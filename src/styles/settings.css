@@ -1,0 +1,20 @@
+.settings-left-panel{
+    width: 30%;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    overflow: hidden;
+}  
+.settings-right-panel{
+    width: 70%;
+    margin-left: 2rem;
+    display: block;
+}
+.panel-item{
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgrey;
+    cursor: pointer;
+}

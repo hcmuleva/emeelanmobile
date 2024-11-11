@@ -1,0 +1,161 @@
+.root-img{
+    width: 1700px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0 !important;
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+}
+#gathjod{
+    font-size: medium;
+    margin-top: -35px;
+}
+.mobile-logo{
+    display: none;
+    gap: "0.3rem";
+    margin-top: 10px;
+    margin-left: 30px;
+}
+.help-img{
+    padding: 0;
+    margin: 0;
+    margin-right: -140px;
+    margin-top: -40px;
+    scale: 0.25;
+}
+.container{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: white; /* Black text for contrast */
+    z-index: 1; 
+}
+.container .left-sider{
+    color: solid white;
+    margin-top: 40px;
+    margin-left: 250px;
+    width: 550px;
+    font-size: x-large;
+}
+.container .right-sider{
+    color: solid white;
+    width: 550px;
+    background:rgb(250, 128, 114, 0.3);
+    font-size: x-large;
+}
+.people{
+    margin-top: 200px;
+    margin-left: 200px;
+    font-size: 40px;
+}
+.help-center{
+    display: flex;
+    margin-top: 20px;
+    height: 100px;
+    margin-bottom: 140px;
+    width: 100%;
+}
+.help-center .help{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-right: 20px;
+    gap: 10px;
+}
+.login-details{
+    display: flex;
+    margin-top: 100px;
+    width: 100%;
+    justify-content: center;
+}
+.login{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+img{
+    opacity: 0.8;
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .left-sider{
+        display: none;
+    }
+    .root-img{
+        width: 1000px;
+        margin-left: -400px;
+    }
+    .mobile-logo{
+        display: "flex";
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+    .login-details{
+        scale: 0.8;
+        margin-top: 60px
+    }
+    .help-center{
+        scale: 0.8;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .mobile-logo{
+        display: block;
+    }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .left-sider{
+        display: none;
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+    .mobile-logo{
+        display: block;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+    .left-sider{
+        display: none;
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+    .mobile-logo{
+        display: block;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    .left-sider{
+        display: none;
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+    .mobile-logo{
+        display: block;
+    }
+}
