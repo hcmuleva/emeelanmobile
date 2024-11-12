@@ -1,0 +1,46 @@
+/* Main container styling for smaller screens */
+@media (max-width: 768px) {
+    .full-content-on-mobile {
+      width: 100%;
+      padding: 1rem;
+    }
+    
+    /* Profile card responsiveness */
+    .dashboard-profiles-icons {
+      width: 100%;
+      max-width: 12rem;
+      height: auto;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .near-me-profiles {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    /* Adjust filters layout on smaller screens */
+    .main-filters {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    /* Filter button alignment */
+    .filters-button {
+      width: 100%;
+    }
+  
+    /* Search dropdown adjustments */
+    .filter-dropdown {
+      width: 100%;
+    }
+  }
+  
+  /* Ensuring smooth scroll behavior and margins */
+  .main-content {
+    scroll-behavior: smooth;
+    margin-bottom: 2rem;
+  }
+  
