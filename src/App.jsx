@@ -2,8 +2,7 @@ import React from 'react';
 import {
     AuthPage,
     ErrorComponent,
-    Layout,
-    useNotificationProvider
+    useNotificationProvider,
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 import { Authenticated, Refine } from "@refinedev/core";
@@ -39,6 +38,13 @@ import PendingPage from "./pages/nocontent/pending";
 import BlockedPage from "./pages/nocontent/blocked";
 import RejectedPage from "./pages/nocontent/rejected";
 import UnauthorizedPage from "./pages/nocontent/unauthorized";
+
+// Custom layout component without sidebar
+const CustomLayout = ({ children }) => (
+    <div style={{ padding: "16px" }}>
+        {children}
+    </div>
+);
 
 export default function App() {
     return (
@@ -78,9 +84,9 @@ export default function App() {
                                         <Authenticated
                                             fallback={<CatchAllNavigate to="/login" />}
                                         >
-                                            <Layout>
+                                            <CustomLayout>
                                                 <Outlet />
-                                            </Layout>
+                                            </CustomLayout>
                                         </Authenticated>
                                     }
                                 >
