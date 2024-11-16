@@ -10,6 +10,7 @@ import { useLogout, useOne } from "@refinedev/core";
 const Header = () => {
   const navigate = useNavigate();
   const userid = localStorage.getItem("userid");
+  const emeelanrole=localStorage.getItem("emeelanrole")
   const {mutate: logout} = useLogout();
   const {data, isLoading} = useOne({
     resource: "users",
@@ -25,9 +26,28 @@ const Header = () => {
     navigate('/login');
     logout();
   }
+  const handleBackToHome= ()=>{
+    console.log("handleBackToHome clicked ", emeelanrole)
+    switch(emeelanrole){
+      case "CENTER":
+        navigate('/dashboard')
+      break;
+      case "ADMIN":
+        navigate('/admin-dashboard')
+        break;
+        case "MEELAN":
+          navigate('/user-dashboard')
+          break;
+        default :
+        navigate('/user-dashboard')
+    }
+       
+}
   if (isLoading){
     return <p>Loading...</p>;
   }
+
+  
   return (
     <div className="profile-container">
       <div className="profile-content">
@@ -45,7 +65,10 @@ const Header = () => {
           </div>
         </div>
         <div style={{ width: "25rem", display: "flex", justifyContent: "center", alignItems: "center"}}>
-          <p style={{color: "black", marginTop: "1rem", cursor: "pointer"}} onClick={() => navigate('/dashboard')}><HomeOutlined /> Back To Home</p>
+          <p style={{color: "black", marginTop: "1rem", cursor: "pointer"}} onClick={() => {
+            console.log("Clicked home")
+            handleBackToHome()
+            }}><HomeOutlined /> Back To Home</p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <div

@@ -116,10 +116,22 @@ export const authProvider = {
             "Authorization"
           ] = `Bearer ${data.jwt}`;
         }
-        return {
-          success: true,
-          redirectTo: "/",
-        };
+        const role = data?.user?.emeelanrole;
+        console.log("role",role)
+    switch (role) {
+      
+      case "MEELAN":
+        return { success: true, redirectTo: "/user-dashboard" };
+
+      case "CENTER":
+        return { success: true, redirectTo: "/dashboard" };
+
+      case "ADMIN":
+        return { success: true, redirectTo: "/admin-dashboard" };
+
+      default:
+        return { success: true, redirectTo: "/" }; // Default fallback
+    }
       }
     } catch (error) {
       const errorObj = error?.response?.data?.message?.[0]?.messages?.[0];
@@ -264,92 +276,93 @@ export const authProvider = {
     };
   },
   getPermissions: async () => null,
-  getIdentity: async () => {
+  getUserIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) {
-      return null;
+        return null;
     }
 
     const { data, status } = await strapiAuthHelper.me(token, {
-      meta: {
-        populate: {
-          usermeelan: { populate: { photos: { fields: ["id"] } } },
-          likesto: {
+        meta: {
             populate: {
-              usersto: {
-                populate: {
-                  usermeelan: {
-                    populate: { photos: { fields: ["id", "url"] } },
-                  },
+                usermeelan: { populate: { photos: { fields: ["id"] } } },
+                likesto: {
+                    populate: {
+                        usersto: {
+                            populate: {
+                                usermeelan: {
+                                    populate: { photos: { fields: ["id", "url"] } },
+                                },
+                            },
+                        },
+                    },
                 },
-              },
-            },
-          },
-          likesby: {
-            populate: {
-              usersfrom: {
-                populate: {
-                  usermeelan: {
-                    populate: { photos: { fields: ["id", "url"] } },
-                  },
+                likesby: {
+                    populate: {
+                        usersfrom: {
+                            populate: {
+                                usermeelan: {
+                                    populate: { photos: { fields: ["id", "url"] } },
+                                },
+                            },
+                        },
+                    },
                 },
-              },
-            },
-          },
-          requeststo: {
-            populate: {
-              requeststo: {
-                populate: {
-                  usermeelan: {
-                    populate: { photos: { fields: ["id", "url"] } },
-                  },
+                requeststo: {
+                    populate: {
+                        requeststo: {
+                            populate: {
+                                usermeelan: {
+                                    populate: { photos: { fields: ["id", "url"] } },
+                                },
+                            },
+                        },
+                    },
                 },
-              },
-            },
-          },
-          requestby: {
-            populate: {
-              requestsfrom: {
-                populate: {
-                  usermeelan: {
-                    populate: { photos: { fields: ["id", "url"] } },
-                  },
+                requestby: {
+                    populate: {
+                        requestsfrom: {
+                            populate: {
+                                usermeelan: {
+                                    populate: { photos: { fields: ["id", "url"] } },
+                                },
+                            },
+                        },
+                    },
                 },
-              },
             },
-          },
         },
-      },
     });
 
     if (status === 200) {
-      const {
-        id,
-        username,
-        email,
-        userstatus,
-        emeelanrole,
-        likesby,
-        likesto,
-        requeststo,
-        requestsby,
-        usermeelan,
-      } = data;
-      localStorage.setItem(USER_ROLE, emeelanrole);
-      localStorage.setItem(USER_STATUS, userstatus);
-      return {
-        userstatus,
-        emeelanrole,
-        id,
-        username,
-        email,
-        usermeelan,
-        likesby,
-        likesto,
-        requeststo,
-        requestsby,
-      };
+        const {
+            id,
+            username,
+            email,
+            userstatus,
+            emeelanrole,
+            likesby,
+            likesto,
+            requeststo,
+            requestsby,
+            usermeelan,
+        } = data;
+        localStorage.setItem(USER_ROLE, emeelanrole);
+        localStorage.setItem(USER_STATUS, userstatus);
+        return {
+            userstatus,
+            emeelanrole,
+            id,
+            username,
+            email,
+            usermeelan,
+            likesby,
+            likesto,
+            requeststo,
+            requestsby,
+        };
     }
     return null;
-  },
+},
+
 };

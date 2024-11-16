@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import { Button, InputNumber } from 'antd';
 
 export default function ProfileIdSelector({rowData, setuserObject}) {
+    console.log("rowData",rowData[0])
  const [userid,setUserId] = useState(0)
   const onFinish = (values) => {
     
