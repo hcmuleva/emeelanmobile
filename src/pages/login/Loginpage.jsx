@@ -20,6 +20,7 @@ import {
  import Help from "../../../public/help.png";
 import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_SERVER_URL;
+export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 
 export const LoginPage = ({
   providers,
@@ -243,22 +244,30 @@ export const LoginPage = ({
           password: password,
         }),
       });
+
       const contentType = res.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await res.json();
-        if (data?.user?.userstatus === "APPROVED") {
-          login({ userid: userid, password: password });
-          return;
-        } else if (data?.user?.userstatus === "PENDING") {
-          navigate("/pending");
-          return;
-        } else if (data?.user?.userstatus === "REJECTED") {
-          navigate("/rejected");
-        } else if (data?.user?.userstatus === "BLOCKED") {
-          navigate("/blocked");
-        } else {
-          navigate("/unauthorized");
-        }
+        console.log("data",data)
+        localStorage.setItem(TOKEN_KEY, data.jwt);
+        localStorage.setItem("userid", String(data?.user?.id));
+        localStorage.setItem("emeelanrole", String(data?.user?.emeelanrole));
+     
+        navigate('/dashboard');
+
+        // if (data?.user?.userstatus === "APPROVED") {
+        //   login({ userid: userid, password: password });
+        //   return;
+        // } else if (data?.user?.userstatus === "PENDING") {
+        //   navigate("/pending");
+        //   return;
+        // } else if (data?.user?.userstatus === "REJECTED") {
+        //   navigate("/rejected");
+        // } else if (data?.user?.userstatus === "BLOCKED") {
+        //   navigate("/blocked");
+        // } else {
+        //   navigate("/unauthorized");
+        // }
       }
     } catch (error) {
       console.error("Error occurred during login:", error);

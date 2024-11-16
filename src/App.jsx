@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 import {
     AuthPage,
     ErrorComponent,
-    useNotificationProvider,
+    Layout,
+    useNotificationProvider
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 import { Authenticated, Refine } from "@refinedev/core";
@@ -10,42 +11,34 @@ import routerProvider, {
     CatchAllNavigate,
     DocumentTitleHandler,
     NavigateToResource,
-    useDocumentTitle,
+    useDocumentTitle
 } from "@refinedev/react-router-v6";
 import { DataProvider } from "@refinedev/strapi-v4";
 import {
     BrowserRouter,
     Outlet,
     Route,
-    Routes,
-    Navigate,
+    Routes
 } from "react-router-dom";
 import { LoginPage } from "./pages/login/Loginpage";
 import { App as AntdApp, ConfigProvider } from "antd";
 import axios from "axios";
-import { PageViewProvider } from "./contextprovider/PageProvider";
+import { PageViewProvider } from './contextprovider/PageProvider';
+
+export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
+const API_URL = import.meta.env.VITE_SERVER_URL;
 import { authProvider, axiosInstance } from "./authProvider";
-import Dashboard from "./pages/dashboard1";
+import Dashboard from './pages/dashboard1';
 import HomePage from "./pages/home/homepage";
 import ProfileView from "./pages/profileView";
 import MyProfile from "./pages/myProfile";
 import MatchesPage from "./pages/matches";
+import NoContent from "./pages/nocontent/pending";
+import { RegisterPage } from "./pages/register/register";
 import PendingPage from "./pages/nocontent/pending";
 import BlockedPage from "./pages/nocontent/blocked";
 import RejectedPage from "./pages/nocontent/rejected";
 import UnauthorizedPage from "./pages/nocontent/unauthorized";
-import UserDashboard from "./pages/UserDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-const API_URL = import.meta.env.VITE_SERVER_URL;
-
-// Custom layout component without sidebar
-const CustomLayout = ({ children }) => <div style={{ padding: "16px" }}>{children}</div>;
-
-// Custom error boundary component
-const CustomErrorComponent = () => {
-    const isAuthenticated = authProvider.check(); // Adjust this based on your auth implementation
-    return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
-};
 
 export default function App() {
     return (
@@ -61,22 +54,14 @@ export default function App() {
                             warnWhenUnsavedChanges: true,
                             syncWithLocation: true,
                             liveMode: "auto",
-                            disableTelemetry: true,
                         }}
                         resources={[
                             {
                                 name: "dashboard",
                                 list: "/dashboard",
                                 meta: {
-                                    icon: (
-                                        <img
-                                            src="/home.svg"
-                                            width={"24px"}
-                                            alt="dashboard-icon"
-                                        />
-                                    ),
+                                    icon: <img src="/home.svg" width={"24px"} alt="dashboard-icon" />,
                                     label: "Dashboard",
-                                    canonical: true,
                                 },
                             },
                         ]}
@@ -85,32 +70,22 @@ export default function App() {
                             <Routes>
                                 {/* Public Routes */}
                                 <Route path="/login" element={<LoginPage />} />
+                                <Route path="/register" element={<RegisterPage />} />
 
                                 {/* Authenticated Routes */}
                                 <Route
                                     element={
                                         <Authenticated
                                             fallback={<CatchAllNavigate to="/login" />}
-                                            loading={<div>Loading...</div>}
                                         >
-                                            <CustomLayout>
+                                            <Layout>
                                                 <Outlet />
-                                            </CustomLayout>
+                                            </Layout>
                                         </Authenticated>
                                     }
                                 >
-                                    {/* Redirect based on role */}
-                                    <Route
-                                        path="/"
-                                        element={
-                                            <RoleBasedRedirect />
-                                        }
-                                    />
-                                    {/* Admin Routes */}
-                                    <Route path="/dashboard" element={<Dashboard />} />
-                                    {/* User Routes */}
-                                    <Route path="/user-dashboard" element={<UserDashboard />} />
-                                    <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                                    <Route index element={<NavigateToResource resource="dashboard" />} />
+                                    <Route path="dashboard" element={<Dashboard />} />
                                     <Route path="/home" element={<HomePage />} />
                                     <Route path="/matches" element={<MatchesPage />} />
                                     <Route path="/profile/:id" element={<ProfileView />} />
@@ -121,8 +96,8 @@ export default function App() {
                                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
                                 </Route>
 
-                                {/* Custom 404 handler */}
-                                <Route path="*" element={<CustomErrorComponent />} />
+                                {/* Fallback for Undefined Routes */}
+                                <Route path="*" element={<ErrorComponent />} />
                             </Routes>
                         </PageViewProvider>
                     </Refine>
@@ -131,32 +106,3 @@ export default function App() {
         </ConfigProvider>
     );
 }
-
-// Helper Component for Role-Based Redirection
-const RoleBasedRedirect = () => {
-    const [role, setRole] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
-
-    React.useEffect(() => {
-        (async () => {
-            const user = await authProvider.getUserIdentity();
-            setRole(user?.emeelanrole);
-            console.log("user",user)
-            setLoading(false);
-
-        })();
-    }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    switch(role){
-        case "MEELAN":
-           return <Navigate to="/user-dashboard" replace />
-        case "CENTER":
-            return <Navigate to="/dashboard" replace />
-        case "ADMIN":
-            return <Navigate to="/admin-dashboard" replace />
-    }
-   
-};

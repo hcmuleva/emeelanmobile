@@ -28,19 +28,7 @@ const Header = () => {
   }
   const handleBackToHome= ()=>{
     console.log("handleBackToHome clicked ", emeelanrole)
-    switch(emeelanrole){
-      case "CENTER":
-        navigate('/dashboard')
-      break;
-      case "ADMIN":
-        navigate('/admin-dashboard')
-        break;
-        case "MEELAN":
-          navigate('/user-dashboard')
-          break;
-        default :
-        navigate('/user-dashboard')
-    }
+    navigate('/dashboard')
        
 }
   if (isLoading){

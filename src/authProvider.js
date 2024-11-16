@@ -118,20 +118,8 @@ export const authProvider = {
         }
         const role = data?.user?.emeelanrole;
         console.log("role",role)
-    switch (role) {
-      
-      case "MEELAN":
         return { success: true, redirectTo: "/user-dashboard" };
-
-      case "CENTER":
-        return { success: true, redirectTo: "/dashboard" };
-
-      case "ADMIN":
-        return { success: true, redirectTo: "/admin-dashboard" };
-
-      default:
-        return { success: true, redirectTo: "/" }; // Default fallback
-    }
+   
       }
     } catch (error) {
       const errorObj = error?.response?.data?.message?.[0]?.messages?.[0];
