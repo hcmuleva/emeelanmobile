@@ -6,7 +6,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { useUpdate } from '@refinedev/core';
 import ProfileStatusState from './Stats/ProfileStatusState';
-import EngagementCard from './EngagementCard';
+import EngagementCard from './Engaggement/EngagementCard';
 import UserProfileCards from './Engaggement/UserPartenerSelector';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 const { Option } = Select;
@@ -48,7 +48,7 @@ const BooleanCellRenderer = (props) => {
 
 const AgGridComponent = ({rowData,refetch}) => {
     const gridRef = useRef(null);
-
+    const [pairObject,setPairObject] = useState([])
     const { mutate:updateUser } = useUpdate();
     const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -102,6 +102,7 @@ const AgGridComponent = ({rowData,refetch}) => {
        );
       };
       const UserStatusEditor = (props) => {
+        console.log("UserStatusEditor Props ",props)
         const handleChange = (value) => {
           if (props?.data?.id) {
             updateUser({
@@ -111,10 +112,7 @@ const AgGridComponent = ({rowData,refetch}) => {
                 userstatus: value,
                 profile_checked: true,
               },
-              successNotification: false,
-              onSuccess: () => {
-                refetch(); // Refetch only after the update is successful
-              },
+             
             });
           }
         };
@@ -261,8 +259,7 @@ const AgGridComponent = ({rowData,refetch}) => {
           </Button>
         </Card>
         <AgGridReact
-          key={JSON.stringify(rowData)} // Use a key to trigger reinitialization
-
+         
           rowData={rowData}
           ref={gridRef}
           columnDefs={columnDefs}
@@ -272,7 +269,7 @@ const AgGridComponent = ({rowData,refetch}) => {
           domLayout="autoHeight"
           rowHeight={50}
         />
-  
+        
         {/* Modal */}
         <Modal
           title="GAATHJOD Details"
@@ -284,17 +281,11 @@ const AgGridComponent = ({rowData,refetch}) => {
             </Button>,
           ]}
         >
-          {modalData && (
-            <div>
-              <p><strong>ID:</strong> {modalData.id}</p>
-              <p><strong>First Name:</strong> {modalData.FirstName}</p>
-              <p><strong>Last Name:</strong> {modalData.LastName}</p>
-              {/* Add other row fields here */}
-              
-            </div>
-          )}
-          <UserPartenerSelector firstUser={modalData} rowData={rowData} />
+         
+          <UserPartenerSelector firstUser={modalData} rowData={rowData} setPairObject={setPairObject} setIsModalVisible={setIsModalVisible}/>
+         
         {/* <EngagementCard rowData={rowData} modalData={modalData}/> */}
+
         </Modal>
       </div>
     );
