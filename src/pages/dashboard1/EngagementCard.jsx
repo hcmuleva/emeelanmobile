@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
-import { Modal, Button, Input, Card, Avatar, Typography, Row, Col, message } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
-import './Engaggement.css'
+import { Avatar, Button, Card, Col, Input, message, Modal, Row, Typography } from 'antd';
+import React, { useState } from 'react';
+import './Engaggement.css';
 const { Text, Title } = Typography;
 
 // Dummy data for rowData
-const rowData = [
-  { id: 1, name: 'Emily', photo: '/placeholder1.svg', mother: 'Sarah', father: 'Michael' },
-  { id: 2, name: 'James', photo: '/placeholder2.svg', mother: 'Linda', father: 'Robert' },
-  { id: 3, name: 'Sophia', photo: '/placeholder3.svg', mother: 'Anna', father: 'David' },
-  { id: 4, name: 'William', photo: '/placeholder4.svg', mother: 'Grace', father: 'John' },
-];
+// const rowData = [
+//   { id: 1, name: 'Emily', photo: '/placeholder1.svg', mother: 'Sarah', father: 'Michael' },
+//   { id: 2, name: 'James', photo: '/placeholder2.svg', mother: 'Linda', father: 'Robert' },
+//   { id: 3, name: 'Sophia', photo: '/placeholder3.svg', mother: 'Anna', father: 'David' },
+//   { id: 4, name: 'William', photo: '/placeholder4.svg', mother: 'Grace', father: 'John' },
+// ];
 
-const EngagementCard = () => {
+const EngagementCard = ({rowData}) => {
+    console.log("Enggg row data",rowData[0])
   const [firstPerson, setFirstPerson] = useState(null);
   const [secondPerson, setSecondPerson] = useState(null);
   const [engagedCouple, setEngagedCouple] = useState(null);
   const [secondPersonId, setSecondPersonId] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [userObject,setuserObject] = useState({})
   const handleSearch = () => {
     const person = rowData.find((item) => item.id === parseInt(secondPersonId, 10));
     if (person) {
@@ -47,7 +48,7 @@ const EngagementCard = () => {
       >
         Engage Users
       </Button>
-
+     
       <Modal
         title="Engagement Setup"
         visible={isModalVisible}

@@ -7,6 +7,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { useUpdate } from '@refinedev/core';
 import ProfileStatusState from './Stats/ProfileStatusState';
 import EngagementCard from './EngagementCard';
+import UserProfileCards from './Engaggement/UserPartenerSelector';
+import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 const { Option } = Select;
 
 // Simple Image Component with Fallback
@@ -288,9 +290,11 @@ const AgGridComponent = ({rowData,refetch}) => {
               <p><strong>First Name:</strong> {modalData.FirstName}</p>
               <p><strong>Last Name:</strong> {modalData.LastName}</p>
               {/* Add other row fields here */}
+              
             </div>
           )}
-          <EngagementCard/>
+          <UserPartenerSelector firstUser={modalData} rowData={rowData} />
+        {/* <EngagementCard rowData={rowData} modalData={modalData}/> */}
         </Modal>
       </div>
     );
