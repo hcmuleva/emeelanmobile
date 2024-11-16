@@ -43,4 +43,22 @@
     scroll-behavior: smooth;
     margin-bottom: 2rem;
   }
+  .dashboard-profiles-icons img {
+    will-change: transform;
+    transform: translateZ(0);
+  }
   
+  .dashboard-container {
+    contain: content;
+  }
+  .dashboard-profiles-icons img {
+  object-fit: cover;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize paint performance */
+.dashboard-content {
+  will-change: transform;
+  transform: translateZ(0);
+}

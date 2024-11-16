@@ -17,7 +17,8 @@ import {
     BrowserRouter,
     Outlet,
     Route,
-    Routes
+    Routes,
+    Navigate
 } from "react-router-dom";
 import { LoginPage } from "./pages/login/Loginpage";
 import { App as AntdApp, ConfigProvider } from "antd";
@@ -46,6 +47,15 @@ const CustomLayout = ({ children }) => (
     </div>
 );
 
+// Custom error boundary component
+const CustomErrorComponent = () => {
+    const isAuthenticated = authProvider.check(); // You might need to adjust this based on your auth implementation
+    
+    return (
+        <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
+    );
+};
+
 export default function App() {
     return (
         <ConfigProvider>
@@ -60,6 +70,7 @@ export default function App() {
                             warnWhenUnsavedChanges: true,
                             syncWithLocation: true,
                             liveMode: "auto",
+                            disableTelemetry: true, // Add this to reduce unnecessary network requests
                         }}
                         resources={[
                             {
@@ -68,6 +79,7 @@ export default function App() {
                                 meta: {
                                     icon: <img src="/home.svg" width={"24px"} alt="dashboard-icon" />,
                                     label: "Dashboard",
+                                    canonical: true // Add this to ensure proper routing
                                 },
                             },
                         ]}
@@ -83,6 +95,7 @@ export default function App() {
                                     element={
                                         <Authenticated
                                             fallback={<CatchAllNavigate to="/login" />}
+                                            loading={<div>Loading...</div>}
                                         >
                                             <CustomLayout>
                                                 <Outlet />
@@ -90,8 +103,10 @@ export default function App() {
                                         </Authenticated>
                                     }
                                 >
-                                    <Route index element={<NavigateToResource resource="dashboard" />} />
-                                    <Route path="dashboard" element={<Dashboard />} />
+                                    {/* Redirect root to dashboard */}
+                                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                                    
+                                    <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/home" element={<HomePage />} />
                                     <Route path="/matches" element={<MatchesPage />} />
                                     <Route path="/profile/:id" element={<ProfileView />} />
@@ -102,8 +117,8 @@ export default function App() {
                                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
                                 </Route>
 
-                                {/* Fallback for Undefined Routes */}
-                                <Route path="*" element={<ErrorComponent />} />
+                                {/* Custom 404 handler */}
+                                <Route path="*" element={<CustomErrorComponent />} />
                             </Routes>
                         </PageViewProvider>
                     </Refine>

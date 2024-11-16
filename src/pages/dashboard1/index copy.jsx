@@ -15,8 +15,6 @@ import "../../styles/dashboard.css";
 import "./dashboard.css";
 import calculateAge from "../../utils/age-finder";
 import Header from "./header/header";
-import AgGridComponent from "./Ag-GridComp";
-import UserGridComp from "./UserAgGrid";
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -111,21 +109,6 @@ const Dashboard = () => {
       },
     },
   });
-  if(isLoading){
-    return <h1>Page Loading</h1>
-  }
-
-  const mydata= []
-  for(let i=0;i<5;i++){
-    mydata.push(data?.data?.data[i])
-  }
-  console.log("data",data?.data?.data[0])
-  const gridata=data?.data?.data
-
-  console.log("for status",gridata[0]);
-  //gridata['dateOfBirthVisible']=false
- //return <UserGridComp rowData={gridata}/>
- return <AgGridComponent rowData={gridata}  refetch={refetch}/>
 
   useEffect(() => {
     if (data?.data?.data) {
