@@ -101,6 +101,7 @@ const MyProfile = () => {
   const { mutate: updateUser } = useUpdate();
   const [edit, setEdit] = useState(false);
   const user = data?.data;
+  console.log("userdata", user)
   let profile = null;
   profile = `${user?.profilePicture?.url}`
   if (!user?.profilePicture) {
@@ -112,13 +113,14 @@ const MyProfile = () => {
   };
   const handleFinish = (values) => {
     const formattedDate = dayjs(values["DOB"])
+    // const integerPhoneNumber = parseInt((values["MamajiMobileNumber"]))
       .startOf("day")
       .tz("Asia/Kolkata")
       .format();
     updateUser({
       resource: "users",
       id,
-      values: { ...values, DOB: formattedDate },
+      values: { ...values, DOB: formattedDate},
     });
   };
   const uploadButton = (
@@ -756,7 +758,7 @@ const MyProfile = () => {
                         </span>
                         <br />
                         <span>
-                          <b>Phone Number</b>: {user?.MamajiPhoneNumber}
+                          <b>Phone Number</b>: {user?.MamajiMobileNumber}
                         </span>
                         <br />
                         <span>
@@ -846,7 +848,7 @@ const MyProfile = () => {
                       <div>
                         <span>
                           <b>Horoscope Details</b> <br />
-                          Aries
+                          {user?.Horoscope}
                         </span>
                       </div>
                     </div>
