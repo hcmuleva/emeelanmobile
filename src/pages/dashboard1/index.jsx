@@ -31,9 +31,9 @@ switch(emeelanrole){
         <UserDashboard/>
         </>)
     case "CENTER":
-        return <> <Header/><CenterDashBoard/></>
+        return <> <Header/><UserDashboard/></>
     case "ADMIN":
-        return  <> <Header/><AdminDashboard/></>
+        return  <> <Header/><UserDashboard/></>
 }
 
 }
