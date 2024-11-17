@@ -22,7 +22,7 @@ export default function UserDashboard() {
       }
       console.log("data",data)
       return (<>
-      <Header/>
+      
       <UserTableView rowData={data?.data?.data}/>
       </>)
   return (

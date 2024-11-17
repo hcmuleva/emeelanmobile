@@ -158,7 +158,7 @@ const UserTableView = ({rowData,refetch}) => {
 
       {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        <ProfileStatusState rowData={rowData}  refetch={refetch}/>
+        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
         
        <Card bordered={false} style={{ textAlign: 'center' }}>
          <Space>
