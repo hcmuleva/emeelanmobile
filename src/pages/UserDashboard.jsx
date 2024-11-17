@@ -1,6 +1,7 @@
 import { useCustom, useList } from '@refinedev/core';
 import React, { useState } from 'react'
 import UserTableView from './UserDashboard/UserTableView';
+import Header from './Header';
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
 export default function UserDashboard() {
@@ -21,7 +22,7 @@ export default function UserDashboard() {
       }
       console.log("data",data)
       return (<>
-     
+      <Header/>
       <UserTableView rowData={data?.data?.data}/>
       </>)
   return (
