@@ -5,6 +5,7 @@ import ImageGallery from './profile/ImageGallery';
 import { Tabs } from 'antd';
 import PreferencesDisplay from './profile/PreferencesDisplay';
 import FamilyAndOtherInfo from './profile/FamilyAndOtherInfo';
+import PreferencesInfo from './profile/PreferenceInfo';
 
 
 export default function ProfileDetails({setView,profileData}) {
@@ -27,7 +28,7 @@ export default function ProfileDetails({setView,profileData}) {
         {
           key: '3',
           label: 'Preferences',
-          children: 'UnderDevelopment',
+          children: <PreferencesInfo profileData={profileData}/>,
         },
         {
             key: '4',
