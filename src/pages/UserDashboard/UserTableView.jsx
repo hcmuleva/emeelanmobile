@@ -155,7 +155,7 @@ const UserTableView = ({rowData,refetch}) => {
 
     return (
       <>
-
+      
       {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
         {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
@@ -166,11 +166,11 @@ const UserTableView = ({rowData,refetch}) => {
             Reset Filters
           </Button>
           <Button color="default" variant="dashed">
-            MyLikedProfile
+            ByMe
           </Button>
          
           <Button color="danger" variant="dashed">
-            LikedToMe
+            ToMe
           </Button>
           </Space>
        </Card>
