@@ -87,19 +87,19 @@ const FamilyAndOtherInfo = ({profileData}) => {
             }
             bordered={true}
           >
-            <Text>MamaJi Name:</Text>
-            <br />
-            <Text>NanaJi Name:</Text>
-            <br />
-            <Text>NaniJi Name:</Text>
-            <br />
-            <Text>Phone Number:</Text>
-            <br />
-            <Text>Gotra:</Text>
-            <br />
-            <Text>Hobbies:</Text>
-            <br />
-            <Text>Other Interests: Private Job</Text>
+              <Text strong>MamaJi Name:</Text> {profileData?.MamajiName}
+              <br />
+              <Text strong>NanaJi Name:</Text> {profileData?.NanajiName}
+              <br />
+              <Text strong>NaniJi Name:</Text> {profileData?.NanijiName}
+              <br />
+              <Text strong>Phone Number:</Text> {profileData?.MamajiMobileNumber}
+              <br />
+              <Text strong>Gotra:</Text> {profileData?.MaternalGotra}
+              <br />
+              <Text strong>Hobbies:</Text> {profileData?.Hobbies}
+              <br />
+              <Text strong>Other Interests:</Text> {profileData?.Profession}
           </Card>
         </Col>
 
@@ -114,12 +114,12 @@ const FamilyAndOtherInfo = ({profileData}) => {
             }
             bordered={true}
           >
-            <Text>Fitness Freak</Text>
+            <Text strong>Lifestyle:</Text> {profileData?.LifeStyle}
             <br />
-            <Text>Other Activities: Private Job</Text>
+            <Text strong>Other Activities:</Text> {profileData?.OtherActivities}
             <br />
             <EyeOutlined style={{ fontSize: "18px", marginRight: "8px", marginTop: "10px" }} />
-            <Text>Horoscope Details</Text>
+            <Text strong>Horoscope Details:</Text> {profileData?.Horoscope}
           </Card>
         </Col>
       </Row>
