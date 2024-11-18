@@ -104,7 +104,7 @@ export default function ProfileDetails({setView,profileData}) {
         {
           key: '3',
           label: 'Preferences',
-          children: 'UnderDevelopment',
+          children: <PreferencesInfo profileData={profileData}/>,
         },
         {
             key: '4',
