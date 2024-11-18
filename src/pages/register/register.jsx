@@ -1,42 +1,34 @@
-import { useCreate, useLogin, useRegister } from "@refinedev/core";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined
+} from "@ant-design/icons";
+import { useCreate, useLogin, useOnError, useRegister } from "@refinedev/core";
 import {
   Button,
-  Card,
   DatePicker,
   Form,
   Input,
   InputNumber,
-  Radio,
   Select,
   Steps,
   notification,
-  theme,
+  theme
 } from "antd";
-import { useNavigate } from "react-router-dom";
-import gotra from "../../utils/gotra.json";
-import { useState } from "react";
-import { UploadFile } from "antd/lib";
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import ReCAPTCHA from "react-google-recaptcha";
-import Banner from "../../components/banner";
-const KEY = import.meta.env.VITE_CAPTCHA_KEY;
-import Countries from "../../utils/countries.json";
-import "../../styles/register.css";
-import { useOnError } from "@refinedev/core";
-import { useForm } from "@refinedev/antd";
-import CoverImage from "../../../public/gathjod.png";
-import Logo from "../../../public/logo.png";
-import Help from "../../../public/help.png";
-import countryCode from "../../utils/countryCode";
-import { Country, City, State } from "country-state-city";
+import { City, Country, State } from "country-state-city";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CoverImage from "../../../public/gathjod.png";
+import Help from "../../../public/help.png";
+import Logo from "../../../public/logo.png";
+import "../../styles/register.css";
+import countryCode from "../../utils/countryCode";
+import gotra from "../../utils/gotra.json";
+const KEY = import.meta.env.VITE_CAPTCHA_KEY;
 const API_URL = import.meta.env.VITE_SERVER_URL;
+export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -200,6 +192,7 @@ export const RegisterPage = () => {
       });
       return;
     }
+    val['emeelanrole']="MEELAN"
     createUser(
       {
         resource: "users",
@@ -207,37 +200,43 @@ export const RegisterPage = () => {
       },
       {
         onSuccess: async (data) => {
+          console.log("Data",data)
           try {
+            console.log("Before request")
+            console.log("userid",val.email)
+            console.log("password", val.password)
             const res = await fetch(`${API_URL}/api/auth/local`, {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                identifier: val.email,
-                password: val.password,
-              }),
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ identifier: val.email, password: val.password }),
             });
-            const contentType = res.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-              const data = await res.json();
-              navigate("/dashboard")
-              // if (data?.user?.userstatus === "APPROVED") {
-              //   login({ userid: val.email, password: val.password });
-              //   return;
-              // } else if (data?.user?.userstatus === "PENDING") {
-              //   navigate("/pending");
-              //   return;
-              // } else if (data?.user?.userstatus === "REJECTED") {
-              //   navigate("/rejected");
-              // } else if (data?.user?.userstatus === "BLOCKED") {
-              //   navigate("/blocked");
-              // } else {
-              //   navigate("/unauthorized");
-              // }
+            console.log("Res",res)
+            if (res.ok) {
+              const logindata = await res.json();
+              console.log("Login data",logindata)
+              console.log("TOKEN_KEY", logindata.jwt);
+              console.log("userid", String(logindata?.user?.id));
+              console.log("userstatus",String(logindata?.user?.userstatus));
+              console.log("emeelanrole",String(logindata?.user?.emeelanrole))
+              localStorage.setItem(TOKEN_KEY, logindata.jwt);
+              localStorage.setItem("userid", String(logindata?.user?.id));
+              localStorage.setItem("userstatus",String(logindata?.user?.userstatus));
+              localStorage.setItem("emeelanrole",String(logindata?.user?.emeelanrole))
+              navigate("/pending");
+            } else {
+              
+              const errorData = await res.json(); // Get error response body
+                  notification.error({
+                      message: "Login Failed",
+                      description: errorData?.message || "Envalid Credential.",
+                  });
             }
+            console.log("OUTSIDE IF")
           } catch (error) {
-            console.error("Error occurred during login:", error);
+            notification.error({
+              message: "Error",
+              description: "Something went wrong, please try again later.",
+          });
           }
         },
       }
@@ -637,11 +636,7 @@ export const RegisterPage = () => {
                                 value={"Female"}
                                 children={"Female"}
                               ></Select.Option>
-                              <Select.Option
-                                key={"Other"}
-                                value={"Other"}
-                                children={"Other"}
-                              ></Select.Option>
+                              
                             </Select>
                           </Form.Item>
                         </div>
