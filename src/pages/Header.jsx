@@ -9,6 +9,7 @@ import { useOne } from "@refinedev/core";
 
 const Header = ({ setSearch } ) => {
   const userid = localStorage.getItem("userid");
+  
   const navigate = useNavigate();
   const {data, isLoading} = useOne({
     resource: "users",
@@ -20,6 +21,7 @@ const Header = ({ setSearch } ) => {
   if (pic){
     photos = pic?.replace(/[\[\]']/g, "").split(", ");
   }
+  console.log("Data for header ",data)
   if (isLoading){
     return <p>Loading...</p>;
   }
