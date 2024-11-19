@@ -118,7 +118,7 @@ return (
     <Space>
       <Button color="danger" variant="dashed" onClick={()=>setView("LIST")}>Back To List</Button>
       <Button 
-        onClick={handleLikeClick} 
+        onClick={()=>console.log("yet to implement")} 
         variant="outline"
         className="flex items-center space-x-2 hover:bg-red-50"
       >
