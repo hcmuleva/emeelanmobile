@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useOne, useUpdate } from "@refinedev/core";
 import PhotoComponent from './PhotoComponent';
 import ProfileCard from './ProfileCard';
-
+import EditProfile from './EditProfile'
 const { Content } = Layout;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -167,7 +167,8 @@ export default function MyProfile() {
   return (
     <Layout>
       <Content style={{ padding: '10px' }}>
-        <ProfileCard/>
+        {/* <ProfileCard user={user}/> */}
+        <EditProfile user={user}/>
 
         {/* <PhotoComponent user={user}/> */}
         {/* <Card>
