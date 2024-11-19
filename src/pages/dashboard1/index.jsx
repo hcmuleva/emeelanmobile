@@ -27,6 +27,9 @@ export default function Dashboard() {
   if (userState === "BLOCKED") {
     return <BlockedPage />;
   }
+  if (userState !== "APPROVED") {
+    return <BlockedPage />;
+  }
 
   if (!userState || userState === "undefined") {
     return (
