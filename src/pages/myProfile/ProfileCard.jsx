@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { Card, Avatar, Button, Tabs, Space, Typography } from "antd";
+import { Card, Avatar, Button, Tabs,Form, Space,Upload, Typography, notification } from "antd";
 import { EditOutlined, SettingOutlined } from "@ant-design/icons";
+import { CameraOutlined } from '@ant-design/icons';
+import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
+import { useUpdate } from "@refinedev/core";
 
 const { TabPane } = Tabs;
 const { Text } = Typography;
+const API_URL = import.meta.env.VITE_SERVER_URL;
 
-const ProfileCard = () => {
+const ProfileCard = ({user}) => {
   const [activeTab, setActiveTab] = useState("1");
+  const [form] = Form.useForm();
+  const { mutate: updateUser } = useUpdate();
+
 
   // User data
   const userInfo = {
@@ -23,7 +30,39 @@ const ProfileCard = () => {
   const handleTabChange = (key) => {
     setActiveTab(key);
   };
+  const onFinish = async (values) => {
+    try {
+      const { profilePicture } = values;
 
+      const profilePicture_id = profilePicture?.file?.response
+      console.log("prof id",profilePicture_id[0].id)
+      const payload={profilePicture:parseInt(profilePicture_id[0].id)}
+      console.log("Payload",payload )
+      await updateUser(
+        {
+          resource: "users",
+          id: user.id,
+          values: payload
+        },
+        {
+          onSuccess: () => {
+            notification.success({
+              message: "Success",
+              description: "Your images have been successfully uploaded.",
+            });
+            form.resetFields();
+          },
+        }
+      );
+    } catch (error) {
+      console.log("Error",error)
+      notification.error({
+        message: "Error",
+        description: "There was an issue with the upload process.",
+      });
+    }
+  };
+  console.log(" user.profilePicture",user.formats)
   return (
     <Card
       style={{ width: 300 }}
@@ -31,7 +70,44 @@ const ProfileCard = () => {
     >
       {/* Upper Section */}
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-        <Avatar src={userInfo.avatar} size={64} />
+        {user?.profilePicture?<Avatar src={user?.profilePicture?.formats?.thumbnail?.url} size={64} />:
+        
+         <Form
+         form={form}
+         layout="vertical"
+         onFinish={onFinish}
+         initialValues={{}}
+         style={{ maxWidth: "800px", margin: "0 auto" }}
+       >
+         {/* Upload Field */}
+         <Form.Item
+           name="profilePicture"
+           valuePropName="fileList"
+           getValueProps={(data) => getValueProps(data, API_URL)}
+           
+           extra={`profile picture`}
+         >
+            <Upload.Dragger
+             style={{}}
+             name="files"
+             action={API_URL + `/api/upload`}
+             listType="picture-card"
+             headers={{
+                 Authorization: `Bearer ${localStorage.getItem(
+                   "jwt-token"
+                 )}`,
+               }}
+           >
+             <Button><CameraOutlined/></Button>
+           </Upload.Dragger>
+         </Form.Item>
+         <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Save
+          </Button>
+          </Form.Item>
+         </Form>
+        }
         <div style={{ flex: 1, marginLeft: 16 }}>
           <Space direction="vertical">
             <div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Card, Button, Tabs, Form, Input, Upload, message, Row, Col, Spin } from 'antd';
+import { Layout, Card, Button, Tabs, Form, Input,Space, Upload, message, Row, Col, Spin } from 'antd';
 import { EnvironmentOutlined, UserOutlined, CalendarOutlined, PhoneOutlined, BookOutlined, PlusOutlined } from '@ant-design/icons';
 import { useParams } from "react-router-dom";
 import { useOne, useUpdate } from "@refinedev/core";
@@ -11,6 +11,7 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export default function MyProfile() {
+  const [isEditProfile,setIsEditProfile]= useState(false);
   const userid = localStorage.getItem("userid");
   const [images, setImages] = useState([{
     uid: "0",
@@ -167,10 +168,20 @@ export default function MyProfile() {
   return (
     <Layout>
       <Content style={{ padding: '10px' }}>
-        {/* <ProfileCard user={user}/> */}
-        <EditProfile user={user}/>
-
-        {/* <PhotoComponent user={user}/> */}
+        <Space>
+          {!isEditProfile&&<Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(true)}}>
+            EditProfile
+          </Button>}
+         {isEditProfile&& <Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(false)}}>
+            Back To Profile
+          </Button>}
+        </Space>
+      
+        {!isEditProfile&& <ProfileCard user={user} setIsEditProfile={setIsEditProfile}/>}
+        {isEditProfile&&<EditProfile user={user} setIsEditProfile={setIsEditProfile}/>}
+        <Space>
+        <PhotoComponent user={user}/>
+        </Space>
         {/* <Card>
           <Row gutter={[24, 24]}>
             <Col xs={24} sm={24} md={8} lg={6} xl={6}>
