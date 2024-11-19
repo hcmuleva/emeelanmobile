@@ -8,6 +8,7 @@ import { AgGridReact } from 'ag-grid-react';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 import ProfileStatusState from './Stats/ProfileStatusState';
 import ProfileDetails from './ProfileDetails';
+import ProfileActions from '../myProfile/ProfileActions';
 const { Option } = Select;
 
 // Simple Image Component with Fallback
@@ -41,24 +42,15 @@ const ImageCellRenderer = (props) => {
 const UserTableView = ({rowData,refetch}) => {
     const gridRef = useRef(null);
     const[view,setView] = useState("LIST")
-    const [pairObject,setPairObject] = useState([])
-    const { mutate:updateUser } = useUpdate();
-    const [isModalVisible, setIsModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
 
   // Open Modal
   const handleButtonClick = (data) => {
     console.log("DATA for Gathjod",data)
     setProfileData(data);
-    // setIsModalVisible(true);
     setView("DETAILS")
   };
 
-  // Close Modal
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-    setProfileData(null);
-  };
     
   const resetFilters = () => {
     gridRef.current.api.setFilterModel(null);
@@ -74,7 +66,6 @@ const UserTableView = ({rowData,refetch}) => {
         }
     });
    
-
     const columnDefs = [
         {
             headerName: "Pictures",
@@ -158,51 +149,18 @@ const UserTableView = ({rowData,refetch}) => {
       
       {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
         
        <Card bordered={false} style={{ textAlign: 'center' }}>
          <Space>
-          <Button color="primary" onClick={() => gridRef.current.api.setFilterModel(null)}>
+          <Button color="danger" variant="dashed"  onClick={() => gridRef.current.api.setFilterModel(null)}>
             Reset Filters
           </Button>
-          <Button color="default" variant="dashed">
-            ByMe
-          </Button>
          
-          <Button color="danger" variant="dashed">
-            ToMe
-          </Button>
+         
+        
           </Space>
        </Card>
-      
-        <AgGridReact
-         
-          rowData={rowData}
-          ref={gridRef}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          pagination={true}
-          paginationPageSize={10}
-          domLayout="autoHeight"
-          rowHeight={50}
-        />
-        
-        {/* Modal */}
-        {/* <Modal
-          title="GAATHJOD Details"
-          visible={isModalVisible}
-          onCancel={handleCloseModal}
-          footer={[
-            <Button key="close" onClick={handleCloseModal}>
-              Close
-            </Button>,
-          ]}
-        >
-         
-          <UserPartenerSelector firstUser={modalData} rowData={rowData} setPairObject={setPairObject} setIsModalVisible={setIsModalVisible}/>
-         
-
-        </Modal> */}
+        <AgGridReact rowData={rowData}   rowHeight={50} />
       </div>}
       </>
     );
