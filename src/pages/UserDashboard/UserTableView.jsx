@@ -8,8 +8,11 @@ import { AgGridReact } from 'ag-grid-react';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 import ProfileStatusState from './Stats/ProfileStatusState';
 import ProfileDetails from './ProfileDetails';
-import ProfileActions from '../myProfile/ProfileActions';
 const { Option } = Select;
+import { getTwoToneColor, HeartFilled, HeartTwoTone, setTwoToneColor } from '@ant-design/icons';
+import { FilterIcon, HeartHandshake } from 'lucide-react';
+import LikedByMe from './profile/LikedByMe';
+import LikedToMe from './profile/LikedToMe';
 
 // Simple Image Component with Fallback
 const AvatarImage = ({ src }) => {
@@ -42,15 +45,24 @@ const ImageCellRenderer = (props) => {
 const UserTableView = ({rowData,refetch}) => {
     const gridRef = useRef(null);
     const[view,setView] = useState("LIST")
+    const [pairObject,setPairObject] = useState([])
+    const { mutate:updateUser } = useUpdate();
+    const [isModalVisible, setIsModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
 
   // Open Modal
   const handleButtonClick = (data) => {
     console.log("DATA for Gathjod",data)
     setProfileData(data);
+    // setIsModalVisible(true);
     setView("DETAILS")
   };
 
+  // Close Modal
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setProfileData(null);
+  };
     
   const resetFilters = () => {
     gridRef.current.api.setFilterModel(null);
@@ -66,6 +78,7 @@ const UserTableView = ({rowData,refetch}) => {
         }
     });
    
+
     const columnDefs = [
         {
             headerName: "Pictures",
@@ -143,24 +156,93 @@ const UserTableView = ({rowData,refetch}) => {
         resizable: true,
         suppressSizeToFit: true
     };
-
+    setTwoToneColor('#eb2f96')
     return (
       <>
-      
+     <Space.Compact style={{ flexWrap: "wrap", justifyContent: "flex-start", gap: "8px" }}>
+  {view === "LIST" && (
+    <Button
+      color="danger"
+      variant="dashed"
+      onClick={() => gridRef.current.api.setFilterModel(null)}
+      style={{ whiteSpace: "nowrap" }}
+    >
+      <FilterIcon size={15} style={{ color: "brown" }} /> Reset
+    </Button>
+  )}
+
+  {view !== "LIST" && (
+    <Button color="danger" variant="dashed" onClick={() => setView("LIST")}>
+      LIST
+    </Button>
+  )}
+
+  <Button
+    color="danger"
+    variant="dashed"
+    onClick={() => setView("REQUESTED")}
+    style={{ whiteSpace: "nowrap" }}
+  >
+    <HeartTwoTone style={{ color: getTwoToneColor() }} /> requested
+  </Button>
+
+  <Button
+    color="danger"
+    variant="dashed"
+    onClick={() => setView("RECIEVED")}
+    style={{ whiteSpace: "nowrap" }}
+
+  >
+    <HeartFilled style={{ color: "red" }} /> recieved
+  </Button>
+
+  <Button
+    color="danger"
+    variant="dashed"
+    onClick={() => setView("LIKEDTOME")}
+    style={{ whiteSpace: "nowrap" }}
+  >
+    <HeartHandshake style={{ color: "red" }} /> रिस्ते
+  </Button>
+</Space.Compact>
+      {view==="REQUESTED" && <LikedByMe />}
+      {view==="RECIEVED"&&<LikedToMe/> }
       {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
+        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
         
        <Card bordered={false} style={{ textAlign: 'center' }}>
-         <Space>
-          <Button color="danger" variant="dashed"  onClick={() => gridRef.current.api.setFilterModel(null)}>
-            Reset Filters
-          </Button>
-         
-         
         
-          </Space>
        </Card>
-        <AgGridReact rowData={rowData}   rowHeight={50} />
+      
+        <AgGridReact
+         
+          rowData={rowData}
+          ref={gridRef}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          pagination={true}
+          paginationPageSize={10}
+          domLayout="autoHeight"
+          rowHeight={50}
+        />
+        
+        {/* Modal */}
+        {/* <Modal
+          title="GAATHJOD Details"
+          visible={isModalVisible}
+          onCancel={handleCloseModal}
+          footer={[
+            <Button key="close" onClick={handleCloseModal}>
+              Close
+            </Button>,
+          ]}
+        >
+         
+          <UserPartenerSelector firstUser={modalData} rowData={rowData} setPairObject={setPairObject} setIsModalVisible={setIsModalVisible}/>
+         
+
+        </Modal> */}
       </div>}
       </>
     );
