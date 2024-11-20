@@ -8,97 +8,28 @@ export const axiosInstance = axios.create();
 const strapiAuthHelper = AuthHelper(API_URL + "/api");
 import moment from "moment";
 
-const makeMeelanRequest = async (
-  values,
-  token,
-  id
-) => {
-  const timeFormat = "HH:mm:ss.SSS";
-  const { manglik, have_child, birth_time } = values;
-  const isManglik = manglik === "YES" ? true : false;
-  const isHaveChild = have_child === "YES" ? true : false;
-  let formatedTime = null;
-  if (birth_time) {
-    const momentObject = moment(birth_time?.$d, timeFormat);
-    formatedTime = momentObject.format(timeFormat);
+
+
+// Add request interceptor to automatically add token
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
-  const { mother_photo, father_photo, self_image } = values;
+  return config;
+});
 
-  const formData = new FormData();
-
-  const motherPhotoFile = mother_photo?.file;
-  const fatherPhotoFile = father_photo?.file;
-  const selfPhotoFile = self_image?.file;
-
-  if (motherPhotoFile) {
-    formData.append("files", motherPhotoFile);
-  }
-  if (fatherPhotoFile) {
-    formData.append("files", fatherPhotoFile);
-  }
-  if (selfPhotoFile) {
-    formData.append("files", selfPhotoFile);
-  }
-
-  let responsedata = [];
-
-  let mother_photo_id = null;
-  let father_photo_id = null;
-  let photos = null;
-
-  if (motherPhotoFile || fatherPhotoFile || selfPhotoFile) {
-    const response_upload = await axios.post(
-      API_URL + "/api/upload",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    responsedata = response_upload?.data;
-    responsedata?.map((imagefileresponse, index) => {
-      if (index === 0) {
-        mother_photo_id = imagefileresponse?.id;
-      }
-      if (index === 1) {
-        father_photo_id = imagefileresponse?.id;
-      }
-      if (index === 2) {
-        photos = imagefileresponse?.id;
-      }
-    });
-  }
-  const usermeelandata = {
-    ...values,
-    manglik: isManglik,
-    self_image: null,
-    have_child: isHaveChild,
-    birth_time: formatedTime,
-    mother_photo: mother_photo_id,
-    father_photo: father_photo_id,
-    photos: photos,
-    age: values?.age ? String(values?.age) : "",
-    user: id,
-  };
-
-  const usermeelanresponse = await axios.post(
-    API_URL + `/api/usermeelans`,
-    { data: { ...usermeelandata } },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
+// Add response interceptor to handle 401 errors
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.clear();
     }
-  );
-  if (usermeelanresponse.status === 200) {
-    return true;
-  } else {
-    return false;
+    return Promise.reject(error);
   }
-};
+);
+
 
 export const authProvider = {
   login: async ({
@@ -107,17 +38,19 @@ export const authProvider = {
   }) => {
     try {
       const { data, status } = await strapiAuthHelper.login(userid, password);
-      if (status === 200) {
+      if (status == 200) {
+        console.log("DATA",data)
         localStorage.setItem(TOKEN_KEY, data.jwt);
         localStorage.setItem("userid", String(data?.user?.id));
         localStorage.setItem("emeelanrole", String(data?.user?.emeelanrole));
-        if (axiosInstance) {
-          axiosInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${data.jwt}`;
-        }
-        const role = data?.user?.emeelanrole;
-        console.log("role",role)
+        localStorage.setItem("userstatus",String(data?.user?.userstatus))
+        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
+        
+        return {
+          success: true,
+          redirectTo: "/user-dashboard",
+        };
+
         return { success: true, redirectTo: "/user-dashboard" };
    
       }
@@ -189,24 +122,14 @@ export const authProvider = {
       );
 
       const { status, data } = response;
-      if (status === 200) {
-        const can_go_to_dashboard = await makeMeelanRequest(
-          values,
-          data?.jwt,
-          data?.user?.id
-        );
-        if (can_go_to_dashboard) {
-          localStorage.setItem(TOKEN_KEY, data?.jwt);
-          if (axiosInstance) {
-            axiosInstance.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${data?.jwt}`;
-          }
-          return {
-            success: true,
-            redirectTo: "/",
-          };
-        }
+      if (status == 200) {
+        localStorage.setItem(TOKEN_KEY, data?.jwt);
+        return {
+          success: true,
+          redirectTo: "/dashboard",
+        };
+      
+        
       }
     } catch (error) {
       const errorObj = error?.response?.data?.message?.[0]?.messages?.[0];
@@ -226,42 +149,71 @@ export const authProvider = {
   },
   logout: async () => {
     localStorage.clear();
-    window.location.reload();
+    axiosInstance.defaults.headers.common["Authorization"] = null;
     return {
       success: true,
+      redirectTo: "/login",
     };
   },
 
   onError: async (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+    
+    if (status === 401 || status === 403) {
+      localStorage.clear();
       return {
         logout: true,
+        redirectTo: "/login",
+        error: {
+          message: "Session expired",
+          id: "Unauthorized",
+        },
       };
     }
+
     return { error };
   },
 
   check: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      if (axiosInstance) {
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${token}`;
-      }
+    
+    if (!token || token === "undefined") {
       return {
-        authenticated: true,
+        authenticated: false,
+        error: {
+          message: "Authentication failed",
+          id: "Token not found",
+        },
+        logout: true,
+        redirectTo: "/login",
       };
     }
+
+    try {
+      // Verify token validity by making a request to /me endpoint
+      const response = await strapiAuthHelper.me(token);
+      if (response.status === 200) {
+        return {
+          authenticated: true,
+        };
+      }
+    } catch (error) {
+      localStorage.clear();
+      return {
+        authenticated: false,
+        error: {
+          message: "Token validation failed",
+          id: "Invalid token",
+        },
+        logout: true,
+        redirectTo: "/login",
+      };
+    }
+
     return {
-      authenticated: false,
-      error: {
-        message: "Authentication failed",
-        id: "Token not found",
-      },
-      logout: true,
-      redirectTo: "/login",
+      authenticated: true,
     };
+  
   },
   getPermissions: async () => null,
   getUserIdentity: async () => {
@@ -322,7 +274,7 @@ export const authProvider = {
         },
     });
 
-    if (status === 200) {
+    if (status == 200) {
         const {
             id,
             username,

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Card, Button, Tabs, Form, Input, Upload, message, Row, Col, Spin } from 'antd';
-import { EnvironmentOutlined, UserOutlined, CalendarOutlined, PhoneOutlined, BookOutlined, PlusOutlined } from '@ant-design/icons';
-import { useParams } from "react-router-dom";
-import { useOne, useUpdate } from "@refinedev/core";
+import { Layout, Card, Button, Tabs, Form, Input,Space, Upload, message, Row, Col, Spin } from 'antd';
+import { EnvironmentOutlined, UserOutlined, CalendarOutlined, PhoneOutlined, BookOutlined, PlusOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from "react-router-dom";
+import { useLogout, useOne, useUpdate } from "@refinedev/core";
 import PhotoComponent from './PhotoComponent';
 import ProfileCard from './ProfileCard';
 import EditProfile from './EditProfile'
@@ -11,7 +11,10 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export default function MyProfile() {
-  const [isProfileEdit,setProfileEdit]=useState(false)
+  console.log("Myprofile called")
+  const navigate = useNavigate();
+  const { mutate: logout } = useLogout();
+  const [isEditProfile,setIsEditProfile]= useState(false);
   const userid = localStorage.getItem("userid");
   const [images, setImages] = useState([{
     uid: "0",
@@ -19,34 +22,6 @@ export default function MyProfile() {
     url: "0"
   }]);
   const [profilePhotos,setProfilePhotos]=useState([])
-  const [user, setUser] = useState({
-    FirstName: "Harish",
-    LastName: "Muleva",
-    profilePicture: "https://picsum.photos/seed/picsum/200/300",
-    photos: [
-      "/placeholder.svg?height=100&width=100",
-      "/placeholder.svg?height=100&width=100",
-      "/placeholder.svg?height=100&width=100",
-      "/placeholder.svg?height=100&width=100",
-      "/placeholder.svg?height=100&width=100"
-    ],
-    home_address: "Bangalore",
-    State: "NY",
-    Sex: "Male",
-    marital: "Single",
-    Language: "English",
-    Height: "5'10\"",
-    Samaj: "Seervi Samaj",
-    Gotra: "Muleva",
-    DOB: "1990-01-01",
-    mobile: "+91234567890",
-    email: "harish@hph.com",
-    HighestDegree: "Bachelor's",
-    Profession: "Software Engineer",
-    AboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem felis nec erat"
-  });
-  
-  console.log("Before",user)
   
   //const { id } = useParams();
   const { data, isLoading } = useOne({
@@ -61,119 +36,33 @@ export default function MyProfile() {
       Page Loading
     </Spin>
   }
-  useEffect(() => {
-    if (data?.data) {
-      setProfilePhotos(data?.data?.photos??[
-        "/placeholder.svg?height=100&width=100",
-        "/placeholder.svg?height=100&width=100",
-        "/placeholder.svg?height=100&width=100",
-        "/placeholder.svg?height=100&width=100",
-        "/placeholder.svg?height=100&width=100"
-      ])
-      
-      setUser({...user,...data.data});
-    }
-    console.log("DATA ",data?.data)
-  }, [data]);
-  console.log("after",user)
-
-  const [edit, setEdit] = useState(false);
-
-  const handleEdit = () => {
-    setEdit(!edit);
+    const user=data?.data
+  const handleLogout = () => {
+    logout(); // Triggers the logout process
   };
 
-  const handleSave = (values) => {
-    setUser({ ...user, ...values });
-    setEdit(false);
-    message.success('Profile updated successfully');
-  };
-
-  const customProfileRequest = ({ file, onSuccess, onError }) => {
-    const formData = new FormData();
-    formData.append("files", file);
-
-    axios
-      .post(`${API_URL}/api/upload`, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
-        },
-      })
-      .then((response) => {
-        const img = {
-          uid: response?.data?.[0]?.id,
-          name: response?.data?.[0]?.name,
-          url: response?.data?.[0]?.url,
-        };
-        setProfilePicture([img]);
-        flag1 = true;
-        onSuccess(response?.data);
-      })
-      .catch((error) => {
-        console.error("Upload failed", error);
-        onError(error);
-      });
-  };
-  const customRequest = ({ file, onSuccess, onError }) => {
-    const formData = new FormData();
-    formData.append("files", file);
-
-    axios
-      .post(`${API_URL}/api/upload`, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
-        },
-      })
-      .then((response) => {
-        const img = {
-          uid: response?.data?.[0]?.id,
-          name: response?.data?.[0]?.name,
-          url: response?.data?.[0]?.url,
-        };
-        let newImages = images.filter((user) => typeof user.uid === "number");
-        newImages.push(img);
-        setImages(newImages);
-        flag = true;
-        onSuccess(response?.data);
-      })
-      .catch((error) => {
-        console.error("Upload failed", error);
-        onError(error);
-      });
-  };
-  const handleProfileChange = ({fileList}) => {
-    if (!flag1){
-      setProfilePicture(fileList)
-    }
-    flag1 = false
-  }
   
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
-
-  console.log("user object", user)  /** 
-  Profile has three section:
-  1) Image:
-      How to take a form component when user can simply call this component
-  2) View Profile
-  3) Edit Profile
-
-
- */
-
   return (
     <Layout>
       <Content style={{ padding: '10px' }}>
-        {!isProfileEdit&&<Button onClick={()=>setProfileEdit(true)}>Edit</Button>}
-        {isProfileEdit&&<Button onClick={()=>setProfileEdit(false)}>BackToProfile</Button>}
-        {!isProfileEdit&&<ProfileCard user={user}/>}
-        {isProfileEdit&&<EditProfile user={user}/>}
+        <Space>
+          <Button color="danger" variant="dashed" onClick={() => navigate('/dashboard')}>Back</Button>
+          {!isEditProfile&&<Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(true)}}>
+            EditProfile
+          </Button>}
 
-        {/* <PhotoComponent user={user}/> */}
+         {isEditProfile&& <Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(false)}}>
+            Back To Profile
+          </Button>}
+          <Button color="danger" variant="dashed"       icon={<LogoutOutlined/>}
+ onClick={handleLogout}>Logout</Button>
+        </Space>
+      
+        {!isEditProfile&& <ProfileCard user={user} setIsEditProfile={setIsEditProfile}/>}
+        {isEditProfile&&<EditProfile user={user} setIsEditProfile={setIsEditProfile}/>}
+        <Space>
+        <PhotoComponent user={user}/>
+        </Space>
         {/* <Card>
           <Row gutter={[24, 24]}>
             <Col xs={24} sm={24} md={8} lg={6} xl={6}>

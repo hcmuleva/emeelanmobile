@@ -208,7 +208,7 @@ const ProfileCard = ({ user }) => {
               <Space direction="vertical">
                 <div>
                   <Text strong style={{ fontSize: 18 }}>
-                    {user.FirstName}
+                    {user?.FirstName}
                   </Text>
                   {user?.FatherName && (
                     <Text strong style={{ fontSize: 18 }}>
@@ -218,7 +218,7 @@ const ProfileCard = ({ user }) => {
                   )}
                   <br />
                   <Text type="secondary" style={{ marginLeft: 8 }}>
-                    ({user.age} years old)
+                    ({user?.age} years old)
                   </Text>
                 </div>
                 <Space>

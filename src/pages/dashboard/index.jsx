@@ -86,7 +86,6 @@ const Dashboard = () => {
   const handleCreateNewUser = () => {
     setShowCreateUserModal(true);
   };
-console.log("dsfdsfdsf", userMeelanCustom)
   const onSubmit = (values) => {
     let email = values.email;
     let username = values.username;
