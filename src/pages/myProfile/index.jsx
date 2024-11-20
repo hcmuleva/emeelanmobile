@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Card, Button, Tabs, Form, Input,Space, Upload, message, Row, Col, Spin } from 'antd';
-import { EnvironmentOutlined, UserOutlined, CalendarOutlined, PhoneOutlined, BookOutlined, PlusOutlined } from '@ant-design/icons';
-import { useParams } from "react-router-dom";
-import { useOne, useUpdate } from "@refinedev/core";
+import { EnvironmentOutlined, UserOutlined, CalendarOutlined, PhoneOutlined, BookOutlined, PlusOutlined, HomeOutlined, LogoutOutlined, EditOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from "react-router-dom";
+import { useLogout, useOne, useUpdate } from "@refinedev/core";
 import PhotoComponent from './PhotoComponent';
 import ProfileCard from './ProfileCard';
 import EditProfile from './EditProfile'
@@ -13,6 +13,9 @@ const { TextArea } = Input;
 export default function MyProfile() {
   const [isEditProfile,setIsEditProfile]= useState(false);
   const userid = localStorage.getItem("userid");
+  const navigate = useNavigate();
+  const {mutate: logout} = useLogout();
+
   const [images, setImages] = useState([{
     uid: "0",
     name: "0",
@@ -45,7 +48,12 @@ export default function MyProfile() {
 
   const [edit, setEdit] = useState(false);
 
-
+  const handleLogout = () => {
+    console.log("sdsfsf")
+    localStorage.clear()
+    navigate('/login');
+    
+  }
   
   const uploadButton = (
     <div>
@@ -67,15 +75,21 @@ export default function MyProfile() {
   return (
     <Layout>
       <Content style={{ padding: '10px' }}>
-        <Space>
-          <Button color='danger' variant='dashed' onClick={()=>{console.log("Back to Hoime")}}> Back to home</Button>
+        <Space.Compact>
+          <Button color='danger' variant='dashed' onClick={() => navigate(`/dashboard}`)}> <HomeOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
+          home</Button>
           {!isEditProfile&&<Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(true)}}>
-            EditProfile
+          <EditOutlined style={{ fontSize: '14px', color: '#1890ff' }} />
+          Edit
           </Button>}
          {isEditProfile&& <Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(false)}}>
-            Back To Profile
+         <UserOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
+         Profile
           </Button>}
-        </Space>
+          <Button onClick={handleLogout} ><LogoutOutlined style={{ fontSize: '15px', color: '#ff4d4f' }}  /> Logout
+
+          </Button>
+        </Space.Compact>
       
         {!isEditProfile&& <ProfileCard user={user} setIsEditProfile={setIsEditProfile}/>}
         {isEditProfile&&<EditProfile user={user} setIsEditProfile={setIsEditProfile}/>}
