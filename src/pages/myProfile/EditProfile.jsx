@@ -166,6 +166,9 @@ thumbnail?.url} size={64} />
                 <Form.Item name="Country" label="Country">
                   <Input placeholder="Enter Country" />
                 </Form.Item>
+                <Form.Item name="postalcode" label="Postal Code">
+                  <Input placeholder="Enter Postal Code" />
+                </Form.Item>
               </Space>
             </TabPane>
 

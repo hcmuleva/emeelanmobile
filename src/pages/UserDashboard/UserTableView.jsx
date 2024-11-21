@@ -9,6 +9,10 @@ import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 import ProfileStatusState from './Stats/ProfileStatusState';
 import ProfileDetails from './ProfileDetails';
 const { Option } = Select;
+import { getTwoToneColor, HeartFilled, HeartTwoTone, setTwoToneColor } from '@ant-design/icons';
+import { FilterIcon, HeartHandshake } from 'lucide-react';
+import LikedByMe from './profile/LikedByMe';
+import LikedToMe from './profile/LikedToMe';
 
 // Simple Image Component with Fallback
 const AvatarImage = ({ src }) => {
@@ -152,27 +156,63 @@ const UserTableView = ({rowData,refetch}) => {
         resizable: true,
         suppressSizeToFit: true
     };
-
+    setTwoToneColor('#eb2f96')
     return (
       <>
+     <Space.Compact style={{ flexWrap: "wrap", justifyContent: "flex-start", gap: "8px" }}>
+  {view === "LIST" && (
+    <Button
+      color="danger"
+      variant="dashed"
+      onClick={() => gridRef.current.api.setFilterModel(null)}
+      style={{ whiteSpace: "nowrap" }}
+    >
+      <FilterIcon size={15} style={{ color: "brown" }} /> Reset
+    </Button>
+  )}
 
+  {view !== "LIST" && (
+    <Button color="danger" variant="dashed" onClick={() => setView("LIST")}>
+      LIST
+    </Button>
+  )}
+
+  <Button
+    color="danger"
+    variant="dashed"
+    onClick={() => setView("REQUESTED")}
+    style={{ whiteSpace: "nowrap" }}
+  >
+    <HeartTwoTone style={{ color: getTwoToneColor() }} /> requested
+  </Button>
+
+  <Button
+    color="danger"
+    variant="dashed"
+    onClick={() => setView("RECIEVED")}
+    style={{ whiteSpace: "nowrap" }}
+
+  >
+    <HeartFilled style={{ color: "red" }} /> recieved
+  </Button>
+
+  <Button
+    color="danger"
+    variant="dashed"
+    onClick={() => setView("LIKEDTOME")}
+    style={{ whiteSpace: "nowrap" }}
+  >
+    <HeartHandshake style={{ color: "red" }} /> रिस्ते
+  </Button>
+</Space.Compact>
+      {view==="REQUESTED" && <LikedByMe />}
+      {view==="RECIEVED"&&<LikedToMe/> }
       {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        <ProfileStatusState rowData={rowData}  refetch={refetch}/>
+        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
         
        <Card bordered={false} style={{ textAlign: 'center' }}>
-         <Space>
-          <Button color="primary" onClick={() => gridRef.current.api.setFilterModel(null)}>
-            Reset Filters
-          </Button>
-          <Button color="default" variant="dashed">
-            MyLikedProfile
-          </Button>
-         
-          <Button color="danger" variant="dashed">
-            LikedToMe
-          </Button>
-          </Space>
+        
        </Card>
       
         <AgGridReact

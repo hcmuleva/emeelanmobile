@@ -104,21 +104,16 @@ const ProfileCard = ({ user }) => {
         return (
           <Space direction="vertical" size="small">
             {renderField("Home Address", user.home_address)}
-            {renderField("Shop Address", user.shop_address)}
-            {renderField("Address", user.Address)}
             {renderField("City", user.City)}
-            {renderField("Village", user.Village)}
             {renderField("State", user.State)}
             {renderField("Country", user.Country)}
-            {renderField("District", user.district)}
             {renderField("Postal Code", user.postalcode)}
-            {renderField("Area", user.area)}
           </Space>
         );
       case "educationInfo":
         return (
           <Space direction="vertical" size="small">
-            {renderField("Education Level", user.education_level)}
+            {renderField("Education", user.education_level)}
             {renderField("Highest Degree", user.HighestDegree)}
             {renderField("Additional Qualification", user.AdditionalQualification)}
             {renderField("Last College", user.LastCollege)}
@@ -159,18 +154,18 @@ const ProfileCard = ({ user }) => {
   };
 
   const sections = [
-    { key: "personalInfo", label: "Personal Information" },
-    { key: "contactInfo", label: "Contact Information" },
-    { key: "familyDetails", label: "Family Details" },
-    { key: "addressInfo", label: "Address Information" },
-    { key: "educationInfo", label: "Educational Information" },
-    { key: "professionalInfo", label: "Professional Information" },
+    { key: "personalInfo", label: "Personal" },
+    { key: "contactInfo", label: "Contact " },
+    { key: "familyDetails", label: "Family" },
+    { key: "addressInfo", label: "Address" },
+    { key: "educationInfo", label: "Educational" },
+    { key: "professionalInfo", label: "Professional" },
     { key: "lifestyle", label: "Lifestyle" },
     { key: "preferences", label: "Preferences" },
   ];
 
   return (
-    <Space direction="vertical" size="large" style={{ width: 400 }}>
+    <Space direction="vertical" size="large" style={{ width: 300 }}>
       <Card>
         <Space direction="vertical" size="middle" style={{ width: "100%" }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
@@ -208,7 +203,7 @@ const ProfileCard = ({ user }) => {
               <Space direction="vertical">
                 <div>
                   <Text strong style={{ fontSize: 18 }}>
-                    {user.FirstName}
+                    {user?.FirstName}
                   </Text>
                   {user?.FatherName && (
                     <Text strong style={{ fontSize: 18 }}>
@@ -218,7 +213,7 @@ const ProfileCard = ({ user }) => {
                   )}
                   <br />
                   <Text type="secondary" style={{ marginLeft: 8 }}>
-                    ({user.age} years old)
+                    ({user?.age} years old)
                   </Text>
                 </div>
                 <Space>
