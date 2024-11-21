@@ -1,13 +1,14 @@
 import {
     HeartFilled
 } from "@ant-design/icons";
-import { useCustom } from "@refinedev/core";
+import { useCustom, useList } from "@refinedev/core";
 import React, { memo, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import calculateAge from "../utils/age-finder";
 import "../styles/dashboard.css";
 import CenterTableView from "./UserDashboard/CenterTableView";
 import "./UserDashboard/dashboard.css";
+import { Button, Card, Space } from "antd";
   
   const API_URL = import.meta.env.VITE_SERVER_URL;
   
@@ -81,32 +82,70 @@ import "./UserDashboard/dashboard.css";
       currentDate.setFullYear(currentDate.getFullYear() - yearsBack);
       return currentDate.toISOString().split("T")[0];
     };
-  
-    const { data, isLoading, isFetching, refetch } = useCustom({
-      url: `${API_URL}/api/custom-user`,
-      method: "get",
-      config: {
-        headers: { "x-custom-header": "foo-bar" },
-        query: {
-          pagination: { page: current, pageSize },
-          filters: {
-            id: localStorage.getItem("userid"),
-            state: filters.state,
-            search_string: filters.search_string,
-            dob_gte: calculateDOB(filters.upper),
-            dob_lte: calculateDOB(filters.lower),
-            profession: filters.profession,
-            marital_status: filters.marital_status,
-            education: filters.education,
+    const { data: usersdata, isLoading } = useList({
+        resource: "users",
+        filters: [
+          {
+            field: "userstatus",
+            operator: "eq", // 'eq' is the operator for equality
+            value: "BLOCKED",
           },
-        },
-      },
-    });
-    if(isLoading){
-      return <h1>Page Loading</h1>
-    }
-   return <CenterTableView rowData={data?.data?.data}/>
+        ],
+      });
+    
+      if (isLoading) {
+        return <h1>Page Loading...</h1>;
+      }
+    
+      console.log("Filtered User", usersdata)
+    console.log("userdata",usersdata)
+    // const { data, isLoading, isFetching, refetch } = useCustom({
+    //   url: `${API_URL}/api/custom-user`,
+    //   method: "get",
+    //   config: {
+    //     headers: { "x-custom-header": "foo-bar" },
+    //     query: {
+    //       pagination: { page: current, pageSize },
+    //       filters: {
+    //         id: localStorage.getItem("userid"),
+    //         state: filters.state,
+    //         search_string: filters.search_string,
+    //         dob_gte: calculateDOB(filters.upper),
+    //         dob_lte: calculateDOB(filters.lower),
+    //         profession: filters.profession,
+    //         marital_status: filters.marital_status,
+    //         education: filters.education,
+    //       },
+    //     },
+    //   },
+    // });
+    // if(isLoading){
+    //   return <h1>Page Loading</h1>
+    // }
+
+   return  ( <> <Card bordered={false} style={{ textAlign: 'center' }}>
+    <Space>
+    <Button color='danger' variant='dashed' onClick={() => gridRef.current.api.setFilterModel(null)}>
+      APPROVED
+    </Button>
+    <Button color='danger' variant='dashed' onClick={() => gridRef.current.api.setFilterModel(null)}>
+     PENDING
+    </Button>
+    <Button color='danger' variant='dashed' onClick={() => gridRef.current.api.setFilterModel(null)}>
+      BLOCKED
+    </Button>
+    </Space>
+    <Space>
+    <Button color='danger' variant='dashed' onClick={() => gridRef.current.api.setFilterModel(null)}>
+      VERIFIED
+    </Button>
+    </Space>
   
+  </Card>
+   <h1>Heello</h1>
+   {/* <CenterTableView rowData={data?.data?.data}/>
+    <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
+   </>)
   };
   
   export default CenterDashBoard;
