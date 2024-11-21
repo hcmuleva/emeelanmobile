@@ -1,22 +1,13 @@
 import {
-    AppstoreOutlined,
-    CaretRightOutlined,
-    HeartFilled,
-    LoadingOutlined,
-    ReloadOutlined,
-    UnorderedListOutlined,
-  } from "@ant-design/icons";
-  import { useCustom } from "@refinedev/core";
-  import { Button, Col, Form, Modal, Row, Select } from "antd";
-  import { State } from "country-state-city";
-  import React, { useCallback, useEffect, useState, memo } from "react";
-  import { useNavigate } from "react-router-dom";
-  import "../../styles/dashboard.css";
-  import "./dashboard.css";
-  import calculateAge from "../../utils/age-finder";
-  import Header from "./header/header";
-  import AgGridComponent from "./Ag-GridComp";
-  import UserGridComp from "./UserAgGrid";
+    HeartFilled
+} from "@ant-design/icons";
+import { useCustom } from "@refinedev/core";
+import React, { memo, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import calculateAge from "../utils/age-finder";
+import "../styles/dashboard.css";
+import CenterTableView from "./UserDashboard/CenterTableView";
+import "./UserDashboard/dashboard.css";
   
   const API_URL = import.meta.env.VITE_SERVER_URL;
   
@@ -114,12 +105,7 @@ import {
     if(isLoading){
       return <h1>Page Loading</h1>
     }
-  
-    //const gridata=data?.data?.data
-  
-    //gridata['dateOfBirthVisible']=false
-   //return <UserGridComp rowData={gridata}/>
-   return <AgGridComponent rowData={data?.data?.data}/>
+   return <CenterTableView rowData={data?.data?.data}/>
   
   };
   
