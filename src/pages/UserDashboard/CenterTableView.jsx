@@ -1,3 +1,4 @@
+
 import { Avatar, Button, Card, Modal, Select } from 'antd';
 import React,{useRef,useState} from 'react';
 
@@ -5,7 +6,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { useUpdate } from '@refinedev/core';
-import ProfileStatusState from './Stats/ProfileStatusState';
+//import ProfileStatusState from './Stats/ProfileStatusState';
 import EngagementCard from './Engaggement/EngagementCard';
 import UserProfileCards from './Engaggement/UserPartenerSelector';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
@@ -46,7 +47,7 @@ const BooleanCellRenderer = (props) => {
   );
 };
 
-const AgGridComponent = ({rowData,refetch}) => {
+const CenterTableView = ({rowData,refetch}) => {
     const gridRef = useRef(null);
     const [pairObject,setPairObject] = useState([])
     const { mutate:updateUser } = useUpdate();
@@ -252,10 +253,10 @@ const AgGridComponent = ({rowData,refetch}) => {
 
     return (
       <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        <ProfileStatusState rowData={rowData}  refetch={refetch}/>
+        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
         <Card bordered={false} style={{ textAlign: 'center' }}>
           <Button onClick={() => gridRef.current.api.setFilterModel(null)}>
-            Reset Filters
+            Reset Filters  need to change HHCCMM
           </Button>
         </Card>
         <AgGridReact
@@ -291,4 +292,4 @@ const AgGridComponent = ({rowData,refetch}) => {
     );
   };
   
-  export default AgGridComponent;
+  export default CenterTableView;
