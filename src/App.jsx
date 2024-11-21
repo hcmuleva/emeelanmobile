@@ -18,10 +18,10 @@ import { PageViewProvider } from "./contextprovider/PageProvider";
 import Controller from "./pages/Controller";
 import LoginPage from "./pages/login/LoginPage";
 import MatchesPage from "./pages/matches";
-import MyProfile from "./pages/myProfile";
 import PendingPage from "./pages/nocontent/pending";
 import ProfileView from "./pages/profileView";
 import { RegisterPage } from "./pages/register/register";
+import MyProfile from "./pages/myProfile";
 
     export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
     const API_URL = import.meta.env.VITE_SERVER_URL;
