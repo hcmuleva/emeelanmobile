@@ -1,14 +1,12 @@
 
 import { Avatar, Button, Card, Modal, Select } from 'antd';
-import React,{useRef,useState} from 'react';
+import React, { useRef, useState } from 'react';
 
+import { useUpdate } from '@refinedev/core';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
-import { useUpdate } from '@refinedev/core';
 //import ProfileStatusState from './Stats/ProfileStatusState';
-import EngagementCard from './Engaggement/EngagementCard';
-import UserProfileCards from './Engaggement/UserPartenerSelector';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 const { Option } = Select;
 
@@ -48,6 +46,7 @@ const BooleanCellRenderer = (props) => {
 };
 
 const CenterTableView = ({rowData,refetch}) => {
+    
     const gridRef = useRef(null);
     const [pairObject,setPairObject] = useState([])
     const { mutate:updateUser } = useUpdate();
@@ -66,13 +65,7 @@ const CenterTableView = ({rowData,refetch}) => {
     setIsModalVisible(false);
     setModalData(null);
   };
-    const statusOptions = [
-        "APPROVED",
-        "UNAPPROVED",
-        "REJECTED",
-        "BLOCKED",
-        "PENDING",
-      ];
+  const statusOptions = ["APPROVED", "UNAPPROVED", "REJECTED", "BLOCKED", "PENDING"];
 
       const profile_checked_val = [
         true,
@@ -103,18 +96,34 @@ const CenterTableView = ({rowData,refetch}) => {
        );
       };
       const UserStatusEditor = (props) => {
-        console.log("UserStatusEditor Props ",props)
+        const { mutate: updateUser } = useUpdate();
+      
         const handleChange = (value) => {
           if (props?.data?.id) {
-            updateUser({
-              resource: "users",
-              id: props?.data?.id,
-              values: {
-                userstatus: value,
-                profile_checked: true,
+            // Update the user's status
+            updateUser(
+              {
+                resource: "users", // Adjust the resource name to match your API
+                id: props?.data?.id,
+                values: {
+                  userstatus: value,
+                },
               },
-             
-            });
+              {
+                onSuccess: () => {
+                  notification.success({
+                    message: "Success",
+                    description: `${props?.data?.FirstName}'s profile status successfully updated to ${value}`,
+                  });
+                },
+                onError: (error) => {
+                  notification.error({
+                    message: "Error",
+                    description: `Failed to update status for ${props?.data?.FirstName}: ${error.message}`,
+                  });
+                },
+              }
+            );
           }
         };
       
@@ -124,29 +133,19 @@ const CenterTableView = ({rowData,refetch}) => {
             style={{ width: "100%" }}
             onChange={handleChange}
           >
-            {statusOptions.map((status) => (
-              <Option key={status} value={status}>
-                {status}
-              </Option>
-            ))}
+            {["APPROVED", "UNAPPROVED", "REJECTED", "BLOCKED", "PENDING"].map(
+              (status) => (
+                <Option key={status} value={status}>
+                  {status}
+                </Option>
+              )
+            )}
           </Select>
         );
       };
       
       
-      // const handleCellValueChanged = (params) => {
-      //   console.log("Params",params)
-      //   if (params.colDef.field === "userstatus") {
-      //     const { id } = params.data;
-      //     const newValue = params.newValue;
-      //     console.log("Row ID:", id, "New Status:", newValue);
-            
-      //     // Call the handler passed as a prop
-      //     if (onStatusChange) {
-      //       onStatusChange(id, newValue);
-      //     }
-      //   }
-      // };
+      
     
   const resetFilters = () => {
     gridRef.current.api.setFilterModel(null);
@@ -161,8 +160,6 @@ const CenterTableView = ({rowData,refetch}) => {
             }
         }
     });
-   
-
     const columnDefs = [
         {
             headerName: "Pictures",
@@ -253,14 +250,8 @@ const CenterTableView = ({rowData,refetch}) => {
 
     return (
       <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
-        <Card bordered={false} style={{ textAlign: 'center' }}>
-          <Button onClick={() => gridRef.current.api.setFilterModel(null)}>
-            Reset Filters  need to change HHCCMM
-          </Button>
-        </Card>
+       
         <AgGridReact
-         
           rowData={rowData}
           ref={gridRef}
           columnDefs={columnDefs}
@@ -284,8 +275,6 @@ const CenterTableView = ({rowData,refetch}) => {
         >
          
           <UserPartenerSelector firstUser={modalData} rowData={rowData} setPairObject={setPairObject} setIsModalVisible={setIsModalVisible}/>
-         
-        {/* <EngagementCard rowData={rowData} modalData={modalData}/> */}
 
         </Modal>
       </div>
