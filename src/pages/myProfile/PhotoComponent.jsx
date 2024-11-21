@@ -42,7 +42,7 @@ export default function PhotoComponent({ user }) {
 
   return (
     <div>
-      <h3>Upload Photos for {user?.name || "User"}</h3>
+      {/* <h3>Upload Photos for {user?.FirstName || "User"}</h3> */}
       <Form
         form={form}
         layout="vertical"
@@ -55,8 +55,8 @@ export default function PhotoComponent({ user }) {
           name="photos"
           valuePropName="fileList"
           getValueProps={(data) => getValueProps(data, API_URL)}
-          label="Upload Photos"
-          extra="Upload one or more images related to this user."
+          label={<span style={{ fontWeight: "bold", fontSize: "18px" }}>Upload Photos</span>}
+          extra="You Can Upload a Maximum of 4 Photos."
         >
            <Upload.Dragger
             style={{}}

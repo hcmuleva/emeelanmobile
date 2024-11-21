@@ -86,7 +86,7 @@ export default function MyProfile() {
          <UserOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
          Profile
           </Button>}
-          <Button onClick={handleLogout} ><LogoutOutlined style={{ fontSize: '15px', color: '#ff4d4f' }}  /> Logout
+          <Button color='danger' variant='dashed' onClick={handleLogout} ><LogoutOutlined style={{ fontSize: '15px', color: '#ff4d4f' }}  /> Logout
 
           </Button>
         </Space.Compact>
