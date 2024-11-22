@@ -1,53 +1,91 @@
 
-import { Avatar, Button, Card, Modal, Select } from 'antd';
+import { Avatar, Button, Card, Modal, notification, Select } from 'antd';
 import React, { useRef, useState } from 'react';
 
 import { useUpdate } from '@refinedev/core';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
-//import ProfileStatusState from './Stats/ProfileStatusState';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
+import { FilterIcon, HeartHandshake } from 'lucide-react';
+import ProfileDetails from './ProfileDetails';
 const { Option } = Select;
 
 // Simple Image Component with Fallback
-const AvatarImage = ({ src }) => {
-  return (
-    <Avatar src={src} size={64} />
-
-  );
-};
-
-// Image Cell Renderer Component
-const ImageCellRenderer = (props) => {
-  const images = props.value;
-  
-  if (!images || !Array.isArray(images) || images.length === 0) {
-    return <span className="text-gray-500 text-sm">No Images</span>;
+const ImageCellRenderer = ({ value }) => {
+  if (!value) {
+    return <span>No Image</span>;
   }
-   // Access and display only the first image
-   const firstImageUrl = images[0];
 
-   return (
-     <div className="flex items-center gap-2">
-       <AvatarImage key="image" src={firstImageUrl} />
-     </div>
-   );
-   
-};
+  let images = [];
+  // Parse the value if it's a string
+  if (typeof value === "string") {
+    try {
+      images = JSON.parse(value.replace(/'/g, '"')); // Replace single quotes and parse
+    } catch (error) {
+      console.error("Failed to parse Pictures field:", value, error);
+      return <span>Invalid Image</span>;
+    }
+  } else if (Array.isArray(value)) {
+    images = value; // Directly use the array if already parsed
+  }
 
-// Boolean Cell Renderer Component
-const BooleanCellRenderer = (props) => {
-  return (
-    <span className={`text-sm ${props.value ? 'text-green-600' : 'text-red-600'}`}>
-      {props.value ? "Yes" : "No"}
-    </span>
+  const firstImage = images[0]; // Get the first image
+  return firstImage ? (
+    <Avatar src={firstImage} size={64} />
+  ) : (
+    <span>No Image</span>
   );
 };
+
+const BooleanCellRenderer = (props) => {
+  const { mutate:updateUser } = useUpdate();
+  const handleCheckboxChange = (event) => {
+    const newValue = event.target.checked;
+    console.log("Checkbox toggled:", newValue, " data ",props.data);
+   
+        updateUser(
+          {
+            resource: "users", // Adjust the resource name to match your API
+            id: props?.data?.id,
+            values: {
+              profile_checked: newValue,
+            },
+          },
+          {
+            onSuccess: () => {
+              notification.success({
+                message: "Success",
+                description: `${props?.data?.FirstName}'s profile status successfully verified to ${newValue}`,
+              });
+            },
+            onError: (error) => {
+              notification.error({
+                message: "Error",
+                description: `Failed to update status for ${props?.data?.FirstName}: ${error.message}`,
+              });
+            },
+          }
+        );
+  };
+
+  return (
+    <input
+      type="checkbox"
+      checked={props.value}
+      onChange={handleCheckboxChange}
+      className="cursor-pointer"
+    />
+  );
+};
+
+
 
 const CenterTableView = ({rowData,refetch}) => {
-    
-    const gridRef = useRef(null);
+  const[view,setView] = useState("LIST")
+  const gridRef = useRef(null);
+  const [profileData, setProfileData] = useState(null);
+
     const [pairObject,setPairObject] = useState([])
     const { mutate:updateUser } = useUpdate();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -55,9 +93,13 @@ const CenterTableView = ({rowData,refetch}) => {
 
   // Open Modal
   const handleButtonClick = (data) => {
-    console.log("DATA for Gathjod",data)
     setModalData(data);
     setIsModalVisible(true);
+  };
+  const handleDetailButtonClick = (data) => {
+    console.log("DATA for Gathjod",data)
+    setProfileData(data);
+    setView("DETAILS")
   };
 
   // Close Modal
@@ -127,6 +169,7 @@ const CenterTableView = ({rowData,refetch}) => {
           }
         };
       
+        
         return (
           <Select
             defaultValue={props.value}
@@ -160,6 +203,7 @@ const CenterTableView = ({rowData,refetch}) => {
             }
         }
     });
+    
     const columnDefs = [
         {
             headerName: "Pictures",
@@ -188,10 +232,10 @@ const CenterTableView = ({rowData,refetch}) => {
           },
           
           { 
-            headerName: "profile_checked", 
+            headerName: "Verification", 
             field: "profile_checked", 
             editable: true, // Make this column editable
-           
+            cellRenderer:BooleanCellRenderer,
             width: 120
         },
         { 
@@ -214,6 +258,11 @@ const CenterTableView = ({rowData,refetch}) => {
             field: "mobile", 
             width: 122
         },
+        {
+          headerName:"Profession",
+          field:"Profession",
+          width:125
+        },
         { 
             headerName: "DOB", 
             field: "DOB", 
@@ -225,14 +274,28 @@ const CenterTableView = ({rowData,refetch}) => {
             width: 90
         },
         {
-          headerName: 'GAATHJOD',
+          headerName: 'Detail',
           field: 'gaathjod',
           cellRenderer: (params) => (
             <Button
               type="primary"
+              onClick={() => handleDetailButtonClick(params.data)}
+            >
+              Details
+            </Button>
+          ),
+          width: 120,
+        },
+        {
+          headerName: 'GAATHJOD',
+          field: 'gaathjod',
+          cellRenderer: (params) => (
+            <Button
+              color='danger'
+              variant='dashed'
               onClick={() => handleButtonClick(params.data)}
             >
-              GAATHJOD
+             <HeartHandshake style={{ color: "red" }} /> रिस्ते
             </Button>
           ),
           width: 120,
@@ -248,9 +311,20 @@ const CenterTableView = ({rowData,refetch}) => {
         suppressSizeToFit: true
     };
 
+ 
     return (
       <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-       
+         {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
+         {view==="LIST"&&
+        <>
+        <Button
+      color="danger"
+      variant="dashed"
+      onClick={() => gridRef.current.api.setFilterModel(null)}
+      style={{ whiteSpace: "nowrap" }}
+    >
+      <FilterIcon size={15} style={{ color: "brown" }} /> Reset
+    </Button>
         <AgGridReact
           rowData={rowData}
           ref={gridRef}
@@ -258,9 +332,10 @@ const CenterTableView = ({rowData,refetch}) => {
           defaultColDef={defaultColDef}
           pagination={true}
           paginationPageSize={10}
+
           domLayout="autoHeight"
           rowHeight={50}
-        />
+        /></>}
         
         {/* Modal */}
         <Modal
