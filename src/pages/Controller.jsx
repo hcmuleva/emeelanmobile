@@ -14,7 +14,7 @@ import CenterDashBoard from "./CenterDashboard";
 
 export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 
-const MessagePage = ({userState,navigate}) => {
+const MessagePage = ({userState,navigate,userid}) => {
     const clearLocalStorageAndRedirect=()=>{
         localStorage.clear()
         navigate('/login')
@@ -37,7 +37,7 @@ const MessagePage = ({userState,navigate}) => {
                 <div className="text-center">
                   <Clock className="mx-auto h-12 w-12 text-yellow-500 mb-4" />
                   <h1 className="text-2xl font-bold text-gray-900 mb-2">Pending Approval</h1>
-                  <p className="text-gray-600 mb-4">Your account is currently pending approval. Please check back later. For more support, please contact Admin: +91 9019905115</p>
+                  <p className="text-gray-600 mb-4">Your account is currently pending approvalfor you id {userid}. Please check back later. For more support, please contact Admin: +91 9019905115</p>
                   <Button onClick={clearLocalStorageAndRedirect}>Try Again</Button>
                 </div>
               </div>
@@ -120,13 +120,13 @@ export default function Controller() {
     const userState = localStorage.getItem("userstatus");
     const userRole = localStorage.getItem("emeelanrole");
     const token = localStorage.getItem(TOKEN_KEY);
-   
+    const userid = localStorage.getItem('userid')
     if (!userState || userState === "undefined"|| userState !=="APPROVED") {
        console.log("Not approved");
        
        return <>
          <Header />
-        <MessagePage navigate={navigate} userState={userState}/>
+        <MessagePage navigate={navigate} userState={userState} userid={userid}/>
         </>  
     }else {
         console.log("USER STATE ",userState, " USER ROLE",userRole)
