@@ -20,6 +20,10 @@ const CenterDashBoard = () => {
         value: "Married(Only for Admin)",
       },
     ],
+    sort: {
+      field: "id", // Replace with the field you want to sort by
+      order: "desc", // or "asc" for ascending order
+    },
   });
   if(isLoading){
     <h1>Loading</h1>
