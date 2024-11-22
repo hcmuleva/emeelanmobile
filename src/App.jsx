@@ -18,7 +18,7 @@ import { PageViewProvider } from "./contextprovider/PageProvider";
 import Controller from "./pages/Controller";
 import LoginPage from "./pages/login/LoginPage";
 import MatchesPage from "./pages/matches";
-import PendingPage from "./pages/nocontent/pending";
+//import PendingPage from "./pages/nocontent/pending";
 import ProfileView from "./pages/profileView";
 import { RegisterPage } from "./pages/register/register";
 import MyProfile from "./pages/myProfile";
@@ -59,7 +59,7 @@ import MyProfile from "./pages/myProfile";
                                     <Route path="/myprofile/:id" element={<MyProfile />} />
                                     <Route path="/matches" element={<MatchesPage />} />
                                     <Route path="/profile/:id" element={<ProfileView />} />
-                                    <Route path="/pending" element={<PendingPage />} />
+                                  
                                 </Route>
                                 <Route path="*" element={<CustomErrorComponent />} />
                             </Routes>
