@@ -9,6 +9,8 @@ import { AgGridReact } from 'ag-grid-react';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 import { FilterIcon, HeartHandshake } from 'lucide-react';
 import ProfileDetails from './ProfileDetails';
+import { UserAddOutlined } from '@ant-design/icons';
+import { RegisterPage } from '../register/register';
 const { Option } = Select;
 
 // Simple Image Component with Fallback
@@ -314,6 +316,7 @@ const CenterTableView = ({rowData,refetch}) => {
  
     return (
       <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
+         {view==="REGISTER" &&<RegisterPage userrole={"CENTER"} createdBy={localStorage.getItem("userid")} setView={setView}/>}
          {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
          {view==="LIST"&&
         <>
@@ -324,6 +327,14 @@ const CenterTableView = ({rowData,refetch}) => {
       style={{ whiteSpace: "nowrap" }}
     >
       <FilterIcon size={15} style={{ color: "brown" }} /> Reset
+    </Button>
+    <Button
+      color="danger"
+      variant="dashed"
+      onClick={()=>setView("REGISTER")}
+      style={{ whiteSpace: "nowrap" }}
+    >
+      <UserAddOutlined size={15} style={{ color: "brown" }} /> Register
     </Button>
         <AgGridReact
           rowData={rowData}
