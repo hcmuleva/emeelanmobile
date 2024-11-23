@@ -4,6 +4,7 @@ import { EditOutlined, SettingOutlined, CameraOutlined } from "@ant-design/icons
 import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
 import { useUpdate } from "@refinedev/core";
 import PhotoComponent from "./PhotoComponent";
+import ImageGallery from "./ImageGallery";
 
 const { Text } = Typography;
 const API_URL = import.meta.env.VITE_SERVER_URL;
@@ -13,7 +14,7 @@ const ProfileCard = ({ user }) => {
   const [showPhoto, setShowPhoto] = useState(false);
   const [form] = Form.useForm();
   const { mutate: updateUser } = useUpdate();
-
+  console.log("Users for photos to see ",user)
   const onFinish = async (values) => {
     try {
       const { profilePicture } = values;
@@ -104,15 +105,10 @@ const ProfileCard = ({ user }) => {
         return (
           <Space direction="vertical" size="small">
             {renderField("Home Address", user.home_address)}
-            {renderField("Shop Address", user.shop_address)}
-            {renderField("Address", user.Address)}
             {renderField("City", user.City)}
-            {renderField("Village", user.Village)}
             {renderField("State", user.State)}
             {renderField("Country", user.Country)}
-            {renderField("District", user.district)}
             {renderField("Postal Code", user.postalcode)}
-            {renderField("Area", user.area)}
           </Space>
         );
       case "educationInfo":
@@ -255,6 +251,8 @@ const ProfileCard = ({ user }) => {
         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
           {showPhoto && renderContent()}
           {!showPhoto && <PhotoComponent user={user} />}
+          {user?.photos&&<ImageGallery images={user.photos}/>}
+
         </div>
       </Card>
     </Space>
