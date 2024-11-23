@@ -219,7 +219,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                     </Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="MobileNumber" label="Mobile Number">
+                <Form.Item name="MobileNumber" label="Mobile Number"  rules={[{ required: true, message: 'Please enter your mobile number' }]}>
                   <Input placeholder="Enter Mobile Number" />
                 </Form.Item>
                 <Form.Item name="MeritalStatus" label="Marital Status" rules={[{ required: true, message: 'Please enter your marital status' }]}>
