@@ -77,8 +77,6 @@ const UserTableView = ({rowData,refetch}) => {
             }
         }
     });
-   
-
     const columnDefs = [
         {
             headerName: "Pictures",
@@ -207,7 +205,7 @@ const UserTableView = ({rowData,refetch}) => {
 </Space.Compact>
       {view==="REQUESTED" && <LikedByMe />}
       {view==="RECIEVED"&&<LikedToMe/> }
-      {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
+      {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData} calledBy={"USER"}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
         {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
         

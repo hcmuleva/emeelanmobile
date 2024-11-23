@@ -5,7 +5,7 @@ import ImageGallery from './profile/ImageGallery';
 import PreferencesDisplay from './profile/PreferencesDisplay';
 import FamilyAndOtherInfo from './profile/FamilyAndOtherInfo';
 
-export default function ProfileDetails({ setView, profileData }) {
+export default function ProfileDetails({ setView, profileData, calledBy }) {
     const { mutate: updateRequestBy, isLoading: isUpdating } = useUpdate();
     const [currentUserId] = useState(localStorage.getItem("userid"));
     const [otherUserId] = useState(profileData?.id);
@@ -17,7 +17,7 @@ export default function ProfileDetails({ setView, profileData }) {
         resource: "users",
         id: String(otherUserId),
         meta: {
-            populate: ["requestsby"],
+            populate: ["requestsby", "Pictures"],
         },
         queryOptions: {
             enabled: !!otherUserId, // Only fetch when ID is present
@@ -105,13 +105,7 @@ export default function ProfileDetails({ setView, profileData }) {
         <>
             <Space>
                 <Button onClick={() => setView("LIST")}>Back To List</Button>
-                <Button
-                    onClick={handleSelectProfile}
-                    loading={isUpdating || isLoading || isLoadingOtherUser}
-                    type="primary"
-                >
-                    Select Profile
-                </Button>
+              
             </Space>
             {profileData?.Pictures && <ImageGallery pictures={profileData?.Pictures} />}
             <Tabs
@@ -123,6 +117,14 @@ export default function ProfileDetails({ setView, profileData }) {
                     children: tab.children,
                 }))}
             />
+             {calledBy==="USER" &&
+                <Button
+                    onClick={handleSelectProfile}
+                    loading={isUpdating || isLoading || isLoadingOtherUser}
+                    type="primary"
+                >
+                   Request For Connection
+                </Button>}
         </>
     );
 }
