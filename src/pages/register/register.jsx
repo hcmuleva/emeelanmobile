@@ -1,217 +1,52 @@
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined
-} from "@ant-design/icons";
-import { useCreate, useLogin, useOnError, useRegister } from "@refinedev/core";
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Steps,
-  notification,
-  theme
-} from "antd";
+import React, { useState } from 'react';
+import { Layout, Card, Form, Input, Button, DatePicker, Select, Tabs, Row, Col, Typography, Progress, notification } from 'antd';
+import { UserOutlined, MailOutlined, TeamOutlined, BookOutlined, LockOutlined } from '@ant-design/icons';
 import { City, Country, State } from "country-state-city";
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import CoverImage from "../../../public/gathjod.png";
-import Help from "../../../public/help.png";
-import Logo from "../../../public/logo.png";
-import "../../styles/register.css";
-import countryCode from "../../utils/countryCode";
 import gotra from "../../utils/gotra.json";
-const KEY = import.meta.env.VITE_CAPTCHA_KEY;
-const API_URL = import.meta.env.VITE_SERVER_URL;
+import "../../styles/register.css"
+import { useCreate } from '@refinedev/core';
+import { useNavigate } from 'react-router-dom';
+
+const { Content } = Layout;
+const { Title, Text } = Typography;
+const { Option } = Select;
+
 export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
+const API_URL = import.meta.env.VITE_SERVER_URL;
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const { useToken } = theme;
-
-export const RegisterPage = () => {
-  const { mutate: register } = useRegister();
-  const { mutate: login } = useLogin();
-  const { mutate: createUser } = useCreate();
-  const [selfImage, setSelfImage] = useState([]);
-  const [fatherImage, setFatherImage] = useState([]);
-  const [motherImage, setMotherImage] = useState([]);
-  const [country, setCountry] = useState({
-    code: "IN",
-    name: "India",
-  });
-  const [state, setState] = useState({
-    code: "",
-    name: "",
-  });
-  const [city, setCity] = useState({
-    code: "",
-    name: "",
-  });
-  const [values, setValues] = useState({
-    FirstName: "",
-    LastName: "",
-    email: "",
-    mobile: "",
-    password: "",
-    dial_code: "",
-    Sex: "",
-    Height: "",
-    Country: "",
-    Gotra: "",
-  });
-  const [step, setStep] = useState(0);
-  const { mutate: onError } = useOnError();
-
+export const RegisterPage = ({userrole,createdBy,setView}) => {
   const [form] = Form.useForm();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [country, setCountry] = useState({});
+  const [state, setState] = useState({});
+  const { mutate: createUser } = useCreate();
   const navigate = useNavigate();
-
-  const formItemProps = {
-    rules: [{ max: 20 }],
-    style: { marginBottom: "1rem" },
-  };
-
-  const onSubmit = (values) => {
+  const onFinish = async(values) => {
+    values['emeelanrole']="MEELAN"
     values["username"] = values["MobileNumber"];
     values["email"] = values["MobileNumber"] + "@hph.com";
-
-    register({ ...values });
-  };
-
-  const handleRedirectToLogin = () => {
-    navigate("/login");
-  };
-
-  const selfImageProps = {
-    onRemove: (file) => {
-      const index = selfImage.indexOf(file);
-      const newSelfImage = selfImage.slice();
-      selfImage.splice(index, 1);
-      setSelfImage(newSelfImage);
-    },
-    beforeUpload: (file) => {
-      setSelfImage([...selfImage, file]);
-      return false;
-    },
-    maxCount: 1,
-  };
-
-  const fatherImageprops = {
-    onRemove: (file) => {
-      const index = fatherImage.indexOf(file);
-      const newfatherImage = fatherImage.slice();
-      newfatherImage.splice(index, 1);
-      setFatherImage(newfatherImage);
-    },
-    beforeUpload: (file) => {
-      setFatherImage([...fatherImage, file]);
-
-      return false;
-    },
-    maxCount: 1,
-  };
-
-  const motherImageprops = {
-    onRemove: (file) => {
-      const index = motherImage.indexOf(file);
-      const newmotherImage = motherImage.slice();
-      newmotherImage.splice(index, 1);
-      setMotherImage(newmotherImage);
-    },
-    beforeUpload: (file) => {
-      setMotherImage([...motherImage, file]);
-      return false;
-    },
-    maxCount: 1,
-  };
-
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-
-  const handleSubmit = async (val) => {
-    const formattedDate = dayjs(val["DOB"])
-      .startOf("day")
-      .tz("Asia/Kolkata")
-      .format();
-    val = {
-      ...values,
-      role: 1,
-      email: values.email.replace(/\s+/g, ''),
-      username: String(values.mobile),
-      ...val,
-      DOB: formattedDate,
-      Country: country.name,
-      State: state.name,
-      City: city.name,
-    };
-    const namePattern = /^[A-Za-z]+$/;
-    if (val.password !== val.re_password) {
-      notification.error({
-        message: "Error",
-        description: "Password did not match",
-        placement: "topRight",
-      });
-      return;
-    }
-    if (!val.FirstName || val.FirstName === "") {
-      notification.error({
-        message: "Error",
-        description: "FirstName is mandatory",
-        placement: "topRight",
-      });
-      return;
-    } else if (!namePattern.test(val.FirstName)) {
-      notification.error({
-        message: "Error",
-        description: "FirstName should contain only alphabets",
-        placement: "topRight",
-      });
-      return;
-    } else if (val.FirstName.length <= 2 || val.FirstName.length > 30) {
-      notification.error({
-        message: "Error",
-        description: "FirstName must be between 2 to 30 characters",
-        placement: "topRight",
-      });
-      return;
-    }
-    val['emeelanrole']="MEELAN"
+    console.log('Form values:', values);
+     values['role']=1
+    if(createdBy&&user){values['profilecreatedby'] =createdBy}
     createUser(
       {
         resource: "users",
-        values: val,
+        values: values,
       },
       {
         onSuccess: async (data) => {
           console.log("Data",data)
           try {
             console.log("Before request")
-            console.log("userid",val.email)
-            console.log("password", val.password)
+            console.log("userid",values.email)
+            console.log("password", values.password)
             const res = await fetch(`${API_URL}/api/auth/local`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ identifier: val.email, password: val.password }),
+              body: JSON.stringify({ identifier: values.email, password: values.password }),
             });
             console.log("Res",res)
-            if (res.ok) {
+            if (res.ok&&!userrole||!createdBy) {
               const logindata = await res.json();
               console.log("Login data",logindata)
               console.log("TOKEN_KEY", logindata.jwt);
@@ -222,8 +57,12 @@ export const RegisterPage = () => {
               localStorage.setItem("userid", String(logindata?.user?.id));
               localStorage.setItem("userstatus",String(logindata?.user?.userstatus));
               localStorage.setItem("emeelanrole",String(logindata?.user?.emeelanrole))
-              navigate("/pending");
-            } else {
+              navigate("/dashboard");
+            } else if(userrole||!createdBy){
+             
+              navigate("/dashboard")
+            }
+            else {
               
               const errorData = await res.json(); // Get error response body
                   notification.error({
@@ -238,809 +77,330 @@ export const RegisterPage = () => {
               description: "Something went wrong, please try again later.",
           });
           }
-        },
-      }
-    );
-  };
-  const mobileCodePreFix = countryCode?.map((code) => {
-    return {
-      label: code.dial_code,
-      key: code.code,
-    };
-  });
-  const handleGenderChange = (option) => {
-    setValues({ ...values, Sex: option });
+        }
+      })
   };
 
-  const handleHeightChange = (option) => {
-    setValues({ ...values, Height: option });
+  const handleTabChange = (activeKey) => {
+    setCurrentStep(Number(activeKey));
   };
 
-  const handleStepChange = (value) => {
-    const values = form.getFieldsValue();
-    setValues({
-      ...values,
-      FirstName: values?.FirstName,
-      LastName: values?.LastName,
-      dial_code: values?.dial_code,
-      mobile: values?.mobile,
-      email: values?.email,
-      password: values?.password,
-    });
-    if (value == "back") {
-      setStep(step - 1);
-    } else {
-      const namePattern = /^[A-Za-z]+$/;
-      if (!values.password || values.password !== values.re_password) {
-        notification.error({
-          message: "Error",
-          description: "Password did not match",
-          placement: "topRight",
-        });
-        return;
-      }
-      if (!values.FirstName || values.FirstName === "") {
-        notification.error({
-          message: "Error",
-          description: "FirstName is mandatory",
-          placement: "topRight",
-        });
-        return;
-      } else if (!namePattern.test(values.FirstName)) {
-        notification.error({
-          message: "Error",
-          description: "FirstName should contain only alphabets",
-          placement: "topRight",
-        });
-        return;
-      } else if (values.FirstName.length <= 2 || values.FirstName.length > 30) {
-        notification.error({
-          message: "Error",
-          description: "FirstName must be between 2 to 30 characters",
-          placement: "topRight",
-        });
-        return;
-      }
-      setStep(step + 1);
-    }
-  };
   const handleCountry = (option) => {
-    Country.getAllCountries().forEach((country) => {
-      if (country.name === option) {
-        setCountry({ code: country.isoCode, name: option });
-      }
-    });
+    // Get the country code based on selected country name
+    const selectedCountry = Country.getAllCountries().find(
+      (country) => country.name === option
+    );
+    setCountry({ code: selectedCountry.isoCode, name: option });
+    setState({}); // Clear selected state
+    form.setFieldsValue({ State: undefined, City: undefined }); // Clear state and city fields
   };
+
   const handleState = (option) => {
-    State.getStatesOfCountry(country.code).forEach((state) => {
-      if (state.name === option) {
-        setState({ code: state.isoCode, name: option });
-      }
-    });
+    const selectedState = State.getStatesOfCountry(country.code).find(
+      (state) => state.name === option
+    );
+    setState({ code: selectedState.isoCode, name: option });
+    form.setFieldsValue({ City: undefined }); // Clear city field
   };
+
+  const tabItems = [
+    { key: '1', tab: 'Personal Info', icon: <UserOutlined /> },
+    { key: '2', tab: 'Contact Details', icon: <MailOutlined /> },
+    { key: '3', tab: 'Family Details', icon: <TeamOutlined /> },
+    { key: '4', tab: 'Education', icon: <BookOutlined /> },
+    { key: '5', tab: 'Profession', icon: <BookOutlined /> },
+  ];
+
   return (
-    <>
-      <div>
-        <img src={CoverImage} className="root-img"></img>
-        <div className="container">
-          <div className="left-sider">
-            <div style={{ display: "flex", gap: "0.3rem" }}>
-              <div>
-                <p>EMEELAN</p>
-                <p id="gathjod">गठजोड़</p>
-              </div>
-              <div>
-                <img
-                  src={Logo}
-                  alt="logo"
-                  style={{ width: "2.5rem", marginTop: "0.3rem" }}
-                ></img>
-              </div>
-            </div>
-            <div className="people">
-              <span>We bring</span>
-              <br />
-              <span>People Together</span>
-            </div>
+    <Layout style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)' }}>
+      <Content style={{ padding: '40px 0' }}>
+        <Card style={{ maxWidth: 800, margin: '0 auto', borderRadius: 15, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <Title level={2} style={{ color: '#ff6b6b', marginBottom: 0 }}>EMEELAN</Title>
+            <Title level={3} style={{ color: '#ff6b6b', marginBottom: 0 }}>गठजोड़</Title>
+            <Text style={{ display: 'block', fontSize: '1.2rem', color: '#4a4a4a' }}>We bring People Together</Text>
           </div>
-          <div className="right-sider">
-            <div className="help-center">
-              <div className="mobile-logo">
-                <div style={{ display: "flex", gap: "0.3rem" }}>
-                  <div>
-                    <p>EMEELAN</p>
-                    <p id="gathjod">गठजोड़</p>
-                  </div>
-                  <div>
-                    <img
-                      src={Logo}
-                      alt="logo"
-                      style={{ width: "2.5rem", marginTop: "0.3rem" }}
-                    ></img>
-                  </div>
-                </div>
-              </div>
-              <div className="help">
-                <img src={Help} alt="help" className="help-img" />
-              </div>
-            </div>
-            <div className="register-details">
-              <Form
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  color: "white",
-                  width: "100%",
-                  justifyContent: "center",
-                }}
-                form={form}
-                onFinish={handleSubmit}
-              >
-                <div className="register">
-                  <span style={{ fontSize: "1.2rem" }}>Welcome To EMEELAN</span>
-                  <span style={{ fontSize: "1rem" }}>गठजोड़</span>
-                  <div style={{ marginTop: "30px" }} className="steps">
-                    <Steps
-                      size="small"
-                      progressDot
-                      className="stepsa"
-                      current={step}
-                      items={[
-                        {
-                          title: <p style={{ color: "white" }}>Step 1</p>,
-                        },
-                        {
-                          title: <p style={{ color: "white" }}>Final</p>,
-                        },
-                      ]}
-                    />
-                  </div>
-                  {step == 0 && (
-                    <>
-                      <div
-                        style={{
-                          display: "flex",
-                          marginTop: "10px",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>First Name</span>
-                          </div>
-                          <Form.Item
-                            name="FirstName"
-                            rules={[
-                              {
-                                required: true,
-                              },
-                            ]}
-                          >
-                            <Input
-                              width={"50%"}
-                              placeholder="FirstName"
-                              required
-                            ></Input>
-                          </Form.Item>
-                        </div>
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>Last Name</span>
-                          </div>
-                          <Form.Item name="LastName">
-                            <Input placeholder="LastName"></Input>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>Email</span>
-                      </div>
-                      <Form.Item name="email" style={{ width: "100%" }}>
-                        <Input
-                          style={{ width: "100%" }}
-                          placeholder="Enter your Email"
-                          required
-                        ></Input>
-                      </Form.Item>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>Mobile Number</span>
-                      </div>
-                      <Form.Item
-                        name="mobile"
-                        style={{ width: "100%" }}
-                        rules={[
-                          {
-                            validator: (_, value) => {
-                              const mobileString = String(value).length;
-                              if (mobileString !== 10) {
-                                return Promise.reject(
-                                  "Please enter a valid number with 10 digits"
-                                );
-                              }
-                              return Promise.resolve();
-                            },
-                          },
-                          {
-                            required: true,
-                            message: "Please Enter mobile number!",
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          style={{ width: "100%" }}
-                          addonBefore={
-                            <Form.Item
-                              noStyle
-                              name={"dial_code"}
-                              initialValue={"+91"}
-                            >
-                              <Select
-                                style={{ width: "80px" }}
-                                defaultValue={"+91"}
-                              >
-                                {mobileCodePreFix?.map((code, index) => (
-                                  <Select.Option key={index} value={code.label}>
-                                    <span>{code.label}</span>
-                                  </Select.Option>
-                                ))}
-                              </Select>
-                            </Form.Item>
-                          }
-                          type="number"
-                          placeholder="Enter your Mobile Number"
-                          required
-                        ></InputNumber>
-                      </Form.Item>
 
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>Password</span>
-                      </div>
-                      <Form.Item name={"password"} style={{ width: "100%" }}>
-                        <Input.Password
-                          placeholder="Enter your Password"
-                          required
-                          type="password"
-                          name="password"
-                        ></Input.Password>
-                      </Form.Item>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>Confirm Password</span>
-                      </div>
-                      <Form.Item name={"re_password"} style={{ width: "100%" }}>
-                        <Input.Password
-                          placeholder="Enter Your Password Again"
-                          type="password"
-                          required
-                        ></Input.Password>
-                      </Form.Item>
-                    </>
-                  )}
-                  {step == 1 && (
-                    <>
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          marginTop: "10px",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>DOB</span>
-                          </div>
-                          <Form.Item
-                            name={"DOB"}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Enter DOB",
-                              },
-                            ]}
-                          >
-                            <DatePicker />
-                          </Form.Item>
-                        </div>
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>Gender</span>
-                          </div>
-                          <Form.Item
-                            name={"Sex"}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Enter Gender",
-                              },
-                            ]}
-                          >
-                            <Select
-                              placeholder="Select gender"
-                              onChange={handleGenderChange}
-                            >
-                              <Select.Option
-                                key={"Male"}
-                                value={"Male"}
-                                children={"Male"}
-                              ></Select.Option>
-                              <Select.Option
-                                key={"Female"}
-                                value={"Female"}
-                                children={"Female"}
-                              ></Select.Option>
-                              
-                            </Select>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>Height</span>
-                      </div>
-                      <Form.Item
-                        name="Height"
-                        style={{ width: "100%" }}
-                        rules={[
-                          {
-                            required: true,
-                          },
-                        ]}
-                      >
-                        <Select
-                          placeholder="Select Your Height"
-                          showSearch
-                          style={{ width: "100%" }}
-                          onChange={handleHeightChange}
-                          //onChange={(e) => handleUserId(e)}
-                        >
-                          {Array.from({ length: 100 }, (_, i) => 100 + i).map(
-                            (height) => (
-                              <Select.Option
-                                key={height}
-                                value={String(height)}
-                              >
-                                {height} cm
-                              </Select.Option>
-                            )
-                          )}
-                        </Select>
-                      </Form.Item>
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>Country</span>
-                          </div>
-                          <Form.Item
-                            name={"Country"}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Enter Country",
-                              },
-                            ]}
-                          >
-                            <Select
-                              style={{ width: "100%" }}
-                              placeholder="Enter Your Country"
-                              showSearch
-                              onChange={(option) => handleCountry(option)}
-                            >
-                              {Country.getAllCountries().map((country) => {
-                                return (
-                                  <Select.Option
-                                    value={country.name}
-                                    label={country.name}
-                                    children={country.name}
-                                  ></Select.Option>
-                                );
-                              })}
-                            </Select>
-                          </Form.Item>
-                        </div>
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>State</span>
-                          </div>
-                          <Form.Item
-                            name={"State"}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Enter State",
-                              },
-                            ]}
-                          >
-                            <Select
-                              placeholder="Select state"
-                              onChange={handleState}
-                              showSearch
-                            >
-                              {State.getStatesOfCountry(country.code).map(
-                                (state) => (
-                                  <Select.Option
-                                    label={state.name}
-                                    value={state.name}
-                                  >
-                                    {state.name}
-                                  </Select.Option>
-                                )
-                              )}
-                            </Select>
-                          </Form.Item>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>City</span>
-                      </div>
-                      <Form.Item
-                        name={"City"}
-                        style={{ width: "100%" }}
-                        rules={[
-                          {
-                            required: true,
-                          },
-                        ]}
-                      >
-                        <Select
-                          style={{ width: "100%" }}
-                          placeholder="Select Your City"
-                          showSearch
-                        >
-                          {City.getCitiesOfState(country.code, state.code).map(
-                            (city) => (
-                              <Select.Option
-                                label={city.name}
-                                value={city.name}
-                              >
-                                {city.name}
-                              </Select.Option>
-                            )
-                          )}
-                        </Select>
-                      </Form.Item>
+          <Progress percent={(currentStep / 5) * 100} showInfo={false} strokeColor="#ff6b6b" style={{ marginBottom: '1rem' }} />
 
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "-10px",
-                        }}
-                      >
-                        <span>Gotra</span>
-                      </div>
-                      <Form.Item
-                        name="Gotra"
-                        style={{ width: "100%" }}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Gotra",
-                          },
-                        ]}
-                      >
-                        <Select
-                          style={{ width: "100%" }}
-                          placeholder="Enter Your Gotra"
-                          showSearch
-                        >
-                          {gotra?.Gotra?.map((gotra) => {
-                            return (
-                              <Select.Option
-                                value={gotra.EName}
-                                label={gotra.EName}
-                              >
-                                {gotra.EName} {`(${gotra.HName})`}
-                              </Select.Option>
-                            );
-                          })}
-                          <Select.Option value="Other" label="Other">
-                            Other
-                          </Select.Option>
-                        </Select>
-                      </Form.Item>
-                    </>
-                  )}
-                  {step == 2 && (
-                    <>
-                      <div
-                        style={{
-                          display: "flex",
-                          marginTop: "10px",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>DOB</span>
-                          </div>
-                          <Input
-                            width={"50%"}
-                            placeholder="FirstName"
-                            //onChange={(e) => handleUserId(e)}
-                          ></Input>
-                        </div>
-                        <div
-                          style={{
-                            width: "47%",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "0.1rem",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1rem",
-                            }}
-                          >
-                            <span>Last Name</span>
-                          </div>
-                          <Input
-                            placeholder="LastName"
-                            //onChange={(e) => handleUserId(e)}
-                          ></Input>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <span>Email</span>
-                      </div>
-                      <Input
-                        placeholder="Enter your Email"
-                        name="email"
-                        //onChange={(e) => handleUserId(e)}
-                      ></Input>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <span>Mobile Number</span>
-                      </div>
-                      <Input
-                        prefix={<span style={{ color: "darkgray" }}>+91 </span>}
-                        name="mobile_number"
-                        placeholder="Enter your Mobile Number"
-                        //onChange={(e) => handleUserId(e)}
-                      ></Input>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <span>Password</span>
-                      </div>
-                      <Input.Password
-                        placeholder="Enter your Password"
-                        type="password"
-                        name="password"
-                        //onChange={(e) => handlePassword(e)}
-                      ></Input.Password>
-                      <div
-                        style={{
-                          width: "100%",
-                          fontSize: "1rem",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <span>Confirm Password</span>
-                      </div>
-                      <Input.Password
-                        placeholder="Enter your Password again"
-                        type="password"
-                        //onChange={(e) => handlePassword(e)}
-                      ></Input.Password>
-                    </>
-                  )}
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "12px",
-                      alignItems: "center",
-                    }}
+          <Form form={form} layout="vertical" onFinish={onFinish}>
+            <Tabs defaultActiveKey="1" onChange={handleTabChange} style={{ marginBottom: 32 }}>
+              <Tabs.TabPane tab={<span><UserOutlined />Personal Info</span>} key="1">
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item name="FirstName" label="First Name" rules={[{ required: true, message: 'Please enter your first name' }]}>
+                      <Input prefix={<UserOutlined />} placeholder="Enter First Name" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item name="LastName" label="Last Name" rules={[{ required: true, message: 'Please enter your last name' }]}>
+                      <Input prefix={<UserOutlined />} placeholder="Enter Last Name" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+      <Col xs={24} sm={12}>
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[
+            { required: true, message: 'Please enter your password' },
+            { min: 6, message: 'Password must be at least 6 characters long' },
+          ]}
+          hasFeedback
+        >
+          <Input.Password
+            prefix={<LockOutlined />}
+            placeholder="Enter Password"
+          />
+        </Form.Item>
+      </Col>
+      <Col xs={24} sm={12}>
+        <Form.Item
+          name="confirmPassword"
+          label="Confirm Password"
+          dependencies={['password']}
+          hasFeedback
+          rules={[
+            { required: true, message: 'Please confirm your password' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords do not match'));
+              },
+            }),
+          ]}
+        >
+          <Input.Password
+            prefix={<LockOutlined />}
+            placeholder="Confirm Password"
+          />
+        </Form.Item>
+      </Col>
+    </Row>
+                <Form.Item name="email" label="Email Address" rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}>
+                  <Input prefix={<MailOutlined />} placeholder="Enter Email Address" />
+                </Form.Item>
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item name="DOB" label="Date of Birth" rules={[{ required: true, message: 'Please select your date of birth' }]}>
+                      <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" placeholder="Select Date of Birth" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item name="Sex" label="Sex" rules={[{ required: true, message: 'Please select your gender' }]}>
+                      <Select placeholder="Select Sex">
+                        <Option value="Male">Male</Option>
+                        <Option value="Female">Female</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item
+                  name="Gotra"
+                  label="Gotra"
+                  rules={[{ required: true, message: "Please select your gotra." }]}
+                >
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Select Your Gotra"
+                    showSearch
+                    optionFilterProp="label"
                   >
-                    {step < 1 && (
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          justifyContent:
-                            step == 0 ? "flex-end" : "space-between",
-                        }}
+                    {gotra.Gotra.map((g) => (
+                      <Option key={g.EName} value={g.EName} label={g.EName}>
+                        {g.EName} ({g.HName})
+                      </Option>
+                    ))}
+                    <Option value="Other" label="Other">
+                      Other
+                    </Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="MobileNumber" label="Mobile Number">
+                  <Input placeholder="Enter Mobile Number" />
+                </Form.Item>
+                <Form.Item name="MeritalStatus" label="Marital Status" rules={[{ required: true, message: 'Please enter your marital status' }]}>
+                  <Input placeholder="Enter Marital Status" />
+                </Form.Item>
+                <Form.Item name="Address" label="Home Address">
+                  <Input.TextArea placeholder="Enter Home Address" />
+                </Form.Item>
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="Country"
+                      label="Country"
+                      rules={[{ required: true, message: "Please Enter Country" }]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Select Your Country"
+                        showSearch
+                        onChange={handleCountry}
                       >
-                        {step !== 0 && (
-                          <Button
-                            style={{
-                              width: "20%",
-                              background: "rgba(250, 250, 250, 0.2)",
-                              color: "white",
-                            }}
-                            onClick={() => handleStepChange("back")}
-                          >
-                            <ArrowLeftOutlined></ArrowLeftOutlined>
-                          </Button>
-                        )}
-                        <Button
-                          style={{
-                            width: "20%",
-                            background: "rgba(250, 250, 250, 0.2)",
-                            color: "white",
-                          }}
-                          onClick={() => handleStepChange("forth")}
-                        >
-                          <ArrowRightOutlined />
-                        </Button>
-                      </div>
-                    )}
-                    {step == 1 && (
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
+                        {Country.getAllCountries().map((country) => (
+                          <Option key={country.isoCode} value={country.name}>
+                            {country.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="State"
+                      label="State"
+                      rules={[{ required: true, message: "Please Enter State" }]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Select State"
+                        onChange={handleState}
+                        showSearch
+                        disabled={!country.code}
                       >
-                        <Button
-                          style={{
-                            width: "20%",
-                            background: "rgba(250, 250, 250, 0.2)",
-                            color: "white",
-                          }}
-                          onClick={() => setStep(step - 1)}
-                        >
-                          <ArrowLeftOutlined />
-                        </Button>
-                        <Button
-                          style={{
-                            width: "30%",
-                            background: "rgba(250, 250, 250, 0.2)",
-                            color: "white",
-                          }}
-                          htmlType="submit"
-                        >
-                          Sign Up
-                        </Button>
-                      </div>
-                    )}
-                    <div style={{ fontSize: "1rem" }}>
-                      <span>Already have an account?</span>
-                      <span style={{cursor: "pointer"}} onClick={() => navigate('/login')}> Log In </span>
-                    </div>
-                  </div>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+                        {State.getStatesOfCountry(country.code).map((state) => (
+                          <Option key={state.isoCode} value={state.name}>
+                            {state.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="City"
+                      label="City"
+                      rules={[{ required: true, message: "Please Enter City" }]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Select Your City"
+                        showSearch
+                        disabled={!state.code}
+                      >
+                        {City.getCitiesOfState(country.code, state.code).map((city) => (
+                          <Option key={city.name} value={city.name}>
+                            {city.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item name="postalcode" label="Pin Code">
+                      <Input placeholder="Enter Pin Code" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<span><MailOutlined />Contact Details</span>} key="2">
+                <Form.Item name="MobileNumber" label="Mobile Number">
+                  <Input placeholder="Enter Mobile Number" />
+                </Form.Item>
+                <Form.Item name="FatherMobileNumber" label="Father's Mobile">
+                  <Input placeholder="Enter Father's Mobile Number" />
+                </Form.Item>
+                <Form.Item name="MamajiMobileNumber" label="Mamaji's Mobile">
+                  <Input placeholder="Enter Mamaji's Mobile Number" />
+                </Form.Item>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<span><TeamOutlined />Family Details</span>} key="3">
+                <Form.Item name="FatherName" label="Father's Name">
+                  <Input placeholder="Enter Father's Name" />
+                </Form.Item>
+                <Form.Item name="MotherName" label="Mother's Name">
+                  <Input placeholder="Enter Mother's Name" />
+                </Form.Item>
+                <Form.Item name="father_occupation" label="Father's Occupation">
+                  <Input placeholder="Enter Father's Occupation" />
+                </Form.Item>
+                <Form.Item
+                  name="maternalGotra"
+                  label="Maternal Gotra"
+                  rules={[{ required: true, message: "Please select maternal gotra." }]}
+                >
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Select Maternal Gotra"
+                    showSearch
+                    optionFilterProp="label"
+                  >
+                    {gotra.Gotra.map((g) => (
+                      <Option key={g.EName} value={g.EName} label={g.EName}>
+                        {g.EName} ({g.HName})
+                      </Option>
+                    ))}
+                    <Option value="Other" label="Other">
+                      Other
+                    </Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="GrandFatherName" label="Grandfather's Name">
+                  <Input placeholder="Enter Grandfather's Name" />
+                </Form.Item>
+                <Form.Item name="Siblings" label="Siblings">
+                  <Input placeholder="Enter Number of Siblings" />
+                </Form.Item>
+                <Form.Item name="NanajiName" label="Nanaji's Name">
+                  <Input placeholder="Enter Nanaji's Name" />
+                </Form.Item>
+                <Form.Item name="NanijiName" label="Naniji's Name">
+                  <Input placeholder="Enter Naniji's Name" />
+                </Form.Item>
+                <Form.Item name="MamajiName" label="Mamaji's Name">
+                  <Input placeholder="Enter Mamaji's Name" />
+                </Form.Item>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<span><BookOutlined />Education</span>} key="4">
+                <Form.Item name="education_level" label="Education Level">
+                  <Input placeholder="Enter Education Level" />
+                </Form.Item>
+                <Form.Item name="HighestDegree" label="Highest Degree">
+                  <Input placeholder="Enter Highest Degree" />
+                </Form.Item>
+                <Form.Item name="AdditionalQualification" label="Additional Qualification">
+                  <Input placeholder="Enter Additional Qualification" />
+                </Form.Item>
+                <Form.Item name="LastCollege" label="Last College">
+                  <Input placeholder="Enter Last College" />
+                </Form.Item>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<span><BookOutlined />Profession</span>} key="5">
+                <Form.Item name="Profession" label="Profession">
+                  <Input placeholder="Enter Profession" />
+                </Form.Item>
+                <Form.Item name="CompanyName" label="Company Name">
+                  <Input placeholder="Enter Company Name" />
+                </Form.Item>
+                <Form.Item name="Designation" label="Designation">
+                  <Input placeholder="Enter Designation" />
+                </Form.Item>
+                <Form.Item name="WorkingCity" label="Working City">
+                  <Input placeholder="Enter Working City" />
+                </Form.Item>
+                <Form.Item name="Income" label="Income">
+                  <Input placeholder="Enter Income" />
+                </Form.Item>
+                <Form.Item name="PreProfession" label="Previous Profession">
+                  <Input placeholder="Enter Previous Profession" />
+                </Form.Item>
+              </Tabs.TabPane>
+            </Tabs>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                Register
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Content>
+    </Layout>
   );
 };
+
