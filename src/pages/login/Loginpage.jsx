@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const { mutate: login, isLoading } = useLogin();
 
+  // Redirect to dashboard if the user is already logged in
   useEffect(() => {
     if (localStorage.getItem("jwt-token")) navigate("/dashboard");
   }, []);
@@ -52,6 +53,11 @@ const LoginPage = () => {
     }
   };
 
+  // Redirect to the Help page
+  const handleHelpClick = () => {
+    navigate("/help");
+  };
+
   return (
     <div>
       <img src={`${Base_Url}gathjod.png`} className="root-img" alt="Background" />
@@ -74,7 +80,7 @@ const LoginPage = () => {
                   </p>
                 </div>
               </div>
-              <div className="help">
+              <div className="help" onClick={handleHelpClick} style={{ cursor: "pointer" }}>
                 <img src={`${Base_Url}help.png`} alt="help" className="help-img" />
               </div>
             </div>
