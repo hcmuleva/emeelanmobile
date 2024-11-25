@@ -1,161 +1,102 @@
-.root-img{
-    width: 1700px;
+.root-img {
+    width: 100%;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 0 !important;
+    z-index: 0;
     background-size: cover;
     background-position: center;
     pointer-events: none;
+    opacity: 0.8;
 }
-#gathjod{
-    font-size: medium;
-    margin-top: -35px;
-}
-.mobile-logo{
-    display: none;
-    gap: "0.3rem";
-    margin-top: 10px;
-    margin-left: 30px;
-}
-.help-img{
-    padding: 0;
-    margin: 0;
-    margin-right: -140px;
-    margin-top: -40px;
-    scale: 0.25;
-}
-.container{
+
+.container {
     width: 100%;
     height: 100vh;
-    display: flex;
-    background: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    top: 0;
-    left: 0;
-    color: white; /* Black text for contrast */
-    z-index: 1; 
-}
-.container .left-sider{
-    color: solid white;
-    margin-top: 40px;
-    margin-left: 250px;
-    width: 550px;
-    font-size: x-large;
-}
-.container .right-sider{
-    color: solid white;
-    width: 550px;
-    background:rgb(250, 128, 114, 0.3);
-    font-size: x-large;
-}
-.people{
-    margin-top: 200px;
-    margin-left: 200px;
-    font-size: 40px;
-}
-.help-center{
-    display: flex;
-    margin-top: 20px;
-    height: 100px;
-    margin-bottom: 140px;
-    width: 100%;
-}
-.help-center .help{
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    margin-right: 20px;
-    gap: 10px;
-}
-.login-details{
-    display: flex;
-    margin-top: 100px;
-    width: 100%;
-    justify-content: center;
-}
-.login{
-    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #d09e2a;
+    z-index: 1;
 }
-img{
-    opacity: 0.8;
+
+.card-container {
+    max-width: 500px;
+    width: 90%;
+    background: rgba(57, 5, 5, 0.9);
+    color: #e8ebee;
 }
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-    .left-sider{
-        display: none;
+
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.emeelan-gath {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.help {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.help-img {
+    width: 80px; /* Reduce size */
+    height: auto; /* Maintain aspect ratio */
+    margin-left: 10px; /* Add spacing if needed */
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .top {
+        flex-direction: column;
+        align-items: flex-start;
     }
-    .root-img{
-        width: 1000px;
-        margin-left: -400px;
-    }
-    .mobile-logo{
-        display: "flex";
-    }
-    .container{
-        display: flex;
-        justify-content: center;
-    }
-    .login-details{
-        scale: 0.8;
-        margin-top: 60px
-    }
-    .help-center{
-        scale: 0.8;
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
+
+    .login {
         width: 100%;
+        padding: 1rem;
     }
-    .mobile-logo{
-        display: block;
+
+    .help-img {
+        width: 60px; /* Further reduce size on smaller screens */
     }
 }
 
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (max-width: 768px) {
-    .left-sider{
-        display: none;
-    }
-    .container{
-        display: flex;
-        justify-content: center;
-    }
-    .mobile-logo{
-        display: block;
-    }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (max-width: 992px) {
-    .left-sider{
-        display: none;
-    }
-    .container{
-        display: flex;
-        justify-content: center;
-    }
-    .mobile-logo{
-        display: block;
-    }
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (max-width: 1200px) {
-    .left-sider{
-        display: none;
-    }
-    .container{
-        display: flex;
-        justify-content: center;
-    }
-    .mobile-logo{
-        display: block;
+@media (max-width: 600px) {
+    .login-details {
+        width: 100%;
+        padding: 1rem;
     }
 }
