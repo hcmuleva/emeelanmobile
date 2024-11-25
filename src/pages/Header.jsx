@@ -7,8 +7,11 @@ import { CaretRightOutlined, SearchOutlined, UserAddOutlined, UserOutlined } fro
 import { useNavigate } from "react-router-dom";
 import { useOne } from "@refinedev/core";
 
+const Base_Url = import.meta.env.VITE_BASE_URL;
+
 const Header = ({ setSearch } ) => {
   const userid = localStorage.getItem("userid");
+
   
   const navigate = useNavigate();
   const {data, isLoading} = useOne({
@@ -37,7 +40,7 @@ const Header = ({ setSearch } ) => {
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
         <div style={{ textAlign: "center" }}>
           <img
-            src="/logo.png"
+            src = {`${Base_Url}logo.png`}
             alt="logo"
             style={{ width: "3rem", height: "3rem", objectFit: "contain" }}
           />
