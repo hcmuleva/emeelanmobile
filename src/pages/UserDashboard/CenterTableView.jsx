@@ -333,6 +333,7 @@ const CenterTableView = ({rowData,refetch}) => {
       variant="dashed"
       onClick={()=>setView("REGISTER")}
       style={{ whiteSpace: "nowrap" }}
+      disabled={true}
     >
       <UserAddOutlined size={15} style={{ color: "brown" }} /> Register
     </Button>
