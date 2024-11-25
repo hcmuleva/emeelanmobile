@@ -73,9 +73,6 @@ const MessagePage = ({userState,navigate,userid}) => {
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Account Inactive</h1>
                     <p className="text-gray-600 mb-4">Your account is currently inactive. Please reactivate to regain access. For more support, please contact Admin: +91 9019905115 </p>
                     <div className="space-y-2">
-                      <Button asChild className="w-full">
-                        <Link href="/reactivate">Reactivate Account</Link>
-                      </Button>
                       <Button onClick={clearLocalStorageAndRedirect}>Try Again</Button>
 
                     </div>
