@@ -112,7 +112,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)' }}>
+<Layout style={{ minHeight: '100vh', background: 'rgba(57, 5, 5, 0.9)' }}>
       <Content style={{ padding: '40px 0' }}>
         <Card style={{ maxWidth: 800, margin: '0 auto', borderRadius: 15, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -219,7 +219,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                     </Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="MobileNumber" label="Mobile Number">
+                <Form.Item name="MobileNumber" label="Mobile Number"  rules={[{ required: true, message: 'Please enter your mobile number' }]}>
                   <Input placeholder="Enter Mobile Number" />
                 </Form.Item>
                 <Form.Item name="MeritalStatus" label="Marital Status" rules={[{ required: true, message: 'Please enter your marital status' }]}>
