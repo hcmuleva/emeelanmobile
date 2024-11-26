@@ -1,4 +1,4 @@
-    import { Refine } from "@refinedev/core";
+import { Refine } from "@refinedev/core";
 import { DataProvider } from "@refinedev/strapi-v4";
 import { ConfigProvider } from "antd";
 import React from "react";
@@ -18,54 +18,50 @@ import { PageViewProvider } from "./contextprovider/PageProvider";
 import Controller from "./pages/Controller";
 import LoginPage from "./pages/login/LoginPage";
 import MatchesPage from "./pages/matches";
-//import PendingPage from "./pages/nocontent/pending";
-import ProfileView from "./pages/profileView";
 import { RegisterPage } from "./pages/register/register";
 import MyProfile from "./pages/myProfile";
+import HelpPage from "./help/HelpPage";
 
-    export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
-    const API_URL = import.meta.env.VITE_SERVER_URL;
+export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
+const API_URL = import.meta.env.VITE_SERVER_URL;
 
-    export default function App() {
-        return (
-            <ConfigProvider>
-                <BrowserRouter>
-                    <Refine
-                        dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
-                        authProvider={authProvider}
-                        routerProvider={{
-                            routes: {
-                                login: "/login",
-                            },
-                        }}
-                        
-
-                        resources={resourcesConfig}
-                    >
-                        <PageViewProvider>
-                            <Routes>
+export default function App() {
+    return (
+        <ConfigProvider>
+            <BrowserRouter>
+                <Refine
+                    dataProvider={DataProvider(API_URL + `/api`, axiosInstance)}
+                    authProvider={authProvider}
+                    routerProvider={{
+                        routes: {
+                            login: "/login",
+                        },
+                    }}
+                    resources={resourcesConfig}
+                >
+                    <PageViewProvider>
+                        <Routes>
                             <Route path="/register" element={<RegisterPage />} />
-                                <Route path="/login" element={<LoginPage />} />
-                                <Route
-                                    element={
-                                        <ProtectedRoute>
-                                            <CustomLayout>
-                                                <Outlet />
-                                            </CustomLayout>
-                                        </ProtectedRoute>
-                                    }
-                                >
-                                    <Route path="/dashboard" element={<Controller/>} />
-                                    <Route path="/myprofile/:id" element={<MyProfile />} />
-                                    <Route path="/matches" element={<MatchesPage />} />
-                                    <Route path="/profile/:id" element={<ProfileView />} />
-                                  
-                                </Route>
-                                <Route path="*" element={<CustomErrorComponent />} />
-                            </Routes>
-                        </PageViewProvider>
-                    </Refine>
-                </BrowserRouter>
-            </ConfigProvider>
-        );
-    }
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/help" element={<HelpPage />} /> {/* New Help Page Route */}
+                            <Route
+                                element={
+                                    <ProtectedRoute>
+                                        <CustomLayout>
+                                            <Outlet />
+                                        </CustomLayout>
+                                    </ProtectedRoute>
+                                }
+                            >
+                                <Route path="/dashboard" element={<Controller />} />
+                                <Route path="/myprofile/:id" element={<MyProfile />} />
+                                <Route path="/matches" element={<MatchesPage />} />
+                            </Route>
+                            <Route path="*" element={<CustomErrorComponent />} />
+                        </Routes>
+                    </PageViewProvider>
+                </Refine>
+            </BrowserRouter>
+        </ConfigProvider>
+    );
+}
