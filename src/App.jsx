@@ -16,11 +16,12 @@ import { axiosInstance } from "./config/axiosInstance";
 import { resourcesConfig } from "./config/resources";
 import { PageViewProvider } from "./contextprovider/PageProvider";
 import Controller from "./pages/Controller";
-import LoginPage from "./pages/login/LoginPage";
+//import LoginPage from "./pages/login/LoginPage";
 import MatchesPage from "./pages/matches";
 import { RegisterPage } from "./pages/register/register";
 import MyProfile from "./pages/myProfile";
 import HelpPage from "./help/HelpPage";
+import LoginPage from "./pages/login/Loginpage";
 
 export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 const API_URL = import.meta.env.VITE_SERVER_URL;
