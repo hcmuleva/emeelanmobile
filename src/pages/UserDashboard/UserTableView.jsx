@@ -49,7 +49,7 @@ const UserTableView = ({rowData,refetch}) => {
     const { mutate:updateUser } = useUpdate();
     const [isModalVisible, setIsModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
-
+  console.log("UserTableView rowData",rowData)
   // Open Modal
   const handleButtonClick = (data) => {
     console.log("DATA for Gathjod",data)
