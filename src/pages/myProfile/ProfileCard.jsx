@@ -5,6 +5,7 @@ import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
 import { useUpdate } from "@refinedev/core";
 import PhotoComponent from "./PhotoComponent";
 import ImageGallery from "./ImageGallery";
+import Header from "../Header";
 
 const { Text } = Typography;
 const API_URL = import.meta.env.VITE_SERVER_URL;
@@ -167,6 +168,7 @@ const ProfileCard = ({ user }) => {
 
   return (
     <Space direction="vertical" size="large" style={{ width: 300 }}>
+      <Header/>
       <Card>
         <Space direction="vertical" size="middle" style={{ width: "100%" }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
