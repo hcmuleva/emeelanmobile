@@ -4,6 +4,8 @@ import { useOne, useUpdate } from '@refinedev/core';
 import ImageGallery from './profile/ImageGallery';
 import PreferencesDisplay from './profile/PreferencesDisplay';
 import FamilyAndOtherInfo from './profile/FamilyAndOtherInfo';
+import Preference from './Preference';
+import ProfileViewer from './ProfileViewer';
 
 export default function ProfileDetails({ setView, profileData, calledBy }) {
     const { mutate: updateRequestBy, isLoading: isUpdating } = useUpdate();
@@ -92,12 +94,12 @@ export default function ProfileDetails({ setView, profileData, calledBy }) {
         {
             key: '3',
             label: 'Preferences',
-            children: 'Under Development',
+            children: <Preference profileData={profileData} />,
         },
         {
             key: '4',
             label: 'BioData',
-            children: 'Under Development',
+            children: <ProfileViewer profileData={profileData}/>,
         },
     ];
 

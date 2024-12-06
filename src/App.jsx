@@ -42,6 +42,7 @@ export default function App() {
                 >
                     <PageViewProvider>
                         <Routes>
+                            
                             <Route path="/register" element={<RegisterPage />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="/help" element={<HelpPage />} /> {/* New Help Page Route */}
