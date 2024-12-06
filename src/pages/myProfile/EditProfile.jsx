@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Card, Avatar, Button, Form, Input, Tabs, Typography, Space, notification } from "antd";
+import { Card, Avatar, Button, Form, Input, Tabs, Typography, Space, notification,Upload } from "antd";
 import { EditOutlined, SettingOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
+
 import { useUpdate } from "@refinedev/core";
 import ChangePassword from "./ChangePassword"; // Import ChangePassword component
 
@@ -232,6 +234,102 @@ export default function EditProfile({ user }) {
                     <Form.Item name="FoodPreference" label="Food Preference">
                       <Input placeholder="Enter Food Preference" />
                     </Form.Item>
+                  </Space>
+                </TabPane>
+
+                {/* Prefrence Tab */}
+                <TabPane tab="Preference" key="preference">
+                  <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                    <Form layout="vertical">
+
+                      {/* PreMinAge */}
+                      <Form.Item name="PreMinAge" label="Minimum Age">
+                        <Input placeholder="Enter Minimum Age" type="number" />
+                      </Form.Item>
+
+                      {/* PreMaxAge */}
+                      <Form.Item name="PreMaxAge" label="Maximum Age">
+                        <Input placeholder="Enter Maximum Age" type="number" />
+                      </Form.Item>
+
+                      {/* PreMinHeight */}
+                      <Form.Item name="PreMinHeight" label="Minimum Height (cm)">
+                        <Input placeholder="Enter Minimum Height" type="number" />
+                      </Form.Item>
+
+                      {/* PreMaxHeight */}
+                      <Form.Item name="PreMaxHeight" label="Maximum Height (cm)">
+                        <Input placeholder="Enter Maximum Height" type="number" />
+                      </Form.Item>
+
+                      {/* PreProfession */}
+                      <Form.Item name="PreProfession" label="Profession">
+                        <Input placeholder="Enter Profession" />
+                      </Form.Item>
+
+                      {/* PreQualification */}
+                      <Form.Item name="PreQualification" label="Qualification">
+                        <Input placeholder="Enter Qualification" />
+                      </Form.Item>
+                      {/* PreDescription */}
+                      <Form.Item name="PreDescription" label="Description">
+                        <Input.TextArea placeholder="Enter Description" rows={4} />
+                      </Form.Item>
+                    </Form>
+
+                  </Space>
+                </TabPane>
+
+                {/* Profile Upload Tab */}
+                <TabPane tab="ProfileUpload" key="profileupload">
+                  <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                     <Form layout="vertical">
+                      {/* File Upload */}
+                      <Form.Item
+                        name="profiledoc"
+                        label="Profile Document"
+                        valuePropName="fileList"
+                        getValueFromEvent={(e) => {
+                          // Normalize the uploaded files value
+                          if (Array.isArray(e)) return e;
+                          return e?.fileList;
+                        }}
+                        rules={[
+                          { required: true, message: "Please upload a profile document!" },
+                        ]}
+                      >
+                        <Upload
+                          name="file"
+                          accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                          listType="text"
+                          beforeUpload={(file) => {
+                            const isAllowedFile =
+                              file.type === "image/jpeg" ||
+                              file.type === "image/png" ||
+                              file.type === "application/pdf" ||
+                              file.type === "application/msword" ||
+                              file.type ===
+                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+                            if (!isAllowedFile) {
+                              alert("You can only upload JPG, PNG, PDF, DOC, or DOCX files!");
+                              return Upload.LIST_IGNORE;
+                            }
+
+                            const isFileSizeValid = file.size / 1024 / 1024 < 5; // 5MB limit
+                            if (!isFileSizeValid) {
+                              alert("File must be smaller than 5MB!");
+                              return Upload.LIST_IGNORE;
+                            }
+
+                            return true; // Accept the file
+                          }}
+                        >
+                          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        </Upload>
+                      </Form.Item>
+                    </Form>;
+
                   </Space>
                 </TabPane>
               </Tabs>
