@@ -7,75 +7,75 @@ const { Text, Paragraph } = Typography;
 const FAQComponent = () => {
   return (
     <div style={{ margin: "20px 0" }}>
-      <Typography.Title level={4}>Form Filling Help</Typography.Title>
+     
       <Collapse accordion>
         {/* PreDescription Section */}
-        <Panel header="Description" key="1">
+        <Panel header="एप्प को डाउनलोड कैसे करे" key="1">
           <Paragraph>
-            <Text strong>What to Enter:</Text> Provide a short description of your profile or lifestyle preferences. 
-            Use plain text only, avoiding special characters.
+            <Text strong>प्लेस्टोर में ई-मीलन या EMeelan सर्च करे :</Text> प्लेस्टोर में ई-मीलन या EMeelan सर्च करे जिसके बाद आप को दो स्क्रीन दिखेगी, आप को दूसरी वाली एप्लीकेशन डाउनलोड करना है 
           </Paragraph>
-          <Paragraph>
-            <Text strong>Example:</Text> "Looking for a dynamic and outgoing lifestyle."
-          </Paragraph>
+          
+          <img
+          width="100%" // Adjust width as needed
+          height="auto" // Keep proportions
+          controls // Enables playback controls
+          src="https://hphmeelan.s3.us-east-1.amazonaws.com/Screenshot+2024-12-08+at+2.18.52%E2%80%AFPM.png"
+        >
+          
+        </img>
+        </Panel>
+        <Panel header="नए यूजर  रजिस्टर कैसे करे" key="2">
+        <Paragraph>
+      <Text strong>रजिस्टर करे:</Text> 
+      <a 
+        href="https://emeelan.com/emeelan/register" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{ marginLeft: "8px" }}
+      >
+        रजिस्टर करे(Click here to register)
+      </a>
+    </Paragraph>
+          
+          <video
+          width="100%" // Adjust width as needed
+          height="auto" // Keep proportions
+          controls // Enables playback controls
+          src="https://hphmeelan.s3.us-east-1.amazonaws.com/Screen+Recording+2024-12-08+at+1.56.07%E2%80%AFPM.mov"
+        >
+        
+        </video>
         </Panel>
 
         {/* PreMinAge and PreMaxAge Section */}
-        <Panel header="Minimum and Maximum Age" key="2">
+        <Panel header="प्रोफाइल को कैसे देखना है" key="3">
           <Paragraph>
-            <Text strong>What to Enter:</Text> Specify the minimum and maximum age values in numbers.
+            <Text strong>प्रोफाइल को कैसे देखना है:</Text>,और कैसेफ़िल्टर करना है, रिक्वेस्ट कैसे भेजे और कैसे आप अपनी  रिक्वेस्ट को देखे .
           </Paragraph>
-          <Paragraph>
-            <Text strong>Example:</Text> Minimum Age: <Text code>25</Text>, Maximum Age: <Text code>35</Text>.
-          </Paragraph>
-          <Paragraph>
-            Ensure the minimum age is less than the maximum age.
-          </Paragraph>
+          <video
+          width="100%" // Adjust width as needed
+          height="auto" // Keep proportions
+          controls // Enables playback controls
+          src="https://us-east-1.console.aws.amazon.com/s3/object/hphmeelan?region=us-east-1&bucketType=general&prefix=profileView.mov"
+        >
+        
+        </video>
         </Panel>
 
         {/* PreMinHeight and PreMaxHeight Section */}
-        <Panel header="Minimum and Maximum Height" key="3">
+        <Panel header=" हेल्प लाइन नंबर" key="4">
           <Paragraph>
-            <Text strong>What to Enter:</Text> Specify height values in centimeters (cm).
-          </Paragraph>
-          <Paragraph>
-            <Text strong>Example:</Text> Minimum Height: <Text code>150</Text>, Maximum Height: <Text code>180</Text>.
+            <Text strong>एडमिन से संपर्क:</Text>एडमिन (+91-9019905115)से संपर्क करने के लिए नंबर और टाइम  सुबह १० बजे से शाम के ५ बजे तक .
           </Paragraph>
         </Panel>
 
-        {/* PreProfession Section */}
-        <Panel header="Profession" key="4">
-          <Paragraph>
-            <Text strong>What to Enter:</Text> Enter the preferred profession or occupation.
-          </Paragraph>
-          <Paragraph>
-            <Text strong>Example:</Text> "Software Engineer," "Doctor," or "Teacher."
-          </Paragraph>
-        </Panel>
+      
 
         {/* PreQualification Section */}
-        <Panel header="Qualification" key="5">
-          <Paragraph>
-            <Text strong>What to Enter:</Text> Mention the preferred educational qualification.
-          </Paragraph>
-          <Paragraph>
-            <Text strong>Example:</Text> "Bachelor's Degree," "Master's Degree," or "Ph.D."
-          </Paragraph>
-        </Panel>
+       
 
         {/* Profile Document Section */}
-        <Panel header="Profile Document Upload" key="6">
-          <Paragraph>
-            <Text strong>What to Upload:</Text> Upload an image or document file for the profile. 
-            Accepted formats: <Text code>.jpg</Text>, <Text code>.png</Text>, <Text code>.pdf</Text>, <Text code>.doc</Text>, <Text code>.docx</Text>.
-          </Paragraph>
-          <Paragraph>
-            <Text strong>File Size:</Text> Ensure the file is less than 5 MB.
-          </Paragraph>
-          <Paragraph>
-            <Text strong>Example:</Text> A professional resume or profile picture.
-          </Paragraph>
-        </Panel>
+       
       </Collapse>
     </div>
   );
