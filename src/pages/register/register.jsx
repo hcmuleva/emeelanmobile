@@ -30,57 +30,67 @@ export const RegisterPage = ({ userrole, createdBy, setView }) => {
     console.log('Form values:', values);
     values['role'] = 1
     if (createdBy && user) { values['profilecreatedby'] = createdBy }
-    createUser(
-      {
-        resource: "users",
-        values: values,
-      },
-      {
-        onSuccess: async (data) => {
-          console.log("Data", data)
-          try {
-            console.log("Before request")
-            console.log("userid", values.email)
-            console.log("password", values.password)
-            const res = await fetch(`${API_URL}/api/auth/local`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ identifier: values.email, password: values.password }),
-            });
-            console.log("Res", res)
-            if (res.ok && !userrole || !createdBy) {
-              const logindata = await res.json();
-              console.log("Login data", logindata)
-              console.log("TOKEN_KEY", logindata.jwt);
-              console.log("userid", String(logindata?.user?.id));
-              console.log("userstatus", String(logindata?.user?.userstatus));
-              console.log("emeelanrole", String(logindata?.user?.emeelanrole))
-              localStorage.setItem(TOKEN_KEY, logindata.jwt);
-              localStorage.setItem("userid", String(logindata?.user?.id));
-              localStorage.setItem("userstatus", String(logindata?.user?.userstatus));
-              localStorage.setItem("emeelanrole", String(logindata?.user?.emeelanrole))
-              navigate("/dashboard");
-            } else if (userrole || !createdBy) {
+   try {
+    // First, register the user using Strapi's registration endpoint
+    const registerResponse = await fetch(`${API_URL}/api/auth/local/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: values.email, // or values.username if you have it
+        email: values.email,
+        password: values.password,
+        // Add any other required fields
+      }),
+    });
 
-              navigate("/dashboard")
-            }
-            else {
+    if (registerResponse.ok) {
+      const registrationData = await registerResponse.json();
+      console.log("Registration successful:", registrationData);
 
-              const errorData = await res.json(); // Get error response body
-              notification.error({
-                message: "Login Failed",
-                description: errorData?.message || "Envalid Credential.",
+      // User is automatically logged in after registration
+      // Store the JWT and user data
+      localStorage.setItem(TOKEN_KEY, registrationData.jwt);
+      localStorage.setItem("userid", String(registrationData?.user?.id));
+      localStorage.setItem("userstatus", String(registrationData?.user?.userstatus));
+      localStorage.setItem("emeelanrole", String(registrationData?.user?.emeelanrole));
+
+      // If you need to update additional user data through your API
+      if (!userrole || !createdBy) {
+        createUser(
+          {
+            resource: "users",
+            values: {
+              ...values,
+              id: registrationData.user.id, // Use the ID from registration
+            },
+          },
+          {
+            onSuccess: () => {
+              notification.success({
+                message: "Success",
+                description: "User registered successfully",
               });
-            }
-            console.log("OUTSIDE IF")
-          } catch (error) {
-            notification.error({
-              message: "Error",
-              description: "Something went wrong, please try again later.",
-            });
+              navigate("/dashboard");
+            },
           }
-        }
-      })
+        );
+      } else {
+        navigate("/dashboard");
+      }
+    } else {
+      const errorData = await registerResponse.json();
+      notification.error({
+        message: "Registration Failed",
+        description: errorData?.error?.message || "Registration failed. Please try again.",
+      });
+    }
+  } catch (error) {
+    console.error("Registration error:", error);
+    notification.error({
+      message: "Error",
+      description: "Something went wrong, please try again later.",
+    });
+  }
   };
 
   const handleTabChange = (activeKey) => {
