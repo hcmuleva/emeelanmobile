@@ -36,9 +36,7 @@ export const RegisterPage = ({ userrole, createdBy, setView }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: values.email, // or values.username if you have it
-        email: values.email,
-        password: values.password,
+       ...values
         // Add any other required fields
       }),
     });
@@ -53,30 +51,30 @@ export const RegisterPage = ({ userrole, createdBy, setView }) => {
       localStorage.setItem("userid", String(registrationData?.user?.id));
       localStorage.setItem("userstatus", String(registrationData?.user?.userstatus));
       localStorage.setItem("emeelanrole", String(registrationData?.user?.emeelanrole));
-
+      navigate("/dashboard");
       // If you need to update additional user data through your API
-      if (!userrole || !createdBy) {
-        createUser(
-          {
-            resource: "users",
-            values: {
-              ...values,
-              id: registrationData.user.id, // Use the ID from registration
-            },
-          },
-          {
-            onSuccess: () => {
-              notification.success({
-                message: "Success",
-                description: "User registered successfully",
-              });
-              navigate("/dashboard");
-            },
-          }
-        );
-      } else {
-        navigate("/dashboard");
-      }
+      // if (!userrole || !createdBy) {
+      //   createUser(
+      //     {
+      //       resource: "users",
+      //       values: {
+      //         ...values,
+      //         id: registrationData.user.id, // Use the ID from registration
+      //       },
+      //     },
+      //     {
+      //       onSuccess: () => {
+      //         notification.success({
+      //           message: "Success",
+      //           description: "User registered successfully",
+      //         });
+      //         navigate("/dashboard");
+      //       },
+      //     }
+      //   );
+      // } else {
+      //   navigate("/dashboard");
+      // }
     } else {
       const errorData = await registerResponse.json();
       notification.error({
