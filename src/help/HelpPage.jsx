@@ -10,14 +10,12 @@ const HelpPage = () => {
         <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
              <Header />
              
-            <h1>Help Center</h1>
-            <p>Welcome to the Help Center</p>
-            <Typography.Title level={4}>Pending Status or approval</Typography.Title>
-            <Typography.Title level={4}>Contact for addtional support</Typography.Title>
-            <Typography.Title level={4}>Form Filling Help</Typography.Title>
+            <h1>ई-मीलन (EMeelan) Help Center</h1>
+            <p>ई-मीलन में आपका सवागत है (Welcome to the Help Center)</p>
+           
             <FAQComponent/>
-            <Typography.Title level={4}>Best Practices</Typography.Title> 
-            <Typography.Title level={4}>My Preference </Typography.Title> 
+            <Typography.Title level={4}>हेल्प लाइन नंबर (+91-9019905115) ( संपर्क करने के लिए नंबर और टाइम  सुबह १० बजे से शाम के ५ बजे तक ) </Typography.Title> 
+            <Typography.Title level={4}>Helpline number (+91-9019905115) </Typography.Title> 
         </div>
     );
 };
