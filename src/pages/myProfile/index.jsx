@@ -75,21 +75,21 @@ export default function MyProfile() {
   return (
     <Layout>
       <Content style={{ padding: '10px' }}>
-        <Space.Compact>
+        {/* <Space.Compact>
           <Button color='danger' variant='dashed' onClick={() => navigate(`/dashboard}`)}> <HomeOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
           home</Button>
           {!isEditProfile&&<Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(true)}}>
           <EditOutlined style={{ fontSize: '14px', color: '#1890ff' }} />
-          Edit
+          Edit Profile
           </Button>}
          {isEditProfile&& <Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(false)}}>
          <UserOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
-         Profile
+         ViewProfile
           </Button>}
           <Button color='danger' variant='dashed' onClick={handleLogout} ><LogoutOutlined style={{ fontSize: '15px', color: '#ff4d4f' }}  /> Logout
 
           </Button>
-        </Space.Compact>
+        </Space.Compact> */}
       
         {!isEditProfile&& <ProfileCard user={user} setIsEditProfile={setIsEditProfile}/>}
         {isEditProfile&&<EditProfile user={user} setIsEditProfile={setIsEditProfile}/>}
