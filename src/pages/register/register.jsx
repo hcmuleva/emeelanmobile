@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Card, Form, Input, Button, DatePicker, Select, Tabs, Row, Col, Typography, Progress, notification } from 'antd';
+import { Layout, Card, Form, Input, Button, DatePicker, Select, Tabs, Row, Col, Typography, Progress, notification, InputNumber } from 'antd';
 import { UserOutlined, MailOutlined, TeamOutlined, BookOutlined, LockOutlined } from '@ant-design/icons';
 import { City, Country, State } from "country-state-city";
 import gotra from "../../utils/gotra.json";
@@ -14,71 +14,83 @@ const { Option } = Select;
 export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
-export const RegisterPage = ({userrole,createdBy,setView}) => {
+export const RegisterPage = ({ userrole, createdBy, setView }) => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(1);
   const [country, setCountry] = useState({});
   const [state, setState] = useState({});
   const { mutate: createUser } = useCreate();
   const navigate = useNavigate();
-  const onFinish = async(values) => {
-    values['emeelanrole']="MEELAN"
+  const onFinish = async (values) => {
+    values['emeelanrole'] = "MEELAN"
     values["username"] = values["MobileNumber"];
-    values["email"] = values["MobileNumber"] + "@hph.com";
+    if (!values.email && values.MobileNumber) {
+      values.email = values.MobileNumber + "@hph.com";
+    }
     console.log('Form values:', values);
-     values['role']=1
-    if(createdBy&&user){values['profilecreatedby'] =createdBy}
-    createUser(
-      {
-        resource: "users",
-        values: values,
-      },
-      {
-        onSuccess: async (data) => {
-          console.log("Data",data)
-          try {
-            console.log("Before request")
-            console.log("userid",values.email)
-            console.log("password", values.password)
-            const res = await fetch(`${API_URL}/api/auth/local`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ identifier: values.email, password: values.password }),
-            });
-            console.log("Res",res)
-            if (res.ok&&!userrole||!createdBy) {
-              const logindata = await res.json();
-              console.log("Login data",logindata)
-              console.log("TOKEN_KEY", logindata.jwt);
-              console.log("userid", String(logindata?.user?.id));
-              console.log("userstatus",String(logindata?.user?.userstatus));
-              console.log("emeelanrole",String(logindata?.user?.emeelanrole))
-              localStorage.setItem(TOKEN_KEY, logindata.jwt);
-              localStorage.setItem("userid", String(logindata?.user?.id));
-              localStorage.setItem("userstatus",String(logindata?.user?.userstatus));
-              localStorage.setItem("emeelanrole",String(logindata?.user?.emeelanrole))
+    values['role'] = 1
+    if (createdBy && user) { values['profilecreatedby'] = createdBy }
+   try {
+    // First, register the user using Strapi's registration endpoint
+    const registerResponse = await fetch(`${API_URL}/api/auth/local/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: values.email, // or values.username if you have it
+        email: values.email,
+        password: values.password,
+        // Add any other required fields
+      }),
+    });
+
+    if (registerResponse.ok) {
+      const registrationData = await registerResponse.json();
+      console.log("Registration successful:", registrationData);
+
+      // User is automatically logged in after registration
+      // Store the JWT and user data
+      localStorage.setItem(TOKEN_KEY, registrationData.jwt);
+      localStorage.setItem("userid", String(registrationData?.user?.id));
+      localStorage.setItem("userstatus", String(registrationData?.user?.userstatus));
+      localStorage.setItem("emeelanrole", String(registrationData?.user?.emeelanrole));
+
+      // If you need to update additional user data through your API
+      if (!userrole || !createdBy) {
+        createUser(
+          {
+            resource: "users",
+            values: {
+              ...values,
+              id: registrationData.user.id, // Use the ID from registration
+            },
+          },
+          {
+            onSuccess: () => {
+              notification.success({
+                message: "Success",
+                description: "User registered successfully",
+              });
               navigate("/dashboard");
-            } else if(userrole||!createdBy){
-             
-              navigate("/dashboard")
-            }
-            else {
-              
-              const errorData = await res.json(); // Get error response body
-                  notification.error({
-                      message: "Login Failed",
-                      description: errorData?.message || "Envalid Credential.",
-                  });
-            }
-            console.log("OUTSIDE IF")
-          } catch (error) {
-            notification.error({
-              message: "Error",
-              description: "Something went wrong, please try again later.",
-          });
+            },
           }
-        }
-      })
+        );
+      } else {
+        navigate("/dashboard");
+      }
+    } else {
+      const errorData = await registerResponse.json();
+      notification.error({
+        message: "Registration Failed",
+        description: errorData?.error?.message || "Registration failed. Please try again.",
+      });
+    }
+  } catch (error) {
+    console.error("Registration error:", error);
+    notification.error({
+      message: "Error",
+      description: "Something went wrong, please try again later.",
+    });
+  }
   };
 
   const handleTabChange = (activeKey) => {
@@ -112,7 +124,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
   ];
 
   return (
-<Layout style={{ minHeight: '100vh', background: 'rgba(57, 5, 5, 0.9)' }}>
+    <Layout style={{ minHeight: '100vh', background: 'rgba(57, 5, 5, 0.9)' }}>
       <Content style={{ padding: '40px 0' }}>
         <Card style={{ maxWidth: 800, margin: '0 auto', borderRadius: 15, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -139,48 +151,48 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                   </Col>
                 </Row>
                 <Row gutter={16}>
-      <Col xs={24} sm={12}>
-        <Form.Item
-          name="password"
-          label="Password"
-          rules={[
-            { required: true, message: 'Please enter your password' },
-            { min: 6, message: 'Password must be at least 6 characters long' },
-          ]}
-          hasFeedback
-        >
-          <Input.Password
-            prefix={<LockOutlined />}
-            placeholder="Enter Password"
-          />
-        </Form.Item>
-      </Col>
-      <Col xs={24} sm={12}>
-        <Form.Item
-          name="confirmPassword"
-          label="Confirm Password"
-          dependencies={['password']}
-          hasFeedback
-          rules={[
-            { required: true, message: 'Please confirm your password' },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('The two passwords do not match'));
-              },
-            }),
-          ]}
-        >
-          <Input.Password
-            prefix={<LockOutlined />}
-            placeholder="Confirm Password"
-          />
-        </Form.Item>
-      </Col>
-    </Row>
-                <Form.Item name="email" label="Email Address" rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="password"
+                      label="Password"
+                      rules={[
+                        { required: true, message: 'Please enter your password' },
+                        { min: 6, message: 'Password must be at least 6 characters long' },
+                      ]}
+                      hasFeedback
+                    >
+                      <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Enter Password"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      dependencies={['password']}
+                      hasFeedback
+                      rules={[
+                        { required: true, message: 'Please confirm your password' },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue('password') === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('The two passwords do not match'));
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Confirm Password"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item name="email" label="Email Address" rules={[{ required: false, type: 'email', message: 'Please enter a valid email' }]}>
                   <Input prefix={<MailOutlined />} placeholder="Enter Email Address" />
                 </Form.Item>
                 <Row gutter={16}>
@@ -219,11 +231,15 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                     </Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="MobileNumber" label="Mobile Number"  rules={[{ required: true, message: 'Please enter your mobile number' }]}>
+                <Form.Item name="MobileNumber" label="Mobile Number" rules={[{ required: true, message: 'Please enter your mobile number' }]}>
                   <Input placeholder="Enter Mobile Number" />
                 </Form.Item>
                 <Form.Item name="MeritalStatus" label="Marital Status" rules={[{ required: true, message: 'Please enter your marital status' }]}>
-                  <Input placeholder="Enter Marital Status" />
+                <Select placeholder="Select Marital Status">
+                  <Option value="MARRIED">विवाहित</Option>
+                  <Option value="BACHELOR">अविवाहित</Option>
+                  <Option value="DIVORCED">तलाकशुदा</Option>
+              </Select>
                 </Form.Item>
                 <Form.Item name="Address" label="Home Address">
                   <Input.TextArea placeholder="Enter Home Address" />
@@ -233,7 +249,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                     <Form.Item
                       name="Country"
                       label="Country"
-                      rules={[{ required: true, message: "Please Enter Country" }]}
+                      rules={[{ required: false, message: "Please Enter Country" }]}
                     >
                       <Select
                         style={{ width: "100%" }}
@@ -253,7 +269,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                     <Form.Item
                       name="State"
                       label="State"
-                      rules={[{ required: true, message: "Please Enter State" }]}
+                      rules={[{ required: false, message: "Please Enter State" }]}
                     >
                       <Select
                         style={{ width: "100%" }}
@@ -323,7 +339,7 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                 <Form.Item
                   name="maternalGotra"
                   label="Maternal Gotra"
-                  rules={[{ required: true, message: "Please select maternal gotra." }]}
+                  rules={[{ required: false, message: "Please select maternal gotra." }]}
                 >
                   <Select
                     style={{ width: "100%" }}
@@ -384,9 +400,29 @@ export const RegisterPage = ({userrole,createdBy,setView}) => {
                 <Form.Item name="WorkingCity" label="Working City">
                   <Input placeholder="Enter Working City" />
                 </Form.Item>
-                <Form.Item name="Income" label="Income">
-                  <Input placeholder="Enter Income" />
+                <Form.Item
+                  name="Income"
+                  label="Income"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Please enter your income",
+                    },
+                    {
+                      type: "number",
+                      transform: (value) => (value ? Number(value) : undefined),
+                      message: "Income must be a number",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    placeholder="Enter Income"
+                    style={{ width: "100%" }}
+                    min={0} // Optional: set a minimum value
+                    max={1000000} // Optional: set a maximum value
+                  />
                 </Form.Item>
+
                 <Form.Item name="PreProfession" label="Previous Profession">
                   <Input placeholder="Enter Previous Profession" />
                 </Form.Item>

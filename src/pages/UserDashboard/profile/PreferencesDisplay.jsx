@@ -4,6 +4,7 @@ import { Form,Input,Row,Col, Typography } from "antd";
 const { Text, Title } = Typography;
 
 const PreferencesDisplay = ({profileData}) => {
+  console.log("profileData",profileData)
   const preferences = {
     genderPref: "Female",
     maritalStatus: "Married (Only for Admin)",
@@ -48,6 +49,22 @@ const PreferencesDisplay = ({profileData}) => {
         <Col xs={24} sm={12} md={12} lg={12}>
           <Text strong>Age:</Text>
           <Text style={{ marginLeft: "8px" }}>{calculateAge(profileData?.DOB) || "N/A"}</Text>
+        </Col>
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>Profession:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.Profession}</Text>
+        </Col>
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>Edication:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.HighestDegree}</Text>
+        </Col>
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>State:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.State}</Text>
+        </Col>
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>Business(company):</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.CompanyName}</Text>
         </Col>
         {/* <Col xs={24} sm={12} md={12} lg={12}>
           <Text strong>Date of Birth:</Text>
