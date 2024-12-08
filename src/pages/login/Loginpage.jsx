@@ -116,11 +116,11 @@ const LoginPage = () => {
                     <div>
                       <span>Don't have an account?</span>
                       <span
-                        style={{ cursor: "pointer", color: "blue" }}
+                        style={{ cursor: "pointer", color: "white" }}
                         onClick={() => navigate("/register")}
                       >
                         {" "}
-                        Sign Up{" "}
+                        Sign Up(रजिस्टर करे ){" "}
                       </span>
                     </div>
                   </div>

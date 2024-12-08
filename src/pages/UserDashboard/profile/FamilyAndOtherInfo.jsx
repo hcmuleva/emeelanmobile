@@ -33,24 +33,38 @@ const FamilyAndOtherInfo = ({profileData}) => {
           >
               <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <Text strong>First Name:</Text>
-          <Text style={{ marginLeft: "8px" }}>{profileData?.FirstName || "N/A"}</Text>
+          <Text strong>Father Name:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.FatherName || "N/A"}</Text>
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <Text strong>Last Name:</Text>
-          <Text style={{ marginLeft: "8px" }}>{profileData?.LastName || "N/A"}</Text>
+          <Text strong>Mother Name:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.MotherName || "N/A"}</Text>
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <Text strong>Gotra:</Text>
-          <Text style={{ marginLeft: "8px" }}>{profileData?.Gotra || "N/A"}</Text>
+          <Text strong>BhaiBahan:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.Siblings || "N/A"}</Text>
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <Text strong>Marital Status:</Text>
-          <Text style={{ marginLeft: "8px" }}>{profileData?.marital || "N/A"}</Text>
+          <Text strong>Father Mobile Number:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.FatherMobileNumber || "N/A"}</Text>
         </Col>
+       
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>WorkingCity:</Text>
+          <Text style={{ marginLeft: "8px" }}>{profileData?.WorkingCity || "N/A"}</Text>
+        </Col>
+        
         <Col xs={24} sm={12} md={12} lg={12}>
           <Text strong>Age:</Text>
          {profileData?.DOB&& <Text style={{ marginLeft: "8px" }}>{calculateAge(profileData?.DOB) || "N/A"}</Text>}
+        </Col>
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>MoolNivas:</Text>
+         {profileData?.DOB&& <Text style={{ marginLeft: "8px" }}>{profileData?.bera|| "N/A"}</Text>}
+        </Col>
+        <Col xs={24} sm={12} md={12} lg={12}>
+          <Text strong>father_business:</Text>
+         {profileData?.DOB&& <Text style={{ marginLeft: "8px" }}>{profileData?.father_occupation|| "N/A"}</Text>}
         </Col>
         {/* <Col xs={24} sm={12} md={12} lg={12}>
           <Text strong>Date of Birth:</Text>
@@ -91,11 +105,10 @@ const FamilyAndOtherInfo = ({profileData}) => {
               <br />
               <Text strong>NanaJi Name:</Text> {profileData?.NanajiName}
               <br />
-              <Text strong>NaniJi Name:</Text> {profileData?.NanijiName}
               <br />
               <Text strong>Phone Number:</Text> {profileData?.MamajiMobileNumber}
               <br />
-              <Text strong>Gotra:</Text> {profileData?.MaternalGotra}
+              <Text strong>Nanaji Gotra:</Text> {profileData?.MaternalGotra}
               <br />
               <Text strong>Hobbies:</Text> {profileData?.Hobbies}
               <br />

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Card, Avatar, Button, Tabs, Form, Space, Upload, Typography, notification, Row, Col } from "antd";
-import { EditOutlined, SettingOutlined, CameraOutlined } from "@ant-design/icons";
-import { getValueProps, mediaUploadMapper } from "@refinedev/strapi-v4";
+import { Card, Avatar, Button, Form, Space, Upload, Typography, notification, Row, Col, Divider } from "antd";
+import { EditOutlined, SettingOutlined, CameraOutlined, UserOutlined, PhoneOutlined, TeamOutlined, HomeOutlined, BookOutlined, HeartOutlined, StarOutlined, LogoutOutlined } from "@ant-design/icons";
+import { getValueProps } from "@refinedev/strapi-v4";
 import { useUpdate } from "@refinedev/core";
 import PhotoComponent from "./PhotoComponent";
 import ImageGallery from "./ImageGallery";
+import { Navigate, useNavigate } from "react-router-dom";
+import EditProfile from "./EditProfile";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
 const ProfileCard = ({ user }) => {
@@ -14,7 +16,9 @@ const ProfileCard = ({ user }) => {
   const [showPhoto, setShowPhoto] = useState(false);
   const [form] = Form.useForm();
   const { mutate: updateUser } = useUpdate();
-  console.log("Users for photos to see ",user)
+  const navigate = useNavigate();
+  const [isEditProfile,setIsEditProfile]= useState(false);
+
   const onFinish = async (values) => {
     try {
       const { profilePicture } = values;
@@ -38,7 +42,6 @@ const ProfileCard = ({ user }) => {
         }
       );
     } catch (error) {
-      console.error("Error", error);
       notification.error({
         message: "Error",
         description: "There was an issue with the upload process.",
@@ -49,17 +52,28 @@ const ProfileCard = ({ user }) => {
   const renderField = (label, value) => {
     if (label === "Have Children") {
       return (
-        <Text>
-          <strong>{label}:</strong> {value ? "Yes" : "No"}
-        </Text>
+        <div className="field-item">
+          <Text strong>{label}:</Text> {value ? "Yes" : "No"}
+        </div>
       );
     }
     return (
-      <Text>
-        <strong>{label}:</strong> {value || "N/A"}
-      </Text>
+      <div className="field-item">
+        <Text strong>{label}:</Text> {value || "N/A"}
+      </div>
     );
   };
+
+  const sections = [
+    { key: "personalInfo", label: "Personal", icon: <UserOutlined /> },
+    { key: "contactInfo", label: "Contact", icon: <PhoneOutlined /> },
+    { key: "familyDetails", label: "Family", icon: <TeamOutlined /> },
+    { key: "addressInfo", label: "Address", icon: <HomeOutlined /> },
+    { key: "educationInfo", label: "Educational", icon: <BookOutlined /> },
+    { key: "professionalInfo", label: "Professional", icon: <BookOutlined /> },
+    { key: "lifestyle", label: "Lifestyle", icon: <HeartOutlined /> },
+    { key: "preferences", label: "Preferences", icon: <StarOutlined /> },
+  ];
 
   const renderContent = () => {
     switch (activeSection) {
@@ -73,7 +87,6 @@ const ProfileCard = ({ user }) => {
             {renderField("Birth Time", user.birth_time)}
             {renderField("Birth Place", user.birth_place)}
             {renderField("Height", user.Height)}
-            {renderField("Manglik", user.manglik)}
             {renderField("Marital Status", user.MeritalStatus)}
             {renderField("Have Children", user.have_child)}
           </Space>
@@ -116,7 +129,10 @@ const ProfileCard = ({ user }) => {
           <Space direction="vertical" size="small">
             {renderField("Education", user.education_level)}
             {renderField("Highest Degree", user.HighestDegree)}
-            {renderField("Additional Qualification", user.AdditionalQualification)}
+            {renderField(
+              "Additional Qualification",
+              user.AdditionalQualification
+            )}
             {renderField("Last College", user.LastCollege)}
           </Space>
         );
@@ -154,108 +170,203 @@ const ProfileCard = ({ user }) => {
     }
   };
 
-  const sections = [
-    { key: "personalInfo", label: "Personal" },
-    { key: "contactInfo", label: "Contact " },
-    { key: "familyDetails", label: "Family" },
-    { key: "addressInfo", label: "Address" },
-    { key: "educationInfo", label: "Educational" },
-    { key: "professionalInfo", label: "Professional" },
-    { key: "lifestyle", label: "Lifestyle" },
-    { key: "preferences", label: "Preferences" },
-  ];
-
   return (
-    <Space direction="vertical" size="large" style={{ width: 300 }}>
-      <Card>
-        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-            {user?.profilePicture ? (
-              <Avatar src={user?.profilePicture?.formats?.thumbnail?.url} size={64} />
-            ) : (
-              <Form form={form} layout="vertical" onFinish={onFinish} initialValues={{}}>
-                <Form.Item
-                  name="profilePicture"
-                  valuePropName="fileList"
-                  getValueProps={(data) => getValueProps(data, API_URL)}
-                  extra={`profile picture`}
-                >
-                  <Upload.Dragger
-                    name="files"
-                    action={API_URL + `/api/upload`}
-                    listType="picture-card"
-                    headers={{
-                      Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
-                    }}
-                  >
-                    <Button>
-                      <CameraOutlined />
-                    </Button>
-                  </Upload.Dragger>
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit" block>
-                    Save
-                  </Button>
-                </Form.Item>
-              </Form>
-            )}
-            <div style={{ flex: 1, marginLeft: 16 }}>
-              <Space direction="vertical">
-                <div>
-                  <Text strong style={{ fontSize: 18 }}>
-                    {user?.FirstName}
-                  </Text>
-                  {user?.FatherName && (
-                    <Text strong style={{ fontSize: 18 }}>
-                      {" "}
-                      {user.FatherName}
-                    </Text>
-                  )}
-                  <br />
-                  <Text type="secondary" style={{ marginLeft: 8 }}>
-                    ({user?.age} years old)
-                  </Text>
-                </div>
-                <Space>
-                  {showPhoto && (
-                    <Button icon={<EditOutlined />} type="link" onClick={() => setShowPhoto(false)}>
-                      Show Photo
-                    </Button>
-                  )}
-                  {!showPhoto && (
-                    <Button icon={<SettingOutlined />} type="link" onClick={() => setShowPhoto(true)}>
-                      Show Profile
-                    </Button>
-                  )}
-                </Space>
-              </Space>
-            </div>
+    <>
+      <div className="profile-container" style={{ backgroundColor: "" }}>
+        <Card
+          bordered={false}
+          style={{
+            borderRadius: "16px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+          }}
+        >
+          <div
+            style={{
+              marginBottom: "40px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+            >
+              {" "}
+              <HomeOutlined /> Home
+            </Button>
+            <Button
+              onClick={() => {
+                localStorage.clear();
+                navigate("/login");
+              }}
+            >
+              {" "}
+              <LogoutOutlined /> Logout
+            </Button>
           </div>
-          <Row gutter={[8, 8]}>
-            {sections.map((section) => (
-              <Col span={12} key={section.key}>
+          <Row gutter={[24, 24]} align="middle" justify="center">
+            <Col xs={24} sm={24} md={8}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "16px",
+                }}
+              >
+                {user?.profilePicture ? (
+                  <Avatar
+                    src={user?.profilePicture?.formats?.thumbnail?.url}
+                    size={120}
+                    style={{
+                      border: "4px solid #fff",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    }}
+                  />
+                ) : (
+                  <Form form={form} layout="vertical" onFinish={onFinish}>
+                    <Form.Item
+                      name="profilePicture"
+                      valuePropName="fileList"
+                      getValueProps={(data) => getValueProps(data, API_URL)}
+                    >
+                      <Upload.Dragger
+                        name="files"
+                        action={`${API_URL}/api/upload`}
+                        listType="picture-card"
+                        headers={{
+                          Authorization: `Bearer ${localStorage.getItem(
+                            "jwt-token"
+                          )}`,
+                        }}
+                        style={{ width: "120px", height: "120px" }}
+                      >
+                        <Button
+                          type="text"
+                          icon={<CameraOutlined style={{ fontSize: "24px" }} />}
+                        />
+                      </Upload.Dragger>
+                    </Form.Item>
+                    <Button type="primary" htmlType="submit" block>
+                      Save Photo
+                    </Button>
+                  </Form>
+                )}
+                <div style={{ textAlign: "center" }}>
+                  <Title level={4} style={{ margin: 0 }}>
+                    {user?.FirstName}{" "}
+                    {user?.FatherName && `(${user.FatherName})`}
+                  </Title>
+                  <Text type="secondary">{user?.age} years old</Text>
+                </div>
                 <Button
-                  type={activeSection === section.key ? "primary" : "default"}
-                  onClick={() => setActiveSection(section.key)}
-                  style={{ width: "100%" }}
+                  
+                  onClick={() => {
+                    setIsEditProfile(true);
+                  }}
                 >
-                  {section.label}
+                  <EditOutlined
+                    style={{ fontSize: "14px", color: "#1890ff" }}
+                  />
+                  Edit Profile
                 </Button>
-              </Col>
-            ))}
-          </Row>
-        </Space>
-      </Card>
-      <Card>
-        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-          {showPhoto && renderContent()}
-          {!showPhoto && <PhotoComponent user={user} />}
-          {user?.photos&&<ImageGallery images={user.photos}/>}
+                <Button
+                  type="default"
+                  icon={showPhoto ? <EditOutlined /> : <SettingOutlined />}
+                  onClick={() => setShowPhoto(!showPhoto)}
+                  style={{ borderRadius: "6px" }}
+                >
+                  {showPhoto ? "Show Profile" : "Show Photo"}
+                </Button>
+              </div>
+            </Col>
 
-        </div>
-      </Card>
-    </Space>
+            <Col xs={24} md={16}>
+              <Row gutter={[8, 8]}>
+                {sections.map((section) => (
+                  <Col xs={12} sm={8} md={6} key={section.key}>
+                    <Button
+                      type={
+                        activeSection === section.key ? "primary" : "default"
+                      }
+                      onClick={() => setActiveSection(section.key)}
+                      icon={section.icon}
+                      block
+                      style={{
+                        height: "auto",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: "12px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {section.label}
+                      </span>
+                    </Button>
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+          </Row>
+
+          <Divider style={{ margin: "24px 0" }} />
+
+          <div
+            style={{
+              maxHeight: "500px",
+              overflowY: "auto",
+              padding: "16px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+            }}
+          >
+            {showPhoto ? (
+              <PhotoComponent user={user} />
+            ) : (
+              <div className="content-section" style={{ padding: "16px" }}>
+                {renderContent()}
+              </div>
+            )}
+            {user?.photos && <ImageGallery images={user.photos} />}
+          </div>
+        </Card>
+
+        <style jsx>{`
+          .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+
+          .field-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+          }
+
+          .field-item:last-child {
+            border-bottom: none;
+          }
+
+          @media (max-width: 768px) {
+            .profile-container {
+              padding: none;
+            }
+          }
+        `}</style>
+      </div>
+      {isEditProfile&&<EditProfile user={user} setIsEditProfile={setIsEditProfile}/>}
+    </>
   );
 };
 
