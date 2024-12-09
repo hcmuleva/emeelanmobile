@@ -1,11 +1,10 @@
 import React from "react";
 import "../../../styles/profile-header.css";
-import Logo from "../../../../public/logo.png";
-import { Button, Input } from "antd";
-import Hamburger, { Divide } from "hamburger-react";
 import { CaretRightOutlined, HomeOutlined, SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useOne } from "@refinedev/core";
+
+const Base_Url = import.meta.env.VITE_BASE_URL;
 
 const Header = () => {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ const Header = () => {
           </div>
           <div>
             <img
-              src={Logo}
+              src={`${Base_Url}logo.png`}
               alt="logo"
               style={{ width: "2.5rem", marginTop: "0.3rem" }}
             ></img>
