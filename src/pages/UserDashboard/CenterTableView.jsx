@@ -251,15 +251,23 @@ const CenterTableView = ({rowData,refetch}) => {
             width: 125
         },
         { 
+            headerName: "Gotra", 
+            field: "Gotra", 
+            width: 125
+        },
+        { 
             headerName: "State", 
             field: "State", 
             width: 110
         },
-        { 
-            headerName: "Mobile", 
-            field: "mobile", 
-            width: 122
-        },
+        {
+          headerName: "Mobile",
+          field: "mobile", // optional, still works with valueGetter
+          width: 122,
+          valueGetter: (params) => {
+              return params.data.mobile ? params.data.mobile : params.data.MobileNumber;
+          }
+      },
         {
           headerName:"Profession",
           field:"Profession",
