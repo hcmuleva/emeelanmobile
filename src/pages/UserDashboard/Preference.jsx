@@ -23,9 +23,9 @@ export default function Preference({profileData}) {
           <br />
           <Text strong>Height :</Text> {profileData?.PreMinHeight} - <Text strong>Se:</Text>  {profileData?.PreMaxHeight} <Text strong>Tak:</Text>   
           <br />
-          <Text strong>Profession :</Text> {profileData?.PreProfession} 
+          <Text strong>Preffered Profession :</Text> {profileData?.PreProfession} 
           <br />
-          <Text strong>Qualification :</Text> {profileData?.PreQualification} 
+          <Text strong>Preffered Qualification :</Text> {profileData?.PreQualification} 
           <br />
         </Card>
       </Col>

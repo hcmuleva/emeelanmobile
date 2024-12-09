@@ -55,7 +55,7 @@ const PreferencesDisplay = ({profileData}) => {
           <Text style={{ marginLeft: "8px" }}>{profileData?.Profession}</Text>
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
-          <Text strong>Edication:</Text>
+          <Text strong>Education:</Text>
           <Text style={{ marginLeft: "8px" }}>{profileData?.HighestDegree}</Text>
         </Col>
         <Col xs={24} sm={12} md={12} lg={12}>
