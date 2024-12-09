@@ -50,13 +50,6 @@ const ProfileCard = ({ user }) => {
   };
 
   const renderField = (label, value) => {
-    if (label === "Have Children") {
-      return (
-        <div className="field-item">
-          <Text strong>{label}:</Text> {value ? "Yes" : "No"}
-        </div>
-      );
-    }
     return (
       <div className="field-item">
         <Text strong>{label}:</Text> {value || "N/A"}
@@ -94,7 +87,7 @@ const ProfileCard = ({ user }) => {
       case "contactInfo":
         return (
           <Space direction="vertical" size="small">
-            {renderField("Mobile Number", user.MobileNumber)}
+            {renderField("Mobile Number", user.MobileNumber || user.mobile)}
             {renderField("Father's Mobile", user.FatherMobileNumber)}
             {renderField("Mamaji's Mobile", user.MamajiMobileNumber)}
           </Space>
