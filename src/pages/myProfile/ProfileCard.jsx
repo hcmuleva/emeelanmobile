@@ -50,6 +50,13 @@ const ProfileCard = ({ user }) => {
   };
 
   const renderField = (label, value) => {
+    if (label === "Have Children") {
+      return (
+        <div className="field-item">
+          <Text strong>{label}:</Text> {value ? "Yes" : "No"}
+        </div>
+      );
+    }
     return (
       <div className="field-item">
         <Text strong>{label}:</Text> {value || "N/A"}
