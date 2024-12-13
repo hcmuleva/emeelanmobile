@@ -109,7 +109,7 @@ const CenterTableView = ({rowData,refetch}) => {
     setIsModalVisible(false);
     setModalData(null);
   };
-  const statusOptions = ["APPROVED", "UNAPPROVED", "REJECTED", "BLOCKED", "PENDING"];
+  const statusOptions = ["APPROVED", "ENGAGED", "REJECTED", "BLOCKED", "PENDING"];
 
       const profile_checked_val = [
         true,
@@ -178,7 +178,7 @@ const CenterTableView = ({rowData,refetch}) => {
             style={{ width: "100%" }}
             onChange={handleChange}
           >
-            {["APPROVED", "UNAPPROVED", "REJECTED", "BLOCKED", "PENDING"].map(
+            {["APPROVED", "ENGAGED", "REJECTED", "BLOCKED", "PENDING"].map(
               (status) => (
                 <Option key={status} value={status}>
                   {status}
