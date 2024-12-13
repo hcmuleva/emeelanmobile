@@ -1,50 +1,89 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useList } from "@refinedev/core";
 import { Button, Card, Space, Spin } from "antd";
 import CenterTableView from "./UserDashboard/CenterTableView";
 
 const CenterDashBoard = () => {
   const [userStatus, setUserStatus] = useState("PENDING");
-  const { data: usersData, isLoading, isFetching,refetch } = useList({
+
+  // Add more specific filters and logging
+  const listParams = {
     resource: "custom-user",
     meta: {
       populate: ["Pictures"],
     },
     filters: [
-      ...(userStatus
-        ? [{ field: "userstatus", operator: "eq", value: userStatus }]
-        : []),
+      {
+        field: "userstatus",
+        operator: "eq",
+        value: userStatus,
+      },
       {
         field: "marital",
-        operator: "ne", // 'not equal' operator
+        operator: "ne",
         value: "Married(Only for Admin)",
       },
     ],
-    sort: {
-      field: "id", // Replace with the field you want to sort by
-      order: "desc", // or "asc" for ascending order
+    sort: [
+      {
+        field: "id",
+        order: "desc",
+      },
+    ],
+    pagination: {
+      pageSize: 10,
+      current: 1,
     },
-  });
-  if(isLoading){
-    <h1>Loading</h1>
-  }
-  if(isFetching){
-    <h1>Fething</h1>
-  }
-  const handleFilterChange = (status) => setUserStatus(status);
+  };
+
+  const { data: usersData, isLoading, isFetching, refetch } = useList(listParams);
+
+  // Add debug logging
+  useEffect(() => {
+    console.log("Current filters:", listParams.filters);
+    console.log("Response data:", usersData);
+  }, [usersData, userStatus]);
+
+  const handleFilterChange = (status) => {
+    console.log("Changing status to:", status);
+    setUserStatus(status);
+  };
+
+  const statusOptions = ["APPROVED", "PENDING", "BLOCKED", "UNAPPROVED", "REJECTED"];
+
+  // Debug the current data
+  const filteredData = usersData?.data?.filter(
+    (user) => user.userstatus === userStatus
+  );
 
   return (
     <>
       <Card bordered={false} style={{ textAlign: "center" }}>
         <Space>
-          {[ "APPROVED", "PENDING", "BLOCKED"].map((status) => (
-            <Button key={status} onClick={() => handleFilterChange(status)}>
-              {status}
+          {statusOptions.map((status) => (
+            <Button
+              key={status}
+              type={userStatus === status ? "primary" : "default"}
+              onClick={() => handleFilterChange(status)}
+            >
+              {status} ({filteredData?.filter(user => user.userstatus === status).length || 0})
             </Button>
           ))}
         </Space>
       </Card>
-      {!isLoading && <CenterTableView rowData={usersData?.data} refetch={refetch} />}
+
+      <div style={{ margin: '10px 0', fontSize: '12px', color: '#666' }}>
+        Current Filter: {userStatus} | Total Results: {filteredData?.length || 0}
+      </div>
+
+      {isLoading || isFetching ? (
+        <Spin tip="Loading..." />
+      ) : (
+        <CenterTableView 
+          rowData={filteredData} 
+          refetch={refetch} 
+        />
+      )}
     </>
   );
 };
