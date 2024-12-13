@@ -6,7 +6,7 @@ import CenterTableView from "./UserDashboard/CenterTableView";
 const CenterDashBoard = () => {
   const [userStatus, setUserStatus] = useState("PENDING");
   const { data: usersData, isLoading, isFetching,refetch } = useList({
-    resource: "users",
+    resource: "custom-user",
     meta: {
       populate: ["Pictures"],
     },
