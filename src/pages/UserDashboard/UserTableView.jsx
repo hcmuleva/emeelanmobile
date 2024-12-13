@@ -102,38 +102,38 @@ const UserTableView = ({rowData,refetch}) => {
         { 
             headerName: "FirstName", 
             field: "FirstName", 
-            width: 125
+            width: 135
         },
         { 
             headerName: "LastName", 
             field: "LastName", 
-            width: 125
+            width: 135
         },
         { 
           headerName: "Gotra", 
           field: "Gotra", 
-          width: 125
+          width: 130
       },
         {
           headerName:"Profession",
           field:"Profession",
-          width:125
+          width:190
         },
         { 
             headerName: "State", 
             field: "State", 
-            width: 110
+            width: 150
         },
        
         { 
             headerName: "DOB", 
             field: "DOB", 
-            width: 106
+            width: 120
         },
         {
           headerName:"WorkingCity",
           field:"WorkingCity",
-          width: 124
+          width: 150
 
         },
         {
