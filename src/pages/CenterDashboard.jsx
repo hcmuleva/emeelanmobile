@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useList } from "@refinedev/core";
+import { useList, useUpdate } from "@refinedev/core";
 import { Button, Card, Space, Spin } from "antd";
 import CenterTableView from "./UserDashboard/CenterTableView";
 
 const CenterDashBoard = () => {
   const [userStatus, setUserStatus] = useState("PENDING");
+  const [isUpdating, setIsUpdating] = useState(false);
+  
+  const { mutate: updateUser } = useUpdate();
 
   // Add more specific filters and logging
   const listParams = {
@@ -49,7 +52,42 @@ const CenterDashBoard = () => {
     setUserStatus(status);
   };
 
-  const statusOptions = ["APPROVED", "PENDING", "BLOCKED", "UNAPPROVED", "REJECTED"];
+  const updateUnapprovedToEngaged = async () => {
+    try {
+      setIsUpdating(true);
+      const unapprovedUsers = usersData?.data?.filter(
+        (user) => user.userstatus === "UNAPPROVED"
+      );
+      console.log("UserStatus", unapprovedUsers)
+
+      if (!unapprovedUsers?.length) {
+        message.info("No UNAPPROVED users found to update");
+        return;
+      }
+
+      // Process updates in sequence to avoid overwhelming the server
+      for (const user of unapprovedUsers) {
+        updateUser({
+          resource: "users",
+          id: user.id,
+          values: {
+            userstatus: "ENGAGED"
+          },
+        });
+        // console.log(`Updated user ${user.id} to ENGAGED status`);
+      }
+
+      message.success(`Successfully updated ${unapprovedUsers.length} users to ENGAGED status`);
+      refetch(); // Refresh the data
+    } catch (error) {
+      console.error("Error updating users:", error);
+      message.error("Failed to update some users. Please try again.");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const statusOptions = ["APPROVED", "PENDING", "BLOCKED", "UNAPPROVED", "REJECTED","ENGAGED"];
 
   // Debug the current data
   const filteredData = usersData?.data?.filter(
@@ -59,20 +97,31 @@ const CenterDashBoard = () => {
   return (
     <>
       <Card bordered={false} style={{ textAlign: "center" }}>
-        <Space>
-          {statusOptions.map((status) => (
-            <Button
-              key={status}
-              type={userStatus === status ? "primary" : "default"}
-              onClick={() => handleFilterChange(status)}
-            >
-              {status} ({filteredData?.filter(user => user.userstatus === status).length || 0})
-            </Button>
-          ))}
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          <Space wrap>
+            {statusOptions.map((status) => (
+              <Button
+                key={status}
+                type={userStatus === status ? "primary" : "default"}
+                onClick={() => handleFilterChange(status)}
+              >
+                {status} ({filteredData?.filter(user => user.userstatus === status).length || 0})
+              </Button>
+            ))}
+          </Space>
+          
+          <Button
+            type="primary"
+            onClick={updateUnapprovedToEngaged}
+            loading={isUpdating}
+            disabled={!usersData?.data?.some(user => user.userstatus === "UNAPPROVED")}
+          >
+            Update UNAPPROVED to ENGAGED
+          </Button>
         </Space>
       </Card>
 
-      <div style={{ margin: '10px 0', fontSize: '12px', color: '#666' }}>
+      <div style={{ margin: '10px 0', fontSize: '14px', color: '#666' }}>
         Current Filter: {userStatus} | Total Results: {filteredData?.length || 0}
       </div>
 
