@@ -87,7 +87,7 @@ const CenterDashBoard = () => {
     }
   };
 
-  const statusOptions = ["APPROVED", "PENDING", "BLOCKED", "UNAPPROVED", "REJECTED","ENGAGED"];
+  const statusOptions = ["APPROVED", "PENDING", "BLOCKED", "REJECTED","ENGAGED"];
 
   // Debug the current data
   const filteredData = usersData?.data?.filter(
@@ -109,15 +109,6 @@ const CenterDashBoard = () => {
               </Button>
             ))}
           </Space>
-          
-          <Button
-            type="primary"
-            onClick={updateUnapprovedToEngaged}
-            loading={isUpdating}
-            disabled={!usersData?.data?.some(user => user.userstatus === "UNAPPROVED")}
-          >
-            Update UNAPPROVED to ENGAGED
-          </Button>
         </Space>
       </Card>
 
