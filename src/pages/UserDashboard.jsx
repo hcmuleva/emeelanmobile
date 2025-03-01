@@ -4,6 +4,8 @@ import UserTableView from './UserDashboard/UserTableView';
 import Header from './Header';
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
+export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
+
 export default function UserDashboard() {
   console.log("Default in userDashboard")
     const [current, setCurrent] = useState(1);
@@ -14,7 +16,7 @@ export default function UserDashboard() {
         config: {
           headers: {
             "x-custom-header": "foo-bar",
-            Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
+            Authorization: `Bearer ${localStorage.getItem("TOKEN_KEY")}`,
           },
         },
         query: {
