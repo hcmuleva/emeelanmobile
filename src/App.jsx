@@ -22,6 +22,7 @@ import { RegisterPage } from "./pages/register/register";
 import MyProfile from "./pages/myProfile";
 import HelpPage from "./help/HelpPage";
 import LoginPage from "./pages/login/Loginpage";
+import MainPage from "./pages/Mainpage";
 
 export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 const API_URL = import.meta.env.VITE_SERVER_URL;
@@ -55,6 +56,7 @@ export default function App() {
                                     </ProtectedRoute>
                                 }
                             >
+                                <Route path="/mainpage" element={<MainPage/>} />
                                 <Route path="/dashboard" element={<Controller />} />
                                 <Route path="/myprofile/:id" element={<MyProfile />} />
                                 <Route path="/matches" element={<MatchesPage />} />

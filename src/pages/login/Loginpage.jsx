@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   // Redirect to dashboard if the user is already logged in
   useEffect(() => {
-    if (localStorage.getItem("jwt-token")) navigate("/dashboard");
+    if (localStorage.getItem("jwt-token")) navigate("/mainpage");
   }, []);
 
   const handleUserId = (e) => setUserId(e.target.value);
@@ -37,7 +37,7 @@ const LoginPage = () => {
         localStorage.setItem("userid", String(data?.user?.id));
         localStorage.setItem("userstatus", String(data?.user?.userstatus));
         localStorage.setItem("emeelanrole", String(data?.user?.emeelanrole));
-        navigate("/dashboard");
+        navigate("/mainpage");
       } else {
         const errorData = await res.json();
         notification.error({
