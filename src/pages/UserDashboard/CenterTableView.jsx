@@ -11,6 +11,7 @@ import { FilterIcon, HeartHandshake } from 'lucide-react';
 import ProfileDetails from './ProfileDetails';
 import { UserAddOutlined } from '@ant-design/icons';
 import { RegisterPage } from '../register/register';
+import { RegisterByAdminPage } from '../register/registerByAdmin';
 const { Option } = Select;
 
 // Simple Image Component with Fallback
@@ -324,7 +325,7 @@ const CenterTableView = ({rowData,refetch}) => {
  
     return (
       <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-         {view==="REGISTER" &&<RegisterPage userrole={"CENTER"} createdBy={localStorage.getItem("userid")} setView={setView}/>}
+         {view==="REGISTER" &&<RegisterByAdminPage userrole={"CENTER"} createdBy={localStorage.getItem("userid")} setView={setView}/>}
          {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
          {view==="LIST"&&
         <>
@@ -341,7 +342,7 @@ const CenterTableView = ({rowData,refetch}) => {
       variant="dashed"
       onClick={()=>setView("REGISTER")}
       style={{ whiteSpace: "nowrap" }}
-      disabled={true}
+     
     >
       <UserAddOutlined size={15} style={{ color: "brown" }} /> Register
     </Button>
