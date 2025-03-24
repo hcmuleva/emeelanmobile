@@ -45,7 +45,7 @@ const Header = () => {
           </div>
           <div>
             <img
-              src={`${Base_Url}logo.png`}
+              src={`logo.png`}
               alt="logo"
               style={{ width: "2.5rem", marginTop: "0.3rem" }}
             ></img>

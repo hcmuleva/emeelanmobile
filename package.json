@@ -2,8 +2,13 @@
   "name": "gathjod",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/emeelan",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.8",
+    "@mui/x-data-grid": "^7.28.1",
     "@refinedev/antd": "^5.37.4",
     "@refinedev/cli": "^2.16.21",
     "@refinedev/core": "^4.54.1",
@@ -14,6 +19,7 @@
     "ag-grid-community": "^32.3.3",
     "ag-grid-react": "^32.3.3",
     "antd": "^5.0.5",
+    "antd-img-crop": "^4.24.0",
     "axios": "^1.6.2",
     "country-state-city": "^3.2.1",
     "dayjs": "^1.11.11",
@@ -25,7 +31,6 @@
     "react": "^18.0.0",
     "react-countup": "^6.5.3",
     "react-dom": "^18.0.0",
-   
     "react-router-dom": "^6.8.1",
     "react-router-hash-link": "^2.4.3",
     "recharts": "^2.12.7"

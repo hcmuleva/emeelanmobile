@@ -54,7 +54,7 @@ const Header = ({ setSearch }) => {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <div style={{ textAlign: "center" }}>
             <img
-              src={`${Base_Url}logo.png`}
+              src={`logo.png`}
               alt="logo"
               style={{ width: "5rem", height: "3rem", objectFit: "contain" }}
             />
@@ -99,7 +99,7 @@ const Header = ({ setSearch }) => {
           onClick={handleHelpClick}
         >
           <img
-            src={`${Base_Url}help.png`}
+            src={`help.png`}
             alt="help"
             style={{ width: "6rem", height: "4rem", objectFit: "contain" }} // Updated size to match logo
           />
