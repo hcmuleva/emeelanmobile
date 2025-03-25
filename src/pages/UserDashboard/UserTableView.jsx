@@ -8,12 +8,13 @@ import { useUpdate } from '@refinedev/core';
 // import { AgGridReact } from 'ag-grid-react';
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 import ProfileStatusState from './Stats/ProfileStatusState';
-import ProfileDetails from './ProfileDetails';
+// import ProfileDetails from './ProfileDetails';
 const { Option } = Select;
 import { getTwoToneColor, HeartFilled, HeartTwoTone, setTwoToneColor } from '@ant-design/icons';
 import { FilterIcon, HeartHandshake } from 'lucide-react';
 import LikedByMe from './profile/LikedByMe';
 import LikedToMe from './profile/LikedToMe';
+import ProfileDetails from './ProfileDetails';
 
 // Simple Image Component with Fallback
 const AvatarImage = ({ src }) => {
@@ -170,7 +171,7 @@ const UserTableView = ({rowData,refetch}) => {
     setTwoToneColor('#eb2f96')
     return (
       <>
-     <Space.Compact style={{ flexWrap: "wrap", justifyContent: "flex-start", gap: "8px" }}>
+     {/* <Space.Compact style={{ flexWrap: "wrap", justifyContent: "flex-start", gap: "8px" }}>
   {view === "LIST" && (
     <Button
       color="danger"
@@ -216,7 +217,7 @@ const UserTableView = ({rowData,refetch}) => {
     <HeartHandshake style={{ color: "red" }} /> रिस्ते
   </Button>
 
-</Space.Compact>
+</Space.Compact> */}
       {view==="REQUESTED" && <LikedByMe />}
       {view==="RECIEVED"&&<LikedToMe/> }
 

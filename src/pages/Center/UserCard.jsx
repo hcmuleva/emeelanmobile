@@ -113,7 +113,21 @@ const UserCard = ({ selectedUser }) => {
           "age": "22",
           "gender": "female",
           "relation": "sister"
-      }
+      },
+      {
+        "type": "maternal",
+        "name": "Dudaji",
+        "age": "22",
+        "gender": "male",
+        "relation": "Nanaji"
+    },
+    {
+      "type": "siblings",
+      "name": "Raju",
+      "age": "22",
+      "gender": "male",
+      "relation": "brother"
+  },
   ], 
   };
 
