@@ -38,6 +38,9 @@ const LoginPage = () => {
         localStorage.setItem("userid", String(data?.user?.id));
         localStorage.setItem("userstatus", String(data?.user?.userstatus));
         localStorage.setItem("emeelanrole", String(data?.user?.emeelanrole));
+        console.log("Emeelan  Role , ", localStorage.getItem("emeelanrole"));
+        console.log("Id, ", localStorage.getItem("userid"));
+        
         navigate("/dashboard");
       } else {
         const errorData = await res.json();

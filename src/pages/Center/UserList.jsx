@@ -17,6 +17,8 @@ export const UserList = () => {
         pagination: { pageSize: 10, current: 1 },
     });
 
+
+
     const { mutate } = useUpdate();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isRegisterUser, setIsRegisterUser] = useState(false);

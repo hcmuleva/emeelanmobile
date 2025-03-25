@@ -22,11 +22,11 @@ export const RegisterUser = ({open,onClose}) => {
   const [state, setState] = useState({});
   const { mutate: createUser } = useCreate();
   const onFinish = async (values) => {
-    values['emeelanrole'] = emeelanrole||"MEELAN"
+    values['emeelanrole'] = "MEELAN"
     values["username"] = values["MobileNumber"];
-    values["userrole"] =userrole;
+    values["userrole"] ="ADMIN";
     values['profilecreatedby'] = user
-    values["userstatus"] = "APPROVED";
+    // values["userstatus"] = "APPROVED";
     if (!values.email && values.MobileNumber) {
       values.email = values.MobileNumber + "@hph.com";
     }
@@ -295,6 +295,17 @@ const handleCancel = () => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <Form.Item name="userstatus" label="Status">
+                  <Select placeholder="Select status" >
+                    <Option value="APPROVED">APPROVED</Option>
+                    <Option value="REJECTED">REJECTED</Option>
+                    <Option value="PENDING">PENDING</Option>
+                    <Option value="ENGGAGED">ENGGAGED</Option>
+                    <Option value="BLOCKED">BLOCKED</Option>
+                    <Option value="UNAPPROVED">UNAPPROVED</Option>
+                  </Select>
+                </Form.Item>
               </Tabs.TabPane>
               <Tabs.TabPane tab={<span><MailOutlined />Contact Details</span>} key="2">
                 <Form.Item name="MobileNumber" label="Mobile Number">
@@ -407,6 +418,8 @@ const handleCancel = () => {
                 <Form.Item name="PreProfession" label="Previous Profession">
                   <Input placeholder="Enter Previous Profession" />
                 </Form.Item>
+
+
               </Tabs.TabPane>
             </Tabs>
             <Form.Item>
