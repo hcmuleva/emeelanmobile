@@ -18,6 +18,7 @@ const { Title, Text, Paragraph } = Typography
 const { TabPane } = Tabs
 
 export default function ProfilePage({ user }) {
+  console.log("user", user)
   const [editingTabs, setEditingTabs] = useState({
     personal: false,
     contact: false,
@@ -44,10 +45,10 @@ export default function ProfilePage({ user }) {
       "Have Children": `${user?.have_child }`,
     },
     contact: {
-      "Full Name": "Kenneth Valdez",
-      Email: "fip@jukmuh.al",
-      Phone: "(239) 816-9029",
-      Mobile: "(320) 380-4539",
+      "Full Name": `${user.FirstName }`,
+      Email: `${user.email }`,
+      Mobile: `${user.Mobile }`,
+    
       Address: "Bay Area, San Francisco, CA",
     },
     social: {
@@ -78,7 +79,7 @@ export default function ProfilePage({ user }) {
     },
     professional: {
       "Current Company": "Tech Innovations Inc.",
-      Position: "Senior Developer",
+      Position: `${user.Profession || "No Profession"}`,
       Experience: "8 years",
       "Previous Companies": "Google, Facebook",
     },
