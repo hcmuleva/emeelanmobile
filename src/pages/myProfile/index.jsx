@@ -7,6 +7,8 @@ import PhotoComponent from './PhotoComponent';
 import ProfileCard from './ProfileCard';
 import EditProfile from './EditProfile'
 import ProfilePage from '../UserDashboard/ProfileView/ProfilePage';
+import ProfileComponent from './UserProfile/ProfileComponent';
+import ProfileDetailCard from './UserProfile/ProfileDetailCard';
 const { Content } = Layout;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -75,31 +77,8 @@ export default function MyProfile() {
 
   return (
     <>
-    <ProfilePage user={user}/>
-    <Layout>
-      <Content style={{ padding: '10px' }}>
-        {/* <Space.Compact>
-          <Button color='danger' variant='dashed' onClick={() => navigate(`/dashboard}`)}> <HomeOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
-          home</Button>
-          {!isEditProfile&&<Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(true)}}>
-          <EditOutlined style={{ fontSize: '14px', color: '#1890ff' }} />
-          Edit Profile
-          </Button>}
-         {isEditProfile&& <Button color="danger" variant="dashed"   onClick={()=>{setIsEditProfile(false)}}>
-         <UserOutlined style={{ fontSize: '15px', color: '#1890ff' }} />
-         ViewProfile
-          </Button>}
-          <Button color='danger' variant='dashed' onClick={handleLogout} ><LogoutOutlined style={{ fontSize: '15px', color: '#ff4d4f' }}  /> Logout
-
-          </Button>
-        </Space.Compact> */}
-      
-        {!isEditProfile&& <ProfileCard user={user} setIsEditProfile={setIsEditProfile}/>}
-        {isEditProfile&&<EditProfile user={user} setIsEditProfile={setIsEditProfile}/>}
-       
-       
-      </Content>
-    </Layout>
+   {/* <ProfileDetailCard/> */}
+   <ProfileComponent/>
     </>
   );
 }
