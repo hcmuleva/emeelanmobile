@@ -99,12 +99,12 @@ const handleCancel = () => {
 }
 
   return (
-    <Modal
-      title="RegisterUser"
-      open={open}
-      onCancel={handleCancel}
-      footer={null}
-    >
+    // <Modal
+    //   title="RegisterUser"
+    //   open={open}
+    //   onCancel={handleCancel}
+    //   footer={null}
+    // >
     <Layout style={{ minHeight: '100vh', background: 'rgba(57, 5, 5, 0.9)' }}>
       <Content style={{ padding: '40px 0' }}>
         <Card style={{ maxWidth: 800, margin: '0 auto', borderRadius: 15, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
@@ -436,7 +436,7 @@ const handleCancel = () => {
         </Card>
       </Content>
     </Layout>
-    </Modal>
+    //</Modal>
   );
 };
 

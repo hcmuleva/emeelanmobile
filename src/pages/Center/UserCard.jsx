@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tabs, Card, Form, Input, Button, Select,Typography, Divider } from "antd";
+import { Tabs, Card, Form, Input, Button, Select,Typography, Divider,notification } from "antd";
 const { Title } = Typography;
 
 import {
@@ -10,9 +10,10 @@ import {
   PhoneOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { useOne } from "@refinedev/core";
+import { useOne, useUpdate } from "@refinedev/core";
 import FamilyAndOtherInfo from "../UserDashboard/profile/FamilyAndOtherInfo";
 import ResetPassword from "./ResetPassword";
+
 const { Option } = Select;
 
 const { TabPane } = Tabs;
@@ -68,6 +69,7 @@ const calculateAge = (dob) => {
 
 
 const UserCard = ({ selectedUser }) => {
+  const { mutate: updateUser } = useUpdate();
   const id = selectedUser.id;
   const { data, isLoading, isError } = useOne({
     resource: "users",
@@ -137,10 +139,38 @@ const UserCard = ({ selectedUser }) => {
     form.setFieldsValue(initialData);
   };
 
-  const handleSave = () => {
-    form.validateFields().then((values) => {
+  const handleSave =   () => {
+    form.validateFields().then(async (values) => {
+      const {age, ...restdata} = values;
+      console.log("Values:", values);
+      try {
+        await updateUser(
+          {
+            resource: "users",
+            id: id,
+            values: restdata,
+          },
+          {
+            onSuccess: () => {
+              console.log("success");
+              notification.success({
+                message: "Success",
+                description: "Your profile has been successfully updated.",
+              });
+              form.resetFields();
+              setIsEditProfile(false);
+            },
+          }
+        );
+      } catch (error) {
+        notification.error({
+          message: "Error",
+          description: "There was an issue updating your profile.",
+        });
+      }
       console.log("Updated Values:", values);
       setIsEditing(false);
+      
     });
   };
   
