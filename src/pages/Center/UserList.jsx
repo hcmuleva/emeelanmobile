@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTable, useUpdate } from "@refinedev/core";
-import { Table, Button, Space, Modal, Form, Input, message,Avatar, Tooltip, Tag, Typography,Spin,Descriptions } from "antd";
-
+import { Table, Button, Space, Modal, Form, Input, message,  Tag, Typography,Spin,Descriptions } from "antd";
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import UserCard from "./UserCard";
@@ -13,7 +12,7 @@ const { Text } = Typography;
 export const UserList = () => {
     const { tableQueryResult: { data: usersData, isLoading }, current, setCurrent, pageSize, setPageSize, total } = useTable({
         resource: "users",
-         meta: { populate: ["Pictures"] },
+        meta: { populate: ["Pictures"] },
         sort: [{ field: "id", order: "desc" }],
         pagination: { pageSize: 10, current: 1 },
     });
@@ -50,7 +49,6 @@ export const UserList = () => {
         }
     }, [searchTerm, usersData]);
     if(isLoading) return <Spin />;
- 
     const handleEdit = (record) => {
         setSelectedUser(record);
         form.setFieldsValue(record);
@@ -84,36 +82,6 @@ export const UserList = () => {
         {  title: "ID", dataIndex: "id", key:"id", width: 120,render: (id, record) => (
             <a onClick={() => handleViewDetails(record)}>{id}</a>
           ) },
-          {
-            title: "Pictures",
-            dataIndex: "Pictures",
-            key: "Pictures",
-            width: 150,
-            render: (pictures) => {
-                // Check if pictures is a stringified array and parse it
-                if (typeof pictures === "string") {
-                  try {
-                    pictures = JSON.parse(pictures.replace(/'/g, '"')); // Fix single quotes if any
-                  } catch (error) {
-                    console.error("Error parsing pictures:", error);
-                    pictures = [];
-                  }
-                }
-            
-                // Ensure pictures is an array before rendering
-                return Array.isArray(pictures) && pictures.length > 0 ? (
-                  <Avatar.Group max={{ count: 3 }} size="small">
-                    {pictures.map((pic, index) => (
-                      <Tooltip key={index} title={`Image ${index + 1}`}>
-                        <Avatar src={pic} />
-                      </Tooltip>
-                    ))}
-                  </Avatar.Group>
-                ) : (
-                  "No Image"
-                );
-              },
-          },
         { title: "First Name", dataIndex: "FirstName", key: "FirstName", width: 135 },
         {
             title: "Mobile",
