@@ -6,6 +6,7 @@ import { RegisterUser } from "./RegisterUser";
 import UsersStatusQuery from "./Users_Status_Querty";
 import ProfileDetailCard from "./ProfileDetailCard";
 import ProfileComponent from "./userregistration/ProfileComponent";
+import MultiStepForm from "./userregistration/basicinfo/MultiStepForm";
 
 const CenterDashBoard = () => {
 
@@ -37,8 +38,8 @@ const CenterDashBoard = () => {
         <UsersStatusQuery />
         </TabPane>
         <TabPane tab="CreateUser" key="register">
-          
-      <ProfileComponent />
+          <MultiStepForm />
+      {/* <ProfileComponent /> */}
         </TabPane>
         <TabPane tab="AdminList" key="adminlist">
             <AdminTab />

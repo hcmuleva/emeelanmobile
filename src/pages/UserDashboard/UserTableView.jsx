@@ -1,20 +1,22 @@
-import { Avatar, Button, Card, Modal, Select, Space } from 'antd';
+import { Avatar, Button, Card, Modal, Select, Space, Spin } from 'antd';
 import React, { useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridToolbar,GridToolbarContainer, GridToolbarQuickFilter  } from '@mui/x-data-grid';
-import { useUpdate } from '@refinedev/core';
-// import 'ag-grid-community/styles/ag-grid.css';
-// import 'ag-grid-community/styles/ag-theme-alpine.css';
-// import { AgGridReact } from 'ag-grid-react';
+import { useCustom, useList, useUpdate } from '@refinedev/core';
+
 import UserPartenerSelector from './Engaggement/UserPartenerSelector';
 import ProfileStatusState from './Stats/ProfileStatusState';
-// import ProfileDetails from './ProfileDetails';
+import dayjs from "dayjs";
 const { Option } = Select;
 import { getTwoToneColor, HeartFilled, HeartTwoTone, setTwoToneColor } from '@ant-design/icons';
 import { FilterIcon, HeartHandshake } from 'lucide-react';
 import LikedByMe from './profile/LikedByMe';
 import LikedToMe from './profile/LikedToMe';
 import ProfileDetails from './ProfileDetails';
+import { render } from 'react-dom';
+import ProfileDetailCard from '../Center/ProfileDetailCard';
+import FilterUserDialog from './userview/FilterUserDialog';
+const API_URL = import.meta.env.VITE_SERVER_URL;
 
 // Simple Image Component with Fallback
 const AvatarImage = ({ src }) => {
@@ -52,13 +54,66 @@ const ImageCellRenderer = (props) => {
 
 
 
-const UserTableView = ({rowData,refetch}) => {
+const UserTableView = ({refetch}) => {
+
     const gridRef = useRef(null);
     const[view,setView] = useState("LIST")
     const [pairObject,setPairObject] = useState([])
     const { mutate:updateUser } = useUpdate();
+    const [offset, setOffset] = useState(0);
+    const [pageSize] = useState(20);
+    const isFetchingRef = useRef(false); // Track fetch status via ref
+
     const [isModalVisible, setIsModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filters, setFilters] = useState(null);
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  
+  const { data, isLoading } = useCustom({
+    url: `${API_URL}/api/custom-user`,
+    method: "get",
+    config: {
+      headers: {
+        "x-custom-header": "foo-bar",
+        Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
+      },
+    },
+    query: {
+      pagination: { offset, limit: pageSize },
+      sort: "-ID", // Minus sign indicates descending order
+    },
+  });
+
+
+  
+
+const minAge = 50; // Example minimum age
+const maxAge = 70; // Example maximum age
+
+// Calculate DOB range
+const startDOB = dayjs().subtract(maxAge, "year").format("YYYY-MM-DD");
+const endDOB = dayjs().subtract(minAge, "year").format("YYYY-MM-DD");
+
+// const { data: usersData, isLoading:userLodding } = useList({
+//   resource: "users",
+//   meta: { populate: ["Pictures"] },
+//   filters: [
+//     {field:"Sex",operator:"eq", value: "Female"},
+//     { field: "DOB", operator: "gte", value: startDOB }, // Date of Birth >= Start DOB
+//     { field: "DOB", operator: "lte", value: endDOB },   // Date of Birth <= End DOB
+//   ],
+//   sort: [{ field: "id", order: "desc" }],
+//   pagination: { pageSize: 10, current: 1 },
+// });
+//if(userLodding) return <Spin size="large" />
+//const users = usersData?.data;
+//console.log("users",users)
+  if (isLoading) return <>
+  <Spin size="large" />
+  <h1>Loading...</h1>;
+  </>
+const rowData = data?.data?.data;
   // Open Modal
   const handleButtonClick = (data) => {
     setProfileData(data);
@@ -72,6 +127,13 @@ const UserTableView = ({rowData,refetch}) => {
     setIsModalVisible(false);
     setProfileData(null);
   };
+  const handleViewDetails = (record) => {
+
+    console.log("Viewing user:", record);
+     //setSelectedUser(record);
+     setProfileData(record);
+     setIsModalVisible(true);
+};
     
   const resetFilters = () => {
     gridRef.current.api.setFilterModel(null);
@@ -90,7 +152,19 @@ const UserTableView = ({rowData,refetch}) => {
       { 
         field: 'id', 
         headerName: 'ID', 
-        width: 120 
+        width: 120 ,
+        renderCell: (params) => (
+          <a 
+            href="#" 
+            onClick={(e) => {
+              e.preventDefault(); // Prevent default anchor behavior
+              handleViewDetails(params.row); // Pass the entire row data
+            }}
+            style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+          >
+            {params.value}
+          </a>
+        ),
       },
       {
         field: 'Pictures',
@@ -171,92 +245,16 @@ const UserTableView = ({rowData,refetch}) => {
     setTwoToneColor('#eb2f96')
     return (
       <>
-     {/* <Space.Compact style={{ flexWrap: "wrap", justifyContent: "flex-start", gap: "8px" }}>
-  {view === "LIST" && (
-    <Button
-      color="danger"
-      variant="dashed"
-      onClick={() => gridRef.current.api.setFilterModel(null)}
-      style={{ whiteSpace: "nowrap" }}
-    >
-      <FilterIcon size={15} style={{ color: "brown" }} /> Reset
-    </Button>
-  )}
-
-  {view !== "LIST" && (
-    <Button color="danger" variant="dashed" onClick={() => setView("LIST")}>
-      LIST
-    </Button>
-  )}
-
-  <Button
-    color="danger"
-    variant="dashed"
-    onClick={() => setView("REQUESTED")}
-    style={{ whiteSpace: "nowrap" }}
-  >
-    <HeartTwoTone style={{ color: getTwoToneColor() }} /> requested
-  </Button>
-
-  <Button
-    color="danger"
-    variant="dashed"
-    onClick={() => setView("RECIEVED")}
-    style={{ whiteSpace: "nowrap" }}
-
-  >
-    <HeartFilled style={{ color: "red" }} /> recieved
-  </Button>
-
-  <Button
-    color="danger"
-    variant="dashed"
-    onClick={() => setView("LIKEDTOME")}
-    style={{ whiteSpace: "nowrap" }}
-  >
-    <HeartHandshake style={{ color: "red" }} /> रिस्ते
-  </Button>
-
-</Space.Compact> */}
+    <Button onClick={() => setIsFilterModalOpen(true)}>Filter Users</Button>
+      {/* <Button onClick={handleResetFilters} disabled={!isFilterApplied}>
+        Reset Filters
+      </Button> */}
       {view==="REQUESTED" && <LikedByMe />}
       {view==="RECIEVED"&&<LikedToMe/> }
 
       {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData} calledBy={"USER"}/>}
       {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-
-       <Modal
-        title="Profile Details"
-        visible={isModalVisible}
-        onCancel={handleCloseModal}
-        footer={[
-          <Button key="close" onClick={handleCloseModal}>
-            Close
-          </Button>,
-        ]}
-      >
-        {profileData && (
-         <ProfileDetails setView={setView} profileData={profileData} calledBy={"USER"} setProfileData={setProfileData}/>
-        )}
-      </Modal>
-
-        {/* <ProfileStatusState rowData={rowData}  refetch={refetch}/> */}
-        
-       <Card bordered={false} style={{ textAlign: 'center' }}>
-        
-       </Card>
-      
-        {/* <AgGridReact
-         
-          rowData={rowData}
-          ref={gridRef}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          pagination={true}
-          paginationPageSize={10}
-          
-          domLayout="autoHeight"
-          rowHeight={50}
-        /> */}
+      {isFilterModalOpen && <FilterUserDialog isFilterModalOpen={isFilterModalOpen} setIsFilterModalOpen={setIsFilterModalOpen} />}
       <DataGrid
   rows={rowData}
   columns={columns}
@@ -270,8 +268,12 @@ const UserTableView = ({rowData,refetch}) => {
   disableRowSelectionOnClick
 />
         {/* Modal */}
-        {/* <Modal
-          title="GAATHJOD Details"
+        <Modal
+           title={
+            <div style={{ textAlign: "center", width: "100%" }}>
+              {`${profileData?.FirstName} ${profileData?.FatherName} ${profileData?.LastName}`}
+            </div>
+          }
           visible={isModalVisible}
           onCancel={handleCloseModal}
           footer={[
@@ -280,11 +282,8 @@ const UserTableView = ({rowData,refetch}) => {
             </Button>,
           ]}
         >
-         
-          <UserPartenerSelector firstUser={modalData} rowData={rowData} setPairObject={setPairObject} setIsModalVisible={setIsModalVisible}/>
-         
-
-        </Modal> */}
+           <ProfileDetailCard setView={setView} profileData={profileData} calledBy={"USER"} setProfileData={setProfileData}/>
+        </Modal>
       </div>}
       </>
     );

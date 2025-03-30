@@ -34,7 +34,7 @@ const Header = ({ setSearch }) => {
     <div
       className="dashboard-container"
       style={{
-        padding: "0.5rem 1rem", // Reduced padding for the brown bar
+        //padding: "0rem 1rem", // Reduced padding for the brown bar
         backgroundColor: "#333", // Ensure the brown bar (background color) stays consistent
         display: "flex",
         justifyContent: "space-between",

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Card, Button, List, Modal, Tag } from "antd";
+import { Card, Button, List, Modal, Tag, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ProfessionFormModal from "./ProfessionFormModal";
 
-const ProfessionForm = ({professionList,setProfessionList}) => {
+const ProfessionForm = ({professionList,setProfessionList,activeTab,setActiveTab}) => {
   
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
+    <>
     <Card title="Profession Details">
       {/* Button to Open Modal */}
       <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>
@@ -34,6 +35,16 @@ const ProfessionForm = ({professionList,setProfessionList}) => {
         setProfessionList={setProfessionList}
       />
     </Card>
+        <Space>
+         <Button type="primary"  onClick={()=>setActiveTab((prev)=>String(Number(prev)-1))}>
+              {activeTab < 4 ? "Previous" : "Save Profile"}
+            </Button>
+           
+            <Button type="primary"  onClick={()=>setActiveTab((prev)=>String(Number(prev)+1))}>
+              {activeTab < 4 ? "Next" : "Save Profile"}
+            </Button>
+            </Space>
+    </>
   );
 };
 
