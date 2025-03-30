@@ -4,7 +4,7 @@ import { Modal, Form, Input, Select, Button, Radio } from "antd";
 const { Option } = Select;
 const { TextArea } = Input;
 
-const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessionList }) => {
+const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessionList}) => {
   const [form] = Form.useForm();
   const [showEducationForm, setShowEducationForm] = useState(false);
   const [showBusinessForm, setShowBusinessForm] = useState(false);
@@ -28,17 +28,27 @@ const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessio
       setShowBusinessForm(false);
       setShowServiceForm(false);
       setShowAgricultureForm(false);
+      setNojob(false);
       form.resetFields();
       setVisible(false);
-   
+
     });
+  };
+   const handleCancel = () => {
+        setVisible(false);
+        form.resetFields();
+        setShowEducationForm(false);
+        setShowBusinessForm(false);
+        setShowServiceForm(false);
+        setShowAgricultureForm(false);
+        setNojob(false);
   };
 
   return (
-    <Modal title="Add Profession" open={visible} onOk={handleOk}  onCancel={() => setVisible(false)} footer={null}>
+    <Modal title="Add Profession" open={visible} onOk={handleOk} onCancel={handleCancel} footer={null}>
       <Form form={form} layout="vertical">
         {/* Profession Type Selection */}
-        <Form.Item name="type" label="Profession Type" rules={[{ required: true }]}>
+        <Form.Item name="type" label="Profession Type" rules={[{ required: true, message:"Please Select Profession Type" }]}>
           <Select placeholder="Select Profession type" onChange={handleTypeChange}>
             <Option value="Student">Student</Option>
             <Option value="Businessman">Businessman</Option>
@@ -55,7 +65,7 @@ const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessio
 
         {/* Common Fields */}
         {nojob && (<>
-          <Form.Item name="currentlocation" label="Current Location" rules={[{ required: true }]}>
+          <Form.Item name="currentlocation" label="Current Location" rules={[{ required: true , message:"Please Enter currentlocation" }]}>
             <Input placeholder="Enter currentlocation" />
           </Form.Item>
         </>) }
@@ -63,7 +73,7 @@ const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessio
         {/* Education Fields */}
         {showEducationForm && (
           <>
-            <Form.Item name="educationType" label="Education Type" rules={[{ required: true }]}>
+            <Form.Item name="educationType" label="Education Type" rules={[{ required: true, message:"Please select your education Type" }]}>
               <Radio.Group>
                 <Radio value="uneducated">Uneducated</Radio>
                 <Radio value="primary">Primary</Radio>
@@ -96,7 +106,7 @@ const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessio
         {/* Business Fields */}
         {showBusinessForm && (
           <>
-            <Form.Item name="businessName" label="Business Name" rules={[{ required: true }]}>
+            <Form.Item name="businessName" label="Business Name" rules={[{ required: true , message:"Enter Business Name" }]}>
               <Input placeholder="Enter Business Name" />
             </Form.Item>
 
@@ -147,7 +157,7 @@ const ProfessionFormModal = ({ visible, setVisible, professionList, setProfessio
             </Form.Item>
           </>
         )}
-
+      
         {/* Submit Button */}
         <Button type="primary" onClick={handleOk} block>
           Add Profession

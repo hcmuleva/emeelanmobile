@@ -1,18 +1,39 @@
 import { Card, Row, Col, Avatar, Typography, List } from "antd"
 import { UserOutlined, HeartOutlined, EyeOutlined, TeamOutlined } from "@ant-design/icons"
+import { useOne } from "@refinedev/core"
 
 const { Title, Text, Paragraph } = Typography
 
-const ProfileDetailCard = () => {
+const ProfileDetailCard = ({profileData}) => {
+  console.log("ProfileDetailCard",profileData)
+  const { data, isLoading } = useOne({
+    resource: "users",
+    id: String(profileData.id),
+    meta: {
+      populate: ["profilePicture","photos"],
+    },
+  });
+
+  const user = data?.data;
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  console.log("user",user)
+
+  console.log("ProfileDetailCard",profileData)
   return (
-    <Card
-      bordered={false}
-      style={{
-        maxWidth: 1000,
-        margin: "0 auto",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-      }}
-    >
+    // <Card
+    //   bordered={false}
+    //   style={{
+    //     width: "100%",
+    //     maxWidth: "none",
+    //     margin: 0,
+    //     padding: 0,
+    //     boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    //     borderRadius: 0,
+    //   }}
+    // >
       <Row>
         {/* Left Column */}
         <Col
@@ -20,7 +41,7 @@ const ProfileDetailCard = () => {
           sm={8}
           style={{
             backgroundColor: "#e6eef7",
-            padding: "20px",
+            padding: "1px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -28,7 +49,7 @@ const ProfileDetailCard = () => {
         >
           <Avatar
             size={150}
-            src="/placeholder.svg?height=150&width=150"
+            src={user.photos?.[0]?.formats?.medium?.url || "/placeholder.svg?height=150&width=150"}
             style={{
               border: "4px solid white",
               marginBottom: "20px",
@@ -40,27 +61,29 @@ const ProfileDetailCard = () => {
               <EyeOutlined style={{ marginRight: 8 }} /> OVERVIEW
             </Title>
             <Paragraph>
-              <Text strong>Working as</Text>: Neuro Surgeon at AIIMS, New Delhi
+              <Text strong>Working as</Text>: {user.professionjson?.profession?.[1]?.designation || "N/A"} at{" "}
+              {user.professionjson?.profession?.[1]?.organization || "N/A"}
               <br />
-              <Text strong>Annual-Income</Text>: 20LPA
+              <Text strong>Annual-Income</Text>: {user.professionjson?.profession?.[1]?.salary || "N/A"}
               <br />
-              <Text strong>Highest-Degree</Text>: Master Of Business Administration, 2020
+              <Text strong>Highest-Degree</Text>: {user.professionjson?.profession?.[0]?.educationDescription || "N/A"},{" "}
+              {user.professionjson?.profession?.[0]?.passingYear || "N/A"}
               <br />
-              <Text strong>Diet</Text>: Vegetarian
+              <Text strong>Diet</Text>: {user.professionjson?.aboutMe?.diet || "N/A"}
               <br />
-              <Text strong>Skin</Text>: Fair
+              <Text strong>Skin</Text>: {user.professionjson?.aboutMe?.complexion || "N/A"}
               <br />
-              <Text strong>Drink</Text>: Never
+              <Text strong>Drink</Text>: {user.professionjson?.aboutMe?.drink || "Never"}
               <br />
-              <Text strong>Personality</Text>: Simple
+              <Text strong>Personality</Text>: {user.professionjson?.aboutMe?.personality || "Simple"}
             </Paragraph>
 
             <Title level={4} style={{ display: "flex", alignItems: "center", marginTop: 30 }}>
               <HeartOutlined style={{ marginRight: 8 }} /> EXPECTATIONS
             </Title>
             <Paragraph>
-              I am looking for a soulmate, who is understanding, down to earth, lives and enjoys every moment of life.
-              The girl should have strong inclination for values & morals.
+              {user.professionjson?.mychoice?.preference ||
+                "Looking for a kind-hearted, understanding partner who enjoys family values and traditions."}
             </Paragraph>
 
             <Title level={4} style={{ marginTop: 30 }}>
@@ -70,7 +93,13 @@ const ProfileDetailCard = () => {
             </Title>
             <List
               itemLayout="horizontal"
-              dataSource={["Hindu", "Caste: Brahmin", "Gotra: Marwadi", "Rashi: Dhanu (Sagittarius)", "Manglik: No"]}
+              dataSource={[
+                `Hindu`,
+                `Caste: ${user.professionjson?.aboutMe?.caste || "N/A"}`,
+                `Gotra: ${user.Gotra || "N/A"}`,
+                `Subcaste: ${user.professionjson?.aboutMe?.subcaste || "N/A"}`,
+                `Blood Group: ${user.professionjson?.aboutMe?.bloodGroup || "N/A"}`,
+              ]}
               renderItem={(item) => <List.Item style={{ padding: "4px 0", border: "none" }}>• {item}</List.Item>}
             />
           </div>
@@ -81,18 +110,18 @@ const ProfileDetailCard = () => {
           {/* Header */}
           <div style={{ backgroundColor: "#e9a84c", padding: "20px", color: "#333" }}>
             <Title level={2} style={{ margin: 0, color: "#333" }}>
-              NIKHIL DESHMUKH
+              {user.FirstName || "N/A"} {user.LastName || ""}
             </Title>
             <Paragraph style={{ margin: 0, fontSize: 16 }}>
-              D.O.B: 16/02/199X, Time: 10:40PM
+              D.O.B: {user.DOB || "N/A"}, Time: {user.professionjson?.aboutMe?.timeofbirth || "N/A"}
               <br />
-              Height: 5 feet 10 inch
+              Height: {user.professionjson?.aboutMe?.height || "N/A"}
               <br />
-              Contact: 630088XXA23
+              Contact: {user.MobileNumber || "N/A"}
               <br />
-              Place-of-Birth: Pune, Maharashtra
+              Place-of-Birth: {user.professionjson?.aboutMe?.birthplace || "N/A"}
               <br />
-              Mother Tongue: Marathi
+              Mother Tongue: {user.professionjson?.aboutMe?.othertongue || "N/A"}
             </Paragraph>
           </div>
 
@@ -101,32 +130,23 @@ const ProfileDetailCard = () => {
             <Title level={4} style={{ display: "flex", alignItems: "center" }}>
               <UserOutlined style={{ marginRight: 8 }} /> ABOUT MYSELF
             </Title>
-            <Paragraph>
-              I belong to a well-mannered middle-class Brahmin family and strongly consider Hindu culture, rituals &
-              holds an open-minded personality. I'm a pure vegetarian and never not drank or smoked. I'm Affectionate,
-              kind-hearted, Caring, Happy & belives in Hard Working and creativity. My hobbies are playing cricket,
-              Watch Online Documentaries and Learn New Things.
-            </Paragraph>
+            <Paragraph>{user.professionjson?.aboutMe?.aboutMe || "N/A"}</Paragraph>
 
             <Title level={4} style={{ display: "flex", alignItems: "center", marginTop: 30 }}>
               <TeamOutlined style={{ marginRight: 8 }} /> FAMILY DETAILS
             </Title>
             <List
               itemLayout="horizontal"
-              dataSource={[
-                "Father: Avinash Deshmukh, Textile business",
-                "Mother: Arti Deshmukh, Homemaker",
-                "Family-lives-in: Pune, Maharastra",
-                "Family-Type: Nuclear Family",
-                "Siblings: 2",
-                "Younger Sister: Studying B.Tech from KIIT, Bhubaneswar",
-              ]}
+              dataSource={user.professionjson?.family?.map(
+                (member) =>
+                  `${member.type}: ${member.firstName || "N/A"} ${member.lastName || ""}, ${member.profession || "N/A"}`
+              )}
               renderItem={(item) => <List.Item style={{ padding: "4px 0", border: "none" }}>• {item}</List.Item>}
             />
           </div>
         </Col>
       </Row>
-    </Card>
+    // </Card>
   )
 }
 
