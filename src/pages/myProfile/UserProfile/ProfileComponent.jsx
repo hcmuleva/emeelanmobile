@@ -3,6 +3,7 @@
 import React, { useState ,useRef} from "react"
 import { Avatar, Typography, Tabs, Card, Button, Descriptions, Space, Layout, theme } from "antd"
 import { ArrowLeftOutlined, EditOutlined, LeftOutlined, RightOutlined, LogoutOutlined } from "@ant-design/icons"
+import { useOne } from "@refinedev/core"
 
 const { Title, Text } = Typography
 const { Content } = Layout

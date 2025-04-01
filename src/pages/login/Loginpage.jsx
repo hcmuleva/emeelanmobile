@@ -38,6 +38,7 @@ const LoginPage = () => {
         localStorage.setItem("userid", String(data?.user?.id));
         localStorage.setItem("userstatus", String(data?.user?.userstatus));
         localStorage.setItem("emeelanrole", String(data?.user?.emeelanrole));
+        localStorage.setItem("Sex", String(data?.user?.Sex));
         console.log("Emeelan  Role , ", localStorage.getItem("emeelanrole"));
         console.log("Id, ", localStorage.getItem("userid"));
         

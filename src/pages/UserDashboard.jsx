@@ -6,6 +6,8 @@ import { HomeOutlined, UserOutlined, HeartOutlined } from '@ant-design/icons';
 import MyInfo from './UserDashboard/MyInfo';
 import { Tab } from '@mui/material';
 import { Tabs } from 'antd';
+import UserPage from './UserDashboard/userview/UserPage';
+import MyData from './UserDashboard/userview/MyData';
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -47,7 +49,7 @@ const items= [
         <span style={{ marginLeft: 8 }}>Profiles</span>
       </span>
     ),
-    children: <UserTableView />,
+    children: <UserPage />,
   },
   {
     key: '3',
@@ -57,7 +59,7 @@ const items= [
         <span style={{ marginLeft: 8 }}>myChoice</span>
       </span>
     ),
-    children: 'Content of Tab Pane 3',
+    children: <MyData/>,
   },
 ];
   return (

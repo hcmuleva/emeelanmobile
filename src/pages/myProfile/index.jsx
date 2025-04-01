@@ -1,96 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Card, Button, Tabs, Form, Input,Space, Upload, message, Row, Col, Spin } from 'antd';
-import { EnvironmentOutlined, UserOutlined, CalendarOutlined, PhoneOutlined, BookOutlined, PlusOutlined, HomeOutlined, LogoutOutlined, EditOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from "react-router-dom";
-import { useLogout, useOne, useUpdate } from "@refinedev/core";
-import PhotoComponent from './PhotoComponent';
-import ProfileCard from './ProfileCard';
-import EditProfile from './EditProfile'
-import ProfilePage from '../UserDashboard/ProfileView/ProfilePage';
+import { Layout, Spin } from 'antd';
+import { useNavigate } from "react-router-dom";
+import { useLogout, useOne } from "@refinedev/core";
 import ProfileComponent from './UserProfile/ProfileComponent';
-import ProfileDetailCard from './UserProfile/ProfileDetailCard';
+import Header from '../Header';
+
 const { Content } = Layout;
-const { TabPane } = Tabs;
-const { TextArea } = Input;
 
 export default function MyProfile() {
-  const [isEditProfile,setIsEditProfile]= useState(false);
+  const [isEditProfile, setIsEditProfile] = useState(false);
   const userid = localStorage.getItem("userid");
-  const navigate = useNavigate();
-  const {mutate: logout} = useLogout();
-
-  const [images, setImages] = useState([{
-    uid: "0",
-    name: "0",
-    url: "0"
-  }]);
-  const [profilePhotos,setProfilePhotos]=useState([])
-  const [user, setUser] = useState({});
-  
-  
-  //const { id } = useParams();
+ 
   const { data, isLoading } = useOne({
     resource: "users",
-    id:userid,
+    id: String(userid),
     meta: {
-      populate: ["photos","profilePicture", "user_setting"],
+      populate: ["profilePicture"],
     },
   });
-  if(isLoading){
-    <Spin>
-      Page Loading
-    </Spin>
+
+  const user = data?.data;
+
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
-  useEffect(() => {
-    if (data?.data) {
-     
-      
-      setUser({...data.data});
-    }
-  }, [data]);
-
-  const [edit, setEdit] = useState(false);
-
-  const handleLogout = () => {
-    console.log("sdsfsf")
-    localStorage.clear()
-    navigate('/login');
-    
-  }
-  
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
-
-  console.log("user object", user)  /** 
-  Profile has three section:
-  1) Image:
-      How to take a form component when user can simply call this component
-  2) View Profile
-  3) Edit Profile
-
-
- */
-
+  console.log("user",user)
+  return(<>
+   <Header />
+  </>)
   return (
     <>
-   {/* <ProfileDetailCard/> */}
-   <ProfileComponent/>
+      <ProfileComponent userid={userid} />
     </>
-  );
-}
-
-function InfoItem({ icon, label, value }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-      <div style={{ marginRight: 8, marginTop: 4 }}>{icon}</div>
-      <div>
-        <h4 style={{ fontWeight: 'bold', marginBottom: 4 }}>{label}</h4>
-        <p>{value}</p>
-      </div>
-    </div>
   );
 }

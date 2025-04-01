@@ -2,36 +2,37 @@ import React, { useState } from "react";
 import { Modal, Select, Form, Button, Input, InputNumber } from "antd";
 import dayjs from "dayjs";
 
-export default function FilterUserDialog({ isFilterModalOpen, setIsFilterModalOpen }) {
-  const [form] = Form.useForm();
+export default function FilterUserDialog({ isFilterModalOpen, setIsFilterModalOpen,setOnApplyFilters,setPageview }) {
+    console.log("Filters from FilterUserDialog onApplyFilters",isFilterModalOpen)  
+    const [form] = Form.useForm();
   const [filters, setFilters] = useState(null);
-  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  
 
   const handleApplyFilters = (values) => {
-    console.log("Form values:", values);
 
-    const { ageRange, gotra, location, profession } = values;
-
-    if (!ageRange || ageRange.length !== 2) {
-      console.warn("Invalid age range selected");
-      return;
-    }
-
-    const [minAge, maxAge] = ageRange;
+    const {  gotra, location, profession } = values;
+    const userSex = localStorage.getItem("Sex") || "Male"; // Default to "Male" if null
+    const setSexFilter = userSex === "Male" ? "Female" : "Male";
+  
+    const minAge = values?.ageRange?.min??18;
+    const maxAge = values?.ageRange?.max??24;
+    // const [minAge, maxAge] = ageRange;
+    console.log("Age Range:", minAge, maxAge);
+    
     const startDOB = dayjs().subtract(maxAge, "year").format("YYYY-MM-DD");
     const endDOB = dayjs().subtract(minAge, "year").format("YYYY-MM-DD");
-
     const newFilters = [
-      { field: "Sex", operator: "eq", value: "Female" },
+
+      { field: "Sex", operator: "eq", value: setSexFilter},
       { field: "DOB", operator: "gte", value: startDOB },
       { field: "DOB", operator: "lte", value: endDOB },
       gotra && { field: "Gotra", operator: "eq", value: gotra },
       location && { field: "Location", operator: "eq", value: location },
       profession && { field: "Profession", operator: "eq", value: profession },
     ].filter(Boolean);
-
-    setFilters(newFilters);
-    setIsFilterApplied(true);
+    console.log("New filters:", newFilters);
+    setOnApplyFilters(newFilters);
+    setPageview("FILTERED");
     setIsFilterModalOpen(false);
   };
 

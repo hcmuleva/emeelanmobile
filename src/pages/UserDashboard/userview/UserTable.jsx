@@ -1,21 +1,14 @@
-import { Avatar, Button, Card, Modal, Select, Space, Spin } from 'antd';
+import { DataGrid, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { useCustom, useUpdate } from '@refinedev/core';
+import { Avatar, Button, Modal, Select, Spin } from 'antd';
 import React, { useRef, useState } from 'react';
-import Box from '@mui/material/Box';
-import { DataGrid, GridToolbar,GridToolbarContainer, GridToolbarQuickFilter  } from '@mui/x-data-grid';
-import { useCustom, useList, useUpdate } from '@refinedev/core';
 
-import UserPartenerSelector from './Engaggement/UserPartenerSelector';
-import ProfileStatusState from './Stats/ProfileStatusState';
-import dayjs from "dayjs";
+import { setTwoToneColor } from '@ant-design/icons';
+import ProfileDetailCard from './ProfileDetailCard';
+
+//import ProfileDetails from './ProfileDetails';
+
 const { Option } = Select;
-import { getTwoToneColor, HeartFilled, HeartTwoTone, setTwoToneColor } from '@ant-design/icons';
-import { FilterIcon, HeartHandshake } from 'lucide-react';
-import LikedByMe from './profile/LikedByMe';
-import LikedToMe from './profile/LikedToMe';
-import ProfileDetails from './ProfileDetails';
-import { render } from 'react-dom';
-import ProfileDetailCard from '../Center/ProfileDetailCard';
-import FilterUserDialog from './userview/FilterUserDialog';
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
 // Simple Image Component with Fallback
@@ -58,17 +51,12 @@ const UserTableView = ({refetch}) => {
 
     const gridRef = useRef(null);
     const[view,setView] = useState("LIST")
-    const [pairObject,setPairObject] = useState([])
-    const { mutate:updateUser } = useUpdate();
     const [offset, setOffset] = useState(0);
     const [pageSize] = useState(20);
-    const isFetchingRef = useRef(false); // Track fetch status via ref
 
     const [isModalVisible, setIsModalVisible] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filters, setFilters] = useState(null);
-  const [isFilterApplied, setIsFilterApplied] = useState(false);
   
   const { data, isLoading } = useCustom({
     url: `${API_URL}/api/custom-user`,
@@ -88,27 +76,6 @@ const UserTableView = ({refetch}) => {
 
   
 
-const minAge = 50; // Example minimum age
-const maxAge = 70; // Example maximum age
-
-// Calculate DOB range
-const startDOB = dayjs().subtract(maxAge, "year").format("YYYY-MM-DD");
-const endDOB = dayjs().subtract(minAge, "year").format("YYYY-MM-DD");
-
-// const { data: usersData, isLoading:userLodding } = useList({
-//   resource: "users",
-//   meta: { populate: ["Pictures"] },
-//   filters: [
-//     {field:"Sex",operator:"eq", value: "Female"},
-//     { field: "DOB", operator: "gte", value: startDOB }, // Date of Birth >= Start DOB
-//     { field: "DOB", operator: "lte", value: endDOB },   // Date of Birth <= End DOB
-//   ],
-//   sort: [{ field: "id", order: "desc" }],
-//   pagination: { pageSize: 10, current: 1 },
-// });
-// if(userLodding) return <Spin size="large" />
-// const users = usersData?.data;
-//console.log("users",users)
   if (isLoading) return <>
   <Spin size="large" />
   <h1>Loading...</h1>;
@@ -243,30 +210,8 @@ const rowData = data?.data?.data;
         suppressSizeToFit: true
     };
     setTwoToneColor('#eb2f96')
-    return (
-      <>
-    <Button onClick={() => setIsFilterModalOpen(true)}>Filter Users</Button>
-      {/* <Button onClick={handleResetFilters} disabled={!isFilterApplied}>
-        Reset Filters
-      </Button> */}
-      {view==="REQUESTED" && <LikedByMe />}
-      {view==="RECIEVED"&&<LikedToMe/> }
-
-      {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData} calledBy={"USER"}/>}
-      {view==="LIST"&&<div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-      {isFilterModalOpen && <FilterUserDialog isFilterModalOpen={isFilterModalOpen} setIsFilterModalOpen={setIsFilterModalOpen} />}
-      <DataGrid
-  rows={rowData}
-  columns={columns}
-  pageSizeOptions={[10, 25, 50]}
-  initialState={{
-    pagination: {
-      paginationModel: { pageSize: 10, page: 0 },
-    },
-  }}
-  slots={{ toolbar: CustomToolbar }} // Use custom toolbar
-  disableRowSelectionOnClick
-/>
+    return (<>
+    {/* <Button onClick={() => setIsModalVisible(true)}>Filter Users</Button> */}
         {/* Modal */}
         <Modal
            title={
@@ -282,9 +227,21 @@ const rowData = data?.data?.data;
             </Button>,
           ]}
         >
-           <ProfileDetailCard setView={setView} profileData={profileData} calledBy={"USER"} setProfileData={setProfileData}/>
+           <ProfileDetailCard  profileData={profileData} calledBy={"USER"} setProfileData={setProfileData}/>
         </Modal>
-      </div>}
+        <DataGrid
+  rows={rowData}
+  columns={columns}
+  pageSizeOptions={[10, 25, 50]}
+  initialState={{
+    pagination: {
+      paginationModel: { pageSize: 10, page: 0 },
+    },
+  }}
+  slots={{ toolbar: CustomToolbar }} // Use custom toolbar
+  disableRowSelectionOnClick
+/>
+      
       </>
     );
   };

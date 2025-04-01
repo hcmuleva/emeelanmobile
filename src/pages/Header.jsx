@@ -15,7 +15,7 @@ const Header = ({ setSearch }) => {
     resource: "users",
     id: String(userid),
     meta: {
-      populate: ["profilePicture"],
+      populate: ["Pictures"],
     },
   });
 
@@ -24,6 +24,10 @@ const Header = ({ setSearch }) => {
   if (isLoading) {
     return <p>Loading...</p>;
   }
+  const imageSrc =
+    user?.Photos?.[0]?.formats?.thumbnail?.url || // Primary source
+    user?.Pictures?.[0] || // Secondary source
+    '/default-profile.png'; // Fallback image
 
   // Navigate to the Help page
   const handleHelpClick = () => {
@@ -75,14 +79,12 @@ const Header = ({ setSearch }) => {
           }}
           onClick={() => navigate(`/myprofile/${userid}`)}
         >
-          <Avatar
-            src={
-              user?.profilePicture?.formats?.thumbnail?.url ||
-              "/default-profile.png"
-            }
-            size={64}
-            icon={<UserOutlined />}
-          />
+         <Avatar
+      src={imageSrc}
+      size={64}
+      icon={<UserOutlined />}
+      alt="User Avatar"
+    />
           <div style={{ color: "white" }} className="dashboard-username">
             {user?.username}
             <CaretRightOutlined />
