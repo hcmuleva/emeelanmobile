@@ -47,6 +47,7 @@ export const getAuthenticatedUser = async (jwt) => {
     throw error.response?.data?.message || 'Failed to fetch user';
   }
 };
+
 export const getPaginatedUsers = async (start = 0, limit = 10) => {
     console.log("getPaginatedUsers ");
     try {
@@ -54,7 +55,9 @@ export const getPaginatedUsers = async (start = 0, limit = 10) => {
         params: {
           _start: start,
           _limit: limit,
-          _sort: 'id:DESC' // Sort by newest first
+          _sort: 'id:DESC', // Sort by newest first
+          "populate[photos]": "*", // ✅ Populate photos (all fields)
+          "populate[profilePicture]": "*" // ✅ Populate profile picture (all fields)
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`

@@ -4,11 +4,21 @@ import { BellOutline } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {
+
   const navigate = useNavigate();
   const userProfile = "https://via.placeholder.com/40"; // Replace with actual profile image
-
+  const userData=JSON.parse(localStorage.getItem('user'))
+  const userName = [
+    "Mr.",
+    userData?.FirstName,
+    userData?.FatherName,
+    userData?.Gotra
+  ]
+    .filter(Boolean) // Removes null, undefined, and empty strings
+    .join(" "); //  console.log("userdata",userData?.FirstName)
   return (
     <div style={{ position: "relative" }}> {/* Wrapper for absolute positioning */}
+    <br/>
       <NavBar
         backArrow={false}
         left={<img src="/logo.png" alt="Logo" style={{ height: 30 }} />} // Replace with your logo
@@ -16,15 +26,17 @@ const TopBar = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "-8px" }}>
             {/* Bell Icon with notification badge */}
             <Badge dot color="red">
-              <BellOutline fontSize={24} style={{ cursor: "pointer" }} onClick={() => navigate("/notifications")} />
             </Badge>
-            
-            {/* Avatar pushed further right */}
-            <Avatar
-              src={userProfile}
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate("/profile")} // Redirect to profile page
-            />
+
+            {/* Avatar with Name Below */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Avatar
+                src={userProfile}
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/profile")}
+              />
+              <span style={{ fontSize: "12px", marginTop: "4px", color: "#666" }}>{userName}</span> 
+            </div>
           </div>
         }
       />
@@ -34,10 +46,10 @@ const TopBar = () => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        fontSize: "16px",
+        fontSize: "14px",
         fontWeight: "bold"
       }}>
-        Seervi Emeelan
+       आल इंडिया क्षत्रिय राठौड़ समाज    
       </div>
     </div>
   );

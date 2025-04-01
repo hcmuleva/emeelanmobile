@@ -1,12 +1,9 @@
 import React from "react";
-import { Card, Button, Grid, Tag, Avatar, Tabs } from "antd-mobile";
+import { Card, Button, Grid, Tag, Avatar, Tabs ,ScrollView} from "antd-mobile";
 import { BellOutline, UserOutline,ArrowDownCircleOutline } from "antd-mobile-icons";
+import MyLanguageComponent from "./MyLanguageComponent";
 
-const user = {
-    name: "Rahul",
-    premium: true,
-    profilePic: "https://via.placeholder.com/50", // Replace with actual image
-};
+
 
 const journeyStats = [
     { label: "Acceptances received", count: 45, new: 16 },
@@ -19,13 +16,27 @@ const recommendations = [
     { name: "Divya", age: 26, height: "5'4\"", image: "https://via.placeholder.com/70" },
     { name: "Anjali", age: 26, height: "5'4\"", image: "https://via.placeholder.com/70" },
     { name: "Radhika", age: 26, height: "5'4\"", image: "https://via.placeholder.com/70" },
+    { name: "Divya", age: 26, height: "5'4\"", image: "https://via.placeholder.com/70" },
+    { name: "Anjali", age: 26, height: "5'4\"", image: "https://via.placeholder.com/70" },
+    { name: "Radhika", age: 26, height: "5'4\"", image: "https://via.placeholder.com/70" },
+    { name: "Priya", age: 24, height: "5'6\"", image: "https://via.placeholder.com/70" },
+    { name: "Maya", age: 28, height: "5'5\"", image: "https://via.placeholder.com/70" },
+    { name: "Sita", age: 30, height: "5'7\"", image: "https://via.placeholder.com/70" },
+  
 ];
 
 const Home = () => {
+    const userdata = JSON.parse(localStorage.getItem('user'))
+    const accepted = userdata?.accepted??0;
+    const acceptedbyme = userdata?.acceptedbyme??0
+    const rejected = userdata?.rejected??0
+    const rejectedbyme = userdata?.rejectedbyme??0
+
     return (
         <div style={{ padding: "10px" }}>
+            <MyLanguageComponent/>
             {/* Profile Header */}
-            <Card>
+            {/* <Card>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <Avatar src={user.profilePic} style={{ marginRight: "10px" }} />
@@ -39,29 +50,58 @@ const Home = () => {
             </Card>
 
             {/* Horoscope & Biodata */}
-            <Card style={{ marginTop: "10px" }}>
+            {/* <Card style={{ marginTop: "10px" }}>
                 <Button block color="primary">Generate Horoscope</Button>
             </Card>
             <Card style={{ marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <span>Download & share your biodata</span>
                 <Button shape="rounded" color="primary" icon={<ArrowDownCircleOutline />}>Download</Button>
-            </Card>
+            </Card>  */}
 
             {/* Journey Summary */}
-            <h3>Your journey so far</h3>
+           
             <Grid columns={4} gap={8}>
-                {journeyStats.map((item, index) => (
-                    <Card key={index} style={{ textAlign: "center" }}>
-                        <strong>{item.count}</strong>
-                        <p>{item.label}</p>
-                        {item.new > 0 && <Tag color="danger">{item.new} new</Tag>}
+            <Card key={"accepted"} style={{ textAlign: "center" }}>
+                        <strong>Accepted</strong>
+                        <p>{accepted}</p>
+                       
                     </Card>
-                ))}
+                    <Card key={"rejected"} style={{ textAlign: "center" }}>
+                        <strong>Rejected</strong>
+                        <p>{rejected}</p>
+                    </Card>
+                    <Card key={"MyAccepted"} style={{ textAlign: "center" }}>
+                        <strong>MyAccepted</strong>
+                        <p>{acceptedbyme}</p>
+                    </Card>
+                    <Card key={"MyRejected"} style={{ textAlign: "center" }}>
+                        <strong>MyRejected</strong>
+                        <p>{rejectedbyme}</p>
+                    </Card>
+
             </Grid>
 
             {/* Daily Recommendations */}
-            <h3>Your daily recommendations</h3>
-            <Grid columns={3} gap={8}>
+            <h3>Pending Request</h3>
+            
+            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', padding: '10px 0' }}>
+      {recommendations.map((item, index) => (
+        <div key={index} style={{ display: 'inline-block', marginRight: '10px' }}>
+          <Card
+            style={{ width: '100px', textAlign: 'center', padding: '10px' }}
+            cover={<img src={item.image} alt={item.name} />}
+          >
+            <div>
+              <h4>{item.name}</h4>
+              <p>{item.age} years</p>
+              <p>{item.height}</p>
+            </div>
+          </Card>
+        </div>
+      ))}
+    </div>
+
+            {/* <Grid columns={3} gap={8}>
                 {recommendations.map((rec, index) => (
                     <Card key={index}>
                         <Avatar src={rec.image} style={{ width: "70px", height: "70px" }} />
@@ -69,10 +109,10 @@ const Home = () => {
                         <small>{rec.age} Yrs, {rec.height}</small>
                     </Card>
                 ))}
-            </Grid>
+            </Grid> */}
 
             {/* Countdown Timer Placeholder */}
-            <p style={{ textAlign: "center", color: "red", marginTop: "10px" }}>Time left to view your daily matches - 10:23:13</p>
+            {/* <p style={{ textAlign: "center", color: "red", marginTop: "10px" }}>Time left to view your daily matches - 10:23:13</p> */}
         </div>
     );
 };
