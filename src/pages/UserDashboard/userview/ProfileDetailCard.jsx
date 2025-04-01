@@ -1,8 +1,9 @@
-import { Card, Row, Col, Avatar, Typography, List } from "antd"
+import { Card, Row, Col, Avatar, Typography, List, Button, notification } from "antd"
 import { UserOutlined, HeartOutlined, EyeOutlined, TeamOutlined } from "@ant-design/icons"
-import { useOne } from "@refinedev/core"
+import { useCreate, useOne } from "@refinedev/core"
 
 const { Title, Text, Paragraph } = Typography
+const API_URL = import.meta.env.VITE_SERVER_URL;
 
 const ProfileDetailCard = ({profileData}) => {
   console.log("ProfileDetailCard",profileData)
@@ -15,25 +16,35 @@ const ProfileDetailCard = ({profileData}) => {
   });
 
   const user = data?.data;
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
   console.log("user",user)
-
+  const handleCreateLike = async () => {
+    console.log("handleCreateLike",profileData.id, " self user ", localStorage.getItem('userid'))
+    const id = profileData.id;
+    const userid = localStorage.getItem('userid');
+    await fetch(
+      `${API_URL}/api/custom-update-likes/${id}/userid/${userid}`,
+      {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt-token")}`, // Include the token in the Authorization header
+        },
+      }
+    ).then(() => {
+      notification.success({
+        message: "Success",
+        description: "Request sent successfully",
+      });
+      console.log("successfully done");
+    });
+  }
   console.log("ProfileDetailCard",profileData)
+
   return (
-    // <Card
-    //   bordered={false}
-    //   style={{
-    //     width: "100%",
-    //     maxWidth: "none",
-    //     margin: 0,
-    //     padding: 0,
-    //     boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-    //     borderRadius: 0,
-    //   }}
-    // >
+    <>
       <Row>
         {/* Left Column */}
         <Col
@@ -148,7 +159,11 @@ const ProfileDetailCard = ({profileData}) => {
           </div>
         </Col>
       </Row>
-    // </Card>
+      <Row>
+        <Button onClick={handleCreateLike}>Like</Button>
+        </Row>
+      </>
+    
   )
 }
 
