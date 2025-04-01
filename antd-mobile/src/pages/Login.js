@@ -43,6 +43,10 @@ const Login = () => {
     <div style={{ padding: '16px' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>Welcome Back</h2>
       <Form
+      initialValues={{
+        email: "aa@aa.com", // Default email value
+        password: "welcome"
+      }}
         onFinish={onFinish}
         footer={
           <Button block type='submit' color='primary' size='large' loading={loading}>
@@ -53,6 +57,7 @@ const Login = () => {
         <Form.Item
           name='email'
           label='Email'
+          
           rules={[
             { required: true, message: 'Please input your email' },
             { type: 'email', message: 'Please enter a valid email' }

@@ -47,6 +47,10 @@ const LoginPage = ({ onRegister }) => {
       <h2>LOGIN</h2>
       <Space direction="vertical" style={{ width: "100%" }}>
       <Form
+       initialValues={{
+        email: "aa@aa.com", // Default email value
+        password: "welcome"
+      }}
         onFinish={onFinish}
         footer={
           <Button block type='submit' color='primary' size='large' loading={loading}>
