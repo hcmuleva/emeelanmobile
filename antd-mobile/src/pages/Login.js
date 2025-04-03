@@ -17,9 +17,7 @@ const Login = () => {
       const loginSuccess = authContext.login(jwt, user);
 
       if (loginSuccess) {
-        
         navigate('/home', { replace: true });
-      
       }
       
       Toast.show({
@@ -43,14 +41,14 @@ const Login = () => {
     <div style={{ padding: '16px' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>Welcome Back</h2>
       <Form
-      initialValues={{
-        email: "aa@aa.com", // Default email value
-        password: "welcome"
-      }}
+        initialValues={{
+          email: "aa@aa.com", // Default email value
+          password: "welcome"
+        }}
         onFinish={onFinish}
         footer={
           <Button block type='submit' color='primary' size='large' loading={loading}>
-            Sign in 
+            Sign in
           </Button>
         }
       >

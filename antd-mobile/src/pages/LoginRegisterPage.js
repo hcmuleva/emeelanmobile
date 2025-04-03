@@ -7,22 +7,20 @@ import { EyeInvisibleOutline, EyeOutline } from "antd-mobile-icons";
 import { AuthContext } from "../context/AuthContext";
 import { login } from "../services/api";
 const LoginPage = ({ onRegister }) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  // const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
   const onFinish = async (values) => {
-    console.log("values",values)
     setLoading(true);
     try {
       const { jwt, user } = await login(values.email, values.password);
+      // console.log(jwt, user)
       const loginSuccess = authContext.login(jwt, user);
 
       if (loginSuccess) {
-        
-        navigate('/home', { replace: true });
-      
+        navigate('/home', { replace: true }); 
       }
       
       Toast.show({
@@ -47,10 +45,6 @@ const LoginPage = ({ onRegister }) => {
       <h2>LOGIN</h2>
       <Space direction="vertical" style={{ width: "100%" }}>
       <Form
-       initialValues={{
-        email: "aa@aa.com", // Default email value
-        password: "welcome"
-      }}
         onFinish={onFinish}
         footer={
           <Button block type='submit' color='primary' size='large' loading={loading}>
