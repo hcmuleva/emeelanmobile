@@ -70,7 +70,7 @@ const ProfileStatus = () => {
   if (error) return <div>Error: {error}</div>;
   if (!user) return <div>No user found</div>;
   const mycoices=user.mylikes;
-  console.log("mylikes",user.mylikes)
+  console.log("mylikes",user)
   mycoices.map(elm =>{
     console.log("elm", elm)
     if(elm.id ==7210){

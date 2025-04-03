@@ -17,6 +17,7 @@ import { locales, defaultLocale } from './locales';
 import { LanguageProvider } from './context/LanguageContext';
 import Profiles from './components/users/Profiles';
 import ProfileStatusPage from './pages/ProfileStatusPage';
+import LoginRegisterController from './pages/LoginRegisterController';
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -35,12 +36,9 @@ function AppContent() {
           <Route
             path="/"
             element={
-              showRegister ? (
               
-               <RegisterPage onLogin={() => setShowRegister(false)} />
-              ) : (
-                <LoginPage onRegister={() => setShowRegister(true)} />
-              )
+              
+                <LoginRegisterController/>
             }
           />
 
