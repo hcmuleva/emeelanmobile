@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { NavBar, TabBar } from "antd-mobile";
 import { HomeOutlined, UserOutlined, MessageOutlined, SearchOutlined, ProfileTwoTone, ProfileOutlined } from "@ant-design/icons";
 import TopBar from "./TopBar";
-import { TeamFill } from "antd-mobile-icons";
+import { CheckCircleFill, ExclamationCircleFill, StarFill, TeamFill } from "antd-mobile-icons";
 
 const MainLayout = ({ children }) => {
   const location = useLocation();
@@ -12,7 +12,7 @@ const MainLayout = ({ children }) => {
   const tabs = [
     { key: "/home", title: "Home", icon: <HomeOutlined /> },
     {key:"/profiles", title:"profiles", icon:<TeamFill/>},
-    { key: "/matches", title: "Matches", icon: <UserOutlined /> },
+    { key: "/status", title: "status", icon: <CheckCircleFill /> },
     { key: "/mailbox", title: "Mailbox", icon: <MessageOutlined />, badge: 99 },
     { key: "/chat", title: "Chat", icon: <MessageOutlined /> },
     { key: "/search", title: "Search", icon: <SearchOutlined /> },

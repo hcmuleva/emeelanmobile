@@ -16,7 +16,11 @@ import {
   ClockCircleFill,
   CheckShieldFill
 } from 'antd-mobile-icons';
+import { ProfileDetailPanel } from "./ProfileDetailPanel";
+
 export default function ProfileCard({user}) {
+    const [selectedProfile, setSelectedProfile] = useState(null);
+    const [visible,setVisible] =useState(false)
     const fieldPairs = [
         [
           { label: 'First Name', value: user.FirstName },
@@ -109,7 +113,22 @@ export default function ProfileCard({user}) {
                }}>
                  {user.age} yrs, {user.Height} - {user.HighestDegree}- {user.marital} - Mysuru
                </p>
-     
+               {selectedProfile && (
+        <ProfileDetailPanel 
+          profile={selectedProfile} 
+          visible={visible}
+          onClose={() => setSelectedProfile(null)} 
+        />
+      )}
+
+<div key={user.id} onClick={() => {
+    setVisible(true)
+    setSelectedProfile(user)}}>
+          {/* Profile list item */}
+       
+               {/* <Tag color="success" fill="outline" onClick={()=>{
+                setSelectedProfile()
+               }}> Detail</Tag> */}
                <Tag 
                  color='success' 
                  fill='outline'
@@ -122,6 +141,7 @@ export default function ProfileCard({user}) {
                  <CheckShieldFill style={{ marginRight: '4px' }} />
                  Verified Profile
                </Tag>
+               </div>
              </div>
            </div>
      
@@ -149,7 +169,7 @@ export default function ProfileCard({user}) {
                </Tag>
              </Space>
            </div>
-     
+                 
            {/* Action Section */}
            <div style={{ padding: '16px' }}>
              <p style={{ 
