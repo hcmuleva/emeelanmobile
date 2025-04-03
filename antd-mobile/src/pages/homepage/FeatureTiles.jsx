@@ -1,5 +1,6 @@
-import { AlipayCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import { AlipayCircleOutlined} from '@ant-design/icons';
 import { Card, Divider, Grid, NoticeBar, ProgressCircle, Space } from 'antd-mobile';
+import { User, GraduationCap, Briefcase, MapPin, ShieldCheck, HelpCircle, Video, LogOut } from 'lucide-react';
 import {
   LockOutline,
   PictureOutline,
@@ -7,7 +8,7 @@ import {
   TeamOutline,
   TravelOutline
 } from 'antd-mobile-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AdminListDialog } from '../../components/homepage/AdminListDialog';
 import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
 import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
@@ -15,6 +16,37 @@ import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
 import { SettingsDialog } from '../../components/homepage/SettingsDialog';
 import { UploadImagesDialog } from '../../components/homepage/UploadImagesDialog';
 import { ResetPasswordDialog } from './ResetPasswordDialog';
+import UserAbout from './About';
+
+const ProfileTiles = [
+  {
+    title: 'About',
+    color: '#A5D8FF', // Light blue
+    icon: <User style={{ fontSize: 24, color: '#212121' }} />,
+    key: 'about'
+  },
+  {
+    title: 'Education',
+    color: '#D0BFFF', // Light purple
+    icon: <GraduationCap style={{ fontSize: 24, color: '#212121' }} />,
+    key: 'education'
+  },
+  {
+    title: 'Job',
+    color: '#B9F3E4', // Light green
+    icon: <Briefcase style={{ fontSize: 24, color: '#212121' }} />,
+    key: 'job'
+  },
+  {
+    title: 'Address',
+    color: '#FFD8A9', // Light orange
+    icon: <MapPin style={{ fontSize: 24, color: '#212121' }} />,
+    key: 'address'
+  }
+];
+
+
+
 const tiles = [
     { title: 'Bhamasah', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
     { title: 'Profession', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'profession' },
@@ -25,10 +57,33 @@ const tiles = [
     { title: 'UploadImages', color: '#FFA94D', icon: <PictureOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'images' }
   ];
   
-const secondTiles = [
-  { title: 'Logout', color: '#A5D8FF', icon: <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'logout' },
-  { title: 'Help', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'help' },
-]
+  const secondTiles = [
+    { 
+      title: 'Admin', 
+      color: '#FFCC00', // Gold for Admin
+      icon: <ShieldCheck style={{ fontSize: 24, color: '#212121' }} />, 
+      key: 'admin' 
+    },
+    { 
+      title: 'Help', 
+      color: '#66CCFF', // Light Blue for Help
+      icon: <HelpCircle style={{ fontSize: 24, color: '#212121' }} />, 
+      key: 'help' 
+    },
+    { 
+      title: 'Videos', 
+      color: '#FF66CC', // Pink for Videos
+      icon: <Video style={{ fontSize: 24, color: '#212121' }} />, 
+      key: 'videos' 
+    },
+    { 
+      title: 'Logout', 
+      color: '#FF3333', // Red for Logout
+      icon: <LogOut style={{ fontSize: 24, color: '#212121' }} />, 
+      key: 'logout' 
+    },
+  ];
+  
 const demoLongText = " This is a sample long text and heere is our message "
 const FeatureTiles = () => {
   const [visibleBhamasah, setVisibleBhamasah] = useState(false);
@@ -41,13 +96,17 @@ const FeatureTiles = () => {
 
   const [visibleFamily, setVisibleFamily] = useState(false);
   const [visibleSettings,setSettings] = useState(false);
+  const [visibleAbout, setVisibleAbout] = useState(false);
+
+   
+
   const handleTileClick = (tileKey) => {
     switch(tileKey) {
       case 'bhamasah':
         // Handle Bhamasah click
         console.log('Bhamasah tile clicked');
         setVisibleBhamasah(true);
-        
+
         break;
       case 'profession':
         // Handle Profession click
@@ -64,6 +123,7 @@ const FeatureTiles = () => {
         setVisibleAdminList(true)
         console.log('Admin List tile clicked');
         break;
+
       case 'password':
         // Handle Password click
         console.log('Password tile clicked');
@@ -78,6 +138,11 @@ const FeatureTiles = () => {
         // Handle Images click
         console.log('Images tile clicked');
         setVisibleUploadImages(true)
+        break;
+      case 'about':
+        // Handle Images click
+        console.log('About Clicked');
+        setVisibleAbout(true)
         break;
       default:
         console.log('Unknown tile clicked');
@@ -119,6 +184,29 @@ const FeatureTiles = () => {
           </ProgressCircle> */}
         </Space>
     </Grid>
+    <Divider contentPosition="center">Profile Section</Divider>
+    <Grid columns={2} gap={16} style={{ padding: 16 }}>
+        {ProfileTiles.map((tile) => (
+          <Grid.Item key={tile.key}>
+            <Card 
+              style={{
+                backgroundColor: tile.color,
+                color: '#212121',
+                padding: '12px',
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+              onClick={() => handleTileClick(tile.key)}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {tile.icon}
+                <span style={{ marginTop: 8, fontWeight: 'bold' }}>{tile.title}</span>
+              </div>
+            </Card>
+          </Grid.Item>
+        ))}
+      </Grid>
+      <Divider contentPosition="center">Information</Divider>
       <Grid columns={2} gap={16} style={{ padding: 16 }}>
         {tiles.map((tile) => (
           <Grid.Item key={tile.key}>
@@ -172,6 +260,7 @@ const FeatureTiles = () => {
       <SettingsDialog visible={visibleSettings} onClose={()=>setSettings(false)} />
       <BhamasahDialog visible={visibleBhamasah} onClose={()=>setVisibleBhamasah(false)} />
       <UploadImagesDialog visible={visibleUploadImages} onClose={()=>setVisibleUploadImages(false)} />
+      <UserAbout visible={visibleAbout} onClose={setVisibleAbout}/>
     </>
   );
 };

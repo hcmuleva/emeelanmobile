@@ -3,12 +3,11 @@ import FeatureTiles from "./homepage/FeatureTiles";
 
 
 
-
-const Home = () => {
-
+const Home = (user) => {
+   console.log(user);
+   
     return (
         <FeatureTiles/>
-    
     );
 };
 

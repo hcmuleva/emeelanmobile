@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
+const API_URL = 'https://hphtechnology.in/gathjod/api'; // Replace with your Strapi URL
 
 const api = axios.create({
   baseURL: API_URL,
@@ -63,6 +63,19 @@ export const getCustomMe = async (jwt) =>{
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || 'Failed to fetch user';
+  }
+}
+
+export const updateCustomMe = async (jwt, updatedData) => {
+  try {
+    const response = await api.put('/customme', updatedData, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to update user data';
   }
 }
 

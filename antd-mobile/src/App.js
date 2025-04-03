@@ -18,6 +18,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import Profiles from './components/users/Profiles';
 import ProfileStatusPage from './pages/ProfileStatusPage';
 
+
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -43,7 +44,6 @@ function AppContent() {
               )
             }
           />
-
           {/* Protected Routes */}
           <Route
             path="/home"
