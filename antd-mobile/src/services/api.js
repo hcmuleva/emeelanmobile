@@ -36,8 +36,12 @@ export const register = async (username, email, password) => {
 };
 
 export const getAuthenticatedUser = async (jwt) => {
+
   try {
     const response = await api.get('/users/me', {
+      params: {
+        populate: '*' // Populates all relations
+      },
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -47,6 +51,20 @@ export const getAuthenticatedUser = async (jwt) => {
     throw error.response?.data?.message || 'Failed to fetch user';
   }
 };
+
+export const getCustomMe = async (jwt) =>{
+  try {
+    const response = await api.get('/customme', {
+     
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to fetch user';
+  }
+}
 
 export const getPaginatedUsers = async (start = 0, limit = 10) => {
     console.log("getPaginatedUsers ");
@@ -89,3 +107,27 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
       throw error.response?.data?.message || 'Search failed';
     }
   };
+
+
+export const resetpassword = async (userId, newPassword) => {
+  try {
+    const response = await api.post('/reset-password', {
+      userId, // can be email or username
+      newPassword,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Reset Password failed';
+  }
+};
+
+export const photoUpload = async (formData) =>{
+  try {
+    const response = await api.post('/upload', {
+      formData
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Upload is failed';
+  }
+}

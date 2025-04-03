@@ -22,6 +22,7 @@ const Profiles = () => {
   const [page, setPage] = useState(0); // Start index for pagination
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
+  const [response, setResponse] = React.useState('accept'); // 'accept' or 'decline'
 
   const limit = 10; // Number of users per request
 

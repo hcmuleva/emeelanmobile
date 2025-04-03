@@ -7,8 +7,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Admin from "./pages/Admin";
 import SuperAdmin from "./pages/SuperAdmin";
-import Donor from "./pages/Donor";
-import Matches from "./pages/Matches";
+import Donor from "./pages/homepage/Donor";
 import Mail from "./pages/Mail";
 import Chat from "./pages/Chat";
 import Search from "./pages/Search";
@@ -17,6 +16,7 @@ import { LoginPage, RegisterPage } from './pages/LoginRegisterPage';
 import { locales, defaultLocale } from './locales';
 import { LanguageProvider } from './context/LanguageContext';
 import Profiles from './components/users/Profiles';
+import ProfileStatusPage from './pages/ProfileStatusPage';
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -36,7 +36,8 @@ function AppContent() {
             path="/"
             element={
               showRegister ? (
-                <RegisterPage onLogin={() => setShowRegister(false)} />
+              
+               <RegisterPage onLogin={() => setShowRegister(false)} />
               ) : (
                 <LoginPage onRegister={() => setShowRegister(true)} />
               )
@@ -53,10 +54,10 @@ function AppContent() {
             }
           />
           <Route
-            path="/matches"
+            path="/status"
             element={
               <ProtectedRoute>
-                <MainLayout><Matches /></MainLayout>
+                <MainLayout><ProfileStatusPage /></MainLayout>
               </ProtectedRoute>
             }
           />
