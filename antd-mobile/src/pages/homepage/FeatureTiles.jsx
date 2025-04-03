@@ -1,5 +1,5 @@
 import { AlipayCircleOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Card, Divider, Grid, NoticeBar, ProgressCircle, Space, Toast } from 'antd-mobile';
+import { Card, Divider, Grid, NoticeBar, ProgressCircle, Space } from 'antd-mobile';
 import {
   LockOutline,
   PictureOutline,
@@ -8,13 +8,13 @@ import {
   TravelOutline
 } from 'antd-mobile-icons';
 import React, { useState } from 'react';
-import { ResetPasswordDialog } from './ResetPasswordDialog';
-import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
-import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
-import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
 import { AdminListDialog } from '../../components/homepage/AdminListDialog';
+import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
+import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
+import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
 import { SettingsDialog } from '../../components/homepage/SettingsDialog';
 import { UploadImagesDialog } from '../../components/homepage/UploadImagesDialog';
+import { ResetPasswordDialog } from './ResetPasswordDialog';
 const tiles = [
     { title: 'Bhamasah', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
     { title: 'Profession', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'profession' },

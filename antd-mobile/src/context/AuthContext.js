@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
       logout();
     }
     setLoading(false);
-  }, []);
+  }, [user]);
 
   const login = (jwt, userData) => {
     localStorage.setItem('jwt', jwt);
