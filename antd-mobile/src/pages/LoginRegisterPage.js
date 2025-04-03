@@ -1,9 +1,8 @@
-import React, { useState,useContext } from "react";
+import { LockOutline, MailOutline } from 'antd-mobile-icons';
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MailOutline, LockOutline } from 'antd-mobile-icons';
 
-import { Form,Input, Button, Space, Toast } from "antd-mobile";
-import { EyeInvisibleOutline, EyeOutline } from "antd-mobile-icons";
+import { Button, Form, Input, Space, Toast } from "antd-mobile";
 import { AuthContext } from "../context/AuthContext";
 import { login } from "../services/api";
 const LoginPage = ({ onRegister }) => {

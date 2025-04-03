@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { Button, Image, Space, ProgressBar } from 'antd-mobile';
+import { Button, Image, ProgressBar, Space } from 'antd-mobile';
 import { PictureOutline } from 'antd-mobile-icons';
+import React, { useState } from 'react';
 
 const CustomImageUploader = ({ multiple = true, onChange }) => {
   const [files, setFiles] = useState([]);
