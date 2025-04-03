@@ -1,5 +1,5 @@
-import { AlipayCircleOutlined } from '@ant-design/icons';
-import { Card, Grid, NoticeBar, ProgressCircle, Space, Toast } from 'antd-mobile';
+import { AlipayCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Card, Divider, Grid, NoticeBar, ProgressCircle, Space, Toast } from 'antd-mobile';
 import {
   LockOutline,
   PictureOutline,
@@ -9,7 +9,12 @@ import {
 } from 'antd-mobile-icons';
 import React, { useState } from 'react';
 import { ResetPasswordDialog } from './ResetPasswordDialog';
-import ScrollingTextBanner from '../../components/homepage/ScrollingTextBanner';
+import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
+import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
+import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
+import { AdminListDialog } from '../../components/homepage/AdminListDialog';
+import { SettingsDialog } from '../../components/homepage/SettingsDialog';
+import { UploadImagesDialog } from '../../components/homepage/UploadImagesDialog';
 const tiles = [
     { title: 'Bhamasah', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
     { title: 'Profession', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'profession' },
@@ -20,31 +25,44 @@ const tiles = [
     { title: 'UploadImages', color: '#FFA94D', icon: <PictureOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'images' }
   ];
   
+const secondTiles = [
+  { title: 'Logout', color: '#A5D8FF', icon: <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'logout' },
+  { title: 'Help', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'help' },
+]
 const demoLongText = " This is a sample long text and heere is our message "
 const FeatureTiles = () => {
+  const [visibleBhamasah, setVisibleBhamasah] = useState(false);
+  const [visibleProfession, setVisibleProfession] = useState(false);
+  const [visibleAdminList, setVisibleAdminList] = useState(false);
+   
+  const [visibleUploadImages, setVisibleUploadImages] = useState(false);
+
   const [visiblePassword, setVisiblePassword] = useState(false);
 
+  const [visibleFamily, setVisibleFamily] = useState(false);
+  const [visibleSettings,setSettings] = useState(false);
   const handleTileClick = (tileKey) => {
     switch(tileKey) {
       case 'bhamasah':
         // Handle Bhamasah click
         console.log('Bhamasah tile clicked');
-        Toast.show('Opening Bhamasah section');
+        setVisibleBhamasah(true);
+        
         break;
       case 'profession':
         // Handle Profession click
         console.log('Profession tile clicked');
-        Toast.show('Opening Profession section');
+        setVisibleProfession(true);
         break;
       case 'family':
         // Handle Family click
         console.log('Family tile clicked');
-        Toast.show('Opening Family section');
+        setVisibleFamily(true)
         break;
       case 'admin':
         // Handle Admin List click
+        setVisibleAdminList(true)
         console.log('Admin List tile clicked');
-        Toast.show('Opening Admin List');
         break;
       case 'password':
         // Handle Password click
@@ -53,13 +71,13 @@ const FeatureTiles = () => {
         break;
       case 'settings':
         // Handle Settings click
+        setSettings(true)
         console.log('Settings tile clicked');
-        Toast.show('Opening Settings');
         break;
       case 'images':
         // Handle Images click
         console.log('Images tile clicked');
-        Toast.show('Opening Images');
+        setVisibleUploadImages(true)
         break;
       default:
         console.log('Unknown tile clicked');
@@ -122,11 +140,38 @@ const FeatureTiles = () => {
           </Grid.Item>
         ))}
       </Grid>
-
+        <Divider contentPosition="center"> Help Section</Divider>
+        <Grid columns={2} gap={16} style={{ padding: 16 }}>
+        {secondTiles.map((tile) => (
+          <Grid.Item key={tile.key}>
+            <Card 
+              style={{
+                backgroundColor: tile.color,
+                color: '#212121',
+                padding: '12px',
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+              onClick={() => handleTileClick(tile.key)}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {tile.icon}
+                <span style={{ marginTop: 8, fontWeight: 'bold' }}>{tile.title}</span>
+              </div>
+            </Card>
+          </Grid.Item>
+        ))}
+      </Grid>
       <ResetPasswordDialog 
         visible={visiblePassword} 
         onClose={() => setVisiblePassword(false)} 
       />
+      <ProfessionDialog visible={visibleProfession} onClose={()=>setVisibleProfession(false)} />
+      <MyFamilyDialog visible={visibleFamily} onClose={()=>setVisibleFamily(false)} />
+      <AdminListDialog visible={visibleAdminList} onClose={()=>setVisibleAdminList(false)} />
+      <SettingsDialog visible={visibleSettings} onClose={()=>setSettings(false)} />
+      <BhamasahDialog visible={visibleBhamasah} onClose={()=>setVisibleBhamasah(false)} />
+      <UploadImagesDialog visible={visibleUploadImages} onClose={()=>setVisibleUploadImages(false)} />
     </>
   );
 };
