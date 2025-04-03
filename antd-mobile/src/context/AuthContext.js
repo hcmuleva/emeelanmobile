@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
       logout();
     }
     setLoading(false);
-  }, [user]);
+  }, []);
 
   const login = (jwt, userData) => {
     localStorage.setItem('jwt', jwt);
@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('authenticated', 'true');
     setUser(userData);
     setIsAuthenticated(true);
+    return isAuthenticated;
   };
 
   const logout = () => {
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('authenticated', 'false');
     setUser(null);
     setIsAuthenticated(false);
+    // return isAuthenticated;
   };
 
   return (
