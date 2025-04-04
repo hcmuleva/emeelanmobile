@@ -73,40 +73,7 @@ const MyRegister = ({ setIsLogined }) => {
 
     console.log(values)
 
-    if (!values.email && values.MobileNumber) {
-      values.email = values.MobileNumber + '@hph.com';
-    }
-    values.role = 1;
-
-    try {
-      const registerResponse = await fetch(`${API_URL}/api/auth/local/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      });
-
-      if (registerResponse.ok) {
-        const registrationData = await registerResponse.json();
-        Toast.show({
-          icon: 'success',
-          content: 'Registration successful!',
-        });
-        console.log(registrationData)
-        navigate("/");
-      } else {
-        const errorData = await registerResponse.json();
-        Toast.show({
-          icon: 'fail',
-          content: errorData?.error?.message || 'Registration failed. Please try again.',
-        });
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      Toast.show({ 
-        icon: 'fail',
-        content: 'Something went wrong, please try again later.',
-      });
-    }
+  
   };
 
   const handleCountryChange = (value) => {
@@ -133,6 +100,8 @@ const MyRegister = ({ setIsLogined }) => {
   };
 
   const submitForm = () => {
+    console.log("Form data: custome", customdata);
+
     console.log("Form data:", form.getFieldsValue());
     form.submit();
   };
@@ -353,7 +322,7 @@ const MyRegister = ({ setIsLogined }) => {
 
           <Form
             form={form}
-            // onFinish={onFinish}
+             onFinish={onFinish}
             layout="vertical"
             footer={
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
