@@ -2,9 +2,9 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { MailOutline, LockOutline } from 'antd-mobile-icons';
 import { Form, Input, Button, Toast, Card, NavBar, AutoCenter, Space, Divider } from "antd-mobile";
-import { AuthContext } from "../context/AuthContext";
-import { login } from "../services/api";
-import "../styles/login.css";
+import { AuthContext } from "../../context/AuthContext";
+import { login } from "../../services/api";
+import "../../styles/login.css";
 
 const MyLogin = ({ setIsLogined }) => {
   const [loading, setLoading] = useState(false);
@@ -18,10 +18,7 @@ const MyLogin = ({ setIsLogined }) => {
       const loginSuccess = authContext.login(jwt, user);
       console.log(loginSuccess)
       if (loginSuccess) {
-        Toast.show({
-          icon: 'success',
-          content: 'Login successful',
-        });
+       
         navigate('/home', { replace: true }); 
       }
     } catch (error) {
