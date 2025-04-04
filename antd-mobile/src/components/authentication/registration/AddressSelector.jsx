@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Form, Picker, Button, Toast } from 'antd-mobile';
 import { Country, State, City } from 'country-state-city';
 
-const AddressSelector = () => {
+const AddressSelector = ({customdata,setCustomdata}) => {
+  const [addressData,setAddressData] = useState({});
   const [form] = Form.useForm();
   const [visible, setVisible] = useState({
     country: false,
     state: false,
     district: false,
-    tehsil: false
   });
 
   // Get all countries and find India
@@ -48,15 +48,15 @@ const AddressSelector = () => {
   const loadTehsils = (district) => {
     // In many cases, tehsils aren't available in the library
     // So we'll just use the district name as a placeholder
-    setTehsils([{ name: `${district.name} Tehsil` }]);
-    form.setFieldsValue({ tehsil: null });
   };
 
   // Handler for picker confirmations
   const handleConfirm = (type, value) => {
+
     switch (type) {
       case 'country':
         const country = allCountries.find(c => c.isoCode === value[0]);
+        setCustomdata({...customdata, country: country.isoCode, countryName: country.name});
         form.setFieldsValue({ 
           country: country.isoCode,
           countryName: country.name,
@@ -68,6 +68,7 @@ const AddressSelector = () => {
         break;
       case 'state':
         const state = states.find(s => s.isoCode === value[0]);
+        setCustomdata({...customdata, state: state.isoCode, stateName: state.name});
         form.setFieldsValue({ 
           state: state.isoCode,
           stateName: state.name,
@@ -78,6 +79,7 @@ const AddressSelector = () => {
         break;
       case 'district':
         const district = districts.find(d => d.name === value[0]);
+        setCustomdata({...customdata, district: district.name});
         form.setFieldsValue({ 
           district: district.name,
           tehsil: null
@@ -146,23 +148,6 @@ const AddressSelector = () => {
         </Form.Item>
       )}
 
-      {/* Tehsil Selector (only shown when district is selected) */}
-      {form.getFieldValue('district') && (
-        <Form.Item name="tehsil" label="Tehsil">
-          <div 
-            onClick={() => tehsils.length > 0 && setVisible({ ...visible, tehsil: true })}
-            style={{ padding: '6px 0', cursor: tehsils.length > 0 ? 'pointer' : 'not-allowed' }}
-          >
-            {form.getFieldValue('tehsil') || 'Select Tehsil'}
-          </div>
-          <Picker
-            columns={[tehsils.map(t => ({ label: t.name, value: t.name }))]}
-            visible={visible.tehsil}
-            onClose={() => setVisible({ ...visible, tehsil: false })}
-            onConfirm={(v) => handleConfirm('tehsil', v)}
-          />
-        </Form.Item>
-      )}
 
       
     </Form>
