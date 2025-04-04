@@ -1,9 +1,5 @@
+import { Button, DatePicker, Form, Toast } from 'antd-mobile';
 import React, { useState } from 'react';
-import { Form, DatePicker, Button, Toast } from 'antd-mobile';
-import AddressSelector from './registration/AddressSelector';
-import GotraSelector from './registration/GotraSelector';
-import MobileImageUploader from './registration/MobileImageUploader';
-import '../../styles/registration.css';
 
 const formatDateToDDMMYYYY = (date) => {
   if (!date) return '';
@@ -13,7 +9,7 @@ const formatDateToDDMMYYYY = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-const HCMRegister = ({customdata,setCustomdata}) => {
+const DateSelector = ({customdata,setCustomdata}) => {
   const now = new Date();
   const eighteenYearsAgo = new Date(
     now.getFullYear() - 18,
@@ -35,20 +31,16 @@ const HCMRegister = ({customdata,setCustomdata}) => {
   }, [form]);
 
   const handleDateConfirm = (date) => {
-    setCustomdata({...customdata, DOB: date});
+    setCustomdata({...customdata, DOB: formatDateToDDMMYYYY(date)});
     form.setFieldsValue({ DOB: date });
     setDobVisible(false);
     Toast.show(`Selected: ${formatDateToDDMMYYYY(date)}`);
   };
 
-  const onFinish = (values) => {
-    console.log('Form values:', values);
-    console.log('Formatted DOB:', formatDateToDDMMYYYY(values.DOB));
-    Toast.show(`Submitted: ${formatDateToDDMMYYYY(values.DOB)}`);
-  };
+
 
   return (
-    <Form form={form} onFinish={onFinish}>
+    <Form form={form}>
       <Form.Item name="DOB" label="Date of Birth">
         <div 
           onClick={() => setDobVisible(true)}
@@ -71,14 +63,8 @@ const HCMRegister = ({customdata,setCustomdata}) => {
         max={eighteenYearsAgo}
         value={form.getFieldValue('DOB')}
       />
-        <AddressSelector Form = {Form}/>
-          <MobileImageUploader/>
-        <GotraSelector name="gotra" label="Select Your Gotra"  />
-      <Button type="submit" block color="primary" size="large">
-        Submit
-      </Button>
     </Form>
   );
 };
 
-export default HCMRegister;
+export default DateSelector;

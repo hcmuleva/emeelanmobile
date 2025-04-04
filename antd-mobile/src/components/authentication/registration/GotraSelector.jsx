@@ -11,7 +11,9 @@
       // Add more gotras as needed
     ];
 
-    const GotraSelector = ({ name = "gotra", label = "Gotra" }) => {
+    const GotraSelector = ({gotra_for,gotraData,customdata,setCustomdata}) => {
+      const [name, label] = ["gotra", "Gotra"]; 
+      
       const [visible, setVisible] = useState(false);
       const [form] = Form.useForm();
     
@@ -19,6 +21,7 @@
         form.setFieldsValue({ [name]: value[0] });
         setVisible(false);
         const selectedGotra = gotraData.find(g => g.EName === value[0]);
+        gotra_for?setCustomdata({...customdata, matranal_gotra: selectedGotra.Id}) : setCustomdata({...customdata, gotra: selectedGotra.Id});
         Toast.show(`Selected: ${selectedGotra?.EName}`);
       };
     

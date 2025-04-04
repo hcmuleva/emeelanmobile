@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
-import { 
-  Form, Input, Button, DatePicker, Picker,
-  NavBar, Card, Toast, Steps, AutoCenter, Divider,
-  Radio, 
+import {
+  AutoCenter,
+  Button,
+  Card,
+  Divider,
+  Form, Input,
+  NavBar,
+  Radio,
+  Steps,
+  Toast
 } from 'antd-mobile';
+import React, { useState } from 'react';
 // import dayjs from 'dayjs';
-import { City, Country, State } from 'country-state-city';
+import { State } from 'country-state-city';
 import { useNavigate } from 'react-router-dom';
-import gotra from '../../utils/gotra.json';
 import '../../styles/registration.css';
-import CountrySelector from './registration/AddressSelector';
+import gotra from '../../utils/gotra.json';
+import AddressSelector from './registration/AddressSelector';
+import DateSelector from './registration/DateSelector';
+import GotraSelector from './registration/GotraSelector';
+import MaritialStatus from './registration/MaritialStatus';
+import EducationSelector from './registration/EducationSelector';
 
 export const TOKEN_KEY = process.env.REACT_APP_TOKEN_KEY || 'default-token';
 const API_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:3000';
@@ -31,6 +41,8 @@ const MyRegister = ({ setIsLogined }) => {
   const [country, setCountry] = useState({});
   const [state, setState] = useState({});
   const navigate = useNavigate();
+  const [customdata,setCustomdata] = useState({});
+  console.log("customdata",customdata)
   const [visiblePickers, setVisiblePickers] = useState({
     dob: false,
     sex: false,
@@ -51,7 +63,7 @@ const MyRegister = ({ setIsLogined }) => {
     setVisiblePickers({ ...visiblePickers, [key]: false });
   };
 
-  const stepTitles = ['Personal', 'Contact', 'Family', 'Education', 'Profession'];
+  const stepTitles = ['Personal',  'Family', 'Profession'];
 
   const onFinish = async (values) => {
     values.emeelanrole = 'MEELAN';
@@ -121,6 +133,7 @@ const MyRegister = ({ setIsLogined }) => {
   };
 
   const submitForm = () => {
+    console.log("Form data:", form.getFieldsValue());
     form.submit();
   };
 
@@ -176,21 +189,7 @@ const MyRegister = ({ setIsLogined }) => {
       >
         <Input placeholder="Enter Email Address" />
       </Form.Item>
-      <Form.Item
-        name="DOB"
-        label="Date of Birth"
-        rules={[{ required: true, message: 'Required' }]}
-        onClick={() => openPicker('dob')}
-      >
-        <DatePicker
-          visible={visiblePickers.dob}
-          onClose={() => closePicker('dob')}
-          initialValue={eighteenYearsAgo}
-         
-        >
-          {value => (value ? value.toLocaleDateString() : 'Select Date')}
-        </DatePicker>
-      </Form.Item>
+        <DateSelector customdata={customdata} setCustomdata={setCustomdata} />
 
       <Form.Item
         name="Sex"
@@ -228,42 +227,8 @@ const MyRegister = ({ setIsLogined }) => {
           {(value) => value?.[0] || 'Select Sex'}
         </Picker> */}
       </Form.Item>
-      <Form.Item
-        name="maternalGotra"
-        label="Maternal Gotra"
-        onClick={() => openPicker('gotra')}
-      >
-        <Picker
-          columns={[
-            gotra.Gotra.map(g => ({ label: `${g.EName} (${g.HName})`, value: g.EName }))
-              .concat({ label: 'Other', value: 'Other' }),
-          ]}
-          visible={visiblePickers.gotra}
-          onClose={() => closePicker('gotra')}
-        >
-          {(value) => value?.[0] || 'Select Maternal Gotra'}
-        </Picker>
-      </Form.Item>
-      <Form.Item
-        name="MeritalStatus"
-        label="Marital Status"
-        rules={[{ required: true, message: 'Required' }]}
-        onClick={() => openPicker('maritalStatus')}
-      >
-        <Picker
-          columns={[
-            [
-              { label: 'विवाहित', value: 'MARRIED' },
-              { label: 'अविवाहित', value: 'BACHELOR' },
-              { label: 'तलाकशुदा', value: 'DIVORCED' },
-            ],
-          ]}
-          visible={visiblePickers.maritalStatus}
-          onClose={() => closePicker('maritalStatus')}
-        >
-          {(value) => value?.[0] || 'Select Marital Status'}
-        </Picker>
-      </Form.Item>
+        <GotraSelector gotraData={gotra.Gotra}  customdata={customdata} setCustomdata={setCustomdata}/>
+        <MaritialStatus  customdata={customdata} setCustomdata={setCustomdata}/>
       <Form.Item
         name="MobileNumber"
         label="Mobile Number"
@@ -271,63 +236,23 @@ const MyRegister = ({ setIsLogined }) => {
       >
         <Input placeholder="Enter Mobile Number" />
       </Form.Item>
-      <Form.Item name="Address" label="Home Address">
-        <Input placeholder="Enter Home Address" />
-      </Form.Item>
-      <CountrySelector Form={Form}/>
-    
+      <AddressSelector customdata={customdata} setCustomdata={setCustomdata} />
     
       <Form.Item
         name="City"
         label="City"
-        onClick={() => openPicker('city')}
+       
       >
-        <Picker
-          columns={[
-            City.getCitiesOfState(country.code, state.code)?.map(c => ({ label: c.name, value: c.name })) || [],
-          ]}
-          visible={visiblePickers.city}
-          onClose={() => closePicker('city')}
-          disabled={!state.code}
-        >
-          {(value) => value?.[0] || 'Select City'}
-        </Picker>
+        <Input placeholder="Enter City" />
       </Form.Item>
+
       <Form.Item name="postalcode" label="Pin Code">
         <Input placeholder="Enter Pin Code" />
       </Form.Item>
-      <Form.Item
-        name="userstatus"
-        label="Status"
-        onClick={() => openPicker('status')}
-      >
-        <Picker
-          columns={[
-            ['APPROVED', 'REJECTED', 'PENDING', 'ENGGAGED', 'BLOCKED', 'UNAPPROVED'].map((v) => ({
-              label: v,
-              value: v,
-            })),
-          ]}
-          visible={visiblePickers.status}
-          onClose={() => closePicker('status')}
-        >
-          {(value) => value?.[0] || 'Select Status'}
-        </Picker>
-      </Form.Item>
+     
     </>,
     
-    // Step 2: Contact Details
-    <>
-      <Form.Item name="MobileNumber" label="Mobile Number">
-        <Input placeholder="Enter Mobile Number" />
-      </Form.Item>
-      <Form.Item name="FatherMobileNumber" label="Father's Mobile">
-        <Input placeholder="Enter Father's Mobile Number" />
-      </Form.Item>
-      <Form.Item name="MamajiMobileNumber" label="Mamaji's Mobile">
-        <Input placeholder="Enter Mamaji's Mobile Number" />
-      </Form.Item>
-    </>,
+    
     
     // Step 3: Family Details
     <>
@@ -340,16 +265,7 @@ const MyRegister = ({ setIsLogined }) => {
       <Form.Item name="father_occupation" label="Father's Occupation">
         <Input placeholder="Enter Father's Occupation" />
       </Form.Item>
-      <Form.Item name="maternalGotra" label="Maternal Gotra">
-        <Picker
-          columns={[
-            gotra.Gotra.map(g => ({ label: `${g.EName} (${g.HName})`, value: g.EName }))
-              .concat({ label: 'Other', value: 'Other' }),
-          ]}
-        >
-          {value => value?.[0] || 'Select Maternal Gotra'}
-        </Picker>
-      </Form.Item>
+      <GotraSelector gotra_for={"MATERNAL_GOTRA"} gotraData={gotra.Gotra}  customdata={customdata} setCustomdata={setCustomdata}/>
       <Form.Item name="GrandFatherName" label="Grandfather's Name">
         <Input placeholder="Enter Grandfather's Name" />
       </Form.Item>
@@ -362,34 +278,21 @@ const MyRegister = ({ setIsLogined }) => {
       <Form.Item name="NanijiName" label="Naniji's Name">
         <Input placeholder="Enter Naniji's Name" />
       </Form.Item>
-      <Form.Item name="MamajiName" label="Mamaji's Name">
-        <Input placeholder="Enter Mamaji's Name" />
-      </Form.Item>
+     
     </>,
     
     // Step 4: Education
     <>
-      <Form.Item name="education_level" label="Education Level">
-        <Input placeholder="Enter Education Level" />
-      </Form.Item>
-      <Form.Item name="HighestDegree" label="Highest Degree">
-        <Input placeholder="Enter Highest Degree" />
-      </Form.Item>
+     <EducationSelector customdata={customdata} setCustomdata={setCustomdata} />
+     
       <Form.Item name="AdditionalQualification" label="Additional Qualification">
         <Input placeholder="Enter Additional Qualification" />
       </Form.Item>
-      <Form.Item name="LastCollege" label="Last College">
-        <Input placeholder="Enter Last College" />
-      </Form.Item>
-    </>,
-    
-    // Step 5: Profession
-    <>
       <Form.Item name="Profession" label="Profession">
         <Input placeholder="Enter Profession" />
       </Form.Item>
-      <Form.Item name="CompanyName" label="Company Name">
-        <Input placeholder="Enter Company Name" />
+      <Form.Item name="CompanyName" label="OrgName Name">
+        <Input placeholder="Enter OrgName Name" />
       </Form.Item>
       <Form.Item name="Designation" label="Designation">
         <Input placeholder="Enter Designation" />
@@ -400,10 +303,11 @@ const MyRegister = ({ setIsLogined }) => {
       <Form.Item name="Income" label="Income">
         <Input type="number" placeholder="Enter Income" />
       </Form.Item>
-      <Form.Item name="PreProfession" label="Previous Profession">
-        <Input placeholder="Enter Previous Profession" />
-      </Form.Item>
+     
+
     </>,
+    
+    
   ];
 
   return (
@@ -444,7 +348,7 @@ const MyRegister = ({ setIsLogined }) => {
                 <Steps.Step key={index} title={title} />
               ))}
             </Steps>
-            <Divider>{stepTitles[currentStep]} Information</Divider>
+            <Divider>{stepTitles[currentStep]} Entry</Divider>
           </AutoCenter>
 
           <Form
@@ -456,7 +360,7 @@ const MyRegister = ({ setIsLogined }) => {
                 {currentStep > 0 && (
                   <Button onClick={prevStep} style={{ flex: 1, marginRight: '8px' }}>Previous</Button>
                 )}
-                {currentStep < 4 ? (
+                {currentStep < 2 ? (
                   <Button 
                     color="primary"
                     onClick={nextStep}
