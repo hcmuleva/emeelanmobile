@@ -1,8 +1,10 @@
 import React,{useState} from 'react'
-import MyLogin from './MyLogin'
-import MyRegister from './MyRegister'
+import MyLogin from '../components/authentication/MyLogin'
+import MyRegister from '../components/authentication/MyRegister'
+import HCMRegister from '../components/authentication/HCMRegister'
 
-export default function LoginRegisterController() {
+
+export default function LoginPage() {
   const [isLogined, setIsLogined] = useState(true)
 
   return (<>
@@ -10,6 +12,7 @@ export default function LoginRegisterController() {
             <MyLogin isLogined={isLogined} setIsLogined={setIsLogined}/>
             :
             <MyRegister isLogined={isLogined} setIsLogined={setIsLogined}/>
+            // <HCMRegister isLogined={isLogined} setIsLogined={setIsLogined}/>
         }
     </>
   )

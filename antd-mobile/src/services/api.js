@@ -131,3 +131,23 @@ export const photoUpload = async (formData) =>{
     throw error.response?.data?.message || 'Upload is failed';
   }
 }
+
+export const uploadImage = async (formData,jwt) => {
+  console.log("uploadImage function called", "token", jwt); 
+  try {
+    // ✅ Upload files to Strapi using Axios
+    const uploadResponse = await api.post('/upload', formData, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'multipart/form-data' // Important for file uploads
+      }
+    });
+  
+    // Handle successful upload
+    console.log('Upload successful:', uploadResponse);
+    return uploadResponse.data; // Return the uploaded file data
+  } catch (error) {
+    console.error('Upload failed:', error.message);
+    // Handle error (show toast, etc.)
+  }
+}

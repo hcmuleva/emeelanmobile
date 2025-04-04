@@ -7,6 +7,8 @@ import {
   TeamOutline,
   TravelOutline
 } from 'antd-mobile-icons';
+import { useNavigate } from "react-router-dom";
+
 import React, { useState } from 'react';
 import { AdminListDialog } from '../../components/homepage/AdminListDialog';
 import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
@@ -31,6 +33,8 @@ const secondTiles = [
 ]
 const demoLongText = " This is a sample long text and heere is our message "
 const FeatureTiles = () => {
+  const navigate = useNavigate();
+
   const [visibleBhamasah, setVisibleBhamasah] = useState(false);
   const [visibleProfession, setVisibleProfession] = useState(false);
   const [visibleAdminList, setVisibleAdminList] = useState(false);
@@ -42,6 +46,7 @@ const FeatureTiles = () => {
   const [visibleFamily, setVisibleFamily] = useState(false);
   const [visibleSettings,setSettings] = useState(false);
   const handleTileClick = (tileKey) => {
+
     switch(tileKey) {
       case 'bhamasah':
         // Handle Bhamasah click
@@ -78,6 +83,21 @@ const FeatureTiles = () => {
         // Handle Images click
         console.log('Images tile clicked');
         setVisibleUploadImages(true)
+        break;
+      case 'logout':
+
+          localStorage.removeItem("token"); // Clear auth token
+          localStorage.removeItem("user");  // Clear user data
+          navigate("/login"); // Redirect to login page
+      
+        // Handle Logout click
+        console.log('Logout tile clicked');
+        // Add your logout logic here
+        break;
+      case 'help':
+        // Handle Help click
+        console.log('Help tile clicked');
+        // Add your help logic here
         break;
       default:
         console.log('Unknown tile clicked');

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Login from './pages/Login';
-import MyRegister from './pages/RegisterPage';
 import { Button } from 'antd-mobile';
+import HCMRegister from './components/authentication/HCMRegister';
+import MyRegister from './components/authentication/MyRegister';
 
 export default function MyController() {
     const [isLoginPage, setIsLoginPage] = useState(true);

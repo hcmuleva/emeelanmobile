@@ -7,15 +7,24 @@ import {
 // import dayjs from 'dayjs';
 import { City, Country, State } from 'country-state-city';
 import { useNavigate } from 'react-router-dom';
-import gotra from '../utils/gotra.json';
-import '../styles/registration.css';
+import gotra from '../../utils/gotra.json';
+import '../../styles/registration.css';
+import CountrySelector from './registration/AddressSelector';
 
 export const TOKEN_KEY = process.env.REACT_APP_TOKEN_KEY || 'default-token';
 const API_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:3000';
 
-const now = new Date()
+const now = new Date();
+const eighteenYearsAgo = new Date(
+  now.getFullYear() - 18,
+  now.getMonth(),
+  now.getDate()
+);
+
 
 const MyRegister = ({ setIsLogined }) => {
+  
+
   const [form] = Form.useForm();
   const user = localStorage.getItem('userid');
   const [currentStep, setCurrentStep] = useState(0);
@@ -88,11 +97,9 @@ const MyRegister = ({ setIsLogined }) => {
     }
   };
 
-  const handleCountry = (value) => {
-    const selectedCountry = Country.getAllCountries().find((c) => c.name === value[0]);
-    setCountry({ code: selectedCountry.isoCode, name: value[0] });
-    setState({});
-    form.setFieldsValue({ State: null, City: null });
+  const handleCountryChange = (value) => {
+    setCountry(value);
+    // Add any additional country change logic here
   };
 
   const handleState = (value) => {
@@ -178,8 +185,8 @@ const MyRegister = ({ setIsLogined }) => {
         <DatePicker
           visible={visiblePickers.dob}
           onClose={() => closePicker('dob')}
-          initialValue={now}
-          max={now}
+          initialValue={eighteenYearsAgo}
+         
         >
           {value => (value ? value.toLocaleDateString() : 'Select Date')}
         </DatePicker>
@@ -267,37 +274,9 @@ const MyRegister = ({ setIsLogined }) => {
       <Form.Item name="Address" label="Home Address">
         <Input placeholder="Enter Home Address" />
       </Form.Item>
-      <Form.Item
-        name="Country"
-        label="Country"
-        onClick={() => openPicker('country')}
-      >
-        <Picker
-          columns={[Country.getAllCountries().map(c => ({ label: c.name, value: c.name }))]}
-          visible={visiblePickers.country}
-          onClose={() => closePicker('country')}
-          onConfirm={handleCountry}
-        >
-          {(value) => value?.[0] || 'Select Country'}
-        </Picker>
-      </Form.Item>
-      <Form.Item
-        name="State"
-        label="State"
-        onClick={() => openPicker('state')}
-      >
-        <Picker
-          columns={[
-            State.getStatesOfCountry(country.code)?.map(s => ({ label: s.name, value: s.name })) || [],
-          ]}
-          visible={visiblePickers.state}
-          onClose={() => closePicker('state')}
-          onConfirm={handleState}
-          disabled={!country.code}
-        >
-          {(value) => value?.[0] || 'Select State'}
-        </Picker>
-      </Form.Item>
+      <CountrySelector Form={Form}/>
+    
+    
       <Form.Item
         name="City"
         label="City"

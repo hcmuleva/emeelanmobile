@@ -1,23 +1,18 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider } from 'antd-mobile';
 import enUS from 'antd-mobile/es/locales/en-US';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import Admin from "./pages/Admin";
-import SuperAdmin from "./pages/SuperAdmin";
-import Donor from "./pages/homepage/Donor";
-import Mail from "./pages/Mail";
-import Chat from "./pages/Chat";
-import Search from "./pages/Search";
+import React, { useState } from 'react';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import MainLayout from "./components/MainLayout";
-import { LoginPage, RegisterPage } from './pages/LoginRegisterPage';
-import { locales, defaultLocale } from './locales';
-import { LanguageProvider } from './context/LanguageContext';
 import Profiles from './components/users/Profiles';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
+import { locales } from './locales';
+import Chat from "./pages/Chat";
+import Home from './pages/Home';
+import Mail from "./pages/Mail";
 import ProfileStatusPage from './pages/ProfileStatusPage';
-import LoginRegisterController from './pages/LoginRegisterController';
+import Search from "./pages/Search";
+import  LoginPage  from './pages/LoginPage';
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -38,7 +33,7 @@ function AppContent() {
             element={
               
               
-                <LoginRegisterController/>
+                <LoginPage/>
             }
           />
 
