@@ -16,7 +16,9 @@ import {
   ClockCircleFill,
   CheckShieldFill
 } from 'antd-mobile-icons';
-import ProfileCard from "./ProfileCard";
+
+import NewProfileCard from "./NewProfileCard";
+
 const Profiles = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0); // Start index for pagination
@@ -64,7 +66,8 @@ const Profiles = () => {
       {/* User List */}
       <List>
         {users.map((user) => (
-            <ProfileCard user={user}/>
+            // <ProfileCard user={user}/>
+            <NewProfileCard user={user}/>
           // <List.Item key={user.id} description={user.email}>
           //   {user.username}  {user.FirstName}  {user.LastName} {user.FatherName}{user.Gotra} {/* Display user name */}
           // </List.Item>
