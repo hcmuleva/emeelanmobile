@@ -1,54 +1,50 @@
+/* Reset margins and padding globally */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-.container{
+/* Ensure the root container takes the full width */
+html, body, #root {
     width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Make sure container utilizes full width */
+.container {
+    width: 100vw; /* Force full viewport width */
+    max-width: 100vw;
     display: flex;
     justify-content: center;
 }
-.header{
-    display: flex;
-    justify-content: space-between;
-}
-@media only screen and (max-width: 600px) {
-    .content{
-        display: flex;
-        width: 100%;
-    }
-}
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-    .content{
-        display: flex;
-        width: 80%;
-    }
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-    .content{
-        display: flex;
-        width: 80%;
-    }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-    .content{
-        display: flex;
-        width: 60%;
-    }
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-    .content{
-        display: flex;
-        width: 60%;
-    }
-}
-
-.content{
+/* Make content fully extend in mobile view */
+.content {
+    width: 100% !important;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Override Ant Design styles to remove unnecessary margins */
+.ant-form, .ant-modal, .ant-layout {
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Responsive Adjustments */
+@media only screen and (max-width: 600px) {
+    .content {
+        width: 100% !important;
+    }
+}
+
+/* Tablets and larger devices */
+@media only screen and (min-width: 600px) {
+    .content {
+        width: 90%; /* Slight padding for better UX */
+    }
 }

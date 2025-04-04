@@ -15,7 +15,7 @@ const Header = ({ setSearch }) => {
     resource: "users",
     id: String(userid),
     meta: {
-      populate: ["profilePicture"],
+      populate: ["Pictures"],
     },
   });
 
@@ -24,6 +24,10 @@ const Header = ({ setSearch }) => {
   if (isLoading) {
     return <p>Loading...</p>;
   }
+  const imageSrc =
+    user?.Photos?.[0]?.formats?.thumbnail?.url || // Primary source
+    user?.Pictures?.[0] || // Secondary source
+    '/default-profile.png'; // Fallback image
 
   // Navigate to the Help page
   const handleHelpClick = () => {
@@ -34,7 +38,7 @@ const Header = ({ setSearch }) => {
     <div
       className="dashboard-container"
       style={{
-        padding: "0.5rem 1rem", // Reduced padding for the brown bar
+        //padding: "0rem 1rem", // Reduced padding for the brown bar
         backgroundColor: "#333", // Ensure the brown bar (background color) stays consistent
         display: "flex",
         justifyContent: "space-between",
@@ -54,7 +58,7 @@ const Header = ({ setSearch }) => {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <div style={{ textAlign: "center" }}>
             <img
-              src={`${Base_Url}logo.png`}
+              src={`logo.png`}
               alt="logo"
               style={{ width: "5rem", height: "3rem", objectFit: "contain" }}
             />
@@ -75,14 +79,12 @@ const Header = ({ setSearch }) => {
           }}
           onClick={() => navigate(`/myprofile/${userid}`)}
         >
-          <Avatar
-            src={
-              user?.profilePicture?.formats?.thumbnail?.url ||
-              "/default-profile.png"
-            }
-            size={64}
-            icon={<UserOutlined />}
-          />
+         <Avatar
+      src={imageSrc}
+      size={64}
+      icon={<UserOutlined />}
+      alt="User Avatar"
+    />
           <div style={{ color: "white" }} className="dashboard-username">
             {user?.username}
             <CaretRightOutlined />
@@ -99,7 +101,7 @@ const Header = ({ setSearch }) => {
           onClick={handleHelpClick}
         >
           <img
-            src={`${Base_Url}help.png`}
+            src={`help.png`}
             alt="help"
             style={{ width: "6rem", height: "4rem", objectFit: "contain" }} // Updated size to match logo
           />

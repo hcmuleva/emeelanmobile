@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/antd-mobile/node_modules
 /.pnp
 .pnp.js
 

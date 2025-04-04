@@ -11,6 +11,7 @@ import { FilterIcon, HeartHandshake } from 'lucide-react';
 import ProfileDetails from './ProfileDetails';
 import { UserAddOutlined } from '@ant-design/icons';
 import { RegisterPage } from '../register/register';
+import { RegisterByAdminPage } from '../register/registerByAdmin';
 const { Option } = Select;
 
 // Simple Image Component with Fallback
@@ -109,7 +110,7 @@ const CenterTableView = ({rowData,refetch}) => {
     setIsModalVisible(false);
     setModalData(null);
   };
-  const statusOptions = ["APPROVED", "UNAPPROVED", "REJECTED", "BLOCKED", "PENDING"];
+  const statusOptions = ["APPROVED", "ENGAGED", "REJECTED", "BLOCKED", "PENDING"];
 
       const profile_checked_val = [
         true,
@@ -178,7 +179,7 @@ const CenterTableView = ({rowData,refetch}) => {
             style={{ width: "100%" }}
             onChange={handleChange}
           >
-            {["APPROVED", "UNAPPROVED", "REJECTED", "BLOCKED", "PENDING"].map(
+            {["APPROVED", "ENGAGED", "REJECTED", "BLOCKED", "PENDING"].map(
               (status) => (
                 <Option key={status} value={status}>
                   {status}
@@ -251,15 +252,23 @@ const CenterTableView = ({rowData,refetch}) => {
             width: 125
         },
         { 
+            headerName: "Gotra", 
+            field: "Gotra", 
+            width: 125
+        },
+        { 
             headerName: "State", 
             field: "State", 
             width: 110
         },
-        { 
-            headerName: "Mobile", 
-            field: "mobile", 
-            width: 122
-        },
+        {
+          headerName: "Mobile",
+          field: "mobile", // optional, still works with valueGetter
+          width: 122,
+          valueGetter: (params) => {
+              return params.data.mobile ? params.data.mobile : params.data.MobileNumber;
+          }
+      },
         {
           headerName:"Profession",
           field:"Profession",
@@ -316,7 +325,7 @@ const CenterTableView = ({rowData,refetch}) => {
  
     return (
       <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-         {view==="REGISTER" &&<RegisterPage userrole={"CENTER"} createdBy={localStorage.getItem("userid")} setView={setView}/>}
+         {view==="REGISTER" &&<RegisterByAdminPage userrole={"CENTER"} createdBy={localStorage.getItem("userid")} setView={setView}/>}
          {view==="DETAILS"&&<ProfileDetails setView={setView} profileData={profileData}/>}
          {view==="LIST"&&
         <>
@@ -333,7 +342,7 @@ const CenterTableView = ({rowData,refetch}) => {
       variant="dashed"
       onClick={()=>setView("REGISTER")}
       style={{ whiteSpace: "nowrap" }}
-      disabled={true}
+     
     >
       <UserAddOutlined size={15} style={{ color: "brown" }} /> Register
     </Button>

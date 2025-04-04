@@ -1,39 +1,70 @@
-import { useCustom, useList } from '@refinedev/core';
-import React, { useState } from 'react'
+import { useCustom } from '@refinedev/core';
+import React, { useState, useEffect, useRef } from 'react';
 import UserTableView from './UserDashboard/UserTableView';
-import Header from './Header';
+import { HomeOutlined, UserOutlined, HeartOutlined } from '@ant-design/icons';
+
+import MyInfo from './UserDashboard/MyInfo';
+import { Tab } from '@mui/material';
+import { Tabs } from 'antd';
+import UserPage from './UserDashboard/userview/UserPage';
+import MyData from './UserDashboard/userview/MyData';
+
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
 export default function UserDashboard() {
-  console.log("Default in userDashboard")
-    const [current, setCurrent] = useState(1);
-    const [pageSize] = useState(20);
-    const { data, isLoading, isFetching, refetch } = useCustom({
-        url: `${API_URL}/api/custom-user`,
-        method: "get",
-        config: {
-          headers: {
-            "x-custom-header": "foo-bar",
-            Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
-          },
-        },
-        query: {
-            pagination: { page: current, pageSize },
-        }
-      });
 
-      if(isLoading){
-        return <h1>Page Loading</h1>
-      }
-      console.log("data",data)
-      return (<>
-      
-      <UserTableView rowData={data?.data?.data}/>
-      </>)
+
+  const onChange = (key) => {
+    console.log(key);
+  };
+
+const items= [
+  {
+    key: '1',
+    label: (
+      <span>
+        <HomeOutlined />
+        <span style={{ marginLeft: 8 }}>Home</span>
+      </span>
+    ),
+    children: <>
+     <h3>✨ ई-मीलन(E-Meelan) ✨</h3>
+            <p>अब रिश्ता ढूंढ़ना हुआ और आसान! 💍💖</p>
+            <p>
+              अब आप <strong>आयु, कार्य, स्थान और वैवाहिक स्थिति</strong> के आधार पर अपने लिए उपयुक्त रिश्ता आसानी से ढूंढ सकते हैं।
+              <strong> अपना सही जीवनसाथी खोजें, आज ही शुरू करें!</strong>
+            </p>
+            <p>Finding a match is now easier than ever! 💍💖</p>
+            <p>
+              Now, you can search for relationships based on <strong>age, profession, location, and marital status</strong> effortlessly.
+              <strong> Find your perfect match today!</strong>
+            </p>
+    </>,
+  },
+  {
+    key: '2',
+    label: (
+      <span>
+        <UserOutlined />
+        <span style={{ marginLeft: 8 }}>Profiles</span>
+      </span>
+    ),
+    children: <UserPage />,
+  },
+  {
+    key: '3',
+    label: (
+      <span>
+        <HeartOutlined />
+        <span style={{ marginLeft: 8 }}>myChoice</span>
+      </span>
+    ),
+    children: <MyData/>,
+  },
+];
   return (
     <div>
-      <h1>UserDashboard</h1>
-      
+     <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </div>
-  )
+  );
 }

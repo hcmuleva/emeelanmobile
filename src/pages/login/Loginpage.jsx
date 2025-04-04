@@ -33,10 +33,15 @@ const LoginPage = () => {
 
       if (res.ok) {
         const data = await res.json();
+        console.log("Login Success >>", data);
         localStorage.setItem(TOKEN_KEY, data.jwt);
         localStorage.setItem("userid", String(data?.user?.id));
         localStorage.setItem("userstatus", String(data?.user?.userstatus));
         localStorage.setItem("emeelanrole", String(data?.user?.emeelanrole));
+        localStorage.setItem("Sex", String(data?.user?.Sex));
+        console.log("Emeelan  Role , ", localStorage.getItem("emeelanrole"));
+        console.log("Id, ", localStorage.getItem("userid"));
+        
         navigate("/dashboard");
       } else {
         const errorData = await res.json();
@@ -60,7 +65,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <img src={`${Base_Url}gathjod.png`} className="root-img" alt="Background" />
+      <img src={`gathjod.png`} className="root-img" alt="Background" />
       <div className="container">
         <Card className="card-container">
           <div className="right-sider">
@@ -68,7 +73,7 @@ const LoginPage = () => {
               <div className="emeelan-gath">
                 <div>
                   <img
-                    src={`${Base_Url}logo.png`}
+                    src={`logo.png`}
                     alt="logo"
                     style={{ width: "2.5rem", marginTop: "0.3rem" }}
                   />
@@ -81,7 +86,7 @@ const LoginPage = () => {
                 </div>
               </div>
               <div className="help" onClick={handleHelpClick} style={{ cursor: "pointer" }}>
-                <img src={`${Base_Url}help.png`} alt="help" className="help-img" />
+                <img src={`help.png`} alt="help" className="help-img" />
               </div>
             </div>
             <div className="login-details">
@@ -121,6 +126,16 @@ const LoginPage = () => {
                       >
                         {" "}
                         Sign Up(रजिस्टर करे ){" "}
+                      </span>
+                    </div>
+                    <div>
+                      <span>Emeelan Privacy and Policy</span>
+                      <span
+                        style={{ cursor: "pointer", color: "white" }}
+                        onClick={() => navigate("/policy")}
+                      >
+                        {" "}
+                        Emeelan Privacy and Policy(ई-मीलन प्राइवेसी और पालिसी ){" "}
                       </span>
                     </div>
                   </div>

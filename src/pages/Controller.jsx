@@ -1,7 +1,7 @@
 import React from "react";
 
 import Header from "./Header";
-import { Button } from "antd";
+import { Avatar, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Clock } from 'lucide-react'
 import { ShieldAlert } from 'lucide-react'
@@ -10,7 +10,7 @@ import { CheckCircle } from 'lucide-react'
 import { AlertCircle } from 'lucide-react'
 import UserDashboard from "./UserDashboard";
 import AdminDashboard from "./AdminDashboard";
-import CenterDashBoard from "./CenterDashboard";
+import CenterDashBoard from "./Center/CenterDashboard";
 
 export const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 
@@ -112,7 +112,7 @@ const MessagePage = ({userState,navigate,userid}) => {
       }
  }
 export default function Controller() {
-    console.log("Controller called ")
+    const [isLandingPage, setIsLandingPage] = React.useState(true);
     const navigate = useNavigate();
     const userState = localStorage.getItem("userstatus");
     const userRole = localStorage.getItem("emeelanrole");
@@ -130,6 +130,9 @@ export default function Controller() {
      return <>
       <Header/>
       <RoleComponent userRole={userRole}/>
+     
+     
+      
       </>
     }
     
