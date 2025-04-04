@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
+const API_URL = 'https://hphtechnology.in/gathjod/api'; // Replace with your Strapi URL
 
 const api = axios.create({
   baseURL: API_URL,
@@ -75,7 +75,8 @@ export const getPaginatedUsers = async (start = 0, limit = 10) => {
           _limit: limit,
           _sort: 'id:DESC', // Sort by newest first
           "populate[photos]": "*", // ✅ Populate photos (all fields)
-          "populate[profilePicture]": "*" // ✅ Populate profile picture (all fields)
+          "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
+          "populate[Height]": "*"
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -88,6 +89,23 @@ export const getPaginatedUsers = async (start = 0, limit = 10) => {
       throw error.response?.data?.message || 'Failed to fetch users';
     }
   };
+
+// get admin
+export const getPaginatedAdminUsers = async () => {
+  try {
+    const response = await api.get('custom-admins', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,  // Use correct token
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error.response?.data || error.message);
+    throw new Error("Failed to fetch Admins");
+  }
+};
+
   // Add to your existing API service file
 export const searchUsers = async (query, start = 0, limit = 10) => {
     try {
