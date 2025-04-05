@@ -14,7 +14,7 @@ const MainLayout = ({ children }) => {
       <TopBar/>
 
       {/* Main Content */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>{children}</div>
+      <div style={{ flex: 1, overflowY: "auto"}}>{children}</div>
 
       {/* Footer (Bottom Navbar) */}
       <div>

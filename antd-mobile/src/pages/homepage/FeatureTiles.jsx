@@ -135,7 +135,7 @@ const FeatureTiles = () => {
   };
 
   return (
-    <>
+    <div style={{padding:"16px"}}>
       {/* Likes */}
       <div style={{ padding: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -250,7 +250,7 @@ const FeatureTiles = () => {
       <div >
         <RandomHeightMatches matches={mockRecentMatches} />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -15,12 +15,8 @@ const MyLogin = ({ setIsLogined }) => {
     setLoading(true);
     try {
       const { jwt, user } = await login(values.email, values.password);
-      const loginSuccess = authContext.login(jwt, user);
-      console.log(loginSuccess)
-      if (loginSuccess) {
-       
-        navigate('/home', { replace: true }); 
-      }
+      await authContext.login(jwt, user);
+      navigate('/home', { replace: true }); 
     } catch (error) {
       Toast.show({
         icon: 'fail',
