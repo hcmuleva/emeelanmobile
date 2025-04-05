@@ -26,8 +26,10 @@
       };
     
       return (
-        <Form.Item name={name} label={label}>
-          <div 
+<Form.Item
+  name={name}
+  label={gotra_for === "MATERNAL_GOTRA" ? "NanajiGotra" : "Gotra"}
+>          <div 
             onClick={() => setVisible(true)}
             style={{ 
               padding: '6px 0',

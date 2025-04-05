@@ -1,7 +1,8 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const API_URL = 'https://hphtechnology.in/gathjod/api'; // Replace with your Strapi URL
+const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
+//const API_URL = 'https://hphtechnology.in/gathjod/api'; // Replace with your Strapi URL
 
 const api = axios.create({
   baseURL: API_URL,
@@ -73,7 +74,7 @@ export const getPaginatedUsers = async (start = 0, limit = 10) => {
         params: {
           _start: start,
           _limit: limit,
-          _sort: 'id:DESC', // Sort by newest first
+          _sort: 'id:asc', // Sort by newest first
           "populate[photos]": "*", // ✅ Populate photos (all fields)
           "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
           "populate[Height]": "*"
@@ -168,4 +169,23 @@ export const uploadImage = async (formData,jwt) => {
     console.error('Upload failed:', error.message);
     // Handle error (show toast, etc.)
   }
+}
+
+const filteredUsers = async () => {
+  const filters = {
+    AND: [
+      { Gotra: 'Parmar' },
+      { State: 'Gujarat' }
+    ],
+    OR: [
+      { Profession: 'Engineer' },
+      { Profession: 'Doctor' }
+    ],
+    marital: 'Unmarried',
+    age: { $gte: 25, $lte: 35 } // Age range
+  };
+
+  const response = await fetch(`/api/users?_start=0&_limit=10&filters=${encodeURIComponent(JSON.stringify(filters))}`);
+  const data = await response.json();
+  return data;
 }

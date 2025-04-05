@@ -65,13 +65,19 @@ const MyRegister = ({ setIsLogined }) => {
   const stepTitles = ['Personal',  'Family', 'Profession'];
 
   const onFinish = async (values) => {
+
+    customdata['emeelanrole'] = "MEELAN"
+    customdata["username"] = values["MobileNumber"];
+    customdata["userstatus"] = "PENDING";
+    customdata['role'] = 1
+    if (!customdata.email && customdata.MobileNumber) {
+      customdata.email = customdata.MobileNumber + "@hph.com";
+    }
+    console.log('Form values:', customdata);
+    
     console.log(customdata, "FINAL VALUE")
-    // console.log(values, "valllll")
-    // values.emeelanrole = 'MEELAN';
-    // values.username = values.MobileNumber;
-    // values.userrole = 'ADMIN';
-    // values.profilecreatedby = user;
-  };
+    
+  }
 
   const handleCountryChange = (value) => {
     setCountry(value);
@@ -235,9 +241,7 @@ const MyRegister = ({ setIsLogined }) => {
         <Input placeholder="Enter Father's Occupation" />
       </Form.Item>
       <GotraSelector gotra_for={"MATERNAL_GOTRA"} gotraData={gotra.Gotra}  customdata={customdata} setCustomdata={setCustomdata}/>
-      <Form.Item name="GrandFatherName" label="Grandfather's Name">
-        <Input placeholder="Enter Grandfather's Name" />
-      </Form.Item>
+     
       <Form.Item name="Siblings" label="Siblings">
         <Input placeholder="Enter Number of Siblings" />
       </Form.Item>
