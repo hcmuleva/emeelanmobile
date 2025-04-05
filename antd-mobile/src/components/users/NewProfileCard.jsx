@@ -115,7 +115,7 @@ const NewProfileCard = ({user}) => {
           style={{
             padding: "16px 24px 24px",
             backgroundColor: colors.light,
-            borderRadius:"200px",
+            borderRadius: "200px",
           }}
         >
           {/* Name and Age */}
@@ -123,10 +123,10 @@ const NewProfileCard = ({user}) => {
             block
             justify="between"
             align="center"
-            style={{ 
-                marginBottom: "16px",
-                marginTop:"20px",
-             }}
+            style={{
+              marginBottom: "16px",
+              marginTop: "20px",
+            }}
           >
             <h2
               style={{
@@ -168,7 +168,9 @@ const NewProfileCard = ({user}) => {
               borderRadius: "12px",
             }}
           >
-            <UserOutline style={{ fontSize: "18px", color: colors.secondary }} />
+            <UserOutline
+              style={{ fontSize: "18px", color: colors.secondary }}
+            />
             <span>Gender:</span>
             <span style={{ color: colors.primary, fontWeight: "600" }}>
               {user?.Sex || "Not Specified"}
@@ -189,7 +191,9 @@ const NewProfileCard = ({user}) => {
               fontSize: "14px",
             }}
           >
-            <EnvironmentOutline style={{ fontSize: "18px", color: colors.secondary }} />
+            <EnvironmentOutline
+              style={{ fontSize: "18px", color: colors.secondary }}
+            />
             <span>{user?.State + ", " + user?.Country}</span>
           </div>
 
@@ -247,7 +251,9 @@ const NewProfileCard = ({user}) => {
                 fontWeight: "500",
               }}
             >
-              <StarOutline style={{ color: colors.secondary, fontSize: "18px" }} />
+              <StarOutline
+                style={{ color: colors.secondary, fontSize: "18px" }}
+              />
               <span>{user?.marital || "Marital Not Specified"}</span>
             </div>
             <div
@@ -260,7 +266,9 @@ const NewProfileCard = ({user}) => {
                 fontWeight: "500",
               }}
             >
-              <StarOutline style={{ color: colors.secondary, fontSize: "18px" }} />
+              <StarOutline
+                style={{ color: colors.secondary, fontSize: "18px" }}
+              />
               <span>{user?.Profession || "Profession Not Specified"}</span>
             </div>
           </div>
@@ -323,4 +331,4 @@ const NewProfileCard = ({user}) => {
   );
 };
 
-export default NewProfileCard
+export default NewProfileCard;
