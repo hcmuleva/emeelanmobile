@@ -100,9 +100,9 @@ const MyLogin = ({ setIsLogined }) => {
               <Input placeholder='Enter your password' type='password' prefix={<LockOutline />} />
             </Form.Item>
 
-            <div style={{ textAlign: 'right', marginTop: 8, marginBottom: 16 }}>
+            {/* <div style={{ textAlign: 'right', marginTop: 8, marginBottom: 16 }}>
               <a style={{ color: '#ff6b6b', fontSize: '14px' }}>Forgot Password?</a>
-            </div>
+            </div> */}
           </Form>
 
           <Divider>OR</Divider>

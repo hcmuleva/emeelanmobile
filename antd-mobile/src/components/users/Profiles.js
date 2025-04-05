@@ -1,41 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { List, InfiniteScroll, SearchBar } from "antd-mobile";
 import { getPaginatedUsers } from "../../services/api"; // Import API function
-import { 
-  Card, 
-  Button, 
-  Checkbox, 
-  Image,
-  Radio, 
-  Space, 
-  Tag, 
-  Divider 
-} from 'antd-mobile';
-import { 
-  HeartFill, 
-  ClockCircleFill,
-  CheckShieldFill
-} from 'antd-mobile-icons';
 
 import NewProfileCard from "./NewProfileCard";
 
 const Profiles = () => {
   const [users, setUsers] = useState([]);
-  const [page, setPage] = useState(0); // Start index for pagination
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
-  const [response, setResponse] = React.useState('accept'); // 'accept' or 'decline'
+  // const [response, setResponse] = React.useState('accept');
 
-  const limit = 10; // Number of users per request
+  const limit = 10;
 
-  // Function to fetch users from API
   const fetchUsers = async (pageNum = 0, searchQuery = "") => {
     try {
       const data = await getPaginatedUsers(pageNum * limit, limit);
-      console.log("data",data , " from api")
+      console.log("data", data , " from api")
       
       if (data?.data.length === 0) {
-        setHasMore(false); // No more data available
+        setHasMore(false);
       } else {
         setUsers((prev) => (pageNum === 0 ? data?.data : [...prev, ...data?.data])); // Append new data
         setPage(pageNum + 1);
@@ -46,11 +30,10 @@ const Profiles = () => {
     }
   };
 
-  // Fetch users when search changes
   useEffect(() => {
-    setUsers([]); // Reset user list
-    setPage(0);   // Reset page number
-    setHasMore(true); // Enable infinite scroll
+    setUsers([]);
+    setPage(0);
+    setHasMore(true);
     fetchUsers(0, search);
   }, [search]); 
 
@@ -72,11 +55,7 @@ const Profiles = () => {
       {/* User List */}
       <List>
         {users.map((user) => (
-            // <ProfileCard user={user}/>
-            <NewProfileCard user={user}/>
-          // <List.Item key={user.id} description={user.email}>
-          //   {user.username}  {user.FirstName}  {user.LastName} {user.FatherName}{user.Gotra} {/* Display user name */}
-          // </List.Item>
+          <NewProfileCard user={user}/>
         ))}
       </List>
 
