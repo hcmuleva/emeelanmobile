@@ -13,6 +13,7 @@ import Mail from "./pages/Mail";
 import ProfileStatusPage from './pages/ProfileStatusPage';
 import Search from "./pages/Search";
 import  LoginPage  from './pages/LoginPage';
+import UserProfile from './pages/UserProfile';
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -31,12 +32,9 @@ function AppContent() {
           <Route
             path="/"
             element={
-              
-              
-                <LoginPage/>
+              <LoginPage/>
             }
           />
-
           {/* Protected Routes */}
           <Route
             path="/home"
@@ -83,6 +81,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MainLayout><Profiles /></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/userprofile"
+            element={
+              <ProtectedRoute>
+                <MainLayout><UserProfile /></MainLayout>
               </ProtectedRoute>
             }
           />
