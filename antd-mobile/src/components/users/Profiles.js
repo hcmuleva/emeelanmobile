@@ -37,6 +37,12 @@ const Profiles = () => {
     fetchUsers(0, search);
   }, [search]); 
 
+  users.map((user) => {
+    console.log(user, "User Obj")
+    if(user?.images.length>0) {
+      console.log("Pictures", user.images)
+    }
+  })
   return (
     <div>
       {/* Search Bar */}
