@@ -42,7 +42,6 @@ const MyRegister = ({ setIsLogined }) => {
   const [state, setState] = useState({});
   const navigate = useNavigate();
   const [customdata,setCustomdata] = useState({});
-  console.log("customdata",customdata)
   const [visiblePickers, setVisiblePickers] = useState({
     dob: false,
     sex: false,
@@ -59,22 +58,25 @@ const MyRegister = ({ setIsLogined }) => {
   };
   
   const closePicker = (key) => {
-    console.log(key, "key")
+    // console.log(key, "key")
     setVisiblePickers({ ...visiblePickers, [key]: false });
   };
 
   const stepTitles = ['Personal',  'Family', 'Profession'];
 
   const onFinish = async (values) => {
-    values.emeelanrole = 'MEELAN';
-    values.username = values.MobileNumber;
-    values.userrole = 'ADMIN';
-    values.profilecreatedby = user;
-
-    console.log(values)
-
-  
-  };
+    customdata['emeelanrole'] = "MEELAN"
+    customdata["username"] = values["MobileNumber"];
+    customdata["userstatus"] = "PENDING";
+    customdata['role'] = 1
+    if (!customdata.email && customdata.MobileNumber) {
+      customdata.email = customdata.MobileNumber + "@hph.com";
+    }
+    console.log('Form values:', customdata);
+    
+    console.log(customdata, "FINAL VALUE")
+    
+  }
 
   const handleCountryChange = (value) => {
     setCountry(value);
@@ -89,20 +91,23 @@ const MyRegister = ({ setIsLogined }) => {
 
   const nextStep = () => {
     if (currentStep < 4) {
+      setCustomdata((prevVal)=> ({...prevVal, ...form.getFieldsValue()}))
+      // console.log(customdata, "NEW NEXT")
       setCurrentStep(currentStep + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
+      form.setFieldsValue(customdata)
+      // console.log(customdata, "NEW PREV")
       setCurrentStep(currentStep - 1);
     }
   };
 
   const submitForm = () => {
-    console.log("Form data: custome", customdata);
-
-    console.log("Form data:", form.getFieldsValue());
+    setCustomdata((prevVal)=> ({...prevVal, ...form.getFieldsValue()}))
+    // console.log("SUBMIT", customdata)
     form.submit();
   };
 
@@ -235,9 +240,7 @@ const MyRegister = ({ setIsLogined }) => {
         <Input placeholder="Enter Father's Occupation" />
       </Form.Item>
       <GotraSelector gotra_for={"MATERNAL_GOTRA"} gotraData={gotra.Gotra}  customdata={customdata} setCustomdata={setCustomdata}/>
-      <Form.Item name="GrandFatherName" label="Grandfather's Name">
-        <Input placeholder="Enter Grandfather's Name" />
-      </Form.Item>
+     
       <Form.Item name="Siblings" label="Siblings">
         <Input placeholder="Enter Number of Siblings" />
       </Form.Item>
@@ -253,15 +256,14 @@ const MyRegister = ({ setIsLogined }) => {
     // Step 4: Education
     <>
      <EducationSelector customdata={customdata} setCustomdata={setCustomdata} />
-     
       <Form.Item name="AdditionalQualification" label="Additional Qualification">
         <Input placeholder="Enter Additional Qualification" />
       </Form.Item>
       <Form.Item name="Profession" label="Profession">
         <Input placeholder="Enter Profession" />
       </Form.Item>
-      <Form.Item name="CompanyName" label="OrgName Name">
-        <Input placeholder="Enter OrgName Name" />
+      <Form.Item name="CompanyName" label="CompanyName">
+        <Input placeholder="Enter CompanyName" />
       </Form.Item>
       <Form.Item name="Designation" label="Designation">
         <Input placeholder="Enter Designation" />
@@ -272,8 +274,6 @@ const MyRegister = ({ setIsLogined }) => {
       <Form.Item name="Income" label="Income">
         <Input type="number" placeholder="Enter Income" />
       </Form.Item>
-     
-
     </>,
     
     
@@ -322,7 +322,7 @@ const MyRegister = ({ setIsLogined }) => {
 
           <Form
             form={form}
-             onFinish={onFinish}
+            onFinish={onFinish}
             layout="vertical"
             footer={
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
@@ -342,6 +342,7 @@ const MyRegister = ({ setIsLogined }) => {
                   <Button 
                     color="success" 
                     onClick={submitForm}
+                    // type='submit'
                     style={{ flex: 1, marginLeft: '8px' }}
                   >
                     Register
