@@ -3,6 +3,7 @@ import { List, InfiniteScroll, SearchBar } from "antd-mobile";
 import { getPaginatedUsers } from "../../services/api"; // Import API function
 
 import NewProfileCard from "./NewProfileCard";
+import { ProfileDetailPanel } from "./ProfileDetailPanel";
 
 const Profiles = () => {
   const [users, setUsers] = useState([]);
@@ -58,6 +59,7 @@ const Profiles = () => {
           <NewProfileCard user={user}/>
         ))}
       </List>
+      {/* <ProfileDetailPanel/> */}
 
       {/* Infinite Scroll for Pagination */}
       <InfiniteScroll loadMore={() => fetchUsers(page, search)} hasMore={hasMore} />

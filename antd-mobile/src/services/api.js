@@ -35,7 +35,6 @@ export const register = async (data) => {
 };
 
 export const getAuthenticatedUser = async (jwt) => {
-
   try {
     const response = await api.get('/users/me', {
       params: {
@@ -54,7 +53,6 @@ export const getAuthenticatedUser = async (jwt) => {
 export const getCustomMe = async (jwt) =>{
   try {
     const response = await api.get('/customme', {
-     
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -168,6 +166,45 @@ export const uploadImage = async (formData,jwt) => {
     // Handle error (show toast, etc.)
   }
 }
+
+// new Apicalls start
+// update Data of me,
+export const updateUserData = async (data, jwt, userId) => {
+  try {
+    // console.log("Sending update:", { photos: photoIds });
+
+    const response = await api.put(`/users/${userId}`, {
+      ...data,
+    }, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Strapi update error:", error.response?.data || error.message);
+    throw error.response?.data?.message || 'Update failed';
+  }
+};
+
+export const getUserById = async (userId, jwt) => {
+  try {
+    const response = await api.get(`/users/${userId}`,{
+      params: {
+        populate: '*' // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Strapi update error:", error.response?.data || error.message);
+    throw error.response?.data?.message || 'Update failed';
+  }
+};
+// new Apicalls End
 
 const filteredUsers = async () => {
   const filters = {
