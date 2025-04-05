@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Card,
   Form,
@@ -19,8 +19,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import "../../styles/settings.css";
 import MobileImageUploader from "../authentication/registration/MobileImageUploader"
+import { updateUserData } from "../../services/api";
+import { AuthContext } from "../../context/AuthContext";
 
 export const SettingsDialog = () => {
+  const {user} = useContext(AuthContext)
+  const jwt = localStorage.getItem("jwt")
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [preferences, setPreferences] = useState({
@@ -29,15 +33,15 @@ export const SettingsDialog = () => {
     hideLocation: false,
   });
   const [profile, setProfile] = useState({
-    aboutMe: "",
-    education: "",
-    profession: "",
-    hobby: "",
+    AboutMe: "",
+    education_level: "",
+    Profession: "",
+    OtherActivities: "",
   });
 
   const [editingField, setEditingField] = useState(null);
   const [tempValues, setTempValues] = useState({});
-  const [fileList, setFileList] = useState([]);
+  // const [fileList, setFileList] = useState([]);
 
   const handleToggleChange = (key, checked) => {
     setPreferences({
@@ -62,16 +66,25 @@ export const SettingsDialog = () => {
     setEditingField(null);
   };
 
-  const saveEdit = (field) => {
-    setProfile({
-      ...profile,
-      [field]: tempValues[field],
-    });
-    setEditingField(null);
-    Toast.show({
-      content: "Saved successfully",
-      position: "bottom",
-    });
+  const saveEdit = async(field) => {
+    try {
+      setProfile({
+        ...profile,
+        [field]: tempValues[field],
+      });
+      setEditingField(null);
+      Toast.show({
+        content: "Saved successfully",
+        position: "bottom",
+      });
+      // console.log(profile)
+      const response = await updateUserData(profile, jwt, user?.id)
+      // console.log(response, "response")
+
+      //having issue with updating data using api
+    } catch(err) {
+      console.error("error", err)
+    }
   };
 
   const handleFieldChange = (field, value) => {
