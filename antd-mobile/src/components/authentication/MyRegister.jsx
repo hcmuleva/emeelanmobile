@@ -87,6 +87,7 @@ const MyRegister = ({ setIsLogined }) => {
     // navigate("/login")
   };
 
+
   const handleCountryChange = (value) => {
     setCountry(value);
     // Add any additional country change logic here

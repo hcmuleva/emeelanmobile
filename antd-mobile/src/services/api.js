@@ -1,6 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
+
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
 const API_URL = 'https://hphtechnology.in/gathjod/api'; // Replace with your Strapi URL
 
