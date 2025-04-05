@@ -1,40 +1,65 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { NavBar, TabBar } from "antd-mobile";
-import { HomeOutlined, UserOutlined, MessageOutlined, SearchOutlined, ProfileTwoTone, ProfileOutlined } from "@ant-design/icons";
+import { HomeOutlined, MessageOutlined, SearchOutlined} from "@ant-design/icons";
 import TopBar from "./TopBar";
-import { CheckCircleFill, ExclamationCircleFill, StarFill, TeamFill } from "antd-mobile-icons";
+import { CheckCircleFill, TeamOutline } from "antd-mobile-icons";
 
 const MainLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const tabs = [
-    { key: "/home", title: "Home", icon: <HomeOutlined /> },
-    {key:"/profiles", title:"profiles", icon:<TeamFill/>},
-    { key: "/status", title: "status", icon: <CheckCircleFill /> },
-    { key: "/mailbox", title: "Mailbox", icon: <MessageOutlined />, badge: 99 },
-    { key: "/chat", title: "Chat", icon: <MessageOutlined /> },
-    { key: "/search", title: "Search", icon: <SearchOutlined /> },
-  ];
-
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       {/* Header */}
       <TopBar/>
-      {/* <NavBar backArrow={false} style={{ backgroundColor: "#fff", color: "#000", fontWeight: "bold" }}>
-        {tabs.find((tab) => tab.key === location.pathname)?.title || "App"}
-      </NavBar> */}
 
       {/* Main Content */}
       <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>{children}</div>
 
       {/* Footer (Bottom Navbar) */}
-      <TabBar activeKey={location.pathname} onChange={(key) => navigate(key)}>
-        {tabs.map((tab) => (
-          <TabBar.Item key={tab.key} icon={tab.icon} title={tab.title} badge={tab.badge} />
-        ))}
-      </TabBar>
+      <div>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-around', 
+          padding: '12px 0', 
+          backgroundColor: 'white',
+          borderTopLeftRadius: '20px',
+          borderTopRightRadius: '20px',
+          boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)',
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          zIndex: 100
+        }}>
+          {[
+            { icon: <HomeOutlined style={{ fontSize: 24 }} />, key: 'home' },
+            { icon: <TeamOutline style={{ fontSize: 24 }} />, key: 'profiles' },
+            { icon: <CheckCircleFill style={{ fontSize: 24 }} />, key: 'status' },
+            { icon: <MessageOutlined style={{ fontSize: 24 }} />, key: 'chat' },
+            { icon: <SearchOutlined style={{ fontSize: 24 }} />, key: 'search' }
+          ].map(item => {
+            const isActive = location.pathname === `/${item.key}`;
+            return (
+              <div 
+                key={item.key} 
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center',
+                  color: isActive ? '#FF1E56' : '#999'
+                }}
+                onClick={() => navigate(`/${item.key}`)}
+              >
+                {item.icon}
+                <div style={{ fontSize: 12, marginTop: 4 }}>
+                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ height: '70px' }} />
+      </div>
     </div>
   );
 };

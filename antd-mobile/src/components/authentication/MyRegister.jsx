@@ -65,6 +65,7 @@ const MyRegister = ({ setIsLogined }) => {
   const stepTitles = ['Personal',  'Family', 'Profession'];
 
   const onFinish = async (values) => {
+
     customdata['emeelanrole'] = "MEELAN"
     customdata["username"] = values["MobileNumber"];
     customdata["userstatus"] = "PENDING";
