@@ -1,58 +1,64 @@
-import React from "react";
-import { NavBar, Avatar, Badge } from "antd-mobile";
-import { BellOutline } from "antd-mobile-icons";
+import { MessageOutlined } from "@ant-design/icons";
+import { Avatar, Badge } from "antd-mobile";
 import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {
-
   const navigate = useNavigate();
-  const userProfile = "https://via.placeholder.com/40"; // Replace with actual profile image
-  const userData=JSON.parse(localStorage.getItem('user'))
-  const userName = [
-    "Mr.",
-    userData?.FirstName,
-    userData?.FatherName,
-    userData?.Gotra
-  ]
-    .filter(Boolean) // Removes null, undefined, and empty strings
-    .join(" "); //  console.log("userdata",userData?.FirstName)
+  const userProfile = "https://demo.adminkit.io/img/avatars/avatar-4.jpg";
   return (
-    <div style={{ position: "relative" }}> {/* Wrapper for absolute positioning */}
-    <br/>
-      <NavBar
-        backArrow={false}
-        left={<img src="/logo.png" alt="Logo" style={{ height: 30 }} />} // Replace with your logo
-        right={
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "-8px" }}>
-            {/* Bell Icon with notification badge */}
-            <Badge dot color="red">
-            </Badge>
-
-            {/* Avatar with Name Below */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <Avatar
-                src={userProfile}
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/profile")}
-              />
-              <span style={{ fontSize: "12px", marginTop: "4px", color: "#666" }}>{userName}</span> 
+    <div style={{ 
+      position: "relative", 
+      backgroundColor: "#FF4D6D", 
+      padding: "12px 16px", 
+      color: "white"
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{display:"flex", alignItems:"center"}}>
+        <div style={{ width:"80px",  display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Avatar
+            src={userProfile}
+            style={{ 
+              cursor: "pointer",
+              '--size': '55px',
+              borderRadius:"50%"
+            }}
+            onClick={() => navigate("/userprofile")}
+          />
+        </div>
+        <div style={{textAlign:"left"}}>
+          <span style={{
+            fontWeight: '600',
+            fontSize: '18px',
+            lineHeight: '30px',
+            letterSpacing: '.5px',
+          }}>
+            Hello,</span>
+          <br/>
+          <span  style={{
+            fontWeight: '400',
+            fontSize: '15px',
+          }}>
+            User!</span>
+        </div>
+      </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <Badge dot color="#FFDF3F">
+            <div style={{ 
+              backgroundColor: "rgba(255, 255, 255, 0.2)", 
+              borderRadius: "50%", 
+              width: "42px", 
+              height: "42px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}>
+              <MessageOutlined style={{ fontSize: 25, color: "white" }} />
             </div>
-          </div>
-        }
-      />
-      {/* Centered Text */}
-      <div style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        fontSize: "14px",
-        fontWeight: "bold"
-      }}>
-       आल इंडिया क्षत्रिय राठौड़ समाज    
+          </Badge>
+        </div>
       </div>
     </div>
   );
 };
 
-export default TopBar;
+export default TopBar

@@ -74,7 +74,7 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <img
-              src={user?.images?.[0]?.url || "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"}
+              src={user?.images[0]?.url || "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"}
               alt="Profile"
               style={{
                 width: "100%",
