@@ -4,7 +4,7 @@ import { uploadImage } from '../../../services/api';
 
 const MobileImageUploader = () => {
   const [fileList, setFileList] = useState([]);
-  const MAX_IMAGES = 3; // Set your maximum limit here
+  const MAX_IMAGES = 2; // Set your maximum limit here
 
   const beforeUpload = (file) => {
     if (fileList.length >= MAX_IMAGES) {

@@ -1,20 +1,165 @@
-.settings-left-panel{
-    width: 30%;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
-    overflow: hidden;
-}  
-.settings-right-panel{
-    width: 70%;
-    margin-left: 2rem;
-    display: block;
+/* SettingsDialog.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+.settings-container {
+  font-family: 'Poppins', sans-serif;
+  padding-bottom: 20px;
+  /* background-color: #d2151527; */
+  min-height: 100vh;
 }
-.panel-item{
-    height: 2rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: lightgrey;
-    cursor: pointer;
+
+.settings-navbar {
+  background-color: #8B0000;
+  color: white;
+  font-weight: 500;
+  --adm-font-size-10: 18px;
+  /* position: sticky;
+  top: 0;
+  z-index: 1; */
 }
+
+.settings-navbar .adm-nav-bar-back-arrow {
+  font-size: 20px;
+  color: white;
+}
+
+/* .settings-tabs {
+  margin: 16px;
+} */
+
+.settings-card {
+  border-radius: 12px;
+  background-color: white;
+  margin: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 0;
+}
+
+/* Profile styles */
+.profile-field {
+  margin-bottom: 20px;
+}
+
+.profile-field-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.profile-field-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-field-display span {
+  color: #333;
+  font-size: 16px;
+}
+
+.profile-field-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancel-btn {
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.save-btn {
+  background-color: #8B0000;
+  color: white;
+  border: none;
+}
+
+.edit-btn {
+  color: #8B0000;
+  border: 1px solid #8B0000;
+  font-size: 14px;
+}
+
+/* Preferences styles */
+.preference-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.preference-item span {
+  font-size: 16px;
+  color: #333;
+}
+
+.preference-item:last-child {
+  border-bottom: none;
+}
+
+/* Upload section */
+.upload-section {
+  padding: 12px 0;
+}
+
+.upload-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  padding: 24px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  color: #8B0000;
+}
+
+.upload-button svg {
+  font-size: 32px;
+}
+
+/* Original settings form styling */
+.original-settings {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Override antd-mobile defaults for theme */
+:root:root {
+  --adm-color-primary: #8B0000;
+  --adm-font-family: 'Poppins', sans-serif;
+}
+
+.adm-form-item-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.adm-capsule-tabs-tab {
+  font-weight: 500;
+
+}
+
+.adm-capsule-tabs-tab-active {
+  background-color: #8B0000;
+  color: white;
+}
+
+/* Switch component styling */
+/* .adm-switch-checked {
+  background: #8B0000;
+} */

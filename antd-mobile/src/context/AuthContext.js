@@ -44,11 +44,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('authenticated', 'false');
     setUser(null);
     setIsAuthenticated(false);
-    // return isAuthenticated;
+    return isAuthenticated;
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, setIsAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { UploadImagesDialog } from '../components/homepage/UploadImagesDialog';
 import { ResetPasswordDialog } from '../pages/homepage/ResetPasswordDialog';
-import { SettingsDialog } from '../components/homepage/SettingsDialog';
-import { AlipayCircleOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Card, Divider, Grid } from 'antd-mobile';
+import { LogoutOutlined } from '@ant-design/icons';
+import { Card, Grid } from 'antd-mobile';
 import {
   LockOutline,
   PictureOutline,
@@ -12,6 +11,7 @@ import {
   TravelOutline
 } from 'antd-mobile-icons';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../context/AuthContext"
 
 const tiles = [
   { title: 'Logout', color: '#A5D8FF', icon: <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'logout' },
@@ -22,13 +22,15 @@ const tiles = [
 ]
 
 const UserProfile = () => {
+  const authContext = useContext(AuthContext);
+
   const [visibleUploadImages, setVisibleUploadImages] = useState(false);
-  const [visibleSettings,setSettings] = useState(false);
+  // const [visibleSettings,setSettings] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleTileClick = (tileKey) => {
+  const handleTileClick = async (tileKey) => {
     switch(tileKey){
       case 'password':
         // Handle Password click
@@ -37,7 +39,7 @@ const UserProfile = () => {
         break;
       case 'settings':
         // Handle Settings click
-        setSettings(true)
+        navigate("/settings")
         console.log('Settings tile clicked');
         break;
       case 'images':
@@ -46,12 +48,8 @@ const UserProfile = () => {
         setVisibleUploadImages(true)
         break;
       case 'logout':
-        localStorage.removeItem("token"); // Clear auth token
-        localStorage.removeItem("user");  // Clear user data
-        navigate("/login"); // Redirect to login page
-        // Handle Logout click
-        console.log('Logout tile clicked');
-        // Add your logout logic here
+        await authContext.logout()
+        navigate('/login', { replace: true }); 
         break;
       case 'help':
         // Handle Help click
@@ -65,7 +63,7 @@ const UserProfile = () => {
   
   return (
     <>
-      <Grid columns={2} gap={16} style={{ padding: 16 }}>
+      <Grid columns={2} gap={16} style={{padding:"16px"}}>
           {tiles.map((tile) => (
             <Grid.Item key={tile.key}>
               <Card 
@@ -85,16 +83,12 @@ const UserProfile = () => {
               </Card>
             </Grid.Item>
           ))}
-        </Grid>
-        <Divider contentPosition="center"> Help Section</Divider>
-        <Grid columns={2} gap={16} style={{ padding: 16 }}>
       </Grid>
       <ResetPasswordDialog 
         visible={visiblePassword} 
         onClose={() => setVisiblePassword(false)} 
       />
       <UploadImagesDialog visible={visibleUploadImages} onClose={()=>setVisibleUploadImages(false)} />
-      <SettingsDialog visible={visibleSettings} onClose={()=>setSettings(false)} />
     </>
   )
 }

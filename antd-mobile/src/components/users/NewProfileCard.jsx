@@ -9,8 +9,16 @@ import {
 } from "antd-mobile-icons";
 
 const NewProfileCard = ({user}) => {
-    console.log(user, "New User Obj")
-
+  const imagesrc =user?.images?.pictures?.[0] ||
+  user?.images?.profilePicture ||
+  user?.images?.photos?.[0]?.url 
+  //console.log(user, "New User Obj")
+  //console.log("imagesrc ", imagesrc ,  " from user", user.id)
+  console.log("phtos", imagesrc, " from user", user.id)
+  
+    if(user?.images.length>0) {
+      console.log("Pictures", user.images)
+    }
     const colors = {
         primary: "#8B0000",
         secondary: "#FF5252",
@@ -74,8 +82,10 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <img
-              src={user?.images[0]?.url || "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"}
-              alt="Profile"
+ src={
+  imagesrc||
+  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+}              alt="Profile"
               style={{
                 width: "100%",
                 height: "100%",
@@ -104,7 +114,7 @@ const NewProfileCard = ({user}) => {
           style={{
             padding: "16px 24px 24px",
             backgroundColor: colors.light,
-            borderRadius:"200px",
+            borderRadius: "200px",
           }}
         >
           {/* Name and Age */}
@@ -112,10 +122,10 @@ const NewProfileCard = ({user}) => {
             block
             justify="between"
             align="center"
-            style={{ 
-                marginBottom: "16px",
-                marginTop:"20px",
-             }}
+            style={{
+              marginBottom: "16px",
+              marginTop: "20px",
+            }}
           >
             <h2
               style={{
@@ -125,7 +135,10 @@ const NewProfileCard = ({user}) => {
                 fontWeight: "700",
               }}
             >
-              {user?.FirstName} {user?.LastName}
+              <span>
+  {user?.FirstName}
+  {user?.LastName && user?.FirstName !== user?.LastName ? ` ${user.LastName}` : ""}
+</span>
             </h2>
             <Tag
               style={{
@@ -154,10 +167,16 @@ const NewProfileCard = ({user}) => {
               borderRadius: "12px",
             }}
           >
-            <UserOutline style={{ fontSize: "18px", color: colors.secondary }} />
+            <UserOutline
+              style={{ fontSize: "18px", color: colors.secondary }}
+            />
             <span>Gender:</span>
             <span style={{ color: colors.primary, fontWeight: "600" }}>
               {user?.Sex || "Not Specified"}
+            </span>
+            <span>ProfileId:</span>
+            <span style={{ color: colors.primary, fontWeight: "600" }}>
+              {user?.id || "Not Specified"}
             </span>
           </div>
           {/* Location */}
@@ -171,7 +190,9 @@ const NewProfileCard = ({user}) => {
               fontSize: "14px",
             }}
           >
-            <EnvironmentOutline style={{ fontSize: "18px", color: colors.secondary }} />
+            <EnvironmentOutline
+              style={{ fontSize: "18px", color: colors.secondary }}
+            />
             <span>{user?.State + ", " + user?.Country}</span>
           </div>
 
@@ -229,7 +250,9 @@ const NewProfileCard = ({user}) => {
                 fontWeight: "500",
               }}
             >
-              <StarOutline style={{ color: colors.secondary, fontSize: "18px" }} />
+              <StarOutline
+                style={{ color: colors.secondary, fontSize: "18px" }}
+              />
               <span>{user?.marital || "Marital Not Specified"}</span>
             </div>
             <div
@@ -242,7 +265,9 @@ const NewProfileCard = ({user}) => {
                 fontWeight: "500",
               }}
             >
-              <StarOutline style={{ color: colors.secondary, fontSize: "18px" }} />
+              <StarOutline
+                style={{ color: colors.secondary, fontSize: "18px" }}
+              />
               <span>{user?.Profession || "Profession Not Specified"}</span>
             </div>
           </div>
@@ -305,4 +330,4 @@ const NewProfileCard = ({user}) => {
   );
 };
 
-export default NewProfileCard
+export default NewProfileCard;

@@ -14,6 +14,7 @@ import ProfileStatusPage from './pages/ProfileStatusPage';
 import Search from "./pages/Search";
 import  LoginPage  from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
+import { SettingsDialog } from './components/homepage/SettingsDialog';
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -92,6 +93,11 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <MainLayout><SettingsDialog /></MainLayout>
+            </ProtectedRoute>
+          }/>
 
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
