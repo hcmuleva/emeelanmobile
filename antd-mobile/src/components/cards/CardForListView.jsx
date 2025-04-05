@@ -4,6 +4,7 @@ import React from "react";
 
 
 const CardForListView = ({profile}) => {
+    console.log(profile, "Profile Obj")
   return (
     <div style={{
       width: '100%',

@@ -9,8 +9,16 @@ import {
 } from "antd-mobile-icons";
 
 const NewProfileCard = ({user}) => {
-    console.log(user, "New User Obj")
-
+  const imagesrc =user?.images?.pictures?.[0] ||
+  user?.images?.profilePicture ||
+  user?.images?.photos?.[0]?.url 
+  //console.log(user, "New User Obj")
+  //console.log("imagesrc ", imagesrc ,  " from user", user.id)
+  console.log("phtos", imagesrc, " from user", user.id)
+  
+    if(user?.images.length>0) {
+      console.log("Pictures", user.images)
+    }
     const colors = {
         primary: "#8B0000",
         secondary: "#FF5252",
@@ -74,8 +82,10 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <img
-              src={user?.images?.[0]?.url || "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"}
-              alt="Profile"
+ src={
+  imagesrc||
+  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+}              alt="Profile"
               style={{
                 width: "100%",
                 height: "100%",
@@ -125,7 +135,10 @@ const NewProfileCard = ({user}) => {
                 fontWeight: "700",
               }}
             >
-              {user?.FirstName} {user?.LastName}
+              <span>
+  {user?.FirstName}
+  {user?.LastName && user?.FirstName !== user?.LastName ? ` ${user.LastName}` : ""}
+</span>
             </h2>
             <Tag
               style={{
@@ -158,6 +171,10 @@ const NewProfileCard = ({user}) => {
             <span>Gender:</span>
             <span style={{ color: colors.primary, fontWeight: "600" }}>
               {user?.Sex || "Not Specified"}
+            </span>
+            <span>ProfileId:</span>
+            <span style={{ color: colors.primary, fontWeight: "600" }}>
+              {user?.id || "Not Specified"}
             </span>
           </div>
           {/* Location */}
