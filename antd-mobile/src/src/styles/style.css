@@ -1,0 +1,213 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,900&display=swap");
+
+.marquee {
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+  height: 40px;
+  width: 100%;
+  border-radius: 22px;
+  box-shadow: 4px 4px 0 #000;
+  overflow: hidden;
+  background: white;
+  white-space: nowrap;
+  margin-bottom: 1rem;
+}
+
+.marquee--inner {
+  display: block;
+  width: 200%;
+  position: absolute;
+  animation: marquee 20s linear infinite;
+  &:hover {
+    animation-play-state: paused;
+    color: red;
+  }
+}
+
+.marquee-inner-span {
+  float: left;
+  width: 50%;
+  overflow: hidden;
+  font-size: 1.3rem;
+}
+
+@keyframes marquee {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -100%;
+  }
+}
+
+#admin-list-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#user-details-user-name {
+  font-weight: 500;
+}
+
+#matrix-counter-cards {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem auto;
+}
+
+#user-details-user-gender,
+#user-details-user-contact {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+#user-profile-card {
+  width: 80%;
+  margin: 2rem auto;
+}
+
+#user-register-form-atn {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+#header-temple-banner {
+  background-color: #fff8db;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+#aai-mata-description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 10;
+  flex-direction: column;
+}
+
+#header-subheadings {
+  display: flex;
+  width: 100%;
+  padding-top: 1rem;
+  justify-content: space-around;
+}
+
+.header-subheadings-pt {
+  font-size: 1rem;
+  color: #4e4e4e;
+}
+
+#aai-mata-description-h {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #4e4e4e;
+  text-align: center;
+}
+
+#aai-mata-mandir-contact {
+  display: flex;
+  flex-direction: row;
+}
+
+.aai-mata-mandir-contact-para {
+  font-size: 1.15rem;
+}
+
+.aai-mata-mandir-contact-para::before {
+  content: "Tel:";
+  padding-right: 0.5rem;
+  padding-left: 1rem;
+}
+
+.aai-mata-mandir-address > p {
+  font-size: 1rem;
+  text-align: center;
+}
+
+#contact-time-info {
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#contact-time-info > p {
+  line-height: 0.5rem;
+}
+
+#contact-time-info > p > span {
+  font-weight: 600;
+}
+
+#register-card {
+  width: 100%;
+}
+
+#meelan-form {
+  width: 100%;
+}
+
+@media screen and (min-width: 746px) {
+  #hero {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .marquee {
+    width: 95%;
+    margin: 1rem auto;
+  }
+
+  #main {
+    flex: 5;
+  }
+
+  #aside {
+    flex: 1;
+  }
+
+  #dashboard-matrix {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  #user-profile-details-card {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  #register-card {
+    width: 70%;
+    margin: 1rem auto;
+  }
+
+  #meelan-form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+  }
+  #user-register-form-atn {
+    grid-column: 1 / span 2;
+  }
+  .aai-mata-mandir-address > p {
+    font-size: 1.5rem;
+  }
+
+  #header-temple-banner {
+    flex-direction: row;
+  }
+}
