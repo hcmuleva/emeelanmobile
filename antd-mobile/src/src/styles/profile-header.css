@@ -1,0 +1,48 @@
+.profile-container{
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+}
+.profile-content{
+    width: 60%;
+    color: black;
+    border-bottom: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width: 600px) {
+    .profile-content{
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .profile-logo{
+        display: none;
+    }
+    .profile-display-name{
+        display: none;
+    }
+    .profile-website-name{
+        font-size: 0.7rem;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .profile-content{
+        width: 100%;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+
+}
