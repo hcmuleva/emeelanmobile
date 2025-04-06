@@ -1,14 +1,27 @@
-import React, { useRef } from "react";
-import { Tag, Space } from "antd-mobile";
+import { Space, Tag, Toast } from "antd-mobile";
 import {
-  EnvironmentOutline,
-  StarOutline,
-  HeartOutline,
   CloseOutline,
+  EnvironmentOutline,
+  HeartOutline,
+  StarOutline,
   UserOutline,
 } from "antd-mobile-icons";
+import React from "react";
+import { userService } from "../../services";
+const getUserFromLocalStorage = () => {
+  try {
+    const userString = localStorage.getItem("user");
+    return userString ? JSON.parse(userString) : null;
+  } catch (error) {
+    console.error("Failed to parse user data:", error);
+    return null;
+  }
+};
 
 const NewProfileCard = ({user}) => {
+  const userObj = getUserFromLocalStorage();
+  const userId = userObj?.id || null;
+  const profileid = user?.id || null;
   const imagesrc =user?.images?.pictures?.[0] ||
   user?.images?.profilePicture ||
   user?.images?.photos?.[0]?.url 
@@ -282,6 +295,12 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <button
+             onClick={() => {
+              console.log("userService clicked", userId, profileid)
+              const response =userService.connectionRequest(userId, profileid)
+              console.log("response", response)
+             }
+             }
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -301,9 +320,10 @@ const NewProfileCard = ({user}) => {
               }}
             >
               <HeartOutline style={{ fontSize: "18px" }} />
-              Accept
+              Request
             </button>
             <button
+              onClick={() => { Toast.show("Detail Profle compnent need to call") }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -322,7 +342,7 @@ const NewProfileCard = ({user}) => {
               }}
             >
               <CloseOutline style={{ fontSize: "18px" }} />
-              Reject
+              Details
             </button>
           </div>
         </div>
