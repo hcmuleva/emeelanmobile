@@ -15,6 +15,8 @@ import Search from "./pages/Search";
 import  LoginPage  from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
 import { SettingsDialog } from './components/homepage/SettingsDialog';
+import { ProfileDetailPanel } from './components/users/ProfileDetailPanel';
+import StatusNotification from './components/StatusNotification';
 
 
 // ✅ Corrected Protected Route Component
@@ -93,12 +95,29 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          <Route path="/settings" element={
+          <Route path="/settings" 
+          element={
             <ProtectedRoute>
               <MainLayout><SettingsDialog /></MainLayout>
             </ProtectedRoute>
           }/>
 
+          <Route
+            path="/profile-view"
+            element={
+              <ProtectedRoute>
+                <MainLayout><ProfileDetailPanel/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notification-tab"
+            element={
+              <ProtectedRoute>
+                <MainLayout><StatusNotification/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

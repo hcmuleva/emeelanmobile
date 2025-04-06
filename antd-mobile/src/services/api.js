@@ -202,6 +202,7 @@ export const getUserById = async (userId, jwt) => {
     throw error.response?.data?.message || 'Update failed';
   }
 };
+
 // new Apicalls End
 
 const filteredUsers = async () => {
