@@ -25,8 +25,6 @@ const ProtectedRoute = ({ children }) => {
 
 function AppContent() {
   const [showRegister, setShowRegister] = useState(false);
-  console.log("API Key:", apiKey);
-  console.log("API URL:", apiUrl);
   return (
     <AuthProvider>
       <Router>

@@ -2,8 +2,8 @@ import axios from 'axios';
 import qs from 'qs';
 
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
-const API_URL = process.env.REACT_APP_API_URL; // Replace with your Strapi URL
-
+const API_URL = process.env.REACT_APP_API_URL
+console.log("API_URL", API_URL) 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
