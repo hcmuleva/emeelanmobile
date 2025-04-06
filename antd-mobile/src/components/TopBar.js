@@ -1,8 +1,12 @@
+import React,{useState} from "react";
 import { MessageOutlined } from "@ant-design/icons";
 import { Avatar, Badge } from "antd-mobile";
 import { useNavigate } from "react-router-dom";
+import StatusNotification from "./StatusNotification";
+import {  Space } from 'antd-mobile'
 
 const TopBar = () => {
+  const [totalNotifications, setTotalNotifications] = useState(0);
   const navigate = useNavigate();
   const userProfile = "https://demo.adminkit.io/img/avatars/avatar-4.jpg";
   return (
@@ -42,7 +46,7 @@ const TopBar = () => {
         </div>
       </div>
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <Badge dot color="#FFDF3F">
+          <Badge content={totalNotifications} dot color="#FFDF3F">
             <div style={{ 
               backgroundColor: "rgba(255, 255, 255, 0.2)", 
               borderRadius: "50%", 
@@ -53,6 +57,7 @@ const TopBar = () => {
               alignItems: "center"
             }}>
               <MessageOutlined style={{ fontSize: 25, color: "white" }} />
+              <StatusNotification userId={JSON.parse(localStorage.getItem('user'))?.id} totalNotifications={totalNotifications} setTotalNotifications={setTotalNotifications}/>
             </div>
           </Badge>
         </div>
