@@ -22,8 +22,6 @@ import MaritialStatus from "./registration/MaritialStatus";
 import EducationSelector from "./registration/EducationSelector";
 import { register } from "../../services/api";
 
-export const TOKEN_KEY = process.env.REACT_APP_TOKEN_KEY || "default-token";
-const API_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:3000";
 
 const now = new Date();
 const eighteenYearsAgo = new Date(
