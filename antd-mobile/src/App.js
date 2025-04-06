@@ -16,6 +16,7 @@ import  LoginPage  from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
 import { SettingsDialog } from './components/homepage/SettingsDialog';
 
+
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -24,7 +25,8 @@ const ProtectedRoute = ({ children }) => {
 
 function AppContent() {
   const [showRegister, setShowRegister] = useState(false);
-  
+  console.log("API Key:", apiKey);
+  console.log("API URL:", apiUrl);
   return (
     <AuthProvider>
       <Router>

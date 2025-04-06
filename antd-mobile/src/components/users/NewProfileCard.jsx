@@ -27,7 +27,6 @@ const NewProfileCard = ({user}) => {
   user?.images?.photos?.[0]?.url 
   //console.log(user, "New User Obj")
   //console.log("imagesrc ", imagesrc ,  " from user", user.id)
-  console.log("phtos", imagesrc, " from user", user.id)
   
     if(user?.images.length>0) {
       console.log("Pictures", user.images)

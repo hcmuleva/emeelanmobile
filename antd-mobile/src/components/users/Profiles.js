@@ -16,7 +16,7 @@ const Profiles = () => {
   const fetchUsers = async (pageNum = 0, searchQuery = "") => {
     try {
       const data = await getPaginatedUsers(pageNum * limit, limit);
-      console.log("data", data , " from api")
+     
       
       if (data?.data.length === 0) {
         setHasMore(false);
@@ -37,16 +37,12 @@ const Profiles = () => {
     fetchUsers(0, search);
   }, [search]); 
 
-  users.map((user) => {
-    console.log(user, "User Obj")
-    if(user?.images.length>0) {
-      console.log("Pictures", user.images)
-    }
-  })
+  
   return (
     <div>
       {/* Search Bar */}
       <SearchBar
+      key="UniqueKey"
         placeholder="Search Users..."
         onChange={(value) => setSearch(value)}
         style={{ marginBottom: 10 }}

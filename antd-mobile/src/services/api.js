@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
-const API_URL = 'https://hphtechnology.in/gathjod/api'; // Replace with your Strapi URL
+const API_URL = process.env.REACT_APP_API_URL; // Replace with your Strapi URL
 
 const api = axios.create({
   baseURL: API_URL,
@@ -64,7 +64,6 @@ export const getCustomMe = async (jwt) =>{
 }
 
 export const getPaginatedUsers = async (start = 0, limit = 10) => {
-    console.log("getPaginatedUsers ");
     try {
       const response = await api.get(`/users`, {
         params: {
@@ -79,7 +78,6 @@ export const getPaginatedUsers = async (start = 0, limit = 10) => {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`
         }
       });
-      console.log("getPaginatedUsers response ",response.data);
       return response.data;
       
     } catch (error) {
