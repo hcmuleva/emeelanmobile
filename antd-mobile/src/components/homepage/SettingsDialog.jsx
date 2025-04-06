@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Card,
   Form,
@@ -6,20 +6,17 @@ import {
   Switch,
   CapsuleTabs,
   Button,
-  ImageUploader,
   NavBar,
   Toast,
 } from "antd-mobile";
 import {
-  LeftOutline,
   CloseOutline,
   CheckOutline,
-  PictureOutline,
 } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
 import "../../styles/settings.css";
 import MobileImageUploader from "../authentication/registration/MobileImageUploader"
-import { updateUserData } from "../../services/api";
+import { getUserById, updateUserData } from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 
 export const SettingsDialog = () => {
@@ -38,6 +35,22 @@ export const SettingsDialog = () => {
     Profession: "",
     OtherActivities: "",
   });
+
+  useEffect(()=>{
+    const loadFields = async() => {
+        try{
+          const response = await getUserById(user?.id, jwt);
+          const updatedProfile = {};
+          Object.keys(profile).forEach((key) => {
+            updatedProfile[key] = response?.[key] || "";
+          });
+          setProfile(updatedProfile)
+        } catch (err) {
+        console.error("error", err)
+      };
+    }
+    loadFields();
+  },[])
 
   const [editingField, setEditingField] = useState(null);
   const [tempValues, setTempValues] = useState({});
@@ -77,9 +90,9 @@ export const SettingsDialog = () => {
         content: "Saved successfully",
         position: "bottom",
       });
-      // console.log(profile)
+      // console.log([field], "temp field")
       const response = await updateUserData(profile, jwt, user?.id)
-      // console.log(response, "response")
+      console.log(response, "response")
 
       //having issue with updating data using api
     } catch(err) {
@@ -149,12 +162,12 @@ export const SettingsDialog = () => {
 
       <CapsuleTabs defaultActiveKey="profile" className="settings-tabs">
         <CapsuleTabs.Tab title="Profile" key="profile">
-          <Card className="settings-card">
-            {renderProfileField("About Me", "aboutMe")}
-            {renderProfileField("Education", "education")}
-            {renderProfileField("Profession", "profession")}
-            {renderProfileField("Hobby", "hobby")}
-          </Card>
+        <Card className="settings-card">
+          {renderProfileField("About Me", "AboutMe")}
+          {renderProfileField("Education", "education_level")}
+          {renderProfileField("Profession", "Profession")}
+          {renderProfileField("Hobby", "OtherActivities")}
+        </Card>
         </CapsuleTabs.Tab>
 
         <CapsuleTabs.Tab title="Preferences" key="preferences">

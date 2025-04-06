@@ -8,6 +8,7 @@ import {
 } from "antd-mobile-icons";
 import React from "react";
 import { userService } from "../../services";
+import { useNavigate } from "react-router-dom";
 const getUserFromLocalStorage = () => {
   try {
     const userString = localStorage.getItem("user");
@@ -18,31 +19,33 @@ const getUserFromLocalStorage = () => {
   }
 };
 
-const NewProfileCard = ({user}) => {
+const NewProfileCard = ({ user }) => {
+  const navigate = useNavigate()
   const userObj = getUserFromLocalStorage();
   const userId = userObj?.id || null;
   const profileid = user?.id || null;
-  const imagesrc =user?.images?.pictures?.[0] ||
-  user?.images?.profilePicture ||
-  user?.images?.photos?.[0]?.url 
+  const imagesrc =
+    user?.images?.pictures?.[0] ||
+    user?.images?.profilePicture ||
+    user?.images?.photos?.[0]?.url;
   //console.log(user, "New User Obj")
   //console.log("imagesrc ", imagesrc ,  " from user", user.id)
-  
-    if(user?.images.length>0) {
-      console.log("Pictures", user.images)
-    }
-    const colors = {
-        primary: "#8B0000",
-        secondary: "#FF5252",
-        light: "#FFFFFF", 
-        background: "rgba(255, 255, 255, 0.8)",
-        border: "rgba(139, 0, 0, 0.2)",
-        text: {
-          dark: "#333333",
-          light: "#777777",
-          accent: "#8B0000", 
-        }
-      };
+
+  if (user?.images.length > 0) {
+    console.log("Pictures", user.images);
+  }
+  const colors = {
+    primary: "#8B0000",
+    secondary: "#FF5252",
+    light: "#FFFFFF",
+    background: "rgba(255, 255, 255, 0.8)",
+    border: "rgba(139, 0, 0, 0.2)",
+    text: {
+      dark: "#333333",
+      light: "#777777",
+      accent: "#8B0000",
+    },
+  };
   return (
     <div
       style={{
@@ -61,7 +64,7 @@ const NewProfileCard = ({user}) => {
           borderRadius: "24px",
           overflow: "hidden",
           backgroundColor: colors.background,
-          backdropFilter: "blur(10px)",
+          // backdropFilter: "blur(0.1px)",
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
           border: `1px solid ${colors.border}`,
         }}
@@ -94,11 +97,11 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <img
-
- src={
-  imagesrc||
-  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-}              alt="Profile"
+              src={
+                imagesrc ||
+                "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+              }
+              alt="Profile"
               style={{
                 width: "100%",
                 height: "100%",
@@ -149,9 +152,11 @@ const NewProfileCard = ({user}) => {
               }}
             >
               <span>
-  {user?.FirstName}
-  {user?.LastName && user?.FirstName !== user?.LastName ? ` ${user.LastName}` : ""}
-</span>
+                {user?.FirstName}
+                {user?.LastName && user?.FirstName !== user?.LastName
+                  ? ` ${user.LastName}`
+                  : ""}
+              </span>
             </h2>
             <Tag
               style={{
@@ -294,12 +299,14 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <button
-             onClick={() => {
-              console.log("userService clicked", userId, profileid)
-              const response =userService.connectionRequest(userId, profileid)
-              console.log("response", response)
-             }
-             }
+              onClick={() => {
+                console.log("userService clicked", userId, profileid);
+                const response = userService.connectionRequest(
+                  userId,
+                  profileid
+                );
+                console.log("response", response);
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -322,7 +329,9 @@ const NewProfileCard = ({user}) => {
               Request
             </button>
             <button
-              onClick={() => { Toast.show("Detail Profle compnent need to call") }}
+              onClick={() => {
+                navigate("/profile-view")
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",

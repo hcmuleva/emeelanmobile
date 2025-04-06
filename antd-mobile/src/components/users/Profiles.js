@@ -45,7 +45,7 @@ const Profiles = () => {
       key="UniqueKey"
         placeholder="Search Users..."
         onChange={(value) => setSearch(value)}
-        style={{ marginBottom: 10 }}
+        style={{ marginBottom: 10, padding:"16px" }}
       />
 
       {/* User List */}
