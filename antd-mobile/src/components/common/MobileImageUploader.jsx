@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { ImageUploader, Toast, Dialog } from 'antd-mobile';
-import { getUserById, updateUserData, uploadImage } from '../../../services/api';
-import { AuthContext } from '../../../context/AuthContext';
+import {  getUserById, updateUserData, uploadImage } from '../../services/api';
+import { AuthContext } from '../../context/AuthContext';
 
 const MobileImageUploader = () => {
   const {user} = useContext(AuthContext)
