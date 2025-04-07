@@ -1,7 +1,6 @@
-import React,{useState} from 'react'
-import MyLogin from '../components/authentication/MyLogin'
-import MyRegister from '../components/authentication/MyRegister'
-import HCMRegister from '../components/authentication/HCMRegister'
+import React, { useState } from 'react'
+import MyLogin from '../../components/authentication/MyLogin'
+import MyRegister from '../../components/authentication/MyRegister'
 
 
 export default function LoginPage() {
@@ -12,7 +11,6 @@ export default function LoginPage() {
             <MyLogin isLogined={isLogined} setIsLogined={setIsLogined}/>
             :
             <MyRegister isLogined={isLogined} setIsLogined={setIsLogined}/>
-            // <HCMRegister isLogined={isLogined} setIsLogined={setIsLogined}/>
         }
     </>
   )

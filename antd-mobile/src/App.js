@@ -2,8 +2,9 @@ import { ConfigProvider } from 'antd-mobile';
 import enUS from 'antd-mobile/es/locales/en-US';
 import React, { useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import MainLayout from "./components/MainLayout";
-import Profiles from './components/users/Profiles';
+import Search from "./components/common/Search";
+import { SettingsDialog } from './components/homepage/SettingsDialog';
+import MainLayout from "./components/layout/MainLayout";
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { locales } from './locales';
@@ -11,12 +12,13 @@ import Chat from "./pages/Chat";
 import Home from './pages/Home';
 import Mail from "./pages/Mail";
 import ProfileStatusPage from './pages/ProfileStatusPage';
-import Search from "./pages/Search";
-import  LoginPage  from './pages/LoginPage';
-import UserProfile from './pages/UserProfile';
-import { SettingsDialog } from './components/homepage/SettingsDialog';
+import LoginPage from './pages/public/LoginPage';
+import ProfilesPage from './pages/user/ProfilesPage';
+import UserProfile from './pages/user/UserProfile';
+import StatusNotification from './components/layout/StatusNotification';
 import { ProfileDetailPanel } from './components/users/ProfileDetailPanel';
-import StatusNotification from './components/StatusNotification';
+import Admin from './pages/admin/Admin';
+import SuperAdmin from './pages/superadmin/SuperAdmin';
 
 
 // ✅ Corrected Protected Route Component
@@ -83,7 +85,7 @@ function AppContent() {
             path="/profiles"
             element={
               <ProtectedRoute>
-                <MainLayout><Profiles /></MainLayout>
+                <MainLayout><ProfilesPage /></MainLayout>
               </ProtectedRoute>
             }
           />
@@ -115,6 +117,22 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MainLayout><StatusNotification/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/Admin"
+            element={
+              <ProtectedRoute>
+                <MainLayout><Admin/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/SuperAdmin"
+            element={
+              <ProtectedRoute>
+                <MainLayout><SuperAdmin/></MainLayout>
               </ProtectedRoute>
             }
           />
