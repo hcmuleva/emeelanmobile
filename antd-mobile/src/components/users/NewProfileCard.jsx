@@ -8,7 +8,9 @@ import {
 } from "antd-mobile-icons";
 import React from "react";
 import { userService } from "../../services";
+import { ProfileDetailPanel } from "./ProfileDetailPanel";
 import { useNavigate } from "react-router-dom";
+
 const getUserFromLocalStorage = () => {
   try {
     const userString = localStorage.getItem("user");
@@ -24,29 +26,33 @@ const NewProfileCard = ({ user }) => {
   const userObj = getUserFromLocalStorage();
   const userId = userObj?.id || null;
   const profileid = user?.id || null;
-  const imagesrc =
-    user?.images?.pictures?.[0] ||
-    user?.images?.profilePicture ||
-    user?.images?.photos?.[0]?.url;
-  //console.log(user, "New User Obj")
-  //console.log("imagesrc ", imagesrc ,  " from user", user.id)
-
-  if (user?.images.length > 0) {
-    console.log("Pictures", user.images);
+  const imagesrc =user?.images?.pictures?.[0] ||
+  user?.images?.profilePicture ||
+  user?.images?.photos?.[0]?.url 
+  
+  const [visibleProfileDetails, setVisibleProfileDetails] = React.useState(false);
+  
+  const onClose=() => {
+    setVisibleProfileDetails(false);
   }
-  const colors = {
-    primary: "#8B0000",
-    secondary: "#FF5252",
-    light: "#FFFFFF",
-    background: "rgba(255, 255, 255, 0.8)",
-    border: "rgba(139, 0, 0, 0.2)",
-    text: {
-      dark: "#333333",
-      light: "#777777",
-      accent: "#8B0000",
-    },
-  };
+    if(user?.images.length>0) {
+      console.log("Pictures", user.images)
+    }
+    const colors = {
+        primary: "#8B0000",
+        secondary: "#FF5252",
+        light: "#FFFFFF", 
+        background: "rgba(255, 255, 255, 0.8)",
+        border: "rgba(139, 0, 0, 0.2)",
+        text: {
+          dark: "#333333",
+          light: "#777777",
+          accent: "#8B0000", 
+        }
+      };
   return (
+    <>
+    <ProfileDetailPanel visible={visibleProfileDetails} onClose={onClose} user={user} profileMode="OTHER"/>
     <div
       style={{
         width: "100%",
@@ -329,9 +335,7 @@ const NewProfileCard = ({ user }) => {
               Request
             </button>
             <button
-              onClick={() => {
-                navigate("/profile-view")
-              }}
+              onClick={() => { setVisibleProfileDetails(true) }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -356,6 +360,8 @@ const NewProfileCard = ({ user }) => {
         </div>
       </div>
     </div>
+      
+    </>
   );
 };
 

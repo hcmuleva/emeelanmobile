@@ -1,17 +1,16 @@
-import React, { useState, useContext } from 'react'
-import { UploadImagesDialog } from '../components/homepage/UploadImagesDialog';
-import { ResetPasswordDialog } from '../pages/homepage/ResetPasswordDialog';
 import { LogoutOutlined } from '@ant-design/icons';
 import { Card, Grid } from 'antd-mobile';
 import {
   LockOutline,
   PictureOutline,
   SetOutline,
-  TeamOutline,
   TravelOutline
 } from 'antd-mobile-icons';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../context/AuthContext"
+import { UploadImagesDialog } from '../../components/homepage/UploadImagesDialog';
+import { AuthContext } from "../../context/AuthContext";
+import { ResetPasswordDialog } from '../homepage/ResetPasswordDialog';
 
 const tiles = [
   { title: 'Logout', color: '#A5D8FF', icon: <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'logout' },

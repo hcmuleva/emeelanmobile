@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Toast } from "antd-mobile";
-import ably from "../ablyClient";
+import ably from "../../utils/ablyClient";
 
 const StatusNotification = ({ userId, setNotificationStats }) => {
   const [messages, setMessages] = useState([]);
