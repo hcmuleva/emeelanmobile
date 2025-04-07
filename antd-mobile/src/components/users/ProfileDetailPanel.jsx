@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import { 
-  FloatingPanel, 
-  List, 
-  Divider, 
-  Image, 
-  Tag,
-  Button, 
+import { DislikeFilled, MinusCircleFilled, ThunderboltOutlined, ThunderboltTwoTone } from '@ant-design/icons';
+import {
+  Button,
+  Divider,
+  Image,
+  List,
+  Modal,
   Space,
-  Toast,
-  Modal
+  Tag
 } from 'antd-mobile';
-import { 
-  UserOutline, 
-  TeamOutline, 
-  EnvironmentOutline,
-  
-  BookOutline,
-  TrophyOutline,
-  HeartOutline
+import {
+  DeleteOutline,
+  HeartOutline,
+  LikeOutline,
+  TeamOutline,
+  UserOutline
 } from 'antd-mobile-icons';
+import React from 'react';
+import { userService } from '../../services';
 const profile = {
     id: 123,
     firstName: "Harish",
@@ -88,7 +86,7 @@ const profile = {
       ]
     }
   };
-export const ProfileDetailPanel = ({ visible, onClose }) => {
+export const ProfileDetailPanel = ({ visible, onClose, user ,profileMode = "SELF",sender}) => {
     console.log(profile, "Profile")
 
     const safeProfile = {
@@ -109,6 +107,52 @@ export const ProfileDetailPanel = ({ visible, onClose }) => {
         onClose();
         return null;
       }
+      const onAction = (action, user) => {
+        console.log("Action", action, user)
+        // Handle the action here
+      }
+
+      const renderActions = () => {
+        switch (profileMode) {
+          case "SELF":
+            return (
+              <>
+                <Button fill="outline" size="small" onClick={() => onAction?.("edit", user)}>Edit</Button>
+              </>
+            );
+          case "ADMIN":
+            return (
+              <>
+                <Button color="primary" fill="outline" size="small" onClick={() => onAction?.("delete", user)}>
+                  <LikeOutline /> APPROVE
+                </Button>
+                <Button color="warning" fill="outline" size="small" onClick={() => onAction?.("delete", user)}>
+                  <DislikeFilled /> REJECT
+                </Button>
+                <Button color="danger" fill="outline" size="small" onClick={() => onAction?.("delete", user)}>
+                  <MinusCircleFilled /> BLOCK
+                </Button>
+
+              </>
+            );
+          case "OTHER":
+            return (
+              <>
+                {user.status === "PENDING" ? (
+                  <Tag color="warning">Request Sent</Tag>
+                ) : (
+                  <Button size="small" color="primary" onClick={() => {
+                    const response =userService.connectionRequest(sender, user.id)
+                  }}>
+                   <HeartOutline/> Connect
+                  </Button>
+                )}
+              </>
+            );
+          default:
+            return null;
+        }
+      };
     
       return (
         <Modal
@@ -294,14 +338,15 @@ export const ProfileDetailPanel = ({ visible, onClose }) => {
               padding: '12px 16px',
               borderTop: '1px solid #f0f0f0'
             }}>
-              <Button 
+              {/* <Button 
                 block 
                 color='primary' 
                 size='large'
                 style={{ '--border-radius': '8px' }}
               >
                 Connect with {safeProfile.firstName || 'User'}
-              </Button>
+              </Button> */}
+              {renderActions()}
             </div>
           </div>
         }

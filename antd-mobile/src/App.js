@@ -2,8 +2,9 @@ import { ConfigProvider } from 'antd-mobile';
 import enUS from 'antd-mobile/es/locales/en-US';
 import React, { useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Search from "./components/common/Search";
+import { SettingsDialog } from './components/homepage/SettingsDialog';
 import MainLayout from "./components/layout/MainLayout";
-import Profiles from './components/users/Profiles';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { locales } from './locales';
@@ -11,9 +12,8 @@ import Chat from "./pages/Chat";
 import Home from './pages/Home';
 import Mail from "./pages/Mail";
 import ProfileStatusPage from './pages/ProfileStatusPage';
-import Search from "./pages/Search";
-import  LoginPage  from './pages/public/LoginPage';
-import { SettingsDialog } from './components/homepage/SettingsDialog';
+import LoginPage from './pages/public/LoginPage';
+import ProfilesPage from './pages/user/ProfilesPage';
 import UserProfile from './pages/user/UserProfile';
 
 
@@ -81,7 +81,7 @@ function AppContent() {
             path="/profiles"
             element={
               <ProtectedRoute>
-                <MainLayout><Profiles /></MainLayout>
+                <MainLayout><ProfilesPage /></MainLayout>
               </ProtectedRoute>
             }
           />
