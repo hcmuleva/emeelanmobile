@@ -130,7 +130,22 @@ export const userService = {
             status: error.response?.status
           };
         });
+      },
+      myrequestsStatus: async(userId, status) => {
+        try{
+            const response = await http.get('/myrequests-status', {
+                params: {
+                    id: userId,
+                    status, // 'PENDING' | 'APPROVED' | 'REJECTED'
+                }
+                });
+                return response.data;
+        }catch(error){
+          console.error("Error in myrequestsStatus:", error);
+        }
+
       }
+      
 
 };
 // export type UserService = typeof userService;
