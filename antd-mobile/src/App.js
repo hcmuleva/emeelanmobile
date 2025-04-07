@@ -2,7 +2,7 @@ import { ConfigProvider } from 'antd-mobile';
 import enUS from 'antd-mobile/es/locales/en-US';
 import React, { useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import MainLayout from "./components/MainLayout";
+import MainLayout from "./components/layout/MainLayout";
 import Profiles from './components/users/Profiles';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -12,9 +12,9 @@ import Home from './pages/Home';
 import Mail from "./pages/Mail";
 import ProfileStatusPage from './pages/ProfileStatusPage';
 import Search from "./pages/Search";
-import  LoginPage  from './pages/LoginPage';
-import UserProfile from './pages/UserProfile';
+import  LoginPage  from './pages/public/LoginPage';
 import { SettingsDialog } from './components/homepage/SettingsDialog';
+import UserProfile from './pages/user/UserProfile';
 
 
 // ✅ Corrected Protected Route Component
