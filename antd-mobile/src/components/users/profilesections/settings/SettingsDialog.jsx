@@ -14,10 +14,11 @@ import {
   CheckOutline,
 } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
-import "../../styles/settings.css";
-import MobileImageUploader from "../authentication/registration/MobileImageUploader"
-import { getUserById, updateUserData } from "../../services/api";
-import { AuthContext } from "../../context/AuthContext";
+import "../../../../styles/settings.css";
+import MobileImageUploader from "../../../common/MobileImageUploader";
+import { getUserById,updateUserData } from "../../../../services/api";
+import { AuthContext } from "../../../../context/AuthContext";
+import Preferences from "./Prefrences";
 
 export const SettingsDialog = () => {
   const {user} = useContext(AuthContext)
@@ -171,63 +172,7 @@ export const SettingsDialog = () => {
         </CapsuleTabs.Tab>
 
         <CapsuleTabs.Tab title="Preferences" key="preferences">
-          <Card className="settings-card">
-            <div className="preference-item">
-              <span>Hide Phone Number</span>
-              <Switch
-                checkedText={<CheckOutline fontSize={18} />}
-                uncheckedText={<CloseOutline fontSize={18} />}
-                checked={preferences.hidePhoneNumber}
-                onChange={(checked) =>
-                  handleToggleChange("hidePhoneNumber", checked)
-                }
-              />
-            </div>
-
-            <div className="preference-item">
-              <span>Hide Photos</span>
-              <Switch
-                checkedText={<CheckOutline fontSize={18} />}
-                uncheckedText={<CloseOutline fontSize={18} />}
-                checked={preferences.hidePhotos}
-                onChange={(checked) =>
-                  handleToggleChange("hidePhotos", checked)
-                }
-              />
-            </div>
-
-            <div className="preference-item">
-              <span>Hide Location</span>
-              <Switch
-                checkedText={<CheckOutline fontSize={18} />}
-                uncheckedText={<CloseOutline fontSize={18} />}
-                checked={preferences.hideLocation}
-                onChange={(checked) =>
-                  handleToggleChange("hideLocation", checked)
-                }
-              />
-            </div>
-
-            {/* Keep existing form items */}
-            <Form form={form} className="original-settings">
-              <Form.Item
-                name="notifications"
-                label="Notifications"
-                valuePropName="checked"
-              >
-                <Switch
-                  checkedText={<CheckOutline fontSize={18} />}
-                  uncheckedText={<CloseOutline fontSize={18} />}
-                />
-              </Form.Item>
-              <Form.Item name="language" label="Language">
-                <Input placeholder="Select language" />
-              </Form.Item>
-              <Form.Item name="theme" label="Theme">
-                <Input placeholder="Select theme" />
-              </Form.Item>
-            </Form>
-          </Card>
+        <Preferences />
         </CapsuleTabs.Tab>
         {/* upload image */}
         {/* <CapsuleTabs.Tab title="Upload Images" key="images">
@@ -255,8 +200,8 @@ export const SettingsDialog = () => {
             </div>
           </Card>
         </CapsuleTabs.Tab> */}
-        <CapsuleTabs.Tab title="Upload Images" key="images">
-          <MobileImageUploader/>
+        <CapsuleTabs.Tab title="Photos" key="images">
+         <MobileImageUploader/>
         </CapsuleTabs.Tab>
       </CapsuleTabs>
     </div>
