@@ -110,9 +110,9 @@ export const userService = {
 
 
 
-    connectionRequest: (sender, receiver) => {
+    connectionRequest: (data) => {
         return http.post('/connectionrequests', {
-          data: { sender, receiver }
+          data: { ...data }
         })
         .then(response => {
           // Successful response handling
