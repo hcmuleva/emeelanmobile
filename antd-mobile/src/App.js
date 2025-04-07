@@ -14,6 +14,10 @@ import ProfileStatusPage from './pages/ProfileStatusPage';
 import LoginPage from './pages/public/LoginPage';
 import ProfilesPage from './pages/user/ProfilesPage';
 import UserProfile from './pages/user/UserProfile';
+import StatusNotification from './components/layout/StatusNotification';
+import { ProfileDetailPanel } from './components/users/ProfileDetailPanel';
+import Admin from './pages/admin/Admin';
+import SuperAdmin from './pages/superadmin/SuperAdmin';
 import { SettingsDialog } from './components/users/profilesections/settings/SettingsDialog';
 
 
@@ -93,12 +97,45 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          <Route path="/settings" element={
+          <Route path="/settings" 
+          element={
             <ProtectedRoute>
               <MainLayout><SettingsDialog /></MainLayout>
             </ProtectedRoute>
           }/>
 
+          <Route
+            path="/profile-view"
+            element={
+              <ProtectedRoute>
+                <MainLayout><ProfileDetailPanel/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notification-tab"
+            element={
+              <ProtectedRoute>
+                <MainLayout><StatusNotification/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/Admin"
+            element={
+              <ProtectedRoute>
+                <MainLayout><Admin/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/SuperAdmin"
+            element={
+              <ProtectedRoute>
+                <MainLayout><SuperAdmin/></MainLayout>
+              </ProtectedRoute>
+            }
+          />
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

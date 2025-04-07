@@ -8,8 +8,9 @@ import {
 } from "antd-mobile-icons";
 import React from "react";
 import { userService } from "../../services";
+import { useNavigate } from "react-router-dom";
 import { ProfileDetailPanel } from "./ProfileDetailPanel";
-import { ProfileDetailModal } from "./profilesections";
+
 const getUserFromLocalStorage = () => {
   try {
     const userString = localStorage.getItem("user");
@@ -20,7 +21,8 @@ const getUserFromLocalStorage = () => {
   }
 };
 
-const NewProfileCard = ({user}) => {
+const NewProfileCard = ({ user }) => {
+  const navigate = useNavigate()
   const userObj = getUserFromLocalStorage();
   const userId = userObj?.id || null;
   const profileid = user?.id || null;
@@ -50,8 +52,8 @@ const NewProfileCard = ({user}) => {
       };
   return (
     <>
-    {/* <ProfileDetailPanel visible={visibleProfileDetails} onClose={onClose} user={user} profileMode="ADMIN"/> */}
-    <ProfileDetailModal visible={visibleProfileDetails} profile={user} onClose={() => setVisibleProfileDetails(false)} />
+    <ProfileDetailPanel visible={visibleProfileDetails} onClose={onClose} user={user} profileMode="ADMIN"/>
+    {/* <ProfileDetailModal visible={visibleProfileDetails} profile={user} onClose={() => setVisibleProfileDetails(false)} /> */}
     <div
       style={{
         width: "100%",
@@ -69,7 +71,7 @@ const NewProfileCard = ({user}) => {
           borderRadius: "24px",
           overflow: "hidden",
           backgroundColor: colors.background,
-          backdropFilter: "blur(10px)",
+          // backdropFilter: "blur(0.1px)",
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
           border: `1px solid ${colors.border}`,
         }}
@@ -102,11 +104,11 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <img
-
- src={
-  imagesrc||
-  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-}              alt="Profile"
+              src={
+                imagesrc ||
+                "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+              }
+              alt="Profile"
               style={{
                 width: "100%",
                 height: "100%",
@@ -157,9 +159,11 @@ const NewProfileCard = ({user}) => {
               }}
             >
               <span>
-  {user?.FirstName}
-  {user?.LastName && user?.FirstName !== user?.LastName ? ` ${user.LastName}` : ""}
-</span>
+                {user?.FirstName}
+                {user?.LastName && user?.FirstName !== user?.LastName
+                  ? ` ${user.LastName}`
+                  : ""}
+              </span>
             </h2>
             <Tag
               style={{
@@ -302,12 +306,14 @@ const NewProfileCard = ({user}) => {
             }}
           >
             <button
-             onClick={() => {
-              console.log("userService clicked", userId, profileid)
-              const response =userService.connectionRequest(userId, profileid)
-              console.log("response", response)
-             }
-             }
+              onClick={() => {
+                console.log("userService clicked", userId, profileid);
+                const response = userService.connectionRequest(
+                  userId,
+                  profileid
+                );
+                console.log("response", response);
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",
