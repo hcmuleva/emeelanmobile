@@ -3,7 +3,6 @@ import enUS from 'antd-mobile/es/locales/en-US';
 import React, { useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Search from "./components/common/Search";
-import { SettingsDialog } from './components/homepage/SettingsDialog';
 import MainLayout from "./components/layout/MainLayout";
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -19,6 +18,7 @@ import StatusNotification from './components/layout/StatusNotification';
 import ProfileDetailPanel from './components/users/ProfileDetailPanel';
 import Admin from './pages/admin/Admin';
 import SuperAdmin from './pages/superadmin/SuperAdmin';
+import { SettingsDialog } from './components/users/profilesections/settings/SettingsDialog';
 
 
 // ✅ Corrected Protected Route Component

@@ -8,7 +8,6 @@ import {
 } from "antd-mobile-icons";
 import React from "react";
 import { userService } from "../../services";
-import ProfileDetailPanel from "./ProfileDetailPanel";
 import { useNavigate } from "react-router-dom";
 
 const getUserFromLocalStorage = () => {
