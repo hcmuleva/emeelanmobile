@@ -9,15 +9,11 @@ const Profiles = () => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
-  // const [response, setResponse] = React.useState('accept');
 
   const limit = 10;
-
   const fetchUsers = async (pageNum = 0, searchQuery = "") => {
     try {
-      const data = await getPaginatedUsers(pageNum * limit, limit);
-     
-      
+      const data = await getPaginatedUsers(pageNum * limit, limit); 
       if (data?.data.length === 0) {
         setHasMore(false);
       } else {

@@ -8,6 +8,7 @@ import {
 } from "antd-mobile-icons";
 import React from "react";
 import { userService } from "../../services";
+import { ProfileDetailPanel } from "./ProfileDetailPanel";
 const getUserFromLocalStorage = () => {
   try {
     const userString = localStorage.getItem("user");
@@ -25,9 +26,12 @@ const NewProfileCard = ({user}) => {
   const imagesrc =user?.images?.pictures?.[0] ||
   user?.images?.profilePicture ||
   user?.images?.photos?.[0]?.url 
-  //console.log(user, "New User Obj")
-  //console.log("imagesrc ", imagesrc ,  " from user", user.id)
   
+  const [visibleProfileDetails, setVisibleProfileDetails] = React.useState(false);
+  
+  const onClose=() => {
+    setVisibleProfileDetails(false);
+  }
     if(user?.images.length>0) {
       console.log("Pictures", user.images)
     }
@@ -44,6 +48,8 @@ const NewProfileCard = ({user}) => {
         }
       };
   return (
+    <>
+    <ProfileDetailPanel visible={visibleProfileDetails} onClose={onClose} user={user} profileMode="OTHER"/>
     <div
       style={{
         width: "100%",
@@ -322,7 +328,7 @@ const NewProfileCard = ({user}) => {
               Request
             </button>
             <button
-              onClick={() => { Toast.show("Detail Profle compnent need to call") }}
+              onClick={() => { setVisibleProfileDetails(true) }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -347,6 +353,8 @@ const NewProfileCard = ({user}) => {
         </div>
       </div>
     </div>
+      
+    </>
   );
 };
 
