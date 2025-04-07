@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { userService } from "../../services";
 import { ProfileDetailPanel } from "./ProfileDetailPanel";
+import { ProfileDetailModal } from "./profilesections";
 const getUserFromLocalStorage = () => {
   try {
     const userString = localStorage.getItem("user");
@@ -49,7 +50,8 @@ const NewProfileCard = ({user}) => {
       };
   return (
     <>
-    <ProfileDetailPanel visible={visibleProfileDetails} onClose={onClose} user={user} profileMode="OTHER"/>
+    {/* <ProfileDetailPanel visible={visibleProfileDetails} onClose={onClose} user={user} profileMode="ADMIN"/> */}
+    <ProfileDetailModal visible={visibleProfileDetails} profile={user} onClose={() => setVisibleProfileDetails(false)} />
     <div
       style={{
         width: "100%",
