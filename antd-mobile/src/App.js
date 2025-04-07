@@ -16,7 +16,7 @@ import LoginPage from './pages/public/LoginPage';
 import ProfilesPage from './pages/user/ProfilesPage';
 import UserProfile from './pages/user/UserProfile';
 import StatusNotification from './components/layout/StatusNotification';
-import { ProfileDetailPanel } from './components/users/ProfileDetailPanel';
+import ProfileDetailPanel from './components/users/ProfileDetailPanel';
 import Admin from './pages/admin/Admin';
 import SuperAdmin from './pages/superadmin/SuperAdmin';
 
