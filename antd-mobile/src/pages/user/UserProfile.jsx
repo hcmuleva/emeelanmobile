@@ -11,11 +11,12 @@ import { useNavigate } from 'react-router-dom';
 import { UploadImagesDialog } from '../../components/homepage/UploadImagesDialog';
 import { AuthContext } from "../../context/AuthContext";
 import { ResetPasswordDialog } from '../homepage/ResetPasswordDialog';
+import ProfileDetails from './ProfileDetails';
 
 const tiles = [
   { title: 'Logout', color: '#A5D8FF', icon: <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'logout' },
   { title: 'Help', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'help' },
-  { title: 'Password', color: '#AA0BFF', icon: <LockOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'password' },
+  { title: 'Password', color: '#e5dca6', icon: <LockOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'password' },
   { title: 'Settings', color: '#8CE99A', icon: <SetOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'settings' },
   { title: 'UploadImages', color: '#FFA94D', icon: <PictureOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'images' }
 ]
@@ -59,7 +60,7 @@ const UserProfile = () => {
       console.log('Unknown tile clicked');
     }
   }
-  
+  return <ProfileDetails/>
   return (
     <>
       <Grid columns={2} gap={16} style={{padding:"16px"}}>

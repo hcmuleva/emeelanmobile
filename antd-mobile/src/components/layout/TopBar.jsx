@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MessageOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Popover, List } from "antd-mobile";
 import { useNavigate } from "react-router-dom";
 import StatusNotification from "./StatusNotification";
+import { AuthContext } from "../../context/AuthContext";
 
 const TopBar = ({userRole}) => {
+  const { user } = useContext(AuthContext);
   const [notificationStats, setNotificationStats] = useState({
     PENDING: 0,
     APPROVED: 0,
@@ -13,8 +15,15 @@ const TopBar = ({userRole}) => {
   });
 
   const navigate = useNavigate();
-  const userProfile = "https://demo.adminkit.io/img/avatars/avatar-4.jpg";
-
+  let userProfile = "https://demo.adminkit.io/img/avatars/avatar-4.jpg";
+const images=user.images || {};
+if (images.photos?.[0]?.url) {
+  userProfile = images.photos[0].url;
+} else if (images.profilePicture?.url) {
+  userProfile = images.profilePicture.url;
+} else if (Array.isArray(images.pictures) && images.pictures[0]) {
+  userProfile = images.pictures[0];
+}
   const handleStatusClick = (status) => {
     navigate(`/status?filter=${status}`);
   };
@@ -35,13 +44,15 @@ const TopBar = ({userRole}) => {
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div  onClick={() => navigate("/userprofile")} style={{ display: "flex", alignItems: "center" }}>
           <div
+          
             style={{
               width: "80px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              
             }}
           >
             <Avatar
@@ -51,7 +62,7 @@ const TopBar = ({userRole}) => {
                 "--size": "55px",
                 borderRadius: "50%",
               }}
-              onClick={() => navigate("/userprofile")}
+             
             />
           </div>
           <div style={{ textAlign: "left" }}>
@@ -63,7 +74,7 @@ const TopBar = ({userRole}) => {
                 letterSpacing: ".5px",
               }}
             >
-              Hello,
+              {user?.FirstName} {user?.LastName} {user?.Gotra},
             </span>
             <br />
             <span
