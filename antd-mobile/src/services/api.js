@@ -13,7 +13,7 @@ const api = axios.create({
 
 export const login = async (identifier, password) => {
   try {
-    const response = await api.post('/auth/local', {
+    const response = await api.post('/custom-login', {
       identifier, // can be email or username
       password,
     });
