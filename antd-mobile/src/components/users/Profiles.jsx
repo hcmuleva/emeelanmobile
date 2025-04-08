@@ -4,7 +4,7 @@ import { getPaginatedUsers } from "../../services/api"; // Import API function
 
 import NewProfileCard from "./NewProfileCard";
 
-const Profiles = () => {
+const Profiles = ({adminProp}) => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -47,7 +47,7 @@ const Profiles = () => {
       {/* User List */}
       <List>
         {users.map((user) => (
-          <NewProfileCard user={user}/>
+          <NewProfileCard user={user} adminProp={adminProp}/>
         ))}
       </List>
 
