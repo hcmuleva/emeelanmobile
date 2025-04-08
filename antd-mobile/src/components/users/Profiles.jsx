@@ -3,7 +3,8 @@ import { List, InfiniteScroll, SearchBar, Selector, Collapse } from "antd-mobile
 import { getPaginatedUsers } from "../../services/api";
 import NewProfileCard from "./NewProfileCard";
 import { CollapsePanel } from "antd-mobile/es/components/collapse/collapse";
-
+import GotraSelector from "../authentication/registration/GotraSelector";
+import gotraData from "../../utils/gotra.json";
 // Helper to calculate DOB range from age range
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
@@ -24,7 +25,7 @@ const Profiles = ({ adminProp }) => {
 
   const [marital, setMarital] = useState();
   const [profession, setProfession] = useState();
-  const [gotra, setGotra] = useState();
+  const [gotra, setGotra] = useState(); // Will store Gotra.Id
   const [minAge, setMinAge] = useState("");
   const [maxAge, setMaxAge] = useState("");
 
@@ -38,7 +39,6 @@ const Profiles = ({ adminProp }) => {
         gotra: gotra || "",
       };
 
-      // Add DOB range if both minAge and maxAge are provided
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;
@@ -81,13 +81,6 @@ const Profiles = ({ adminProp }) => {
     { label: "Other", value: "other" },
   ];
 
-  const gotraOptions = [
-    { label: "Vasishtha", value: "vasishtha" },
-    { label: "Gautam", value: "gautam" },
-    { label: "Bharadwaj", value: "bharadwaj" },
-    { label: "Other", value: "other" },
-  ];
-
   return (
     <div>
       <div style={{ padding: "16px" }}>
@@ -118,12 +111,11 @@ const Profiles = ({ adminProp }) => {
 
             <div style={{ marginBottom: 8 }}>
               <strong>Gotra:</strong>
-              <Selector
-                showCheckMark
-                columns={3}
-                options={gotraOptions}
-                value={[gotra]}
-                onChange={(val) => setGotra(val[0])}
+              <GotraSelector
+                gotra_for={false}
+                gotraData={gotraData.Gotra}
+                customdata={{ gotra }}
+                setCustomdata={(val) => setGotra(val.gotra)}
               />
             </div>
 
