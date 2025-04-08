@@ -2,15 +2,7 @@
 
     import React, { useState } from 'react';
     import { Form, Picker, Button, Toast } from 'antd-mobile';
-    
-    const gotraData = [
-      { Id: "Parmar", EName: "Parmar", HName: "परमार" },
-      { Id: "Chauhan", EName: "Chauhan", HName: "चौहान" },
-      { Id: "Rathore", EName: "Rathore", HName: "राठौर" },
-      { Id: "Solanki", EName: "Solanki", HName: "सोलंकी" },
-      // Add more gotras as needed
-    ];
-
+  
     const GotraSelector = ({gotra_for,gotraData,customdata,setCustomdata}) => {
       const [name, label] = ["gotra", "Gotra"]; 
       
