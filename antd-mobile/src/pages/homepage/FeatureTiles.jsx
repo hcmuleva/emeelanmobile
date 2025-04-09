@@ -31,6 +31,7 @@ import RandomHeightMatches from '../../components/cards/RandomHeightMatches';
 
 import "../../styles/scrollHide.css"
 import Marquee from '../../components/marquee/Marquee';
+import UserLocation from './Userlocation';
 
 const tiles = [
   { title: 'Donation', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
@@ -234,6 +235,7 @@ const FeatureTiles = () => {
 
   return (
     <div style={{padding:"16px"}}>
+      <UserLocation />
       {/* Likes */}
      <Marquee mockSuggestion={mockSuggestion} />  
 
