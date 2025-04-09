@@ -213,6 +213,20 @@ const FeatureTiles = () => {
           title: 'Profession', 
           description: 'Find your profession',
           icon: null,
+          isVisible: false
+        },
+        {
+          __component: 'feature-tiles.family-tile', 
+          title: 'Family', 
+          description: 'Find your family',
+          icon: null,
+          isVisible: false
+        },
+        {
+          __component: 'feature-tiles.admin-list-tile', 
+          title: 'Admin List', 
+          description: 'View admin list',
+          icon: null,
           isVisible: true
         }
       ]);
