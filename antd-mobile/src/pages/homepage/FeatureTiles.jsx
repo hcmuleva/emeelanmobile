@@ -28,7 +28,11 @@ const FeatureTiles = () => {
   const [users, setUsers] = useState([]);
   const [recentMatches, setRecentMatches] = useState([]);
   const [featureTiles, setFeatureTiles] = useState([]);
-  
+  const [pageSettings, setPageSettings] = useState({
+    showLocation: true,
+    showMarquee: true
+  });
+
   // Mock data for demonstration - kept for fallback
   const mockSuggestion = [
     {
@@ -176,18 +180,26 @@ const FeatureTiles = () => {
     }
   };
 
-  // Fetch tiles from Strapi
-  const fetchTiles = async () => {
+  // Fetch tiles and page settings from Strapi
+  const fetchTilesAndSettings = async () => {
     try {
       const data = await getHomepageTiles();
       if (data && data.data) {
-        // Filter tiles based on isVisible flag
+        // Extract tiles
         const visibleTiles = data.data.attributes.tiles.filter(tile => tile.isVisible !== false);
         setFeatureTiles(visibleTiles || []);
+        
+        // Extract page settings if they exist
+        if (data.data.attributes.settings) {
+          setPageSettings({
+            showLocation: data.data.attributes.settings.showLocation !== false,
+            showMarquee: data.data.attributes.settings.showMarquee !== false
+          });
+        }
       }
     } catch (error) {
-      console.error("Error fetching tiles:", error);
-      // Fallback to hardcoded tiles if Strapi fetch fails
+      console.error("Error fetching tiles and settings:", error);
+      // Fallback to hardcoded values if Strapi fetch fails
       setFeatureTiles([
         { 
           __component: 'feature-tiles.bhamasah-tile', 
@@ -197,34 +209,23 @@ const FeatureTiles = () => {
           isVisible: true
         },
         { 
-          __component: 'feature-tiles.admin-list-tile', 
-          title: 'Admin List', 
-          description: 'View administrators',
-          icon: null,
-          navigateTo: '/adminlist',
-          isVisible: true // Example of hiding a tile
-        },
-        {
-          __component: 'feature-tiles.family-tile',
-          title: 'Family',
-          description: 'Find your family',
-          icon: null,
-          isVisible: false // Example of hiding a tile
-        },
-        {
-          __component: 'feature-tiles.profession-tile',
-          title: 'Profession',
+          __component: 'feature-tiles.profession-tile', 
+          title: 'Profession', 
           description: 'Find your profession',
           icon: null,
-          isVisible: false
-        },
-      ].filter(tile => tile.isVisible !== false)); // Only include visible tiles
+          isVisible: true
+        }
+      ]);
+      setPageSettings({
+        showLocation: true,
+        showMarquee: true
+      });
     }
   };
 
   useEffect(() => {
     fetchUsers();
-    fetchTiles();
+    fetchTilesAndSettings();
     
     // For demo, use mock data immediately
     setUsers(mockSuggestion);
@@ -297,9 +298,11 @@ const FeatureTiles = () => {
 
   return (
     <div style={{padding:"16px"}}>
-      <UserLocation />
-      {/* Likes */}
-      <Marquee mockSuggestion={mockSuggestion} />  
+      {/* User Location - now with visibility control */}
+      <UserLocation isVisible={pageSettings.showLocation} />
+      
+      {/* Marquee with visibility control */}
+      {pageSettings.showMarquee && <Marquee mockSuggestion={mockSuggestion} />}
       
       {/* Dynamic Feature Tiles */}
       <div style={{ padding: 16 }}>

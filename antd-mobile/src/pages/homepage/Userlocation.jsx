@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { reverseGeocode } from '../../services/api';
 
-const UserLocation = () => {
+const UserLocation = ({ isVisible = false }) => {
+  // Declare all hooks at the top level
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [locationText, setLocationText] = useState("No location data available");
@@ -9,6 +10,9 @@ const UserLocation = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Only proceed with geolocation if component should be visible
+    if (!isVisible) return;
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -36,8 +40,7 @@ const UserLocation = () => {
       setError("Geolocation is not supported by your browser");
       setLoading(false);
     }
-  }, []);
-  
+  }, [isVisible]); // Add isVisible as a dependency
   const fetchLocation = async (lat, lng) => {
     try {
       // Log the coordinates we're using
@@ -101,6 +104,8 @@ const UserLocation = () => {
     }
   };
 
+  if (!isVisible) return null;
+
   return (
     <div className="user-location-container">
       <h2>Your Location</h2>
@@ -118,7 +123,6 @@ const UserLocation = () => {
       
       {!loading && !error && (
         <div className="location-info">
-          {/* <p><strong>Coordinates:</strong> {latitude}, {longitude}</p> */}
           <p>{locationText}</p>
         </div>
       )}
