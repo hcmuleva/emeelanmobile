@@ -60,13 +60,22 @@ const MyRegister = ({ setIsLogined }) => {
 
   const stepTitles = ["Personal", "Family", "Profession"];
 
-  const onFinish = async (values) => {
+  const onFinish = async () => {
     customdata["emeelanrole"] = "MEELAN";
     customdata["username"] = customdata["MobileNumber"];
     customdata["userstatus"] = "PENDING";
     customdata["role"] = 1;
 
     // console.log(values, "Value")
+    //making all lowercase
+    const customdataLower = Object.fromEntries(
+      Object.entries(customdata).map(([key, value]) => [
+        key.toLowerCase(),
+        typeof value === 'string' ? value.toLowerCase() : value
+      ])    
+    );
+
+    console.log("lower", customdataLower)
 
     if (!customdata.email && customdata.MobileNumber) {
       customdata.email = customdata.MobileNumber + "@hph.com";
@@ -78,8 +87,6 @@ const MyRegister = ({ setIsLogined }) => {
     } catch (err){
       console.error("error", err)
     }
-    
-    console.log("Form values:", customdata);
 
     // console.log(customdata, "FINAL VALUE");
     // navigate("/login")

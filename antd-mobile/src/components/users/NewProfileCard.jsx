@@ -250,6 +250,7 @@ const NewProfileCard = ({ user, role,action}) => {
               style={{
                 marginBottom: "16px",
                 marginTop: "20px",
+                textTransform: "capitalize"
               }}
             >
               <h2
