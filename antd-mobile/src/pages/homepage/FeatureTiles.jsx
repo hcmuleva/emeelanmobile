@@ -1,36 +1,21 @@
-import { AlipayCircleOutlined} from '@ant-design/icons';
-import { 
-  Card, 
-  Grid, 
-  Avatar, 
-  Image, 
-  NavBar, 
-  TabBar, 
-  Space, 
-  Badge,
-  List,
-  ProgressCircle,
-  ScrollMask
+import { AlipayCircleOutlined } from '@ant-design/icons';
+import {
+  Card,
+  Grid
 } from 'antd-mobile';
-import { 
-  HeartOutline, 
-  MessageOutline, 
-  UserOutline, 
-  AppOutline, 
-  TravelOutline,
+import {
   TeamOutline
 } from 'antd-mobile-icons';
-import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
 import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
 import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
 
 import { getPaginatedUsers } from '../../services/api';
-import RandomHeightMatches from '../../components/cards/RandomHeightMatches';
 
-import "../../styles/scrollHide.css"
 import Marquee from '../../components/marquee/Marquee';
+import "../../styles/scrollHide.css";
 import UserLocation from './Userlocation';
 
 const tiles = [

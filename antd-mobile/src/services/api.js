@@ -103,7 +103,6 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
       throw error.response?.data?.message || 'Failed to fetch users';
     }
   };
-
 // get admin
 export const getPaginatedAdminUsers = async () => {
   try {
