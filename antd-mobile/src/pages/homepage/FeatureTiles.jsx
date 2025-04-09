@@ -22,7 +22,6 @@ import {
 } from 'antd-mobile-icons';
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
-import { AdminListDialog } from '../../components/homepage/AdminListDialog';
 import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
 import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
 import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
@@ -31,12 +30,13 @@ import { getPaginatedUsers } from '../../services/api';
 import RandomHeightMatches from '../../components/cards/RandomHeightMatches';
 
 import "../../styles/scrollHide.css"
+import Marquee from '../../components/marquee/Marquee';
 
 const tiles = [
-  { title: 'Bhamasah', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
-  { title: 'Profession', color: '#B2F2BB', icon: <TravelOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'profession' },
-  { title: 'MyFamily', color: '#FFD8A8', icon: <TeamOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'family' },
+  { title: 'Donation', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
+  
   { title: 'Admin List', color: '#FFC9C9', icon: <TeamOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'admin' },
+  
 ];
   
 const demoLongText = " This is a sample long text and heere is our message "
@@ -45,7 +45,7 @@ const FeatureTiles = () => {
 
   const [visibleBhamasah, setVisibleBhamasah] = useState(false);
   const [visibleProfession, setVisibleProfession] = useState(false);
-  const [visibleAdminList, setVisibleAdminList] = useState(false);
+  // const [visibleAdminList, setVisibleAdminList] = useState(false);
   const [visibleFamily, setVisibleFamily] = useState(false);
   const [users, setUsers] = useState([])
   const [recentMatches, setRecentMatches] = useState([]);
@@ -125,8 +125,9 @@ const FeatureTiles = () => {
         setVisibleFamily(true)
         break;
       case 'admin':
+        navigate('/adminlist')
         // Handle Admin List click
-        setVisibleAdminList(true)
+        // setVisibleAdminList(true)
         console.log('Admin List tile clicked');
         break;
       default:
@@ -137,55 +138,7 @@ const FeatureTiles = () => {
   return (
     <div style={{padding:"16px"}}>
       {/* Likes */}
-      <div style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <h3 style={{ margin: '0', fontSize: '16px' }}>Suggestions</h3>
-            <span style={{ color: '#D30000', fontWeight: 'bold' }}>22</span>
-          </div>
-          <Card style={{ borderRadius: '12px', marginBottom: '16px', padding:"0px" }} >
-            <div 
-             className='container'
-            style={{
-              display:"flex", 
-              overflowX:"auto", 
-              gap:"8px",
-              alignItems:'center'
-            }}
-            >
-              {mockSuggestion.map((user) => (
-                <Grid.Item key={user.id}>
-                  <div style={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center' 
-                  }}>
-                    <Avatar
-                      src={user.avatar}
-                      style={{ 
-                        '--size': '60px',
-                        borderRadius: '8px',
-                        marginBottom: '4px'
-                      }}
-                    />
-                    <div style={{ 
-                      textAlign: 'center', 
-                      fontSize: '12px', 
-                      whiteSpace: 'nowrap' 
-                    }}>
-                      {user.name}, {user.age}
-                    </div>
-                  </div>
-                </Grid.Item>
-              ))}
-              <span style={{
-                fontWeight:"bold",
-                marginLeft:"5px"
-              }}
-              onClick={()=>navigate("/profiles")}
-              >View More</span>
-            </div>
-          </Card>
-      </div>
+     <Marquee mockSuggestion={mockSuggestion} />  
 
       {/* <NoticeBar content={demoLongText} color='alert'/> */}
       
@@ -214,13 +167,13 @@ const FeatureTiles = () => {
       
       <ProfessionDialog visible={visibleProfession} onClose={()=>setVisibleProfession(false)} />
       <MyFamilyDialog visible={visibleFamily} onClose={()=>setVisibleFamily(false)} />
-      <AdminListDialog visible={visibleAdminList} onClose={()=>setVisibleAdminList(false)} />
+      {/* <AdminListDialog visible={visibleAdminList} onClose={()=>setVisibleAdminList(false)} /> */}
       <BhamasahDialog visible={visibleBhamasah} onClose={()=>setVisibleBhamasah(false)} />
       
       {/* Recent */}
-      <div >
+      {/* <div >
         <RandomHeightMatches matches={mockRecentMatches} />
-      </div>
+      </div> */}
     </div>
   );
 };

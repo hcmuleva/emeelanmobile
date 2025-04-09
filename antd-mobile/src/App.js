@@ -19,6 +19,7 @@ import ProfileDetailPanel from './components/users/ProfileDetailPanel';
 import Admin from './pages/admin/Admin';
 import SuperAdmin from './pages/superadmin/SuperAdmin';
 import { SettingsDialog } from './components/users/profilesections/settings/SettingsDialog';
+import AdminListPage from './pages/admin/AdminListPage';
 
 
 // ✅ Corrected Protected Route Component
@@ -70,6 +71,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MainLayout><Chat /></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+            <Route
+            path="/adminlist"
+            element={
+              <ProtectedRoute>
+                <MainLayout><AdminListPage /></MainLayout>
               </ProtectedRoute>
             }
           />
