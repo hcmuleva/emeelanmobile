@@ -71,6 +71,7 @@ const Profiles = ({ adminProp }) => {
     { label: "Divorced", value: "Divorcee" },
     { label: "Married", value: "MARRIED" },
     { label: "Widow", value: "Widow" },
+    { label: "Vidur", value: "VIDUR" },
     { label: "Separated", value: "Separated" },
   ];
 
@@ -78,6 +79,9 @@ const Profiles = ({ adminProp }) => {
     { label: "Engineer", value: "engineer" },
     { label: "Doctor", value: "doctor" },
     { label: "Teacher", value: "teacher" },
+    { label: "Business", value: "business" },
+    { label: "Housewife", value: "housewife" },
+    { label: "CA", value: "ca" },
     { label: "Other", value: "other" },
   ];
 

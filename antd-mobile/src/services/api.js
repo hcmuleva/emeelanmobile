@@ -66,33 +66,36 @@ export const getCustomMe = async (jwt) =>{
 export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
     try {
       console.log("getPaginatedUsers filters",filters, " end")
-      // const strapiFilters = {};
-      // for (const key in filters) {
-      //   if (filters[key]) {
-      //     strapiFilters[`filters[${key}][$eq]`] = filters[key];
-      //   }
-      // }
+    
+      const workingFilters = { ...filters };
 
-      if (filters.DOB_gte) {
-        filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
+      if (workingFilters.DOB_gte || workingFilters.DOB_lte) {
+        workingFilters.DOB = {};
+        if (workingFilters.DOB_gte) workingFilters.DOB.$gte = workingFilters.DOB_gte;
+        if (workingFilters.DOB_lte) workingFilters.DOB.$lte = workingFilters.DOB_lte;
       }
-      if (filters.DOB_lte) {
-        filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
+
+      if (workingFilters.gotra) {
+        workingFilters.gotra = { $ne: workingFilters.gotra };
       }
+
       const strapiFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([_, value]) => value !== '' && value !== null && value !== undefined
+      Object.entries(workingFilters).filter(
+          ([_, value]) =>
+            value !== '' &&
+            value !== null &&
+            value !== undefined &&
+            (typeof value !== 'object' || Object.keys(value).length > 0)
         )
       );
-      const {DOB_gte,DOB_lte, ...modifiedFilters} = strapiFilters;
       const response = await api.get(`/users`, {
         params: {
           _start: start,
           _limit: limit,
-          filters: modifiedFilters, // ✅ Use filters
-          _sort: 'id:asc', // Sort by newest first
-          "populate[photos]": "*", // ✅ Populate photos (all fields)
-          "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
+          filters: strapiFilters,
+          _sort: 'id:asc',
+          "populate[photos]": "*",
+          "populate[profilePicture]": "*",
           "populate[Height]": "*",
         },
         headers: {
