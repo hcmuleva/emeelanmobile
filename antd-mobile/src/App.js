@@ -29,7 +29,6 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function AppContent() {
-  const [showRegister, setShowRegister] = useState(false);
   return (
     <AuthProvider>
       <Router>
@@ -114,7 +113,7 @@ function AppContent() {
           }/>
 
           <Route
-            path="/profile-view"
+            path="/profile-view/:profileid"
             element={
               <ProtectedRoute>
                 <MainLayout><ProfileDetailPanel/></MainLayout>

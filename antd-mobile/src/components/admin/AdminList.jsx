@@ -1,6 +1,3 @@
-
-
-
 import { InfiniteScroll, List, SearchBar } from "antd-mobile";
 import React, { useEffect, useState } from "react";
 import { getPaginatedAdminUsers } from "../../services/api";
@@ -9,8 +6,16 @@ import AdminCard from "./AdminCard";
 // Helper to calculate DOB range from age range
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
-  const fromDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
-  const toDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
+  const fromDate = new Date(
+    today.getFullYear() - maxAge,
+    today.getMonth(),
+    today.getDate()
+  );
+  const toDate = new Date(
+    today.getFullYear() - minAge,
+    today.getMonth(),
+    today.getDate()
+  );
 
   return {
     from: fromDate.toISOString().split("T")[0],
@@ -52,7 +57,9 @@ const AdminList = ({ adminProp }) => {
       if (data?.data.length === 0) {
         setHasMore(false);
       } else {
-        setUsers((prev) => (pageNum === 0 ? data?.data : [...prev, ...data?.data]));
+        setUsers((prev) =>
+          pageNum === 0 ? data?.data : [...prev, ...data?.data]
+        );
         setPage(pageNum + 1);
       }
     } catch (error) {
@@ -88,7 +95,7 @@ const AdminList = ({ adminProp }) => {
 
   return (
     <div>
-      <div style={{ padding: "16px" }}>
+      <div style={{ padding: "16px"}}>
         {/* Collapsible Filters */}
         {/* <Collapse>
           <CollapsePanel key="1" title="Filters">
@@ -105,16 +112,20 @@ const AdminList = ({ adminProp }) => {
       </div>
 
       {/* User List */}
-    
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-  {users.map((user) => (
-    <div key={user.id} style={{ flex: '0 0 calc(50% - 8px)' }}>
-      <AdminCard user={user} role="ADMIN" action="NOACTION" />
-    </div>
-  ))}
-</div>
+
+      <div style={{ padding:"16px" }}>
+        {users.map((user) => (
+          <div key={user.id}>
+            <AdminCard user={user} role="ADMIN" action="NOACTION" />
+            <hr style={{width:'100%'}}/>
+          </div>
+        ))}
+      </div>
       {/* Infinite Scroll */}
-      <InfiniteScroll loadMore={() => fetchUsers(page, search)} hasMore={hasMore} />
+      {/* <InfiniteScroll
+        loadMore={() => fetchUsers(page, search)}
+        hasMore={hasMore}
+      /> */}
     </div>
   );
 };
