@@ -2,16 +2,10 @@
 
     import React, { useState } from 'react';
     import { Form, Picker, Button, Toast } from 'antd-mobile';
-    
-    const gotraData = [
-      { Id: "Parmar", EName: "Parmar", HName: "परमार" },
-      { Id: "Chauhan", EName: "Chauhan", HName: "चौहान" },
-      { Id: "Rathore", EName: "Rathore", HName: "राठौर" },
-      { Id: "Solanki", EName: "Solanki", HName: "सोलंकी" },
-      // Add more gotras as needed
-    ];
-
-    const GotraSelector = ({ name = "gotra", label = "Gotra" }) => {
+  
+    const GotraSelector = ({gotra_for,gotraData,customdata,setCustomdata}) => {
+      const [name, label] = ["gotra", "Gotra"]; 
+      
       const [visible, setVisible] = useState(false);
       const [form] = Form.useForm();
     
@@ -19,12 +13,15 @@
         form.setFieldsValue({ [name]: value[0] });
         setVisible(false);
         const selectedGotra = gotraData.find(g => g.EName === value[0]);
+        gotra_for?setCustomdata({...customdata, matranal_gotra: selectedGotra.Id}) : setCustomdata({...customdata, gotra: selectedGotra.Id});
         Toast.show(`Selected: ${selectedGotra?.EName}`);
       };
     
       return (
-        <Form.Item name={name} label={label}>
-          <div 
+<Form.Item
+  name={name}
+  label={gotra_for === "MATERNAL_GOTRA" ? "NanajiGotra" : "Gotra"}
+>          <div 
             onClick={() => setVisible(true)}
             style={{ 
               padding: '6px 0',

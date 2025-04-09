@@ -15,12 +15,8 @@ const MyLogin = ({ setIsLogined }) => {
     setLoading(true);
     try {
       const { jwt, user } = await login(values.email, values.password);
-      const loginSuccess = authContext.login(jwt, user);
-      console.log(loginSuccess)
-      if (loginSuccess) {
-       
-        navigate('/home', { replace: true }); 
-      }
+      await authContext.login(jwt, user);
+      navigate('/home', { replace: true }); 
     } catch (error) {
       Toast.show({
         icon: 'fail',
@@ -100,9 +96,9 @@ const MyLogin = ({ setIsLogined }) => {
               <Input placeholder='Enter your password' type='password' prefix={<LockOutline />} />
             </Form.Item>
 
-            <div style={{ textAlign: 'right', marginTop: 8, marginBottom: 16 }}>
+            {/* <div style={{ textAlign: 'right', marginTop: 8, marginBottom: 16 }}>
               <a style={{ color: '#ff6b6b', fontSize: '14px' }}>Forgot Password?</a>
-            </div>
+            </div> */}
           </Form>
 
           <Divider>OR</Divider>

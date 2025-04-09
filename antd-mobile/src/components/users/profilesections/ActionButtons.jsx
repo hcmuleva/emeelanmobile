@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Admins() {
+export default function ActionButtons() {
   return (
     <div>
-      Admins List
+      Action  Buttons
     </div>
   )
 }

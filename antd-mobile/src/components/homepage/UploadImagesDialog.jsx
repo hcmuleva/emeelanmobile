@@ -37,7 +37,7 @@ export const UploadImagesDialog = ({ visible, onClose }) => {
       visible={visible}
       title="Upload Images"
       actions={[
-        { key: 'cancel', text: 'Cancel' ,onClick:handleCancel},
+        { key: 'cancel', text: 'Cancel' ,onClick: handleCancel},
         { key: 'submit', text: 'Upload', onClick: handleSubmit }
       ]}
       onClose={onClose}
