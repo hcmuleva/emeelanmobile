@@ -257,9 +257,6 @@ const filteredUsers = async () => {
   return data;
 };
 
-}
-
-
 //mappls service
 const MAPPLS_API_KEY = process.env.REACT_APP_MAPPLS_TOKEN;
 const MAPPLS_BASE_URL = 'https://apis.mappls.com/advancedmaps/v1';
