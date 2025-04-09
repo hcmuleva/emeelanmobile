@@ -103,7 +103,6 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
       throw error.response?.data?.message || 'Failed to fetch users';
     }
   };
-
 // get admin
 export const getPaginatedAdminUsers = async () => {
   try {
@@ -257,3 +256,44 @@ const filteredUsers = async () => {
   const data = await response.json();
   return data;
 };
+
+}
+
+
+//mappls service
+const MAPPLS_API_KEY = process.env.REACT_APP_MAPPLS_TOKEN;
+const MAPPLS_BASE_URL = 'https://apis.mappls.com/advancedmaps/v1';
+
+// Create a new axios instance for Mappls
+const mapplsApi = axios.create({
+  baseURL: MAPPLS_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+export const reverseGeocode = async (latitude, longitude) => {
+  try {
+    // Make a request to the Mappls API
+    console.log("Using Mappls API key:", MAPPLS_API_KEY ? "Key is set" : "Key is not set");
+    
+    const response = await mapplsApi.get(`/${MAPPLS_API_KEY}/rev_geocode`, {
+      params: {
+        lat: latitude,
+        lng: longitude
+      }
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error("Mappls API error:", error.response?.data || error.message);
+    
+    // If we get a CORS error, provide a helpful error message
+    if (error.message.includes('Network Error') || error.message.includes('CORS')) {
+      throw new Error("CORS issue detected. Please implement a server-side proxy for this API call.");
+    }
+    
+    throw new Error(error.response?.data?.message || 'Location lookup failed');
+  }
+};
+
