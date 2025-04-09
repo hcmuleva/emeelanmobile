@@ -188,36 +188,7 @@ const FeatureTiles = () => {
       </div>
 
       {/* <NoticeBar content={demoLongText} color='alert'/> */}
-      <Grid columns={4} gap={14} style={{padding:16}}>
-      <Space style={{ '--gap': '24px' }}>
-        <Card title="Profile Settings " >
-        <ProgressCircle
-          percent={60}
-          style={{
-            '--fill-color': 'var(--adm-color-success)',
-          }}
-        >
-          60%
-        </ProgressCircle>
-        </Card>
-        {/* <ProgressCircle
-          percent={60}
-          style={{
-            '--fill-color': 'var(--adm-color-warning)',
-          }}
-        >
-          60%
-        </ProgressCircle>
-        <ProgressCircle
-          percent={60}
-          style={{
-            '--fill-color': 'var(--adm-color-danger)',
-          }}
-        >
-          60%
-        </ProgressCircle> */}
-      </Space>
-      </Grid>
+      
       
       <Grid columns={2} gap={16} style={{ padding: 16 }}>
         {tiles.map((tile) => (
