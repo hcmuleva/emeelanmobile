@@ -113,11 +113,9 @@ const AdminList = ({ adminProp }) => {
     </div>
   ))}
 </div>
-
       {/* Infinite Scroll */}
       <InfiniteScroll loadMore={() => fetchUsers(page, search)} hasMore={hasMore} />
     </div>
   );
 };
-
 export default AdminList;

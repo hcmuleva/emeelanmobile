@@ -11,7 +11,6 @@ const Marquee = ({ mockSuggestion }) => {
         <h3 style={{ margin: '0', fontSize: '16px' }}>Suggestions</h3>
         <span style={{ color: '#D30000', fontWeight: 'bold' }}>22</span>
       </div>
-
       <Card style={{ borderRadius: '12px', marginBottom: '16px', padding: '0px' }}>
   <div className="scroll-container">
     <div className="scroll-content">
