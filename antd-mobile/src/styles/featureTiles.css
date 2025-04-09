@@ -1,0 +1,55 @@
+/* src/styles/featureTiles.css */
+.feature-tile {
+  border-radius: 12px;
+  height: 100%;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.feature-tile:active {
+  transform: scale(0.98);
+}
+
+.donation-tile {
+  background-color: #a8d5f7;
+}
+
+.admin-list-tile {
+  background-color: #ffccd5;
+}
+
+.family-tile {
+  background-color: #f7f6a8;
+}
+
+.profession-tile {
+  background-color: #ccffe7;
+}
+
+.feature-tile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: center;
+  height: 100%;
+}
+
+.feature-tile-icon {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.feature-tile-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
