@@ -5,6 +5,7 @@ import {
   Input,
   Button,
   Divider,
+  ProgressCircle,
 } from 'antd-mobile';
 import MobileImageUploader from '../../components/common/MobileImageUploader';
 import { useNavigate } from 'react-router-dom';
@@ -57,6 +58,14 @@ const ProfileDetails = () => {
 
   return (
     <div style={{ padding: 10 }}>
+        <ProgressCircle
+          percent={60}
+          style={{
+            '--fill-color': 'var(--adm-color-success)',
+          }}
+        >
+          60%
+        </ProgressCircle>
       <div style={{ display: 'flex', gap: 1 }}>
         {/* Sidebar Links */}
         <div style={{ textAlign: 'center', minWidth: 100 }}>
@@ -268,6 +277,8 @@ const ProfileDetails = () => {
       >
                <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} /> Logout
               </Button>
+              <Divider style={{ margin: '16px 0' }} />
+            
      
     </div>
   );
