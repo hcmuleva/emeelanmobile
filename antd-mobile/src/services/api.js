@@ -66,8 +66,6 @@ export const getCustomMe = async (jwt) =>{
 export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
     try {
       console.log("getPaginatedUsers filters",filters, " end")
-      
-
       if (filters.DOB_gte) {
         filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
       }

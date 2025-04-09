@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { userService } from "../../services";
 import { useNavigate } from "react-router-dom";
+import { PhoneOutlined } from "@ant-design/icons";
 
 const getUserFromLocalStorage = () => {
   try {
@@ -20,7 +21,7 @@ const getUserFromLocalStorage = () => {
   }
 };
 
-const NewProfileCard = ({ user }) => {
+const NewProfileCard = ({ user, role,action}) => {
   const navigate = useNavigate();
   const userObj = getUserFromLocalStorage();
   const userId = userObj?.id || null;
@@ -30,7 +31,7 @@ const NewProfileCard = ({ user }) => {
     user?.images?.profilePicture ||
     user?.images?.photos?.[0]?.url;
 
-  const role = "ADMIN"; // HARD CODED ROLE
+  
   // user?.role?.toUpperCase();
 
   const handleRequest = () => {
@@ -277,9 +278,10 @@ const NewProfileCard = ({ user }) => {
                   border: "none",
                 }}
               >
-                {user?.age || "Age Not Specified"}
+               Age: {user?.age || "Age Not Specified"}
               </Tag>
             </Space>
+           
             <div
               style={{
                 display: "flex",
@@ -396,10 +398,25 @@ const NewProfileCard = ({ user }) => {
                 />
                 <span>{user?.Profession || "Profession Not Specified"}</span>
               </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: colors.text.dark,
+                  fontSize: "15px",
+                  fontWeight: "500",
+                }}
+              >
+                <PhoneOutlined
+                  style={{ color: colors.secondary, fontSize: "18px" }}
+                />
+                <span>{user?.MobileNumber || "No Mobile"}</span>
+              </div>
             </div>
 
             {/* Action Buttons */}
-            {renderActionButtons()}
+            {action !=="NOACTION"&&renderActionButtons()}
             
           </div>
         </div>
