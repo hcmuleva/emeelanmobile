@@ -5,6 +5,7 @@ import { InfiniteScroll, List, SearchBar } from "antd-mobile";
 import React, { useEffect, useState } from "react";
 import { getPaginatedAdminUsers } from "../../services/api";
 import NewProfileCard from "../users/NewProfileCard";
+import AdminCard from "./AdminCard";
 // Helper to calculate DOB range from age range
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
@@ -104,16 +105,17 @@ const AdminList = ({ adminProp }) => {
       </div>
 
       {/* User List */}
-      <List>
-        {users.map((user) => (
-          <NewProfileCard key={user.id} user={user} role={"ADMIN"} action={"NOACTION"}/>
-        ))}
-      </List>
-
+    
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+  {users.map((user) => (
+    <div key={user.id} style={{ flex: '0 0 calc(50% - 8px)' }}>
+      <AdminCard user={user} role="ADMIN" action="NOACTION" />
+    </div>
+  ))}
+</div>
       {/* Infinite Scroll */}
       <InfiniteScroll loadMore={() => fetchUsers(page, search)} hasMore={hasMore} />
     </div>
   );
 };
-
 export default AdminList;
