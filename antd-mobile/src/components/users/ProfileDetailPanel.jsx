@@ -33,7 +33,7 @@ const ProfileDetailPanel = () => {
   const handleRequest = async () => {
     setLoading(true);
     try {
-      await newConnectionRequest(user.id, profileid, jwt);
+      await newConnectionRequest({sender:user.id, receiver:profileid, status:"PENDING"});
       Toast.show({ icon: 'success', content: "Connection request sent" });
 
       getProfileData();
