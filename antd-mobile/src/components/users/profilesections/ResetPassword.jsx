@@ -105,7 +105,7 @@ export default function ResetPassword() {
               }
             />
           </Form.Item>
-          <Button type="submit" color='primary'>Save Password</Button>
+          <Button style={{margin:"10px"}} type="submit" color='primary'>Save Password</Button>
         </Form>
     </>
   )
