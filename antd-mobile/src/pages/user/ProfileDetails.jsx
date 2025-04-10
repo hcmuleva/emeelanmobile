@@ -11,6 +11,7 @@ import MobileImageUploader from '../../components/common/MobileImageUploader';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { LogoutOutlined } from '@ant-design/icons';
+import { BasicInfoCard } from '../../components/users/profilesections';
 
 const profilePic = 'https://demo.adminkit.io/img/avatars/avatar-4.jpg';
 
@@ -28,7 +29,7 @@ const tabLinks = [
 
 const ProfileDetails = () => {
     const authContext = useContext(AuthContext);
-
+  const user = authContext.user;
     const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('basic');
   const [editMode, setEditMode] = useState(false);
@@ -89,7 +90,7 @@ const ProfileDetails = () => {
 
         {/* Tab Content */}
         <div style={{ flex: 1 }}>
-          <h2 style={{ marginBottom: 8 }}>Alyssa Lee Smith</h2>
+          <h3 style={{ marginBottom: 8 }}>{user?.FirstName}{user?.LastName}</h3>
 
           <Tabs activeKey={activeTab} onChange={setActiveTab}>
             <Tabs.Tab title="Photos" key="photos">
@@ -97,7 +98,7 @@ const ProfileDetails = () => {
             </Tabs.Tab>
 
             <Tabs.Tab title="Basic Info" key="basic">
-              <p>Name: Alyssa Lee Smith</p>
+             <BasicInfoCard/>
             </Tabs.Tab>
 
             <Tabs.Tab title="Family" key="family">
