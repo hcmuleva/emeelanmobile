@@ -17,13 +17,14 @@ export default function Settings() {
     theme: ""
   };
 
-  useEffect(() => {
-    form.setFieldsValue(preferencesData);
-  }, [form, preferencesData]);
+//   useEffect(() => {
+//     form.setFieldsValue(preferencesData);
+//   }, [form, preferencesData]);
 
   const handleSubmit = async () => {
     const formValues = form.getFieldsValue();
-
+    console.log('Setting values:', preferencesData);
+    console.log('Current form values:', form.getFieldsValue());
     const updatedUser = {
       ...user,
       mybasicdata: {

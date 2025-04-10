@@ -1,15 +1,14 @@
+import { PhoneOutlined } from "@ant-design/icons";
 import { Space, Tag, Toast } from "antd-mobile";
 import {
-  CloseOutline,
   EnvironmentOutline,
-  HeartOutline,
   StarOutline,
-  UserOutline,
+  UserOutline
 } from "antd-mobile-icons";
-import React from "react";
-import { userService } from "../../services";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { PhoneOutlined } from "@ant-design/icons";
+import { AuthContext } from "../../context/AuthContext";
+import { newConnectionRequest } from "../../services/api";
 function calculateAge(dob) {  
   if (!dob) return null
   const today = new Date();
@@ -34,6 +33,8 @@ const getUserFromLocalStorage = () => {
 };
 
 const NewProfileCard = ({ user, role, action }) => {
+  const { user:selfUser, setUser, jwt } = useContext(AuthContext);
+
   const navigate = useNavigate();
   const userObj = getUserFromLocalStorage();
   const userId = userObj?.id || null;
@@ -44,20 +45,31 @@ const NewProfileCard = ({ user, role, action }) => {
     user?.images?.photos?.[0]?.url;
 
   // user?.role?.toUpperCase();
-console.log("use => NewProfile", user);
-  const handleRequest = () => {
-    const response = userService.connectionRequest(userId, profileid);
+console.log(" User Ro;e =>emeelanrole", selfUser?.emeelanrole);
+  const handleRequest = async() => {
+    const response = await newConnectionRequest({sender:selfUser?.id, receiver:user?.id, status:"PENDING"});
+    Toast.show({
+      icon: 'success',
+      content: `Your request successfully send to ${user.FirstName} and status is pending`,
+      afterClose: () => {
+        console.log(`Your request successfully send to ${user.FirstName} and status is pending`)
+      }, 
+    })
     console.log("Request response", response);
   };
 
-  role = "ADMIN"
 
   const renderActionButtons = () => {
-    if (role === "ADMIN" || role === "SUPERADMIN") {
+    if (selfUser?.emeelanrole === "ADMIN" || selfUser?.emeelanrole === "SUPERADMIN" || selfUser?.emeelanrole === "CENTER") {
       return (
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
           <button
-            onClick={() => console.log("Approve clicked")}
+            onClick={() => 
+              
+            {
+              console.log(`Request Sent to ", ${selfUser.id}, " and request SenderName ${selfUser.FirstName}to ", ${user.id}, " Reciever Name", ${user.FirstName}`)
+            }
+            }
             style={{
               flex: 1,
               padding: "12px 24px",
@@ -109,7 +121,7 @@ console.log("use => NewProfile", user);
           </button>
         </div>
       );
-    } else if (role === "USER") {
+    } else if(selfUser?.emeelanrole==="MEELAN") {
       return (
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
           <button
