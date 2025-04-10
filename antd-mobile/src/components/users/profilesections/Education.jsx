@@ -1,7 +1,15 @@
 import { Card, List, Space } from 'antd-mobile'
 import { TravelOutline, ClockCircleOutline } from 'antd-mobile-icons'
 
-const EducationCard = ({ education }) => (
+
+const EducationCard = ({user}) => {
+
+  // const education = user?.mybasicdata?.education || {}
+  const handleSave = (values)=>{
+    const payload = {...user.mybasicdata, education:values}
+  } 
+
+  return (
   <Card title='Education'>
     <List>
       {education.map((edu, index) => (
@@ -20,5 +28,6 @@ const EducationCard = ({ education }) => (
       ))}
     </List>
   </Card>
-)
+  )
+}
 export default EducationCard

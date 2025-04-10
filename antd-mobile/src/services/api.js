@@ -1,13 +1,13 @@
-import axios from 'axios';
-import qs from 'qs';
+import axios from "axios";
+import qs from "qs";
 
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
-const API_URL = process.env.REACT_APP_API_URL
-console.log("API_URL", API_URL) 
+const API_URL = process.env.REACT_APP_API_URL;
+console.log("API_URL", API_URL);
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -19,26 +19,26 @@ export const login = async (identifier, password) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Login failed';
+    throw error.response?.data?.message || "Login failed";
   }
 };
 
 export const register = async (data) => {
   try {
-    const response = await api.post('/auth/local/register', {
-      ...data
+    const response = await api.post("/auth/local/register", {
+      ...data,
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Registration failed';
+    throw error.response?.data?.message || "Registration failed";
   }
 };
 
 export const getAuthenticatedUser = async (jwt) => {
   try {
-    const response = await api.get('/users/me', {
+    const response = await api.get("/users/me", {
       params: {
-        populate: '*' // Populates all relations
+        populate: "*", // Populates all relations
       },
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -46,22 +46,22 @@ export const getAuthenticatedUser = async (jwt) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Failed to fetch user';
+    throw error.response?.data?.message || "Failed to fetch user";
   }
 };
 
-export const getCustomMe = async (jwt) =>{
+export const getCustomMe = async (jwt) => {
   try {
-    const response = await api.get('/customme', {
+    const response = await api.get("/customme", {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Failed to fetch user';
+    throw error.response?.data?.message || "Failed to fetch user";
   }
-}
+};
 
 export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
     try {
@@ -106,9 +106,9 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
 // get admin
 export const getPaginatedAdminUsers = async () => {
   try {
-    const response = await api.get('custom-admins', {
+    const response = await api.get("custom-admins", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`,  // Use correct token
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`, // Use correct token
         "Content-Type": "application/json",
       },
     });
@@ -119,69 +119,76 @@ export const getPaginatedAdminUsers = async () => {
   }
 };
 
-  // Add to your existing API service file
+// Add to your existing API service file
 export const searchUsers = async (query, start = 0, limit = 10) => {
-    try {
-      const response = await api.get(`/users`, {
-        params: {
-          _start: start,
-          _limit: limit,
-          _q: query, // Strapi search query
-          _sort: 'username:ASC' // Better for search results
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`
-        }
-      });
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Search failed';
+  try {
+    const params = {
+      _start: start,
+      _limit: limit,
+      _q: query, // Strapi search query
+      _sort: "username:ASC",
+      filters: {
+        $or: [
+          { FirstName: { $containsi: query } },
+          { LastName: { $containsi: query } },
+        ],
+      },
     }
-  };
-
+    console.log(params)
+    const response = await api.get(`/users`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Search failed";
+  }
+};
 
 export const resetpassword = async (userId, newPassword) => {
   try {
-    const response = await api.post('/reset-password', {
+    const response = await api.post("/reset-password", {
       userId, // can be email or username
       newPassword,
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Reset Password failed';
+    throw error.response?.data?.message || "Reset Password failed";
   }
 };
 
-export const photoUpload = async (formData) =>{
+export const photoUpload = async (formData) => {
   try {
-    const response = await api.post('/upload', {
-      formData
+    const response = await api.post("/upload", {
+      formData,
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Upload is failed';
+    throw error.response?.data?.message || "Upload is failed";
   }
-}
+};
 
-export const uploadImage = async (formData,jwt) => {
-  console.log("uploadImage function called", "token", jwt); 
+export const uploadImage = async (formData, jwt) => {
+  console.log("uploadImage function called", "token", jwt);
   try {
     // ✅ Upload files to Strapi using Axios
-    const uploadResponse = await api.post('/upload', formData, {
+    const uploadResponse = await api.post("/upload", formData, {
       headers: {
         Authorization: `Bearer ${jwt}`,
-        'Content-Type': 'multipart/form-data' // Important for file uploads
-      }
+        "Content-Type": "multipart/form-data", // Important for file uploads
+      },
     });
-  
+
     // Handle successful upload
-    console.log('Upload successful:', uploadResponse);
+    console.log("Upload successful:", uploadResponse);
     return uploadResponse.data; // Return the uploaded file data
   } catch (error) {
-    console.error('Upload failed:', error.message);
+    console.error("Upload failed:", error.message);
     // Handle error (show toast, etc.)
   }
-}
+};
 
 // new Apicalls start
 // update Data of me,
@@ -195,25 +202,31 @@ export const updateUserData = async (data, jwt, userId) => {
 
     return response.data;
   } catch (error) {
-    console.error("Strapi update error:", error.response?.data || error.message);
-    throw error.response?.data?.message || 'Update failed';
+    console.error(
+      "Strapi update error:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data?.message || "Update failed";
   }
 };
 
 export const getUserById = async (userId, jwt) => {
   try {
-    const response = await api.get(`/users/${userId}`,{
+    const response = await api.get(`/users/${userId}`, {
       params: {
-        populate: '*' // Populates all relations
+        populate: "*", // Populates all relations
       },
       headers: {
         Authorization: `Bearer ${jwt}`,
-      }
+      },
     });
     return response.data;
   } catch (error) {
-    console.error("Strapi update error:", error.response?.data || error.message);
-    throw error.response?.data?.message || 'Update failed';
+    console.error(
+      "Strapi update error:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data?.message || "Update failed";
   }
 };
 
@@ -221,23 +234,20 @@ export const getUserById = async (userId, jwt) => {
 
 const filteredUsers = async () => {
   const filters = {
-    AND: [
-      { Gotra: 'Parmar' },
-      { State: 'Gujarat' }
-    ],
-    OR: [
-      { Profession: 'Engineer' },
-      { Profession: 'Doctor' }
-    ],
-    marital: 'Unmarried',
-    age: { $gte: 25, $lte: 35 } // Age range
+    AND: [{ Gotra: "Parmar" }, { State: "Gujarat" }],
+    OR: [{ Profession: "Engineer" }, { Profession: "Doctor" }],
+    marital: "Unmarried",
+    age: { $gte: 25, $lte: 35 }, // Age range
   };
 
-  const response = await fetch(`/api/users?_start=0&_limit=10&filters=${encodeURIComponent(JSON.stringify(filters))}`);
+  const response = await fetch(
+    `/api/users?_start=0&_limit=10&filters=${encodeURIComponent(
+      JSON.stringify(filters)
+    )}`
+  );
   const data = await response.json();
   return data;
-}
-
+};
 
 //mappls service
 const MAPPLS_API_KEY = process.env.REACT_APP_MAPPLS_TOKEN;
@@ -275,3 +285,4 @@ export const reverseGeocode = async (latitude, longitude) => {
     throw new Error(error.response?.data?.message || 'Location lookup failed');
   }
 };
+
