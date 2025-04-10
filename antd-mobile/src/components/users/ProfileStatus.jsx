@@ -75,13 +75,8 @@ const ProfileStatus = () => {
   };
 
   const handleViewProfile = (userId) => {
-    navigate("/profile-view")
-    // Implement navigation to the user profile
-    // Toast.show({
-    //   content: 'Viewing profile...',
-    //   position: 'bottom',
-    // });
-    // You would add navigation logic here
+    console.log(userId, "IDD")
+    navigate(`/profile-view/${userId}`)
   };
 
   useEffect(() => {
@@ -93,6 +88,8 @@ const ProfileStatus = () => {
       mainTab === "RECEIVED" ? request.sender : request.receiver;
       
     if (!otherUser) return null;
+
+
 
     return (
       <Card 
