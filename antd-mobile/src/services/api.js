@@ -120,6 +120,23 @@ export const getPaginatedAdminUsers = async () => {
   }
 };
 
+export const newConnectionRequest = async( data)=>{
+  const jwt = localStorage.getItem("jwt")
+  console.log("jwt", jwt)
+  try {
+    const reaponse = await api.post(`/connectionrequests`, 
+        {data: data},
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",}
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
+  }
+}
 //connectionrequest
 export const updateConnectionRequest = async(id, data)=>{
   const jwt = localStorage.getItem("jwt")
@@ -249,7 +266,26 @@ export const getUserById = async (userId, jwt) => {
     throw error.response?.data?.message || "Update failed";
   }
 };
-
+export const customsingleuser = async (userId, jwt) =>{
+  console.log("Request recieved ", userId, " Token ", jwt)
+  try {
+    const response = await api.get(`/custom-singleuser/${userId}`, {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Strapi update error:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data?.message || "Update failed";
+  }
+}
 // new Apicalls End
 
 const filteredUsers = async () => {
