@@ -10,7 +10,19 @@ import React from "react";
 import { userService } from "../../services";
 import { useNavigate } from "react-router-dom";
 import { PhoneOutlined } from "@ant-design/icons";
+function calculateAge(dob) {  
+  if (!dob) return null
+  const today = new Date();
+  const birthDate = new Date(dob);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
 
+  // Adjust age if the birth date hasn't occurred yet this year
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+  return age;
+}
 const getUserFromLocalStorage = () => {
   try {
     const userString = localStorage.getItem("user");
@@ -33,7 +45,7 @@ const NewProfileCard = ({ user, role,action}) => {
 
   
   // user?.role?.toUpperCase();
-
+console.log("use => NewProfile", user);
   const handleRequest = () => {
     const response = userService.connectionRequest(userId, profileid);
     console.log("Request response", response);
@@ -138,7 +150,7 @@ const NewProfileCard = ({ user, role,action}) => {
     }
   };
 
-  if (user?.images.length > 0) {
+  if (user?.images?.length > 0) {
     console.log("Pictures", user.images);
   }
 
@@ -278,7 +290,8 @@ const NewProfileCard = ({ user, role,action}) => {
                   border: "none",
                 }}
               >
-               Age: {user?.age || "Age Not Specified"}
+                 Age: {user?.age ?? (user?.DOB ? calculateAge(user.DOB) : "Age Not Specified")}
+
               </Tag>
             </Space>
            

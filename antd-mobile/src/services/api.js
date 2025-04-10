@@ -191,11 +191,7 @@ export const updateUserData = async (data, jwt, userId) => {
 
     const response = await api.put(`/users/${userId}`, {
       ...data,
-    }, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      }
-    });
+    } );
 
     return response.data;
   } catch (error) {
