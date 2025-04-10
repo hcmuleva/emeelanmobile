@@ -45,7 +45,6 @@ const NewProfileCard = ({ user, role, action }) => {
     user?.images?.photos?.[0]?.url;
 
   // user?.role?.toUpperCase();
-console.log(" User Ro;e =>emeelanrole", selfUser?.emeelanrole);
   const handleRequest = async() => {
     const response = await newConnectionRequest({sender:selfUser?.id, receiver:user?.id, status:"PENDING"});
     Toast.show({
@@ -124,7 +123,7 @@ console.log(" User Ro;e =>emeelanrole", selfUser?.emeelanrole);
     } else if(selfUser?.emeelanrole==="MEELAN") {
       return (
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-          <button
+          {/* <button
             onClick={handleRequest}
             style={{
               flex: 1,
@@ -140,7 +139,7 @@ console.log(" User Ro;e =>emeelanrole", selfUser?.emeelanrole);
             }}
           >
             Request
-          </button>
+          </button> */}
           <button
             onClick={() => navigate(`/profile-view/${profileid}`)}
             style={{
