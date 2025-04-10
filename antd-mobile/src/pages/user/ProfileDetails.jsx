@@ -26,6 +26,7 @@ const tabLinks = [
   { key: "preferences", label: "Preferences" },
   { key: "about", label: "About Me" },
   { key: "settings", label: "Settings" },
+  { key: "resetpassword", label: "ResetPassword" },
 ];
 
 const ProfileDetails = () => {
@@ -123,7 +124,9 @@ const ProfileDetails = () => {
           {activeTab === "settings" && (
             <Settings />
           )}
-
+      {activeTab === "resetpassword" && (
+            <h1> ResetPassword need to call</h1>
+          )}
 
         </div>
       </div>
