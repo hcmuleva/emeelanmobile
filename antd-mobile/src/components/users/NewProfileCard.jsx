@@ -262,6 +262,7 @@ console.log("use => NewProfile", user);
               style={{
                 marginBottom: "16px",
                 marginTop: "20px",
+                textTransform: "capitalize"
               }}
             >
               <h2
