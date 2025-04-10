@@ -106,7 +106,8 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
 // get admin
 export const getPaginatedAdminUsers = async () => {
   try {
-    const response = await api.get("custom-admins", {
+
+    const response = await api.get("/custom-admins", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`, // Use correct token
         "Content-Type": "application/json",
@@ -118,6 +119,25 @@ export const getPaginatedAdminUsers = async () => {
     throw new Error("Failed to fetch Admins");
   }
 };
+
+//connectionrequest
+export const updateConnectionRequest = async(id, data)=>{
+  const jwt = localStorage.getItem("jwt")
+  console.log("jwt", jwt)
+  try {
+    const reaponse = await api.put(`/connectionrequests/${id}`, 
+        {data: data},
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",}
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
+  }
+}
 
 // Add to your existing API service file
 export const searchUsers = async (query, start = 0, limit = 10) => {
@@ -248,6 +268,16 @@ const filteredUsers = async () => {
   const data = await response.json();
   return data;
 };
+
+export const getPincode = async(pincode) =>{
+  try{
+
+    const response =await api.get(`/pincodes?filters[pincode]=${pincode}`)
+    return response.data
+  } catch(err){
+    throw err.response?.data?.message || "Error in getting pincode"
+  }
+}
 
 //mappls service
 const MAPPLS_API_KEY = process.env.REACT_APP_MAPPLS_TOKEN;

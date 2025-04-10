@@ -249,7 +249,6 @@ const FeatureTiles = () => {
         ))}
       </Grid>
       
-      <ProfessionDialog visible={visibleProfession} onClose={()=>setVisibleProfession(false)} />
       <MyFamilyDialog visible={visibleFamily} onClose={()=>setVisibleFamily(false)} />
       {/* <AdminListDialog visible={visibleAdminList} onClose={()=>setVisibleAdminList(false)} /> */}
       <BhamasahDialog visible={visibleBhamasah} onClose={()=>setVisibleBhamasah(false)} />
