@@ -33,7 +33,7 @@ const getUserFromLocalStorage = () => {
   }
 };
 
-const NewProfileCard = ({ user, role,action}) => {
+const NewProfileCard = ({ user, role, action }) => {
   const navigate = useNavigate();
   const userObj = getUserFromLocalStorage();
   const userId = userObj?.id || null;
@@ -43,13 +43,14 @@ const NewProfileCard = ({ user, role,action}) => {
     user?.images?.profilePicture ||
     user?.images?.photos?.[0]?.url;
 
-  
   // user?.role?.toUpperCase();
 console.log("use => NewProfile", user);
   const handleRequest = () => {
     const response = userService.connectionRequest(userId, profileid);
     console.log("Request response", response);
   };
+
+  role = "ADMIN"
 
   const renderActionButtons = () => {
     if (role === "ADMIN" || role === "SUPERADMIN") {
@@ -90,7 +91,7 @@ console.log("use => NewProfile", user);
             Decline
           </button>
           <button
-            onClick={() => navigate("/profile-view")}
+            onClick={() => navigate(`/profile-view/${profileid}`)}
             style={{
               flex: 1,
               padding: "12px 24px",
@@ -129,7 +130,7 @@ console.log("use => NewProfile", user);
             Request
           </button>
           <button
-            onClick={() => navigate("/profile-view")}
+            onClick={() => navigate(`/profile-view/${profileid}`)}
             style={{
               flex: 1,
               padding: "12px 24px",

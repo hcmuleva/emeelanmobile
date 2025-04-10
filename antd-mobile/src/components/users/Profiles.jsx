@@ -45,7 +45,7 @@ const Profiles = ({ adminProp }) => {
     { label: "Doctor", value: "doctor" },
     { label: "Teacher", value: "teacher" },
     { label: "Business", value: "business" },
-    { label: "Housewife", value: "housewife" },
+    { label: "Housewife", value: "House work" },
     { label: "CA", value: "ca" },
     { label: "Other", value: "other" },
   ];
