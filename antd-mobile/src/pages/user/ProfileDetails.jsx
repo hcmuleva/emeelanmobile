@@ -15,6 +15,7 @@ import ProfessionInfo from "../../components/users/profilesections/ProfessionInf
 import { AuthContext } from "../../context/AuthContext";
 import Settings from "../../components/users/profilesections/Settings";
 import PreferenceInfo from "../../components/users/profilesections/PreferenceInfo";
+import ResetPassword from "../../components/users/profilesections/ResetPassword";
 
 
 const tabLinks = [
@@ -125,7 +126,7 @@ const ProfileDetails = () => {
             <Settings />
           )}
       {activeTab === "resetpassword" && (
-            <h1> ResetPassword need to call</h1>
+            <ResetPassword/>
           )}
 
         </div>
