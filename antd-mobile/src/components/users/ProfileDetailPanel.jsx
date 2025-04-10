@@ -21,8 +21,9 @@ const theme = {
 const ProfileDetailPanel = () => {
   const { user: selfUser, jwt } = useContext(AuthContext);
   const { profileid } = useParams();
+  const [user,setUser] = useState({})
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState({});
   const [connectionStatus, setConnectionStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [msg,setMsg] = useState("")
@@ -32,25 +33,26 @@ const ProfileDetailPanel = () => {
         setIsLoading(true);
         const res = await customsingleuser(profileid, jwt);
         setProfile(res.mybasicdata);
-        
+        setUser(res)
+        console.log("RES ",res)
         // Check connection status
         if (selfUser?.id && profileid && res.connectionRequests) {
           const connection = res.connectionRequests.find(request => 
             (request.sender.id === selfUser.id && request.receiver.id === parseInt(profileid)) || 
             (request.receiver.id === selfUser.id && request.sender.id === parseInt(profileid))
           );
-          if(selfUser.id ==connection.sender.id&& profileid == connection.receiver.id){
-            setMsg(`Request Status: ${connection.status}`)
+          if(selfUser.id ==connection?.sender?.id&& profileid == connection?.receiver?.id){
+            setMsg(`Request Status: ${connection?.status}`)
           }
-          if(selfUser.id ==connection.receiver.id&& profileid == connection.sender.id){
-            if(connection.status ==="PENDING"){
-              setMsg(`Action Require: ${connection.status}`)
+          if(selfUser.id ==connection?.receiver?.id&& profileid == connection?.sender?.id){
+            if(connection?.status ==="PENDING"){
+              setMsg(`Action Require: ${connection?.status}`)
             }else {
               setMsg(`Status: ${connection.status}`)
             }
            
           }
-          console.log("contnection status", connection?.status, "Connection ", connection.sender.id, connection.receiver.id)
+          console.log("contnection status", connection?.status, "Connection ", connection?.sender.id, connection?.receiver.id)
           setConnectionStatus(connection?.status || null);
         }
       } catch (error) {
@@ -114,8 +116,17 @@ const ProfileDetailPanel = () => {
   };
 
   if (isLoading) return <div style={{ padding: 24, textAlign: 'center' }}>Loading profile...</div>;
-  if (!profile) return <div style={{ padding: 24, textAlign: 'center' }}>Profile not found</div>;
-
+  //if (!profile) return <div style={{ padding: 24, textAlign: 'center' }}>Profile not found</div>;
+  let userImage = "https://demo.adminkit.io/img/avatars/avatar-4.jpg";
+  
+  const images=user.Pictures || {};
+  if (images.photos?.[0]?.url) {
+    userImage = images.photos[0].url;
+  } else if (images.profilePicture?.url) {
+    userImage = images.profilePicture.url;
+  } else if (Array.isArray(images.pictures) && images.pictures[0]) {
+    userImage = images.pictures[0];
+  }
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Header */}
@@ -131,7 +142,7 @@ const ProfileDetailPanel = () => {
         {/* Profile Header */}
         <div style={{ display: "flex", alignItems: "center", padding: "20px 0" }}>
           <Image
-            src={profile.profileImage || "https://via.placeholder.com/100"}
+            src={userImage}
             width={80}
             height={80}
             style={{ borderRadius: "50%", marginRight: 16 }}
@@ -145,7 +156,12 @@ const ProfileDetailPanel = () => {
             </div>
           </div>
         </div>
-
+        <>
+        <List>
+          {user.FirstName} {user.Father} {user.Gotra} ({profileid})
+       
+            </List>
+        </>
         {/* About Me Section */}
         {profile.aboutme && (
           <>
