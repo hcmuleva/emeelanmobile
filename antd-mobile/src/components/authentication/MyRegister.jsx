@@ -188,7 +188,6 @@ export default function MyRegister() {
                     <Radio.Group style={{ display: "flex", gap: "10px" }}>
                         <Radio value="Male">Male</Radio>
                         <Radio value="Female">Female</Radio>
-                        <Radio value="Other">Other</Radio>
                     </Radio.Group>
                 </Form.Item>
 

@@ -11,6 +11,10 @@ switch(user.emeelanrole){
     return <UserRoleProfile/>
     case "ADMIN":
       return <AdminRoleProfiles userrole={user.emeelanrole}/>
+    case "SUPERADMIN":
+        return <AdminRoleProfiles userrole={user.emeelanrole}/>
+    case "CENTER":
+        return <AdminRoleProfiles userrole={user.emeelanrole}/>
 }
 //  console.log("meelan role", user.emeelanrole)
 //   return (
