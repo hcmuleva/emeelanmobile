@@ -1,12 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MessageOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Popover, List } from "antd-mobile";
 import { useNavigate } from "react-router-dom";
 import StatusNotification from "./StatusNotification";
 import { AuthContext } from "../../context/AuthContext";
+import { getCustomMe } from "../../services/api";
 
-const TopBar = ({userRole}) => {
-  const { user } = useContext(AuthContext);
+const TopBar = ({ userRole }) => {
+  const { jwt, profileUpdated, setProfileUpdated } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getMe = async () => {
+      try {
+        const res = await getCustomMe(jwt);
+        setUser(res);
+        setProfileUpdated(false)
+      } catch (error) {
+        console.error("error", error);
+      }
+    };
+    getMe();
+  }, [jwt, profileUpdated]);
+
   const [notificationStats, setNotificationStats] = useState({
     PENDING: 0,
     APPROVED: 0,
@@ -15,15 +31,25 @@ const TopBar = ({userRole}) => {
   });
 
   const navigate = useNavigate();
-  let userProfile = "https://demo.adminkit.io/img/avatars/avatar-4.jpg";
-const images=user.images || {};
-if (images.photos?.[0]?.url) {
-  userProfile = images.photos[0].url;
-} else if (images.profilePicture?.url) {
-  userProfile = images.profilePicture.url;
-} else if (Array.isArray(images.pictures) && images.pictures[0]) {
-  userProfile = images.pictures[0];
-}
+  
+  let userProfile = "";
+  if (user?.Pictures?.profilePicture) {
+    userProfile = user?.Pictures.profilePicture?.url;
+  } else if (
+    Array.isArray(user?.images?.pictures) &&
+    user?.images?.pictures[0]
+  ) {
+    userProfile = user?.images?.pictures[0];
+  } else if (user?.Pictures?.photos?.[0]?.url) {
+    userProfile = user?.Pictures.photos?.[0]?.url;
+  } else if (user?.Sex === "Female") {
+    userProfile = "/assets/woman-user-circle-icon.png";
+  } else if (user?.Sex === "Male") {
+    userProfile = "/assets/man-user-circle-icon.png";
+  } else {
+    userProfile = "/assets/question-mark-circle-outline-icon.png";
+  }
+
   const handleStatusClick = (status) => {
     navigate(`/status?filter=${status}`);
   };
@@ -32,7 +58,7 @@ if (images.photos?.[0]?.url) {
     <div
       style={{
         position: "relative",
-        backgroundColor: "#FF4D6D",
+        background: '#E83F25',
         padding: "12px 20px",
         color: "white",
       }}
@@ -44,15 +70,16 @@ if (images.photos?.[0]?.url) {
           alignItems: "center",
         }}
       >
-        <div  onClick={() => navigate("/userprofile")} style={{ display: "flex", alignItems: "center" }}>
+        <div
+          onClick={() => navigate("/userprofile")}
+          style={{ display: "flex", alignItems: "center" }}
+        >
           <div
-          
             style={{
               width: "80px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              
             }}
           >
             <Avatar
@@ -62,7 +89,6 @@ if (images.photos?.[0]?.url) {
                 "--size": "55px",
                 borderRadius: "50%",
               }}
-             
             />
           </div>
           <div style={{ textAlign: "left" }}>

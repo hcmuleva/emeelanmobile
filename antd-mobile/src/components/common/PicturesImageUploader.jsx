@@ -3,12 +3,12 @@ import { ImageUploader, Toast, Dialog } from 'antd-mobile';
 import {  getUserById, updateUserData, uploadImage } from '../../services/api';
 import { AuthContext } from '../../context/AuthContext';
 
-const MobileImageUploader = () => {
+const PicturesImageUploader = () => {
   const {user} = useContext(AuthContext)
   const jwt = localStorage.getItem("jwt");
   // console.log(user)
   const [fileList, setFileList] = useState([]);
-  const MAX_IMAGES = 2; // Set your maximum limit here
+  const MAX_IMAGES = 5; // Set your maximum limit here
   
   useEffect(() => {
     const loadImages = async () => {
@@ -61,8 +61,8 @@ const MobileImageUploader = () => {
       const response = await uploadImage(formData, jwt);
       // console.log(response)
       const uploadedFile = response[0];
-      await updateUserData({ photos: uploadedFile.id }, jwt, user.id);
-  
+      const updatedUser = await updateUserData({ photos: uploadedFile.id }, user.id);
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
       // Return file for ImageUploader control
       return {
         url: uploadedFile.url,
@@ -79,7 +79,8 @@ const MobileImageUploader = () => {
   const onChange = async (newList) => {
     setFileList(newList);
     const photoIds = newList.map(file => file.id).filter(Boolean);
-    await updateUserData({ photos: photoIds }, jwt, user.id);
+    const updatedUser = await updateUserData({ photos: photoIds }, user.id);
+    localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
   };  
   
   // console.log(user)
@@ -90,15 +91,20 @@ const MobileImageUploader = () => {
         image: file.url,
         title: file.name || 'Preview',
         content: (
-          <img
-            src={file.url}
-            style={{ width: '100%', height: 'auto' }}
-            alt="Preview"
-          />
+          <>
+            <img
+              src={file.url}
+              style={{ width: '100%', height: 'auto' }}
+              alt="Preview"
+            />
+            <button>Set As Profile Picture</button>
+          </>
         ),
+        
       });
     }
   };
+
 
   return (
     <ImageUploader
@@ -109,9 +115,9 @@ const MobileImageUploader = () => {
       onPreview={onPreview}
       maxCount={MAX_IMAGES}
       showUpload={fileList.length < MAX_IMAGES}
-      style={{ '--cell-size': '80px' }}
+      style={{ '--cell-size': '80px', margin:'10px' }}
     />
   );
 };
 
-export default MobileImageUploader;
+export default PicturesImageUploader;

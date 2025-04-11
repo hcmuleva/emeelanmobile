@@ -1,27 +1,32 @@
-import { ConfigProvider } from 'antd-mobile';
-import enUS from 'antd-mobile/es/locales/en-US';
-import React, { useState } from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { ConfigProvider } from "antd-mobile";
+import enUS from "antd-mobile/es/locales/en-US";
+import React, { useState } from "react";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 import Search from "./components/common/Search";
 import MainLayout from "./components/layout/MainLayout";
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { LanguageProvider } from './context/LanguageContext';
-import { locales } from './locales';
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
+import { locales } from "./locales";
 import Chat from "./pages/Chat";
-import Home from './pages/Home';
+import Home from "./pages/Home";
 import Mail from "./pages/Mail";
-import ProfileStatusPage from './pages/ProfileStatusPage';
-import LoginPage from './pages/public/LoginPage';
-import ProfilesPage from './pages/user/ProfilesPage';
-import UserProfile from './pages/user/UserProfile';
-import StatusNotification from './components/layout/StatusNotification';
-import ProfileDetailPanel from './components/users/ProfileDetailPanel';
-import Admin from './pages/admin/Admin';
-import SuperAdmin from './pages/superadmin/SuperAdmin';
-import { SettingsDialog } from './components/users/profilesections/settings/SettingsDialog';
-import AdminListPage from './pages/admin/AdminListPage';
-import NewUserRegistration from './pages/admin/NewUserRegistration';
-
+import ProfileStatusPage from "./pages/ProfileStatusPage";
+import LoginPage from "./pages/public/LoginPage";
+import ProfilesPage from "./pages/user/ProfilesPage";
+import UserProfile from "./pages/user/UserProfile";
+import StatusNotification from "./components/layout/StatusNotification";
+import ProfileDetailPanel from "./components/users/ProfileDetailPanel";
+import Admin from "./pages/admin/Admin";
+import SuperAdmin from "./pages/superadmin/SuperAdmin";
+import { SettingsDialog } from "./components/users/profilesections/settings/SettingsDialog";
+import AdminListPage from "./pages/admin/AdminListPage";
+import NewUserRegistration from "./pages/admin/NewUserRegistration";
+import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -35,18 +40,15 @@ function AppContent() {
       <Router>
         <Routes>
           {/* Public Routes */}
-          <Route
-            path="/"
-            element={
-              <LoginPage/>
-            }
-          />
+          <Route path="/" element={<LoginPage />} />
           {/* Protected Routes */}
           <Route
             path="/home"
             element={
               <ProtectedRoute>
-                <MainLayout><Home /></MainLayout>
+                <MainLayout>
+                  <Home />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -54,7 +56,9 @@ function AppContent() {
             path="/status"
             element={
               <ProtectedRoute>
-                <MainLayout><ProfileStatusPage /></MainLayout>
+                <MainLayout>
+                  <ProfileStatusPage />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -62,7 +66,9 @@ function AppContent() {
             path="/mailbox"
             element={
               <ProtectedRoute>
-                <MainLayout><Mail /></MainLayout>
+                <MainLayout>
+                  <Mail />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -70,15 +76,19 @@ function AppContent() {
             path="/chat"
             element={
               <ProtectedRoute>
-                <MainLayout><Chat /></MainLayout>
+                <MainLayout>
+                  <Chat />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
-            <Route
+          <Route
             path="/adminlist"
             element={
               <ProtectedRoute>
-                <MainLayout><AdminListPage /></MainLayout>
+                <MainLayout>
+                  <AdminListPage />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -86,15 +96,19 @@ function AppContent() {
             path="/search"
             element={
               <ProtectedRoute>
-                <MainLayout><Search /></MainLayout>
+                <MainLayout>
+                  <Search />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
-            <Route
+          <Route
             path="/profiles"
             element={
               <ProtectedRoute>
-                <MainLayout><ProfilesPage /></MainLayout>
+                <MainLayout>
+                  <ProfilesPage />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -102,30 +116,51 @@ function AppContent() {
             path="/userprofile"
             element={
               <ProtectedRoute>
-                <MainLayout><UserProfile /></MainLayout>
+                <MainLayout>
+                  <UserProfile />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/newuserregister"
             element={
               <ProtectedRoute>
-                <MainLayout><NewUserRegistration /></MainLayout>
+                <MainLayout>
+                  <NewUserRegistration />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
-          <Route path="/settings" 
-          element={
-            <ProtectedRoute>
-              <MainLayout><SettingsDialog /></MainLayout>
-            </ProtectedRoute>
-          }/>
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <SettingsDialog />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/social-sharing"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <SocialSharingCard />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/profile-view/:profileid"
             element={
               <ProtectedRoute>
-                <MainLayout><ProfileDetailPanel/></MainLayout>
+                <MainLayout>
+                  <ProfileDetailPanel />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -133,7 +168,9 @@ function AppContent() {
             path="/notification-tab"
             element={
               <ProtectedRoute>
-                <MainLayout><StatusNotification/></MainLayout>
+                <MainLayout>
+                  <StatusNotification />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -141,7 +178,9 @@ function AppContent() {
             path="/Admin"
             element={
               <ProtectedRoute>
-                <MainLayout><Admin/></MainLayout>
+                <MainLayout>
+                  <Admin />
+                </MainLayout>
               </ProtectedRoute>
             }
           />
@@ -149,7 +188,9 @@ function AppContent() {
             path="/SuperAdmin"
             element={
               <ProtectedRoute>
-                <MainLayout><SuperAdmin/></MainLayout>
+                <MainLayout>
+                  <SuperAdmin />
+                </MainLayout>
               </ProtectedRoute>
             }
           />

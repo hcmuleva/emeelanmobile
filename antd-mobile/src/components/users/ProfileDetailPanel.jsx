@@ -243,17 +243,30 @@ const ProfileDetailPanel = () => {
   };
 
   return (
-    <>
-      {profileData ? (
-        <UserDetails profileData={profileData} profileid={profileid} />
-      ) : (
-        "Loading..."
-      )}
-      <div style={{position:"sticky", bottom:"0", width:"100%", backgroundColor:"#fff", textAlign:"center", padding:"10px 0px"}}>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Top part (NavBar + content) */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        {profileData ? (
+          <UserDetails profileData={profileData} profileid={profileid} />
+        ) : (
+          "Loading..."
+        )}
+      </div>
+  
+      {/* Sticky Footer */}
+      <div style={{
+        position: 'sticky',
+        bottom: 0,
+        width: '100%',
+        backgroundColor: '#fff',
+        textAlign: 'center',
+        padding: '10px 0px',
+        borderTop: '1px solid #f0f0f0'
+      }}>
         {renderActionButtons()}
       </div>
-    </>
-  );
+    </div>
+  );  
 };
 
 export default ProfileDetailPanel;

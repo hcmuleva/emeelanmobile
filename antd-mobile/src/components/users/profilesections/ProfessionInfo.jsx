@@ -64,8 +64,11 @@ const ProfessionInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, jwt, user.id);
+      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      
       setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
+      
       Toast.show({ icon: "success", content: "Profession data saved!" });
     } catch (err) {
       console.error("Save error", err);
@@ -74,7 +77,7 @@ const ProfessionInfo = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "10px" }}>
       <Form form={form} initialValues={defaultFormValues} layout="horizontal">
         <Form.Item name="type" label="Profession Type">
           <Selector

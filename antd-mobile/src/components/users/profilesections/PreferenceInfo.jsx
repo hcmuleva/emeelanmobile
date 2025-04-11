@@ -21,7 +21,7 @@ const PreferenceInfo = () => {
   const [preferences, setPreferences] = useState(user?.mybasicdata?.preferences || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
-
+  console.log("Preferences", preferences)
   const defaultFormValues = {
     agerange: "",
     maritialstatus: "Bachelor",
@@ -66,8 +66,9 @@ const PreferenceInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, jwt, user.id);
+      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
       Toast.show({ icon: "success", content: "Preferences saved!" });
     } catch (err) {
       console.error("Save error", err);
@@ -76,7 +77,7 @@ const PreferenceInfo = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "10px" }}>
       <Form form={form} initialValues={defaultFormValues} layout="horizontal">
         <Form.Item name="agerange" label="Age Range">
           <Input placeholder="e.g. 25-30" />

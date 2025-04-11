@@ -26,8 +26,9 @@ const About = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, jwt, user.id);
+      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
       Toast.show({ icon: "success", content: "About Me updated!" });
     } catch (err) {
       console.error("Failed to save About Me", err);
@@ -41,8 +42,9 @@ const About = () => {
         form={form}
         initialValues={aboutmeData}
         layout="horizontal"
+        
         footer={
-          <Button block color="primary" onClick={handleSave}>
+          <Button  block color="primary" onClick={handleSave}>
             Save
           </Button>
         }
