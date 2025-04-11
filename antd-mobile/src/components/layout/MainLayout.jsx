@@ -9,11 +9,12 @@ const MainLayout = ({ children }) => {
   console.log(user) 
   // const role = user?.role || 'USER';
   const emeelanrole =user.emeelanrole
-
+ console.log("Meeelan rol", emeelanrole)
   const LayoutMap = {
     ADMIN: AdminLayout,
     SUPERADMIN: SuperAdminLayout,
     MEELAN: UserLayout,
+    CENTER: SuperAdminLayout,
   };
 
   const Layout = LayoutMap[emeelanrole.toUpperCase()] || UserLayout;
