@@ -3,22 +3,25 @@ import { Space, Tag, Toast } from "antd-mobile";
 import {
   EnvironmentOutline,
   StarOutline,
-  UserOutline
+  UserOutline,
 } from "antd-mobile-icons";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { newConnectionRequest } from "../../services/api";
-function calculateAge(dob) {  
-  if (!dob) return null
+function calculateAge(dob) {
+  if (!dob) return null;
   const today = new Date();
   const birthDate = new Date(dob);
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDifference = today.getMonth() - birthDate.getMonth();
 
   // Adjust age if the birth date hasn't occurred yet this year
-  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
   }
   return age;
 }
@@ -33,7 +36,7 @@ const getUserFromLocalStorage = () => {
 };
 
 const NewProfileCard = ({ user, role, action }) => {
-  const { user:selfUser, setUser, jwt } = useContext(AuthContext);
+  const { user: selfUser, setUser, jwt } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const userObj = getUserFromLocalStorage();
@@ -45,76 +48,85 @@ const NewProfileCard = ({ user, role, action }) => {
     user?.images?.photos?.[0]?.url;
 
   // user?.role?.toUpperCase();
-  const handleRequest = async() => {
-    const response = await newConnectionRequest({sender:selfUser?.id, receiver:user?.id, status:"PENDING"});
+  const handleRequest = async () => {
+    const response = await newConnectionRequest({
+      sender: selfUser?.id,
+      receiver: user?.id,
+      status: "PENDING",
+    });
     Toast.show({
-      icon: 'success',
+      icon: "success",
       content: `Your request successfully send to ${user.FirstName} and status is pending`,
       afterClose: () => {
-        console.log(`Your request successfully send to ${user.FirstName} and status is pending`)
-      }, 
-    })
+        console.log(
+          `Your request successfully send to ${user.FirstName} and status is pending`
+        );
+      },
+    });
     console.log("Request response", response);
   };
-
 
   const renderActionButtons = () => {
     /**
      *  Below piece of code to bypass approval from here
-     * 
+     *
      */
-    return(
-    <>
-    <button
-    onClick={() => navigate(`/profile-view/${profileid}`)}
-    style={{
-      flex: 1,
-      padding: "12px 24px",
-      borderRadius: "12px",
-      backgroundColor: "rgba(139, 0, 0, 0.1)",
-      color: colors.primary,
-      border: "none",
-      fontSize: "15px",
-      fontWeight: "600",
-      cursor: "pointer",
-      boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-    }}
-  >
-    Details
-  </button>
-  <button
-    
-    style={{
-      flex: 1,
-      padding: "12px 24px",
-      borderRadius: "12px",
-      backgroundColor: "rgba(139, 0, 0, 0.1)",
-      color: colors.primary,
-      border: "none",
-      fontSize: "15px",
-      fontWeight: "600",
-      cursor: "pointer",
-      boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-    }}
-  >
-    Status:{user.userstatus}
-  </button>
-  </>
-  )
-  
+    return (
+      <>
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+          <button
+            onClick={() => navigate(`/profile-view/${profileid}`)}
+            style={{
+              flex: 1,
+              padding: "12px 24px",
+              borderRadius: "12px",
+              backgroundColor: "rgba(139, 0, 0, 0.1)",
+              color: colors.primary,
+              border: "none",
+              fontSize: "15px",
+              fontWeight: "600",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
+            }}
+          >
+            Details
+          </button>
+          <button
+            style={{
+              flex: 1,
+              padding: "12px 24px",
+              borderRadius: "12px",
+              backgroundColor: colors.primary,
+              color: colors.light,
+              border: "none",
+              fontSize: "15px",
+              fontWeight: "600",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
+            }}
+          >
+            Status:{user.userstatus}
+          </button>
+        </div>
+      </>
+    );
+
     /**
      *  We are now not allowing approvel on Card instead of it on detail page user can approve
      */
-    if (selfUser?.emeelanrole === "ADMIN" || selfUser?.emeelanrole === "SUPERADMIN" || selfUser?.emeelanrole === "CENTER") {
+    if (
+      selfUser?.emeelanrole === "ADMIN" ||
+      selfUser?.emeelanrole === "SUPERADMIN" ||
+      selfUser?.emeelanrole === "CENTER"
+    ) {
       return (
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
           <button
-            onClick={() => 
-              
-            {
-              console.log(`Request Sent to ", ${selfUser.id}, " and request SenderName ${selfUser.FirstName}to ", ${user.id}, " Reciever Name", ${user.FirstName}`)
-            }
-            }
+            onClick={() => {
+              console.log(
+                `Request Sent to ", ${selfUser.id}, " and request SenderName ${selfUser.FirstName}to ", ${user.id}, " Reciever Name", ${user.FirstName}`
+              );
+            }}
             style={{
               flex: 1,
               padding: "12px 24px",
@@ -166,7 +178,7 @@ const NewProfileCard = ({ user, role, action }) => {
           </button>
         </div>
       );
-    } else if(selfUser?.emeelanrole==="MEELAN") {
+    } else if (selfUser?.emeelanrole === "MEELAN") {
       return (
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
           {/* <button
@@ -320,7 +332,7 @@ const NewProfileCard = ({ user, role, action }) => {
               style={{
                 marginBottom: "16px",
                 marginTop: "20px",
-                textTransform: "capitalize"
+                textTransform: "capitalize",
               }}
             >
               <h2
@@ -349,11 +361,12 @@ const NewProfileCard = ({ user, role, action }) => {
                   border: "none",
                 }}
               >
-                 Age: {user?.age ?? (user?.DOB ? calculateAge(user.DOB) : "Age Not Specified")}
-
+                Age:{" "}
+                {user?.age ??
+                  (user?.DOB ? calculateAge(user.DOB) : "Age Not Specified")}
               </Tag>
             </Space>
-           
+
             <div
               style={{
                 display: "flex",
@@ -488,8 +501,7 @@ const NewProfileCard = ({ user, role, action }) => {
             </div>
 
             {/* Action Buttons */}
-            {action !=="NOACTION"&&renderActionButtons()}
-            
+            {action !== "NOACTION" && renderActionButtons()}
           </div>
         </div>
       </div>
