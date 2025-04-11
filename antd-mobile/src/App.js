@@ -20,6 +20,7 @@ import Admin from './pages/admin/Admin';
 import SuperAdmin from './pages/superadmin/SuperAdmin';
 import { SettingsDialog } from './components/users/profilesections/settings/SettingsDialog';
 import AdminListPage from './pages/admin/AdminListPage';
+import NewUserRegistration from './pages/admin/NewUserRegistration';
 
 
 // ✅ Corrected Protected Route Component
@@ -102,6 +103,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MainLayout><UserProfile /></MainLayout>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/newuserregister"
+            element={
+              <ProtectedRoute>
+                <MainLayout><NewUserRegistration /></MainLayout>
               </ProtectedRoute>
             }
           />

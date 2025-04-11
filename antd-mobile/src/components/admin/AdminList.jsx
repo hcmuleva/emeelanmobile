@@ -1,21 +1,19 @@
-import { InfiniteScroll, List, SearchBar } from "antd-mobile";
+
 import React, { useEffect, useState } from "react";
-import { getPaginatedAdminUsers } from "../../services/api";
+import { List, InfiniteScroll, SearchBar, Selector, Collapse } from "antd-mobile";
+import { getPaginatedAdminUsers, getPaginatedUsers, searchUsers } from "../../services/api"; // ✅ Import both
+
 import NewProfileCard from "../users/NewProfileCard";
+import { CollapsePanel } from "antd-mobile/es/components/collapse/collapse";
+import GotraSelector from "../authentication/registration/GotraSelector";
+import gotraData from "../../utils/gotra.json";
 import AdminCard from "./AdminCard";
+//import AdminCard from "./AdminCard";
 // Helper to calculate DOB range from age range
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
-  const fromDate = new Date(
-    today.getFullYear() - maxAge,
-    today.getMonth(),
-    today.getDate()
-  );
-  const toDate = new Date(
-    today.getFullYear() - minAge,
-    today.getMonth(),
-    today.getDate()
-  );
+  const fromDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
+  const toDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
 
   return {
     from: fromDate.toISOString().split("T")[0],
@@ -23,10 +21,11 @@ const getDOBRange = (minAge, maxAge) => {
   };
 };
 
-const AdminList = ({ adminProp }) => {
+const AdminList = ({ adminProp,userrole }) => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [inputValue, setInputValue] = useState("");
   const [search, setSearch] = useState("");
 
   const [marital, setMarital] = useState();
@@ -34,45 +33,6 @@ const AdminList = ({ adminProp }) => {
   const [gotra, setGotra] = useState(); // Will store Gotra.Id
   const [minAge, setMinAge] = useState("");
   const [maxAge, setMaxAge] = useState("");
-
-  const limit = 10;
-
-  const fetchUsers = async (pageNum = 0, searchQuery = "") => {
-    try {
-      const filters = {
-        marital: marital || "Married(Only for Admin)",
-        profession: profession || "",
-        gotra: gotra || "",
-      };
-
-      if (minAge && maxAge) {
-        const { from, to } = getDOBRange(minAge, maxAge);
-        filters["DOB_gte"] = from;
-        filters["DOB_lte"] = to;
-      }
-
-      const PAGENUMBER = pageNum * limit;
-      const data = await getPaginatedAdminUsers(PAGENUMBER, limit, filters);
-
-      if (data?.data.length === 0) {
-        setHasMore(false);
-      } else {
-        setUsers((prev) =>
-          pageNum === 0 ? data?.data : [...prev, ...data?.data]
-        );
-        setPage(pageNum + 1);
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  useEffect(() => {
-    setUsers([]);
-    setPage(0);
-    setHasMore(true);
-    fetchUsers(0, search);
-  }, [search, marital, profession, gotra, minAge, maxAge]);
 
   const maritalOptions = [
     { label: "Single", value: "Never Married" },
@@ -88,45 +48,142 @@ const AdminList = ({ adminProp }) => {
     { label: "Doctor", value: "doctor" },
     { label: "Teacher", value: "teacher" },
     { label: "Business", value: "business" },
-    { label: "Housewife", value: "housewife" },
+    { label: "Housewife", value: "House work" },
     { label: "CA", value: "ca" },
     { label: "Other", value: "other" },
   ];
 
+  const limit = 10;
+
+  const fetchUsers = async (pageNum = 0, searchQuery = "") => {
+    try {
+      const offset = pageNum * limit;
+      let filters = {
+        marital: marital || "",
+        profession: profession || "",
+        gotra: gotra || "",
+      };
+      filters["marital"]={ $contains: "Admin" } 
+      if (minAge && maxAge) {
+        const { from, to } = getDOBRange(minAge, maxAge);
+        filters["DOB_gte"] = from;
+        filters["DOB_lte"] = to;
+      }
+  
+      let data;
+      if (searchQuery) {
+        data = await searchUsers(searchQuery, offset, limit);
+      } else {
+        data = await getPaginatedAdminUsers(offset, limit, filters);
+      }
+  
+      const userList = data?.data || [];
+  
+      if (userList.length === 0) {
+        setHasMore(false);
+      } else {
+        setUsers((prev) => (pageNum === 0 ? userList : [...prev, ...userList]));
+        setPage(pageNum + 1);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearch(inputValue);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [inputValue]);
+
+  // ✅ Fetch when search changes
+  useEffect(() => {
+    setUsers([]);
+    setPage(0);
+    setHasMore(true);
+    fetchUsers(0, search);
+  }, [search, marital, profession, gotra, minAge, maxAge]);
+
   return (
     <div>
-      <div style={{ padding: "16px"}}>
+      <div style={{ padding: "16px" }}>
         {/* Collapsible Filters */}
-        {/* <Collapse>
+        <Collapse>
           <CollapsePanel key="1" title="Filters">
-    
+            <div style={{ marginBottom: 8 }}>
+              <strong>Marital Status:</strong>
+              <Selector
+                showCheckMark
+                columns={3}
+                options={maritalOptions}
+                value={[marital]}
+                onChange={(val) => setMarital(val[0])}
+              />
+            </div>
+
+            <div style={{ marginBottom: 8 }}>
+              <strong>Profession:</strong>
+              <Selector
+                showCheckMark
+                columns={3}
+                options={professionOptions}
+                value={[profession]}
+                onChange={(val) => setProfession(val[0])}
+              />
+            </div>
+
+            <div style={{ marginBottom: 8 }}>
+              <strong>Gotra:</strong>
+              <GotraSelector
+                gotra_for={false}
+                gotraData={gotraData.Gotra}
+                customdata={{ gotra }}
+                setCustomdata={(val) => setGotra(val.gotra)}
+              />
+            </div>
+
+            <div style={{ marginBottom: 8 }}>
+              <strong>Age Range:</strong>
+              <div style={{ display: "flex", gap: 10 }}>
+                <input
+                  type="number"
+                  placeholder="Min Age"
+                  value={minAge}
+                  onChange={(e) => setMinAge(e.target.value)}
+                  style={{ width: "50%" }}
+                />
+                <input
+                  type="number"
+                  placeholder="Max Age"
+                  value={maxAge}
+                  onChange={(e) => setMaxAge(e.target.value)}
+                  style={{ width: "50%" }}
+                />
+              </div>
+            </div>
           </CollapsePanel>
-        </Collapse> */}
-
-        {/* Search Bar */}
-        <SearchBar
-          placeholder="Search Users..."
-          onChange={(value) => setSearch(value)}
-          style={{ marginTop: 10, marginBottom: 10 }}
-        />
+        </Collapse>
       </div>
+      <SearchBar
+        key="UniqueKey"
+        placeholder="Search Users..."
+        value={inputValue}
+        onChange={val => setInputValue(val)}
+        style={{ marginBottom: 10, padding: "16px" }}
+      />
 
-      {/* User List */}
-
-      <div style={{ padding:"16px" }}>
+      <List>
         {users.map((user) => (
-          <div key={user.id}>
             <AdminCard user={user} role="ADMIN" action="NOACTION" />
-            <hr style={{width:'100%'}}/>
-          </div>
-        ))}
-      </div>
+          ))}
+      </List>
+
       {/* Infinite Scroll */}
-      {/* <InfiniteScroll
-        loadMore={() => fetchUsers(page, search)}
-        hasMore={hasMore}
-      /> */}
+      <InfiniteScroll loadMore={() => fetchUsers(page, search)} hasMore={hasMore} />
     </div>
   );
 };
+
 export default AdminList;
