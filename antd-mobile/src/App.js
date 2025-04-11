@@ -21,6 +21,7 @@ import SuperAdmin from './pages/superadmin/SuperAdmin';
 import { SettingsDialog } from './components/users/profilesections/settings/SettingsDialog';
 import AdminListPage from './pages/admin/AdminListPage';
 import NewUserRegistration from './pages/admin/NewUserRegistration';
+import SocialSharingCard from './components/socialsharing/SocialSharingCard';
 
 
 // ✅ Corrected Protected Route Component
@@ -118,6 +119,13 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <MainLayout><SettingsDialog /></MainLayout>
+            </ProtectedRoute>
+          }/>
+
+        <Route path="/social-sharing" 
+          element={
+            <ProtectedRoute>
+              <MainLayout><SocialSharingCard /></MainLayout>
             </ProtectedRoute>
           }/>
 

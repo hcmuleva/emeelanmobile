@@ -21,7 +21,7 @@ const PreferenceInfo = () => {
   const [preferences, setPreferences] = useState(user?.mybasicdata?.preferences || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
-
+  console.log("Preferences", preferences)
   const defaultFormValues = {
     agerange: "",
     maritialstatus: "Bachelor",

@@ -48,10 +48,13 @@ export default function MyRegister() {
         }
         return true;
     };
+    const handleReset = () => {
+      form.resetFields();
+      setCustomdata({});
+  };
 
     const onFinish = async (values) => {
         if (!validateCustomData()) return;
-        
         setLoading(true);
         
         const payload = {
@@ -70,9 +73,10 @@ export default function MyRegister() {
             Toast.show({ 
                 icon: 'success', 
                 content: "User registration completed successfully",
-                duration: 2000,
+                duration: 3000,
                 afterClose: () => form.resetFields()
             });
+            handleReset(); // Reset all fields
             console.log("Registration success:", response);
         } catch (err) {
             console.error("Registration error:", err.response?.data || err.message);
