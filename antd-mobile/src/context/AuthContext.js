@@ -8,6 +8,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  const [profileUpdated, setProfileUpdated] = useState(false);
+
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
@@ -35,6 +37,12 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+  }, [user]);
 
   const login = (token, userData) => {
     localStorage.setItem('jwt', token);
@@ -68,6 +76,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
+        profileUpdated, 
+        setProfileUpdated
       }}
     >
       {children}

@@ -70,7 +70,8 @@ const ProfileDetails = () => {
             whiteSpace: "nowrap",
             marginBottom: 16,
             padding: "4px 0",
-            borderBottom: "1px solid #eee",
+            borderBottom: "0px solid #eee",
+            scrollbarWidth:"none"
           }}
         >
           {tabLinks.map((tab) => (

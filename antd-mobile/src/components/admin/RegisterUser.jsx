@@ -21,6 +21,7 @@ export default function RegisterUser() {
     }, [user]);
 
     const getButtonActions = () => {
+      console.log("user?.emeelanrole",user?.emeelanrole)
         switch (user?.emeelanrole) {
             case "SUPERADMIN":
                 return (
@@ -54,6 +55,15 @@ export default function RegisterUser() {
                         ADMINROLE
                     </Button>
                 );
+                case "CENTER":
+                  return (
+                      <Button 
+                          onClick={() => setEmeelanrole("ADMIN")}
+                          color={emeelanrole === "ADMIN" ? 'primary' : 'default'}
+                      >
+                          ADMINROLE
+                      </Button>
+                  );
             default:
                 return null;
         }

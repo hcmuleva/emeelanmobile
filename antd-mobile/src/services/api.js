@@ -106,30 +106,10 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
 // get admin
 export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {}) => {
   try {
-    console.log("getPaginatedUsers filters",filters, " end")
-    if (filters.DOB_gte) {
-      filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
-    }
-    if (filters.DOB_lte) {
-      filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
-    }
-     if (filters.gotra) {
-      filters.gotra = {  $ne: filters.gotra };
-    }
-    
-    const strapiFilters = Object.fromEntries(
-      Object.entries(filters).filter(
-        ([_, value]) => value !== '' && value !== null && value !== undefined
-      )
-    );
-    const {DOB_gte,DOB_lte, ...modifiedFilters} = strapiFilters;
-    console.log("getPaginatedUsers filters",modifiedFilters, " end")
-
     const response = await api.get("/custom-admins", {
       params: {
         _start: start,
         _limit: limit,
-        filters: modifiedFilters, // ✅ Use filters
         _sort: 'id:asc', // Sort by newest first
         "populate[photos]": "*", // ✅ Populate photos (all fields)
         "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
@@ -211,6 +191,35 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
   }
 };
 
+//search ADMIN
+export const searchAdmins = async (query, start = 0, limit = 10) => {
+  try {
+    const params = {
+      _start: start,
+      _limit: limit,
+      _q: query, // Strapi search query
+      _sort: "username:ASC",
+      filters: {
+        $or: [
+          { FirstName: { $containsi: query } },
+          { LastName: { $containsi: query } },
+        ],
+      },
+    }
+    console.log(params)
+    const response = await api.get(`/custom-admins`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Search failed";
+  }
+};
+
+
 export const resetpassword = async (userId, newPassword) => {
   try {
     const response = await api.post("/reset-password", {
@@ -263,8 +272,8 @@ export const updateUserData = async (data, userId) => {
     const response = await api.put(`/users/${userId}`, {
       ...data,
     } );
-
     return response.data;
+
   } catch (error) {
     console.error(
       "Strapi update error:",

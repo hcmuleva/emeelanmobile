@@ -9,6 +9,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { newConnectionRequest } from "../../services/api";
+
 function calculateAge(dob) {
   if (!dob) return null;
   const today = new Date();
@@ -39,13 +40,25 @@ const NewProfileCard = ({ user, role, action }) => {
   const { user: selfUser, setUser, jwt } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const userObj = getUserFromLocalStorage();
-  const userId = userObj?.id || null;
+  // const userObj = getUserFromLocalStorage();
+  // const userId = userObj?.id || null;
   const profileid = user?.id || null;
-  const imagesrc =
-    user?.images?.pictures?.[0] ||
-    user?.images?.profilePicture ||
-    user?.images?.photos?.[0]?.url;
+  console.log(user)
+  let imagesrc = ""
+
+  if ( user?.Pictures?.profilePicture ){
+    imagesrc = user?.Pictures.profilePicture?.url
+  } else if (Array.isArray(user?.images?.pictures) && user?.images?.pictures[0]){
+    imagesrc = user?.images?.pictures[0]
+  } else if (user?.Pictures?.photos?.[0]?.url){
+    imagesrc = user?.Pictures.photos?.[0]?.url
+  } else if ( user?.Sex === "Female") {
+    imagesrc = "/assets/woman-user-circle-icon.png"
+  } else if (user?.Sex === "Male"){
+    imagesrc = "/assets/man-user-circle-icon.png"
+  } else {
+    imagesrc = "/assets/question-mark-circle-outline-icon.png"
+  }
 
   // user?.role?.toUpperCase();
   const handleRequest = async () => {
@@ -114,110 +127,6 @@ const NewProfileCard = ({ user, role, action }) => {
     /**
      *  We are now not allowing approvel on Card instead of it on detail page user can approve
      */
-    if (
-      selfUser?.emeelanrole === "ADMIN" ||
-      selfUser?.emeelanrole === "SUPERADMIN" ||
-      selfUser?.emeelanrole === "CENTER"
-    ) {
-      return (
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-          <button
-            onClick={() => {
-              console.log(
-                `Request Sent to ", ${selfUser.id}, " and request SenderName ${selfUser.FirstName}to ", ${user.id}, " Reciever Name", ${user.FirstName}`
-              );
-            }}
-            style={{
-              flex: 1,
-              padding: "12px 24px",
-              borderRadius: "12px",
-              backgroundColor: colors.primary,
-              color: colors.light,
-              border: "none",
-              fontSize: "15px",
-              fontWeight: "600",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-            }}
-          >
-            Approve
-          </button>
-          <button
-            onClick={() => console.log("Decline clicked")}
-            style={{
-              flex: 1,
-              padding: "12px 24px",
-              borderRadius: "12px",
-              backgroundColor: "rgb(197, 194, 33)",
-              color: colors.light,
-              border: "none",
-              fontSize: "15px",
-              fontWeight: "600",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-            }}
-          >
-            Decline
-          </button>
-          <button
-            onClick={() => navigate(`/profile-view/${profileid}`)}
-            style={{
-              flex: 1,
-              padding: "12px 24px",
-              borderRadius: "12px",
-              backgroundColor: "rgba(139, 0, 0, 0.1)",
-              color: colors.primary,
-              border: "none",
-              fontSize: "15px",
-              fontWeight: "600",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-            }}
-          >
-            Details
-          </button>
-        </div>
-      );
-    } else if (selfUser?.emeelanrole === "MEELAN") {
-      return (
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-          {/* <button
-            onClick={handleRequest}
-            style={{
-              flex: 1,
-              padding: "12px 24px",
-              borderRadius: "12px",
-              backgroundColor: colors.primary,
-              color: colors.light,
-              border: "none",
-              fontSize: "15px",
-              fontWeight: "600",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-            }}
-          >
-            Request
-          </button> */}
-          <button
-            onClick={() => navigate(`/profile-view/${profileid}`)}
-            style={{
-              flex: 1,
-              padding: "12px 24px",
-              borderRadius: "12px",
-              backgroundColor: "rgba(139, 0, 0, 0.1)",
-              color: colors.primary,
-              border: "none",
-              fontSize: "15px",
-              fontWeight: "600",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
-            }}
-          >
-            Details
-          </button>
-        </div>
-      );
-    }
   };
 
   if (user?.images?.length > 0) {
@@ -255,50 +164,78 @@ const NewProfileCard = ({ user, role, action }) => {
             borderRadius: "24px",
             overflow: "hidden",
             backgroundColor: colors.background,
-            // backdropFilter: "blur(0.1px)",
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
             border: `1px solid ${colors.border}`,
           }}
         >
-          {/* Header Section with Image */}
+          {/* Header Section with Image and Profile ID */}
           <div
             style={{
               position: "relative",
               padding: "24px 20px 0",
-              background: `linear-gradient(135deg, ${colors.primary}88, ${colors.secondary}88)`,
+              background: 'linear-gradient(to right, #8b0000, #b00000)',
               borderRadius: "24px 24px 0 0",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              zIndex: 2,
             }}
           >
-            {/* Profile Image */}
             <div
               style={{
-                width: "120px",
-                height: "120px",
-                borderRadius: "50%",
-                backgroundColor: colors.light,
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-                border: `4px solid ${colors.light}`,
-                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
-                marginBottom: "16px",
-                position: "relative",
-                zIndex: "1",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+                gap: "16px",
+                zIndex: 1,
               }}
             >
-              <img
-                src={
-                  imagesrc ||
-                  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                }
-                alt="Profile"
+              {/* Profile Image */}
+              <div
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
+                  width: "120px",
+                  height: "120px",
+                  borderRadius: "50%",
+                  backgroundColor: colors.light,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  border: `4px solid ${colors.light}`,
+                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+                  marginBottom: "10px",
                 }}
-              />
+              >
+                <img
+                  src={imagesrc}
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+
+              {/* Profile ID */}
+              <div
+                style={{
+                  backgroundColor: colors.light,
+                  padding: "8px 12px",
+                  borderRadius: "12px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  alignSelf: "center",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                }}
+              >
+                <span style={{ marginRight: "4px", color: colors.text.dark }}>
+                  Profile ID:
+                </span>
+                <span style={{ color: colors.primary }}>
+                  {user?.id || "Not Specified"}
+                </span>
+              </div>
             </div>
 
             {/* Semicircle background curve */}
@@ -333,6 +270,7 @@ const NewProfileCard = ({ user, role, action }) => {
                 marginBottom: "16px",
                 marginTop: "20px",
                 textTransform: "capitalize",
+                flexWrap:"wrap"
               }}
             >
               <h2
@@ -347,7 +285,7 @@ const NewProfileCard = ({ user, role, action }) => {
                   {user?.FirstName}
                   {user?.LastName && user?.FirstName !== user?.LastName
                     ? ` ${user.LastName}`
-                    : ""}
+                    : "Name Not Specified"}
                 </span>
               </h2>
               <Tag
@@ -362,11 +300,11 @@ const NewProfileCard = ({ user, role, action }) => {
                 }}
               >
                 Age:{" "}
-                {user?.age ??
-                  (user?.DOB ? calculateAge(user.DOB) : "Age Not Specified")}
+                {user?.age ?? (user?.DOB ? calculateAge(user.DOB) : "Unknown")}
               </Tag>
             </Space>
 
+            {/* Gender */}
             <div
               style={{
                 display: "flex",
@@ -387,11 +325,8 @@ const NewProfileCard = ({ user, role, action }) => {
               <span style={{ color: colors.primary, fontWeight: "600" }}>
                 {user?.Sex || "Not Specified"}
               </span>
-              <span>ProfileId:</span>
-              <span style={{ color: colors.primary, fontWeight: "600" }}>
-                {user?.id || "Not Specified"}
-              </span>
             </div>
+
             {/* Location */}
             <div
               style={{
@@ -429,7 +364,7 @@ const NewProfileCard = ({ user, role, action }) => {
                   border: "none",
                 }}
               >
-                {user?.Height || "Height Not Specified"}
+                Height: {user?.Height || "Not Specified"}
               </Tag>
               <Tag
                 style={{
@@ -442,16 +377,14 @@ const NewProfileCard = ({ user, role, action }) => {
                   border: "none",
                 }}
               >
-                {user?.Gotra || "Gotra Not Specified"}
+                Gotra: {user?.Gotra || "Not Specified"}
               </Tag>
             </div>
 
+            <hr />
+
             {/* Status Items */}
-            <div
-              style={{
-                marginBottom: "24px",
-              }}
-            >
+            <div style={{ marginBottom: "24px" }}>
               <div
                 style={{
                   display: "flex",
@@ -466,7 +399,9 @@ const NewProfileCard = ({ user, role, action }) => {
                 <StarOutline
                   style={{ color: colors.secondary, fontSize: "18px" }}
                 />
-                <span>{user?.marital || "Marital Not Specified"}</span>
+                <span>
+                  Marital Status: {user?.marital || "Marital Not Specified"}
+                </span>
               </div>
               <div
                 style={{
@@ -474,6 +409,7 @@ const NewProfileCard = ({ user, role, action }) => {
                   alignItems: "center",
                   gap: "8px",
                   color: colors.text.dark,
+                  marginBottom: "12px",
                   fontSize: "15px",
                   fontWeight: "500",
                 }}
@@ -481,7 +417,9 @@ const NewProfileCard = ({ user, role, action }) => {
                 <StarOutline
                   style={{ color: colors.secondary, fontSize: "18px" }}
                 />
-                <span>{user?.Profession || "Profession Not Specified"}</span>
+                <span>
+                  Profession: {user?.Profession || "Profession Not Specified"}
+                </span>
               </div>
               <div
                 style={{
@@ -489,6 +427,7 @@ const NewProfileCard = ({ user, role, action }) => {
                   alignItems: "center",
                   gap: "8px",
                   color: colors.text.dark,
+                  marginBottom: "12px",
                   fontSize: "15px",
                   fontWeight: "500",
                 }}
@@ -496,7 +435,7 @@ const NewProfileCard = ({ user, role, action }) => {
                 <PhoneOutlined
                   style={{ color: colors.secondary, fontSize: "18px" }}
                 />
-                <span>{user?.MobileNumber || "No Mobile"}</span>
+                <span>{user?.MobileNumber || "No Mobile Number"}</span>
               </div>
             </div>
 
