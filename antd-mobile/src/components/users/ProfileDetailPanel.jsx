@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { customsingleuser, newConnectionRequest, updateConnectionRequest, updateConnectionStatus } from "../../services/api";
+import { customsingleuser, newConnectionRequest, updateConnectionRequest, updateConnectionStatus, updateUserData } from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 import UserDetails from "./useractions/UserDetails";
 import { Button, Card, Space, Tag, Toast } from "antd-mobile";
@@ -69,7 +69,10 @@ const ProfileDetailPanel = () => {
     // }
     setLoading(false);
   };
-
+ const handleUserStatus = async (actionname) =>{
+  const response = await updateUserData({userstatus:actionname}, profileid)
+   console.log(`For Profile id ${profileid} USERSTATUS:",${actionname} changed and response ${response}`)
+ }
   const renderActionButtons = () => {
     if (!profileData || !user) return null;
 
@@ -117,11 +120,10 @@ const ProfileDetailPanel = () => {
   if (["ADMIN", "CENTER", "SUPERADMIN"].includes(role)) {
     return (
       <Space>
-        <Button type="primary">Approve</Button>
-        <Button danger>Reject</Button>
-        <Button>Block</Button>
-        <Button danger type="dashed">Suspend</Button>
-      </Space>
+       <Button color='success' onClick={() => handleUserStatus("APPROVED")}>Approve</Button>
+<Button color='warning' onClick={() => handleUserStatus("REJECTED")}>Reject</Button>
+<Button color='danger' onClick={() => handleUserStatus("BLOCKED")}>Block</Button>
+<Button color='warning' type="dashed" onClick={() => handleUserStatus("SUSPENDED")}>Suspend</Button> </Space>
     );
   }
 
@@ -129,7 +131,7 @@ const ProfileDetailPanel = () => {
 };
 
   return (
-    <Card title="Profile Detail" extra={renderActionButtons()}>
+    <Card title="" extra={renderActionButtons()}>
       {profileData ? <UserDetails profileData={profileData} profileid={profileid}/> : "Loading..."}
       {renderActionButtons()}
     </Card>
