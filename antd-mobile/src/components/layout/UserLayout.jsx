@@ -1,12 +1,11 @@
 import {
   HomeOutlined,
-  MessageOutlined,
-  SearchOutlined,
+  MessageOutlined
 } from "@ant-design/icons";
-import { CheckCircleFill, TeamOutline } from "antd-mobile-icons";
+import { CheckCircleFill, TeamOutline, UserAddOutline } from "antd-mobile-icons";
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
-import { useNavigate, useLocation } from "react-router-dom";
 
 export default function UserLayout({ children }) {
   const location = useLocation();
@@ -43,11 +42,11 @@ export default function UserLayout({ children }) {
               icon: <CheckCircleFill style={{ fontSize: 24 }} />,
               key: "status",
             },
-            { icon: <MessageOutlined style={{ fontSize: 24 }} />, key: "chat" },
             {
-              icon: <SearchOutlined style={{ fontSize: 24 }} />,
-              key: "search",
-            },
+              icon: <TeamOutline style={{ fontSize: 24 }} />, 
+							key: "adminlist"
+						},
+
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (

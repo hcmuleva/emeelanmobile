@@ -220,7 +220,7 @@ const FeatureTiles = () => {
 
   return (
     <div style={{padding:"16px"}}>
-      <UserLocation />
+      {/* <UserLocation /> */}
       {/* Likes */}
      <Marquee mockSuggestion={mockSuggestion} />  
 
