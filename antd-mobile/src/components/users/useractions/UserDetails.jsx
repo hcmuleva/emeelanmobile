@@ -138,7 +138,9 @@ const UserDetails = ({profileid}) => {
     gotra: member.gotra || "Unknown",
     profession: member.profession || "Unknown",
   }));
+
   console.log({user}, "userObh")
+  
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Header */}
