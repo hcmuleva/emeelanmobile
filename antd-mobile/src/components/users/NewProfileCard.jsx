@@ -59,6 +59,52 @@ const NewProfileCard = ({ user, role, action }) => {
 
 
   const renderActionButtons = () => {
+    /**
+     *  Below piece of code to bypass approval from here
+     * 
+     */
+    return(
+    <>
+    <button
+    onClick={() => navigate(`/profile-view/${profileid}`)}
+    style={{
+      flex: 1,
+      padding: "12px 24px",
+      borderRadius: "12px",
+      backgroundColor: "rgba(139, 0, 0, 0.1)",
+      color: colors.primary,
+      border: "none",
+      fontSize: "15px",
+      fontWeight: "600",
+      cursor: "pointer",
+      boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
+    }}
+  >
+    Details
+  </button>
+  <button
+    
+    style={{
+      flex: 1,
+      padding: "12px 24px",
+      borderRadius: "12px",
+      backgroundColor: "rgba(139, 0, 0, 0.1)",
+      color: colors.primary,
+      border: "none",
+      fontSize: "15px",
+      fontWeight: "600",
+      cursor: "pointer",
+      boxShadow: "0 4px 12px rgba(139, 0, 0, 0.25)",
+    }}
+  >
+    Status:{user.userstatus}
+  </button>
+  </>
+  )
+  
+    /**
+     *  We are now not allowing approvel on Card instead of it on detail page user can approve
+     */
     if (selfUser?.emeelanrole === "ADMIN" || selfUser?.emeelanrole === "SUPERADMIN" || selfUser?.emeelanrole === "CENTER") {
       return (
         <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>

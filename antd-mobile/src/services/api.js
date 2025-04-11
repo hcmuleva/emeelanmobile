@@ -104,10 +104,37 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
     }
   };
 // get admin
-export const getPaginatedAdminUsers = async () => {
+export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {}) => {
   try {
+    console.log("getPaginatedUsers filters",filters, " end")
+    if (filters.DOB_gte) {
+      filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
+    }
+    if (filters.DOB_lte) {
+      filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
+    }
+     if (filters.gotra) {
+      filters.gotra = {  $ne: filters.gotra };
+    }
+    
+    const strapiFilters = Object.fromEntries(
+      Object.entries(filters).filter(
+        ([_, value]) => value !== '' && value !== null && value !== undefined
+      )
+    );
+    const {DOB_gte,DOB_lte, ...modifiedFilters} = strapiFilters;
+    console.log("getPaginatedUsers filters",modifiedFilters, " end")
 
     const response = await api.get("/custom-admins", {
+      params: {
+        _start: start,
+        _limit: limit,
+        filters: modifiedFilters, // ✅ Use filters
+        _sort: 'id:asc', // Sort by newest first
+        "populate[photos]": "*", // ✅ Populate photos (all fields)
+        "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
+        "populate[Height]": "*",
+      },
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`, // Use correct token
         "Content-Type": "application/json",
@@ -229,7 +256,7 @@ export const uploadImage = async (formData, jwt) => {
 
 // new Apicalls start
 // update Data of me,
-export const updateUserData = async (data, jwt, userId) => {
+export const updateUserData = async (data, userId) => {
   try {
     // console.log("Sending update:", { photos: photoIds });
 
