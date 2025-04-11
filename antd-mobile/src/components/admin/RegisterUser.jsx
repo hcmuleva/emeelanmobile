@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Form, Input, Selector, Button, Toast,Tadio, Radio, Divider } from "antd-mobile";
 
 import { AuthContext } from '../../context/AuthContext'
-import { getPincode } from '../../services/api';
+import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
 import gotra from "../../utils/gotra.json";
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import { Country } from 'country-state-city';
+import DateSelector from '../authentication/registration/DateSelector';
 
 export default function RegisterUser() {
     const [form] = Form.useForm();
@@ -65,9 +66,9 @@ export default function RegisterUser() {
           }
         }
       };
-      const onFinish = (values) => {
+      const onFinish = async (values) => {
         console.log("customdata",customdata)
-        const {gotra:Gotra, marititalstatus:maritial} = customdata
+        const {gotra:Gotra, marititalstatus:maritial, DOB} = customdata
         console.log("Custm data",customdata)
         values["emeelanrole"] =emeelanrole;
         values["username"] = values["MobileNumber"];
@@ -77,9 +78,20 @@ export default function RegisterUser() {
         //values['Gotra'] = customdata?.gotra
         values['Gotra'] = Gotra
         values["maritial"] =maritial
+        values["DOB"] = DOB
         console.log("✅ Form Submitted:", values);
         const {gotra,marititalstatus, ...payload} = values
         console.log("payload ", payload)
+        try{
+          const response = await register(payload)
+          Toast.show({ icon: 'success', content: "User Registration completed" });
+
+          console.log(response)
+        } catch (err){
+          console.error("error", err)
+          Toast.show({ icon: 'fail', content: "Failed to create user" });
+
+        }
 
       };
     
@@ -171,7 +183,8 @@ export default function RegisterUser() {
         setCustomdata={setCustomdata}
       />
       <MaritialStatus customdata={customdata} setCustomdata={setCustomdata} />
-    
+      <DateSelector customdata={customdata} setCustomdata={setCustomdata} />
+
       <Form.Item
         name="MobileNumber"
         label="Mobile Number"
