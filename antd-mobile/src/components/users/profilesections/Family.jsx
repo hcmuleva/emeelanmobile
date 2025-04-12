@@ -73,8 +73,11 @@ const FamilyInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, jwt, user.id);
+      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+
       setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
+
       Toast.show({ icon: "success", content: "Family data saved!" });
     } catch (err) {
       console.error("Save error", err);
@@ -83,7 +86,7 @@ const FamilyInfo = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "10px" }}>
       <Form
         form={form}
         initialValues={defaultFormValues}
@@ -153,17 +156,29 @@ const FamilyInfo = () => {
             marginBottom: 10,
             padding: 10,
             borderRadius: 8,
+            fontSize: "16px",
           }}
         >
           <div>
-            <b>{member.relation}</b> ({member.type}) - {member.firstName} {member.lastName}, Age:{" "}
-            {member.age}, Gotra: {member.gotra}, Profession: {member.profession}
+            <b>{member.relation}</b> ({member.type}) - {member.firstName}{" "}
+            {member.lastName}, Age: {member.age}, Gotra: {member.gotra},
+            Profession: {member.profession}
           </div>
-          <Space style={{ marginTop: 8 }}>
-            <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
+          <Space style={{ marginTop: 10 }}>
+            <Button
+              style={{ width: "80px", padding: "6px" }}
+              size="mini"
+              color="primary"
+              onClick={() => handleEdit(index)}
+            >
               Edit
             </Button>
-            <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
+            <Button
+              style={{ width: "80px", padding: "6px" }}
+              size="mini"
+              color="danger"
+              onClick={() => handleDelete(index)}
+            >
               Delete
             </Button>
           </Space>
@@ -172,7 +187,7 @@ const FamilyInfo = () => {
 
       <Button
         block
-        style={{ backgroundColor: "#8B0000", color: "white", marginTop: 16 }}
+        style={{ backgroundColor: "#004080", color: "white", marginTop: 16 }}
         onClick={handleSaveToServer}
       >
         Save Family Info
