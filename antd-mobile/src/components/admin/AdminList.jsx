@@ -18,12 +18,16 @@ const AdminList = ({ adminProp, userrole }) => {
     try {
       const offset = pageNum * limit;
     
-  
+      let filters = {
+        marital: { $contains: "Admin" } 
+        
+      };
+     
       let data;
       if (searchQuery) {
-        data = await searchAdmins(searchQuery, offset, limit);
+        data = await searchAdmins(searchQuery, offset, limit,filters);
       } else {
-        data = await getPaginatedAdminUsers(offset, limit);
+        data = await getPaginatedAdminUsers(offset, limit,filters);
       }
   
       const userList = data?.data || [];

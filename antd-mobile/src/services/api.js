@@ -110,6 +110,7 @@ export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {})
       params: {
         _start: start,
         _limit: limit,
+        filters,
         _sort: 'id:asc', // Sort by newest first
         "populate[photos]": "*", // ✅ Populate photos (all fields)
         "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
@@ -192,14 +193,16 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
 };
 
 //search ADMIN
-export const searchAdmins = async (query, start = 0, limit = 10) => {
+export const searchAdmins = async (query, start = 0, limit = 10,filters={}) => {
   try {
     const params = {
       _start: start,
       _limit: limit,
       _q: query, // Strapi search query
       _sort: "username:ASC",
+
       filters: {
+        ...filters,
         $or: [
           { FirstName: { $containsi: query } },
           { LastName: { $containsi: query } },

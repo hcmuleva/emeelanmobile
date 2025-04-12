@@ -78,7 +78,7 @@ const UserSuggestionBar = ({ users }) => {
   const navigate = useNavigate();
   
   const viewProfile = (userId) => {
-    navigate(`/profile/${userId}`);
+    if(userId) navigate(`/profile/${userId}`);
   };
   
   return (
@@ -97,7 +97,7 @@ const UserSuggestionBar = ({ users }) => {
           color='primary' 
           fill='none'
           style={{ color: '#b00000' }}
-          onClick={() => navigate('/all-matches')}
+         // onClick={() => navigate('/all-matches')}
         >
           View All
         </Button>
@@ -112,7 +112,7 @@ const UserSuggestionBar = ({ users }) => {
         {users.map(user => (
           <Card 
             key={user.id}
-            onClick={() => viewProfile(user.id)}
+           // onClick={() => viewProfile(user.id)}
             style={{ 
               minWidth: '140px',
               marginRight: '12px',
@@ -236,7 +236,7 @@ const DonationLink = () => {
           </p>
         </div>
         <Button
-          onClick={goToDonation}
+          //onClick={goToDonation}
           style={{ 
             backgroundColor: 'white',
             color: '#b00000',
@@ -272,7 +272,7 @@ const QuickShortcuts = () => {
         {shortcuts.map((item, index) => (
           <Grid.Item key={index}>
             <div 
-              onClick={() => navigate(item.path)}
+             // onClick={() => navigate(item.path)}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -307,16 +307,16 @@ const FeatureTiles = () => {
   const user = JSON.parse(localStorage.getItem("user"))
   // Mock donors data
   const mockDonors = [
-    { name: 'Rahul Sharma', amount: 1000 },
-    { name: 'Priya Patel', amount: 500 },
-    { name: 'Amit Singh', amount: 2000 },
-    { name: 'Meera Reddy', amount: 1500 },
-    { name: 'Vishal Agarwal', amount: 3000 },
-    { name: 'Sunita Jain', amount: 750 },
-    { name: 'Karan Malhotra', amount: 1200 },
-    { name: 'Deepika Kapoor', amount: 2500 },
-    { name: 'Rajesh Kumar', amount: 1800 },
-    { name: 'Anita Sharma', amount: 1000 }
+    { name: 'Pokarji Rathore', amount: 20000 },
+    { name: 'Mangilalji Patel', amount: 1500 },
+    { name: 'Amit Muleva', amount: 2100 },
+    { name: 'Meera bai Hammad', amount: 1500 },
+    { name: 'Vishal Solanki', amount: 3000 },
+    { name: 'Sunita ji  Gehlot', amount: 1750 },
+    { name: 'Karan Bhagwan', amount: 1200 },
+    { name: 'Deepak Pawar', amount: 2500 },
+    { name: 'Rajesh Kag', amount: 1800 },
+    { name: 'Anita Satpuda', amount: 1000 }
   ];
   
   // Mock user suggestions
@@ -430,7 +430,7 @@ const FeatureTiles = () => {
               paddingLeft: '10px',
               paddingRight: '10px'
             }}
-            onClick={()=>navigate("userprofile")}
+            // onClick={()=>navigate("userprofile")}
           >
             Complete your profile
           </Tag>
