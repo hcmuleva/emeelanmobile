@@ -5,13 +5,13 @@ import MyRegister from '../../components/authentication/MyRegister'
 
 export default function LoginPage() {
   const [isLogined, setIsLogined] = useState(true)
-
-  return (<>
-        { isLogined ? 
-            <MyLogin isLogined={isLogined} setIsLogined={setIsLogined}/>
-            :
-            <MyRegister isLogined={isLogined} setIsLogined={setIsLogined}/>
-        }
+  return (
+    <>
+      { isLogined ? 
+        <MyLogin isLogined={isLogined} setIsLogined={setIsLogined}/>
+        :
+        <MyRegister isLogined={isLogined} setIsLogined={setIsLogined}/>
+      }
     </>
-  )
+  ) 
 }

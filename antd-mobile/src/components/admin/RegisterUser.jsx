@@ -240,8 +240,8 @@ export default function RegisterUser() {
                     rules={[{ required: true, message: "Please select your gender" }]}
                 >
                     <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                        <Radio value="Male">Male</Radio>
-                        <Radio value="Female">Female</Radio>
+                        <Radio style={{marginRight:"15px"}} value="Male">Male</Radio>
+                        <Radio style={{marginRight:"15px"}} value="Female">Female</Radio>
                         <Radio value="Other">Other</Radio>
                     </Radio.Group>
                 </Form.Item>
@@ -306,7 +306,7 @@ export default function RegisterUser() {
 
                 <Form.Item name="isdivyang" label="Is Divyang?">
                     <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                        <Radio value={true}>Yes</Radio>
+                        <Radio style={{marginRight:"15px"}} value={true}>Yes</Radio>
                         <Radio value={false}>No</Radio>
                     </Radio.Group>
                 </Form.Item>

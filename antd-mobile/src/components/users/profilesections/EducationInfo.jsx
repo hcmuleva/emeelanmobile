@@ -62,8 +62,11 @@ const EducationInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, jwt, user.id);
+      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      
       setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
+
       Toast.show({ icon: "success", content: "Education data saved!" });
     } catch (err) {
       console.error("Save error", err);
@@ -72,7 +75,7 @@ const EducationInfo = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "10px" }}>
       <Form form={form} initialValues={defaultFormValues} layout="horizontal">
         <Form.Item name="level" label="Level">
           <Selector
@@ -112,16 +115,17 @@ const EducationInfo = () => {
             marginBottom: 10,
             padding: 10,
             borderRadius: 8,
+            fontSize:"16px"
           }}
         >
           <div>
             <b>{edu.level}</b> - {edu.degreeName}, {edu.institute}, {edu.location} ({edu.year})
           </div>
-          <Space style={{ marginTop: 8 }}>
-            <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
+          <Space style={{ marginTop: 10 }}>
+            <Button style={{width:"80px", padding:"6px"}} size="mini" color="primary" onClick={() => handleEdit(index)}>
               Edit
             </Button>
-            <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
+            <Button style={{width:"80px", padding:"6px"}} size="mini" color="danger" onClick={() => handleDelete(index)}>
               Delete
             </Button>
           </Space>
