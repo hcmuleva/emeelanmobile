@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import StatusNotification from "./StatusNotification";
 import { AuthContext } from "../../context/AuthContext";
 import { getCustomMe } from "../../services/api";
+import DynamicLogo from "./DynamicLogo";
 
 const TopBar = ({ userRole }) => {
   const { jwt, profileUpdated, setProfileUpdated } = useContext(AuthContext);
@@ -113,8 +114,18 @@ const TopBar = ({ userRole }) => {
             </span>
           </div>
         </div>
-
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        {/* <Avatar
+              src={"logo.png"}
+              style={{
+                cursor: "pointer",
+                "--size": "55px",
+                borderRadius: "50%",
+              }}
+            /> */}
+<DynamicLogo color="#FFA500" backgroundColor="#FFFFFF" />
+</div>
+        {/* <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Popover
             content={
               <List style={{ minWidth: 180 }}>
@@ -170,7 +181,7 @@ const TopBar = ({ userRole }) => {
             userId={JSON.parse(localStorage.getItem("user"))?.id}
             setNotificationStats={setNotificationStats}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

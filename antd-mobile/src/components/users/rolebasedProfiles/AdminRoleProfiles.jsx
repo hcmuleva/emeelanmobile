@@ -56,14 +56,11 @@ const AdminRoleProfiles = ({ adminProp,userrole }) => {
   const fetchUsers = async (pageNum = 0, searchQuery = "") => {
     try {
       const offset = pageNum * limit;
-      let filters = {
-        marital: marital || "",
-        profession: profession || "",
-        gotra: gotra || "",
-      };
+      let filters = {}
+      
       if(userrole==="ADMIN"){
         filters["userstatus"]="PENDING"
-      }
+      } 
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;

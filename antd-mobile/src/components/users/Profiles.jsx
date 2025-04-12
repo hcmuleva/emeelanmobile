@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import AdminRoleProfiles from "./rolebasedProfiles/AdminRoleProfiles";
 
 export default function Profiles() {
+console.log("profiles")
   const { user } = useContext(AuthContext);
   switch (user.emeelanrole) {
     case "MEELAN":

@@ -20,6 +20,7 @@ const getDOBRange = (minAge, maxAge) => {
 };
 
 const UserRoleProfile = ({ adminProp }) => {
+  console.log("USER PROFILES ")
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
