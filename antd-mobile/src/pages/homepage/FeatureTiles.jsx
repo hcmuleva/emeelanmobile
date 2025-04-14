@@ -1,263 +1,354 @@
-import { AlipayCircleOutlined } from '@ant-design/icons';
-import {
-  Card,
-  Grid
+import React, { useContext, useEffect, useState } from 'react';
+import { 
+  Card, 
+  Grid, 
+  Avatar, 
+  Button, 
+  SwipeAction, 
+  Toast, 
+  Badge, 
+  List, 
+  Space, 
+  FloatingBubble,
+  Divider,
+  Tag
 } from 'antd-mobile';
-import {
-  TeamOutline
+import { 
+  TeamOutline, 
+  HeartOutline, 
+  GiftOutline, 
+  UserAddOutline,
+  PayCircleOutline,
+  TravelOutline
 } from 'antd-mobile-icons';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import { BhamasahDialog } from '../../components/homepage/BhamasahDialog';
-import { MyFamilyDialog } from '../../components/homepage/MyFamilyDialog';
-import { ProfessionDialog } from '../../components/homepage/ProfessionDialog';
-
+import { useNavigate } from 'react-router-dom';
 import { getPaginatedUsers } from '../../services/api';
-
-import Marquee from '../../components/marquee/Marquee';
 import "../../styles/scrollHide.css";
-import UserLocation from './Userlocation';
+import AdminUserEditor from '../../components/admin/AdminUserEditor';
+import PendingApprovalCard from '../../components/authentication/PendingApprovalCard';
+import { authService } from '../../services';
+import { AuthContext } from '../../context/AuthContext';
 
-const tiles = [
-  { title: 'Donation', color: '#A5D8FF', icon: <AlipayCircleOutlined style={{ fontSize: 24, color: '#212121' }} />, key: 'bhamasah' },
-  
-  { title: 'Admin List', color: '#FFC9C9', icon: <TeamOutline style={{ fontSize: 24, color: '#212121' }} />, key: 'admin' },
-  
-];
-  
-const demoLongText = " This is a sample long text and heere is our message "
-const FeatureTiles = () => {
-  const navigate = useNavigate();
-
-  const [visibleBhamasah, setVisibleBhamasah] = useState(false);
-  const [visibleProfession, setVisibleProfession] = useState(false);
-  // const [visibleAdminList, setVisibleAdminList] = useState(false);
-  const [visibleFamily, setVisibleFamily] = useState(false);
-  const [users, setUsers] = useState([])
-  const [recentMatches, setRecentMatches] = useState([]);
-  
-  // Mock data for demonstration
-  const mockSuggestion = [
-    {
-      id: 1,
-      name: 'Radhika',
-      age: 23,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU',
-      mobileNumber: '9876543210',
-      city: 'Jaipur',
-      state: 'Rajasthan',
-    },
-    {
-      id: 2,
-      name: 'Chanchala',
-      age: 28,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU',
-      mobileNumber: '9123456780',
-      city: 'Indore',
-      state: 'Madhya Pradesh',
-    },
-    {
-      id: 3,
-      name: 'Geeta',
-      age: 21,
-      avatar: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg',
-      mobileNumber: '7012345678',
-      city: 'Udaipur',
-      state: 'Rajasthan',
-    },
-    {
-      id: 4,
-      name: 'Manubai',
-      age: 32,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU',
-      mobileNumber: '9001234567',
-      city: 'Bikaner',
-      state: 'Rajasthan',
-    },
-    {
-      id: 5,
-      name: 'Mamta',
-      age: 23,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU',
-      mobileNumber: '9999999999',
-      city: 'Jodhpur',
-      state: 'Rajasthan',
-    },
-    {
-      id: 6,
-      name: 'Bhanupriya',
-      age: 28,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU',
-      mobileNumber: '8888888888',
-      city: 'Ahmedabad',
-      state: 'Gujarat',
-    },
-    {
-      id: 7,
-      name: 'Priti',
-      age: 21,
-      avatar: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg',
-      mobileNumber: '7777777777',
-      city: 'Mumbai',
-      state: 'Maharashtra',
-    },
-    {
-      id: 8,
-      name: 'Sangeeta',
-      age: 32,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU',
-      mobileNumber: '6666666666',
-      city: 'Surat',
-      state: 'Gujarat',
-    },
-    {
-      id: 9,
-      name: 'Rachana',
-      age: 23,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU',
-      mobileNumber: '9555555555',
-      city: 'Kota',
-      state: 'Rajasthan',
-    },
-    {
-      id: 10,
-      name: 'Komal',
-      age: 28,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU',
-      mobileNumber: '9444444444',
-      city: 'Pune',
-      state: 'Maharashtra',
-    },
-    {
-      id: 11,
-      name: 'Bhumika',
-      age: 21,
-      avatar: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg',
-      mobileNumber: '9333333333',
-      city: 'Nagpur',
-      state: 'Maharashtra',
-    },
-    {
-      id: 12,
-      name: 'Vandana',
-      age: 32,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU',
-      mobileNumber: '9222222222',
-      city: 'Ajmer',
-      state: 'Rajasthan',
-    },
-  ];
-  
-  
-  const mockRecentMatches = [
-    { id: 1, name: 'James', age: 26, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU' },
-    { id: 2, name: 'Robert', age: 29, image: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg' },
-    { id: 3, name: 'Chris', age: 31, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU' },
-    { id: 4, name: 'David', age: 25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU' },
-    { id: 5, name: 'James', age: 26, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU' },
-    { id: 6, name: 'Robert', age: 29, image: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg' },
-    { id: 7, name: 'Chris', age: 31, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU' },
-    { id: 8, name: 'David', age: 25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU' },
-    { id: 9, name: 'James', age: 26, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU' },
-    { id: 10, name: 'Robert', age: 29, image: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg' },
-    { id: 11, name: 'Chris', age: 31, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU' },
-    { id: 12, name: 'David', age: 25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU' },
-    { id: 13, name: 'James', age: 26, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMaT_ZJ1PscPs0m7B0xx_gLUcM8WPjPw1uDol5_cog3HqI0LvNFXOeNTW6WTbiRAh0PDE&usqp=CAU' },
-    { id: 14, name: 'Robert', age: 29, image: 'https://demo.adminkit.io/img/avatars/avatar-4.jpg' },
-    { id: 15, name: 'Chris', age: 31, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzzonSCay4c4CRv3zAejWFWtV793n52JFVtvO4PL39Qc7993khhzUaxM_9O2iyFjCajs&usqp=CAU' },
-    { id: 16, name: 'David', age: 25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSycJK9L_nCGUU3cCbBvrW371fQRZ3LUHpsHNxcGEZy4GEZbQYF0ZJsmvhNWJ66_a0a7B0&usqp=CAU' },
-  ];
-
-  const fetchUsers = async () => {
-    try {
-      const data = await getPaginatedUsers();
-      if (data) {
-        setUsers(data?.data || []);
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      // Use mock data if API fails
-      setUsers(mockSuggestion);
-      setRecentMatches(mockRecentMatches);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-    // For demo, use mock data immediately
-    setUsers(mockSuggestion);
-    setRecentMatches(mockRecentMatches);
-  }, []);
-  
-  const handleTileClick = (tileKey) => {
-    switch(tileKey) {
-      case 'bhamasah':
-        // Handle Bhamasah click
-        console.log('Bhamasah tile clicked');
-        setVisibleBhamasah(true);
-        
-        break;
-      case 'profession':
-        // Handle Profession click
-        console.log('Profession tile clicked');
-        setVisibleProfession(true);
-        break;
-      case 'family':
-        // Handle Family click
-        console.log('Family tile clicked');
-        setVisibleFamily(true)
-        break;
-      case 'admin':
-        navigate('/adminlist')
-        // Handle Admin List click
-        // setVisibleAdminList(true)
-        console.log('Admin List tile clicked');
-        break;
-      default:
-        console.log('Unknown tile clicked');
-    }
-  };
-
+// Custom styled Marquee component for donors
+const DonorMarquee = ({ donors }) => {
   return (
-    <div style={{padding:"16px"}}>
-      <UserLocation />
-      {/* Likes */}
-     <Marquee mockSuggestion={mockSuggestion} />  
+    <div className="donor-marquee-container" style={{ 
+      overflow: 'hidden',
+      backgroundColor: 'rgba(180, 0, 0, 0.07)',
+      borderRadius: '8px',
+      padding: '8px',
+      marginBottom: '16px',
+      border: '1px solid rgba(180, 0, 0, 0.2)'
+    }}>
+      <div className="marquee-header" style={{ 
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '8px'
+      }}>
+        <GiftOutline color="#b00000" fontSize={18} />
+        <span style={{ 
+          marginLeft: '6px',
+          fontWeight: 'bold',
+          color: '#b00000'
+        }}>Recent Donors</span>
+      </div>
+      <div className="donor-marquee" style={{ 
+        whiteSpace: 'nowrap',
+        animation: 'marquee 30s linear infinite',
+        padding: '4px 0'
+      }}>
+        {donors.map((donor, index) => (
+          <span key={index} style={{ 
+            padding: '4px 16px 4px 0',
+            display: 'inline-block'
+          }}>
+            <span style={{ fontWeight: 'bold' }}>{donor.name}</span>
+            <span style={{ color: '#b00000' }}> ₹{donor.amount}</span>
+          </span>
+        ))}
+      </div>
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+      `}</style>
+    </div>
+  );
+};
 
-      {/* <NoticeBar content={demoLongText} color='alert'/> */}
+// User suggestion carousel
+const UserSuggestionBar = ({ users }) => {
+  const navigate = useNavigate();
+  
+  const viewProfile = (userId) => {
+    if(userId) navigate(`/profile/${userId}`);
+  };
+  
+  return (
+    <div className="user-suggestions" style={{ marginBottom: '20px' }}>
+      <div style={{ 
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '10px'
+      }}>
+        <h3 style={{ margin: 0, color: '#8b0000' }}>
+          <TeamOutline /> Suggested Matches
+        </h3>
+        <Button 
+          size='small' 
+          color='primary' 
+          fill='none'
+          style={{ color: '#b00000' }}
+         // onClick={() => navigate('/all-matches')}
+        >
+          View All
+        </Button>
+      </div>
       
-      
-      <Grid columns={2} gap={16} style={{ padding: 16 }}>
-        {tiles.map((tile) => (
-          <Grid.Item key={tile.key}>
-            <Card 
+      <div style={{ 
+        display: 'flex',
+        overflowX: 'auto',
+        paddingBottom: '10px',
+        scrollbarWidth: 'none'
+      }} className="scroll-hide">
+        {users.map(user => (
+          <Card 
+            key={user.id}
+           // onClick={() => viewProfile(user.id)}
+            style={{ 
+              minWidth: '140px',
+              marginRight: '12px',
+              borderRadius: '8px',
+              border: '1px solid #f0f0f0',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            }}
+            bodyStyle={{ padding: '12px' }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <Badge content={<HeartOutline fontSize={12} />} color='#b00000'>
+                <Avatar 
+                  src={user.avatar} 
+                  style={{ 
+                    width: '70px', 
+                    height: '70px',
+                    border: '2px solid #b00000'
+                  }} 
+                />
+              </Badge>
+              <div style={{ 
+                marginTop: '8px',
+                fontSize: '15px',
+                fontWeight: '500',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
+                {user.name}, {user.age}
+              </div>
+              <div style={{ 
+                fontSize: '12px',
+                color: '#666',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
+                {user.city}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Share profile component
+const ShareProfileCard = ({ userId }) => {
+  console.log(userId)
+  const textToCopy = `http://localhost:3000/profile-view/${userId}`;
+
+  const shareProfile = () => {
+    // Toast.show({
+    //   content: 'Profile link copied to clipboard!',
+    //   position: 'bottom',
+    // });
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => alert("Copied to clipboard!"))
+      .catch((err) => console.error("Failed to copy:", err));
+  };
+  
+  return (
+    <Card style={{ 
+      marginBottom: '16px',
+      borderRadius: '8px',
+      border: '1px solid rgba(180, 0, 0, 0.2)',
+      backgroundColor: 'rgba(180, 0, 0, 0.03)'
+    }}>
+      <div style={{ 
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <div>
+          <h3 style={{ margin: '0 0 5px 0', color: '#8b0000' }}>Share Your Profile</h3>
+          <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
+            Invite friends to view your profile
+          </p>
+        </div>
+        <Button
+          onClick={shareProfile}
+          color='primary'
+          style={{ 
+            backgroundColor: '#b00000',
+            borderColor: '#b00000',
+            borderRadius: '20px'
+          }}
+        >
+          <TravelOutline fontSize={16}/>
+        </Button>
+      </div>
+    </Card>
+  );
+};
+
+// Donation link component
+const DonationLink = () => {
+  const navigate = useNavigate();
+  
+  const goToDonation = () => {
+    navigate('/donation');
+  };
+  
+  return (
+    <Card style={{ 
+      marginBottom: '16px',
+      borderRadius: '8px',
+      background: 'linear-gradient(45deg, #8b0000, #b00000)',
+      color: 'white'
+    }}>
+      <div style={{ 
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <div>
+          <h3 style={{ margin: '0 0 5px 0', color: 'white' }}>Support Our Community</h3>
+          <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>
+            Your contribution helps us grow
+          </p>
+        </div>
+        <Button
+          //onClick={goToDonation}
+          style={{ 
+            backgroundColor: 'white',
+            color: '#b00000',
+            borderColor: 'white',
+            borderRadius: '20px'
+          }}
+        >
+          <PayCircleOutline fontSize={16} /> Donate
+        </Button>
+      </div>
+    </Card>
+  );
+};
+
+// Quick shortcuts component
+const QuickShortcuts = () => {
+  const navigate = useNavigate();
+  
+  const shortcuts = [
+    { icon: <TeamOutline />, text: 'Browse', path: '/browse' },
+    { icon: <HeartOutline />, text: 'Matches', path: '/matches' },
+    { icon: <UserAddOutline />, text: 'Invite', path: '/invite' },
+    { icon: <GiftOutline />, text: 'Donate', path: '/donation' }
+  ];
+  
+  return (
+    <Card style={{ 
+      marginBottom: '16px',
+      borderRadius: '8px',
+    }}>
+      <h3 style={{ margin: '0 0 12px 0', color: '#8b0000' }}>Quick Actions</h3>
+      <Grid columns={4} gap={8}>
+        {shortcuts.map((item, index) => (
+          <Grid.Item key={index}>
+            <div 
+             // onClick={() => navigate(item.path)}
               style={{
-                backgroundColor: tile.color,
-                color: '#212121',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 padding: '12px',
+                backgroundColor: index === 0 ? 'rgba(180, 0, 0, 0.07)' : '#f5f5f5',
                 borderRadius: '8px',
                 cursor: 'pointer'
               }}
-              onClick={() => handleTileClick(tile.key)}
             >
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {tile.icon}
-                <span style={{ marginTop: 8, fontWeight: 'bold' }}>{tile.title}</span>
+              <div style={{ 
+                fontSize: '24px',
+                color: '#b00000',
+                marginBottom: '8px' 
+              }}>
+                {item.icon}
               </div>
-            </Card>
+              <div style={{ fontSize: '12px' }}>{item.text}</div>
+            </div>
           </Grid.Item>
         ))}
       </Grid>
-      
-      <ProfessionDialog visible={visibleProfession} onClose={()=>setVisibleProfession(false)} />
-      <MyFamilyDialog visible={visibleFamily} onClose={()=>setVisibleFamily(false)} />
-      {/* <AdminListDialog visible={visibleAdminList} onClose={()=>setVisibleAdminList(false)} /> */}
-      <BhamasahDialog visible={visibleBhamasah} onClose={()=>setVisibleBhamasah(false)} />
-      
-      {/* Recent */}
-      {/* <div >
-        <RandomHeightMatches matches={mockRecentMatches} />
-      </div> */}
+    </Card>
+  );
+};
+
+const FeatureTiles = () => {
+  const {user} = useContext(AuthContext)
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [donors, setDonors] = useState([]);
+ // const user = JSON.parse(localStorage.getItem("user"));
+  const userStatus = user?.userstatus || "PENDING";
+  console.log("hcm userStatus",userStatus)
+  useEffect(() => {
+    // You can optionally fetch users/donors if needed
+    setDonors([
+      { name: 'Pokarji Rathore', amount: 20000 },
+      { name: 'Mangilalji Patel', amount: 1500 },
+      { name: 'Amit Muleva', amount: 2100 },
+      { name: 'Meera bai Hammad', amount: 1500 },
+      { name: 'Vishal Solanki', amount: 3000 },
+      { name: 'Sunita ji Gehlot', amount: 1750 },
+      { name: 'Karan Bhagwan', amount: 1200 },
+      { name: 'Deepak Pawar', amount: 2500 },
+    ]);
+
+    // Fetch suggested users only if approved
+    if (userStatus === "APPROVED") {
+      getPaginatedUsers().then((res) => {
+        setUsers(res?.data || []);
+      });
+    }
+  }, [userStatus]);
+
+  if (userStatus !== "APPROVED") {
+    return <PendingApprovalCard />;
+  }
+
+  return (
+    <div style={{ padding: '16px' }}>
+      <DonorMarquee donors={donors} />
+      <QuickShortcuts />
+      <DonationLink />
+      <ShareProfileCard userId={user?.id} />
+      <UserSuggestionBar users={users} />
+      {(
+  user.emeelanrole === "CENTER" ||
+  user.emeelanrole === "ADMIN" ||
+  user.emeelanrole === "SUPERADMIN"
+) && <AdminUserEditor />}
     </div>
   );
 };

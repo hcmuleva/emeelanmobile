@@ -1,285 +1,156 @@
-import React, { useContext, useState } from 'react';
+import { LogoutOutlined } from "@ant-design/icons";
 import {
-  Tabs,
-  List,
-  Input,
   Button,
   Divider,
-  ProgressCircle,
-} from 'antd-mobile';
-import MobileImageUploader from '../../components/common/MobileImageUploader';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import { LogoutOutlined } from '@ant-design/icons';
+  ProgressCircle
+} from "antd-mobile";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import About from "../../components/users/profilesections/About";
+import BasicInfoUpdate from "../../components/users/profilesections/BasicInfoUpdate";
+import EducationInfo from "../../components/users/profilesections/EducationInfo";
+import FamilyInfo from "../../components/users/profilesections/Family";
+import PhotoUpload from "../../components/users/profilesections/PhotoUpload";
+import ProfessionInfo from "../../components/users/profilesections/ProfessionInfo";
+import { AuthContext } from "../../context/AuthContext";
+import Settings from "../../components/users/profilesections/Settings";
+import PreferenceInfo from "../../components/users/profilesections/PreferenceInfo";
+import ResetPassword from "../../components/users/profilesections/ResetPassword";
 
-const profilePic = 'https://demo.adminkit.io/img/avatars/avatar-4.jpg';
 
 const tabLinks = [
-  { key: 'photos', label: 'Photos' },
-  { key: 'basic', label: 'Basic Info' },
-  { key: 'family', label: 'Family' },
-  { key: 'education', label: 'Education' },
-  { key: 'profession', label: 'Profession' },
-  { key: 'mypreference', label: 'MyPreference' },
-  { key: 'MyDetail', label: 'MyDetail' },
-  { key: 'settings', label: 'My Settings' },
- 
+  { key: "photos", label: "Photos" },
+  { key: "basic", label: "Basic Info" },
+  { key: "family", label: "Family" },
+  { key: "education", label: "Education" },
+  { key: "profession", label: "Profession" },
+  { key: "preferences", label: "Preferences" },
+  { key: "about", label: "About Me" },
+  { key: "settings", label: "Settings" },
+  { key: "resetpassword", label: "ResetPassword" },
 ];
 
 const ProfileDetails = () => {
-    const authContext = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const {user} =useContext(AuthContext)
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("basic");
 
-    const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('basic');
-  const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
-    family: { fatherName: 'John Smith', motherName: 'Mary Smith' },
-    education: { degree: 'M.Sc. Computer Science', institution: 'Oxford University' },
-    profession: { company: 'ABC Corp', role: 'Software Engineer' },
-    mypreference: { language: 'English', location: 'New York' },
-    mydetail: { hobbies: 'Reading, Traveling', interests: 'Technology, Music' },
-    settings: { notification: 'Enabled', darkMode: 'Disabled' },
-  });
-
-  const handleChange = (section, field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value,
-      },
-    }));
-  };
-
-  const handleSave = () => {
-    console.log('Saved Data:', formData);
-    setEditMode(false);
-  };
-
+ 
   return (
-    <div style={{ padding: 10 }}>
+    <div style={{ padding: 10, backgroundColor: "#fff", color: "#333" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+          backgroundColor: "#8B0000",
+          padding: 12,
+          borderRadius: 8,
+          color: "white",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>My Profile</h2>
         <ProgressCircle
-          percent={60}
+          percent={45}
           style={{
-            '--fill-color': 'var(--adm-color-success)',
+            "--size": "48px",
+            "--track-width": "3px",
+            "--fill-color": "#FF5A5A",
           }}
         >
-          60%
+          45%
         </ProgressCircle>
-      <div style={{ display: 'flex', gap: 1 }}>
-        {/* Sidebar Links */}
-        <div style={{ textAlign: 'center', minWidth: 100 }}>
-          <div style={{ marginTop: 20, textAlign: 'left' }}>
-            {tabLinks.map((tab) => (
-              <div
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                style={{
-                  cursor: 'pointer',
-                  margin: '6px 0',
-                  color: activeTab === tab.key ? '#1677ff' : '#333',
-                  fontWeight: activeTab === tab.key ? 'bold' : 'normal',
-                }}
-              >
-                {tab.label}
-              </div>
-            ))}
-          </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            overflowX: "auto",
+            whiteSpace: "nowrap",
+            marginBottom: 16,
+            padding: "4px 0",
+            borderBottom: "0px solid #eee",
+            scrollbarWidth:"none"
+          }}
+        >
+          {tabLinks.map((tab) => (
+            <span
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              style={{
+                display: "inline-block",
+                padding: "8px 12px",
+                cursor: "pointer",
+                margin: "0 4px",
+                color: activeTab === tab.key ? "#8B0000" : "#666",
+                fontWeight: activeTab === tab.key ? "bold" : "normal",
+                borderBottom:
+                  activeTab === tab.key ? "2px solid #8B0000" : "none",
+              }}
+            >
+              {tab.label}
+            </span>
+          ))}
         </div>
 
-        {/* Tab Content */}
         <div style={{ flex: 1 }}>
-          <h2 style={{ marginBottom: 8 }}>Alyssa Lee Smith</h2>
-
-          <Tabs activeKey={activeTab} onChange={setActiveTab}>
-            <Tabs.Tab title="Photos" key="photos">
-              <MobileImageUploader />
-            </Tabs.Tab>
-
-            <Tabs.Tab title="Basic Info" key="basic">
-              <p>Name: Alyssa Lee Smith</p>
-            </Tabs.Tab>
-
-            <Tabs.Tab title="Family" key="family">
-              <List>
-                <List.Item title="Father's Name">
-                  {editMode ? (
-                    <Input
-                      value={formData.family.fatherName}
-                      onChange={(val) => handleChange('family', 'fatherName', val)}
-                    />
-                  ) : (
-                    formData.family.fatherName
-                  )}
-                </List.Item>
-                <List.Item title="Mother's Name">
-                  {editMode ? (
-                    <Input
-                      value={formData.family.motherName}
-                      onChange={(val) => handleChange('family', 'motherName', val)}
-                    />
-                  ) : (
-                    formData.family.motherName
-                  )}
-                </List.Item>
-              </List>
-            </Tabs.Tab>
-
-            <Tabs.Tab title="Education" key="education">
-              <List>
-                <List.Item title="Highest Degree">
-                  {editMode ? (
-                    <Input
-                      value={formData.education.degree}
-                      onChange={(val) => handleChange('education', 'degree', val)}
-                    />
-                  ) : (
-                    formData.education.degree
-                  )}
-                </List.Item>
-                <List.Item title="Institution">
-                  {editMode ? (
-                    <Input
-                      value={formData.education.institution}
-                      onChange={(val) => handleChange('education', 'institution', val)}
-                    />
-                  ) : (
-                    formData.education.institution
-                  )}
-                </List.Item>
-              </List>
-            </Tabs.Tab>
-
-            <Tabs.Tab title="Profession" key="profession">
-              <List>
-                <List.Item title="Company">
-                  {editMode ? (
-                    <Input
-                      value={formData.profession.company}
-                      onChange={(val) => handleChange('profession', 'company', val)}
-                    />
-                  ) : (
-                    formData.profession.company
-                  )}
-                </List.Item>
-                <List.Item title="Role">
-                  {editMode ? (
-                    <Input
-                      value={formData.profession.role}
-                      onChange={(val) => handleChange('profession', 'role', val)}
-                    />
-                  ) : (
-                    formData.profession.role
-                  )}
-                </List.Item>
-              </List>
-            </Tabs.Tab>
-
-            <Tabs.Tab title="My Preference" key="mypreference">
-              <List>
-                <List.Item title="Preferred Language">
-                  {editMode ? (
-                    <Input
-                      value={formData.mypreference.language}
-                      onChange={(val) => handleChange('mypreference', 'language', val)}
-                    />
-                  ) : (
-                    formData.mypreference.language
-                  )}
-                </List.Item>
-                <List.Item title="Preferred Location">
-                  {editMode ? (
-                    <Input
-                      value={formData.mypreference.location}
-                      onChange={(val) => handleChange('mypreference', 'location', val)}
-                    />
-                  ) : (
-                    formData.mypreference.location
-                  )}
-                </List.Item>
-              </List>
-            </Tabs.Tab>
-
-            <Tabs.Tab title="My Detail" key="MyDetail">
-              <List>
-                <List.Item title="Hobbies">
-                  {editMode ? (
-                    <Input
-                      value={formData.mydetail.hobbies}
-                      onChange={(val) => handleChange('mydetail', 'hobbies', val)}
-                    />
-                  ) : (
-                    formData.mydetail.hobbies
-                  )}
-                </List.Item>
-                <List.Item title="Interests">
-                  {editMode ? (
-                    <Input
-                      value={formData.mydetail.interests}
-                      onChange={(val) => handleChange('mydetail', 'interests', val)}
-                    />
-                  ) : (
-                    formData.mydetail.interests
-                  )}
-                </List.Item>
-              </List>
-            </Tabs.Tab>
-
-            <Tabs.Tab title="My Settings" key="settings">
-              <List>
-                <List.Item title="Notification">
-                  {editMode ? (
-                    <Input
-                      value={formData.settings.notification}
-                      onChange={(val) => handleChange('settings', 'notification', val)}
-                    />
-                  ) : (
-                    formData.settings.notification
-                  )}
-                </List.Item>
-                <List.Item title="Dark Mode">
-                  {editMode ? (
-                    <Input
-                      value={formData.settings.darkMode}
-                      onChange={(val) => handleChange('settings', 'darkMode', val)}
-                    />
-                  ) : (
-                    formData.settings.darkMode
-                  )}
-                </List.Item>
-              </List>
-            </Tabs.Tab>
-
-          
-          </Tabs>
-
-          {/* Edit/Save Buttons */}
-          {activeTab !== 'photos' && activeTab !== 'logout' && (
-            <div style={{ marginTop: 16 }}>
-              {editMode ? (
-                <Button color="primary" onClick={handleSave}>
-                  Save
-                </Button>
-              ) : (
-                <Button onClick={() => setEditMode(true)}>Edit</Button>
-              )}
-            </div>
+          {activeTab === "photos" && (
+            <PhotoUpload />
           )}
+
+          {activeTab === "basic" && (
+            <BasicInfoUpdate />
+          )}
+
+          {activeTab === "family" && (
+            <FamilyInfo />
+          )}
+
+          {activeTab === "education" && (
+            <EducationInfo />
+          )}
+
+          {activeTab === "profession" && (
+            <ProfessionInfo />
+          )}
+
+          {activeTab === "preferences" && (
+            < PreferenceInfo/>
+          )}
+
+          {activeTab === "about" && (
+            <About />
+          )}
+
+          {activeTab === "settings" && (
+            <Settings />
+          )}
+      {activeTab === "resetpassword" && (
+            <ResetPassword userId={user.id}/>
+          )}
+
         </div>
       </div>
-      <Divider style={{ margin: '16px 0' }} />
-      <Button 
-     
-     onClick={async ()=>{
-        await authContext.logout()
-        navigate('/login', { replace: true });
-   }}
+
+      <Divider style={{ margin: "16px 0" }} />
+
+      <Button
+        block
+        style={{ backgroundColor: "#8B0000", color: "white" }}
+        onClick={async () => {
+          await authContext.logout();
+          navigate("/login", { replace: true });
+        }}
       >
-               <LogoutOutlined style={{ fontSize: 24, color: '#212121' }} /> Logout
-              </Button>
-              <Divider style={{ margin: '16px 0' }} />
-            
-     
+        <LogoutOutlined
+          style={{ fontSize: 16, color: "white", marginRight: 8 }}
+        />{" "}
+        Logout
+      </Button>
+
+      <Divider style={{ margin: "16px 0" }} />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
 import {
   CheckCircleFill,
   TeamOutline,
+  UserAddOutline,
   UserSetOutline,
 } from "antd-mobile-icons";
 import React from "react";
@@ -47,15 +48,14 @@ export default function SuperAdminLayout({ children }) {
               icon: <CheckCircleFill style={{ fontSize: 24 }} />,
               key: "status",
             },
-            { icon: <MessageOutlined style={{ fontSize: 24 }} />, key: "chat" },
             {
-              icon: <SearchOutlined style={{ fontSize: 24 }} />,
-              key: "search",
-            },
+              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
+							key: "adminlist"
+						},
             {
-              icon: <UserSetOutline style={{ fontSize: 24 }} />,
-              key: "SuperAdmin",
-            },
+              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
+							key: "NewUserRegister"
+						},
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (

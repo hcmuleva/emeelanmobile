@@ -15,10 +15,11 @@ import {
 } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/settings.css";
-import MobileImageUploader from "../../../common/MobileImageUploader";
-import { getUserById,updateUserData } from "../../../../services/api";
+import MobileImageUploader from "../../../common/ProfilePictureImageUploader";
+//import { getUserById,updateUserData } from "../../../../services/api";
 import { AuthContext } from "../../../../context/AuthContext";
 import Preferences from "./Prefrences";
+import {getUserById, updateUserData } from "../../../../services/api";
 
 export const SettingsDialog = () => {
   const {user} = useContext(AuthContext)

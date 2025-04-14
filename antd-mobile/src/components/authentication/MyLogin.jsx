@@ -15,6 +15,7 @@ const MyLogin = ({ setIsLogined }) => {
     setLoading(true);
     try {
       const { jwt, user } = await login(values.email, values.password);
+      console.log("jwt",jwt)
       await authContext.login(jwt, user);
       navigate('/home', { replace: true }); 
     } catch (error) {

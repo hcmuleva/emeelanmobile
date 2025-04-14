@@ -5,7 +5,7 @@ import { Form, Picker, Button, Toast } from 'antd-mobile';
 
 const marititalstatus = [
   { Id: "MARRIED", EName: "MARRIED", HName: "शादीशुदा" },
-  { Id: "BACHELOR", EName: "BACHELOR", HName: "कुंवारा/कुवारी" },
+  { Id: "NeverMarried", EName: "BACHELOR", HName: "कुंवारा/कुवारी" },
   { Id: "DIVORCED", EName: "DIVORCED", HName: "तलाकशुदा" },
  
 ];
