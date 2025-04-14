@@ -1,24 +1,46 @@
 import {
   HomeOutlined,
-  MessageOutlined
 } from "@ant-design/icons";
-import { CheckCircleFill, TeamOutline, UserAddOutline } from "antd-mobile-icons";
-import React from "react";
+import { CheckCircleFill, TeamOutline } from "antd-mobile-icons";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
+import { Badge } from "antd-mobile";
+import StatusNotification from "./StatusNotification";
+//import StatusNotification from "../components/StatusNotification"; // Adjust path if needed
 
 export default function UserLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [notificationStats, setNotificationStats] = useState({ total: 0 });
+  console.log("Notification ", JSON.stringify(notificationStats))
+  const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+  const footerItems = [
+    { icon: <HomeOutlined style={{ fontSize: 24 }} />, key: "home" },
+    { icon: <TeamOutline style={{ fontSize: 24 }} />, key: "profiles" },
+    {
+      icon: (
+        <Badge content={notificationStats.total} style={{ '--right': '0%', '--top': '0%' }}>
+          <CheckCircleFill style={{ fontSize: 24 }} />
+        </Badge>
+      ),
+      key: "status",
+    },
+    {
+      icon: <TeamOutline style={{ fontSize: 24 }} />,
+      key: "adminlist",
+    },
+  ];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      {/* Header */}
-      <TopBar userRole={"User"}/>
-
-      {/* Main Content */}
+      <TopBar userRole={"User"} />
       <div style={{ flex: 1, overflowY: "auto" }}>{children}</div>
 
-      {/* Footer (Bottom Navbar) */}
+      {/* StatusNotification hooks into Ably */}
+      <StatusNotification userId={userId} setNotificationStats={setNotificationStats} />
+
       <div>
         <div
           style={{
@@ -35,19 +57,7 @@ export default function UserLayout({ children }) {
             zIndex: 100,
           }}
         >
-          {[
-            { icon: <HomeOutlined style={{ fontSize: 24 }} />, key: "home" },
-            { icon: <TeamOutline style={{ fontSize: 24 }} />, key: "profiles" },
-            {
-              icon: <CheckCircleFill style={{ fontSize: 24 }} />,
-              key: "status",
-            },
-            {
-              icon: <TeamOutline style={{ fontSize: 24 }} />, 
-							key: "adminlist"
-						},
-
-          ].map((item) => {
+          {footerItems.map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (
               <div

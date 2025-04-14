@@ -32,6 +32,7 @@ const tabLinks = [
 
 const ProfileDetails = () => {
   const authContext = useContext(AuthContext);
+  const {user} =useContext(AuthContext)
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("basic");
 
@@ -127,7 +128,7 @@ const ProfileDetails = () => {
             <Settings />
           )}
       {activeTab === "resetpassword" && (
-            <ResetPassword/>
+            <ResetPassword userId={user.id}/>
           )}
 
         </div>

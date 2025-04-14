@@ -88,7 +88,7 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
           _start: start,
           _limit: limit,
           filters: modifiedFilters, // ✅ Use filters
-          _sort: 'id:asc', // Sort by newest first
+          _sort: 'id:desc', // Sort by newest first
           "populate[photos]": "*", // ✅ Populate photos (all fields)
           "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
           "populate[Height]": "*",
@@ -111,7 +111,7 @@ export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {})
         _start: start,
         _limit: limit,
         filters,
-        _sort: 'id:asc', // Sort by newest first
+        _sort: 'id:desc', // Sort by newest first
         "populate[photos]": "*", // ✅ Populate photos (all fields)
         "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
         "populate[Height]": "*",
@@ -148,6 +148,7 @@ export const newConnectionRequest = async( data)=>{
 //connectionrequest
 export const updateConnectionRequest = async(id, data)=>{
   const jwt = localStorage.getItem("jwt")
+  console.log("DATA",data)
   console.log("jwt", jwt)
   try {
     const reaponse = await api.put(`/connectionrequests/${id}`, 
@@ -163,6 +164,70 @@ export const updateConnectionRequest = async(id, data)=>{
     console.error("error", error)
   }
 }
+export const getEngagedRequests = async (page = 1, pageSize = 10) => {
+  const jwt = localStorage.getItem("jwt");
+
+  try {
+    const response = await api.get(
+      `/connectionrequests?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort[0]=updatedAt:desc&filters[status][$eq]=ENGGAGED&populate[sender][populate]=*&populate[receiver][populate]=*`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    return {
+      data: response.data.data.map((item) => ({
+        id: item.id,
+        updatedAt: item.attributes.updatedAt,
+        sender: {
+          ...item.attributes.sender?.data?.attributes,
+          id: item.attributes.sender?.data?.id,
+        },
+        receiver: {
+          ...item.attributes.receiver?.data?.attributes,
+          id: item.attributes.receiver?.data?.id,
+        },
+      })),
+      pagination: response.data.meta.pagination,
+    };
+  } catch (error) {
+    console.error("Failed to fetch ENGAGED requests", error);
+    return {
+      data: [],
+      pagination: { page: 1, pageSize: 10, total: 0, pageCount: 1 },
+    };
+  }
+};
+
+export const findConnectionRequest = async (userId1, userId2) => {
+  const jwt = localStorage.getItem("jwt");
+
+  try {
+    const response = await api.get(
+      `/connectionrequests?filters[$or][0][sender][id][$eq]=${userId1}&filters[$or][0][receiver][id][$eq]=${userId2}&filters[$or][1][sender][id][$eq]=${userId2}&filters[$or][1][receiver][id][$eq]=${userId1}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    if (response.data?.data?.length > 0) {
+      const item = response.data.data[0];
+      return {
+        id: item.id,
+        ...item.attributes,
+      };
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.error("Error finding connection request", err);
+    return null;
+  }
+};
 
 // Add to your existing API service file
 export const searchUsers = async (query, start = 0, limit = 10) => {

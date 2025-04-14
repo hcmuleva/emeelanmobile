@@ -66,6 +66,8 @@ const NewProfileCard = ({ user, role, action }) => {
       sender: selfUser?.id,
       receiver: user?.id,
       status: "PENDING",
+      message:`User Status is pending from id ${user?.id}`
+
     });
     Toast.show({
       icon: "success",

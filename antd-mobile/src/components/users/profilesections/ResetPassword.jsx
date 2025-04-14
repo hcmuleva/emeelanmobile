@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
-import { Dialog, Input, Button, Form, Toast } from "antd-mobile";
+import { Button, Form, Input, Toast } from "antd-mobile";
 import { EyeInvisibleOutline, EyeOutline } from "antd-mobile-icons";
-import { AuthContext } from "../../../context/AuthContext";
+import React, { useState } from "react";
 import { resetpassword } from "../../../services/api";
 
-export default function ResetPassword() {
+export default function ResetPassword({userId}) {
   const [form] = Form.useForm();
-  const { user, jwt } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -14,7 +12,7 @@ export default function ResetPassword() {
     console.log("Submit Clicked");
     try {
       // Get user from localStorage
-      const userId = user?.id ?? null;
+      //const userId = user?.id ?? null;z
 
       if (!userId) {
         Toast.show({
