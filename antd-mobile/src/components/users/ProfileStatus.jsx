@@ -223,6 +223,8 @@ const ProfileStatus = () => {
   };
 
   return (
+    <>
+   <br/>
     <div style={{ backgroundColor: "#FCFAFA", minHeight: "100vh", padding: "8px" }}>
       <div style={{ 
         backgroundColor: "#8B0000", 
@@ -309,6 +311,7 @@ const ProfileStatus = () => {
         </>
       )}
     </div>
+    </>
   );
 };
 

@@ -10,7 +10,7 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
     if (!userId) return;
 
     const channel = ably.channels.get(`user:${userId}`);
-
+    console.log("USER Channele" , `user:${userId}`)
     const onConnected = () => console.log("✅ Ably connected");
     const onFailed = (err) => console.error("❌ Ably connection failed:", err);
     const onAttached = () => console.log(`📡 Channel "${channel.name}" attached`);
@@ -36,7 +36,7 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
             acc.total += 1;
             return acc;
           },
-          { PENDING: 0, APPROVED: 0, REJECTED: 0, total: 0 }
+          { PENDING: 0, APPROVED: 0, REJECTED: 0, total: 0, message: text}
         );
       
         console.log("🔢 Grouped Stats:", grouped); // For debugging

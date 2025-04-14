@@ -64,20 +64,36 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
+  // ✅ Update one or more fields in user object
+  const updateUser = (updatedFields) => {
+    setUser((prevUser) => {
+      const updatedUser = { ...prevUser, ...updatedFields };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return updatedUser;
+    });
+  };
+
+  // ✅ Update a single field by key
+  const updateUserField = (key, value) => {
+    updateUser({ [key]: value });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
-        jwt,          // ✅ now available via context
-        setJwt,       // ✅ optional, but available
+        jwt,
+        setJwt,
         isAuthenticated,
         setIsAuthenticated,
         loading,
         login,
         logout,
-        profileUpdated, 
-        setProfileUpdated
+        profileUpdated,
+        setProfileUpdated,
+        updateUser,        // ✅ exposed helper
+        updateUserField,   // ✅ exposed helper
       }}
     >
       {children}

@@ -43,6 +43,7 @@ const ProfileDetailPanel = () => {
         sender: user.id,
         receiver: profileid,
         status: "PENDING",
+        message:`User Status is pending from id ${profileid}`
       });
       Toast.show({ icon: "success", content: "Connection request sent" });
 
