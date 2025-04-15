@@ -44,7 +44,16 @@ const PendingApprovalCard = ({ userCurrentState,setUserCurrentState }) => {
   return (
     <Card style={{ margin: 16 }}>
       <div style={{ marginBottom: 12 }}>
-        Your status is <strong>{user.userstatus || "UNKNOWN"}</strong>. Please wait for approval.
+      <p>
+  Your profile ID: <strong>{user.id}</strong> is currently in <strong>pending</strong> status. Please contact the admin for further assistance. 
+  <a href="/adminlist" style={{ color: 'blue', textDecoration: 'underline' }}>Click here</a> to view the admin list.
+</p>
+<p>
+  आपका प्रोफ़ाइल ID:  <strong>{user.id}</strong> फिलहाल <strong>Pending</strong> स्थिति में है। कृपया सहायता के लिए एडमिन से संपर्क करें। 
+  <a href="/adminlist" style={{ color: 'blue', textDecoration: 'underline' }}>एडमिन सूची देखने के लिए यहां क्लिक करें</a>।
+</p>
+
+       
       </div>
       <Button color="primary" onClick={handleRefresh}>
         Refresh Status
