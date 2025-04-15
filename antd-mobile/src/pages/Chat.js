@@ -1,11 +1,11 @@
 import React from 'react'
-import ProfileStatus from '../components/users/ProfileStatus'
+import { ChatApp } from '../components/chat/ChatApp'
 
 export default function Chat() {
   return (
     <div>
       chat
-      <ProfileStatus/>
+      <ChatApp/>
     </div>
   )
 }

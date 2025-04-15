@@ -30,27 +30,55 @@ const MyLogin = ({ setIsLogined }) => {
 
   return (
     <div className="login-container">
-      <NavBar
-        back={null}
-        style={{ 
-          background: '#ff6b6b',
-          color: 'white',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          padding: "10px",
-        }}
-      >
-        <span style={{
+     <NavBar
+  back={null}
+  style={{
+    background: '#ff6b6b',
+    color: 'white',
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
+    padding: '10px',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    }}
+  >
+    {/* Left Side: Title */}
+    <div>
+      <div
+        style={{
           fontWeight: '600',
           fontSize: '18px',
-          lineHeight: '32px',
+          lineHeight: '20px',
           letterSpacing: '.5px',
-        }}>
-          EMEELAN</span>
-        <br/>
-        <span>गठजोड़</span>
-      </NavBar>
+        }}
+      >
+        EMEELAN (गठजोड़)
+      </div>
+     
+    </div>
+
+    {/* Right Side: Logo */}
+    <img
+      src="logo.png" // Replace with your logo path
+      alt="Logo"
+      style={{
+        height: '36px',
+        width: '36px',
+        borderRadius: '50%',
+        objectFit: 'cover',
+      }}
+    />
+  </div>
+</NavBar>
+
+
 
       <div className="login-content">
         <Card>
@@ -114,7 +142,13 @@ const MyLogin = ({ setIsLogined }) => {
                 Register
               </span>
             </div>
+           
           </Space>
+          <div style={{ textAlign: "center", marginTop: "1rem" }}>
+  <a href="/terms" style={{ fontSize: "0.875rem", color: "#888" }}>
+    Terms and Conditions
+  </a>
+</div>
         </Card>
       </div>
     </div>
