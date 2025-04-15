@@ -27,6 +27,7 @@ import { SettingsDialog } from "./components/users/profilesections/settings/Sett
 import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
+import { TermsPage } from "./pages/public/TermsPage";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -41,6 +42,8 @@ function AppContent() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LoginPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+
           {/* Protected Routes */}
           <Route
             path="/home"

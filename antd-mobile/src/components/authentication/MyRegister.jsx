@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Form, Input, Button, Toast, Radio, Divider } from "antd-mobile";
+import { Form, Input, Button, Toast, Radio, Divider, NavBar } from "antd-mobile";
 import { AuthContext } from '../../context/AuthContext';
 import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
@@ -100,7 +100,54 @@ export default function MyRegister() {
     };
 
     return (
-        <div style={{ padding: '16px' }}>
+        <div style={{ padding: '5px' }}>
+              <NavBar
+  back={null}
+  style={{
+    background: '#ff6b6b',
+    color: 'white',
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
+    padding: '10px',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    }}
+  >
+    {/* Left Side: Title */}
+    <div>
+      <div
+        style={{
+          fontWeight: '600',
+          fontSize: '18px',
+          lineHeight: '20px',
+          letterSpacing: '.5px',
+        }}
+      >
+        EMEELAN (गठजोड़)
+      </div>
+     
+    </div>
+
+    {/* Right Side: Logo */}
+    <img
+      src="logo.png" // Replace with your logo path
+      alt="Logo"
+      style={{
+        height: '36px',
+        width: '36px',
+        borderRadius: '50%',
+        objectFit: 'cover',
+      }}
+    />
+  </div>
+</NavBar>
             <Form
                 form={form}
                 onFinish={onFinish}
@@ -188,6 +235,25 @@ export default function MyRegister() {
                     <Radio.Group style={{ display: "flex", gap: "10px" }}>
                         <Radio value="Male">Male</Radio>
                         <Radio value="Female">Female</Radio>
+                    </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                    name="Profession"
+                    label="Profession"
+                    rules={[{ required: true, message: "Please select your gender" }]}
+                >
+                    <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                        <Radio value="BUSINESS">BUSINESS</Radio>
+                        <Radio value="ENGINEER">ENGINEER</Radio>
+                        <Radio value="DOCTOR">DOCTOR</Radio>
+                        <Radio value="TEACHER">TEACHER</Radio>
+                        <Radio value="CA">CA</Radio>
+                        <Radio value="SERVICE">SERVICE</Radio>
+                        <Radio value="HOUSEWORK">HOUSEWORK</Radio>
+                        <Radio value="GOVTJOB">GOVTJOB</Radio>
+                        <Radio value="PRIVATEJOB">PRIVATEJOB</Radio>
+                        <Radio value="STUDENT">STUDENT</Radio>
+                        <Radio value="OTHER">OTHER</Radio>
                     </Radio.Group>
                 </Form.Item>
 
