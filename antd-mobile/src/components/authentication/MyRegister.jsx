@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Form, Input, Button, Toast, Radio, Divider, NavBar } from "antd-mobile";
+import { Form, Input, Button, Toast, Radio, Divider, NavBar, Space } from "antd-mobile";
 import { AuthContext } from '../../context/AuthContext';
 import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
@@ -7,7 +7,7 @@ import gotra from "../../utils/gotra.json";
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
 
-export default function MyRegister() {
+export default function MyRegister({setIsLogined}) {
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
     const [customdata, setCustomdata] = useState({});
@@ -339,6 +339,18 @@ export default function MyRegister() {
                     <Input placeholder="Enter disability details if applicable" />
                 </Form.Item>
             </Form>
+            <Space direction="vertical" style={{ width: '100%' }}>
+            <div style={{ textAlign: 'center', marginTop: 16 }}>
+             {' '}
+              <span
+                style={{ color: '#ff6b6b', fontWeight: 'bold', cursor: 'pointer' }}
+                onClick={() => setIsLogined(true)}
+              >
+                Login
+              </span>
+            </div>
+           
+          </Space>
         </div>
     );
 }
