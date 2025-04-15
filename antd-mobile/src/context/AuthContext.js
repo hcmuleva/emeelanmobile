@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(user));
     }
   }, [user]);
+
   useEffect(()=>{
     let progressPer = 0
     const getProgress = () => {
@@ -78,8 +79,6 @@ export const AuthProvider = ({ children }) => {
     getProgress()
   }, [profileUpdated])
   
-    
-
   const login = (token, userData) => {
     localStorage.setItem('jwt', token);
     localStorage.setItem('user', JSON.stringify(userData));
