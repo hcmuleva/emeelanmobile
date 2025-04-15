@@ -19,7 +19,7 @@ const relationOptions = {
 };
 
 const FamilyInfo = () => {
-  const { user, setUser, jwt } = useContext(AuthContext);
+  const { user, setUser, jwt, setProfileUpdated } = useContext(AuthContext);
   const [families, setFamilies] = useState(user?.mybasicdata?.families || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
@@ -77,7 +77,7 @@ const FamilyInfo = () => {
 
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
-
+      setProfileUpdated(true)
       Toast.show({ icon: "success", content: "Family data saved!" });
     } catch (err) {
       console.error("Save error", err);

@@ -12,7 +12,7 @@ const professionOptions = [
 ];
 
 const ProfessionInfo = () => {
-  const { user, setUser, jwt } = useContext(AuthContext);
+  const { user, setUser, jwt, setProfileUpdated } = useContext(AuthContext);
   const [professions, setProfessions] = useState(user?.mybasicdata?.professions || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
@@ -68,7 +68,7 @@ const ProfessionInfo = () => {
       
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
-      
+      setProfileUpdated(true)
       Toast.show({ icon: "success", content: "Profession data saved!" });
     } catch (err) {
       console.error("Save error", err);

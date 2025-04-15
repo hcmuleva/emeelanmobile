@@ -1,69 +1,85 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { 
-  Card, 
-  Grid, 
-  Avatar, 
-  Button, 
-  SwipeAction, 
-  Toast, 
-  Badge, 
-  List, 
-  Space, 
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Card,
+  Grid,
+  Avatar,
+  Button,
+  SwipeAction,
+  Toast,
+  Badge,
+  List,
+  Space,
   FloatingBubble,
   Divider,
-  Tag
-} from 'antd-mobile';
-import { 
-  TeamOutline, 
-  HeartOutline, 
-  GiftOutline, 
+  Tag,
+} from "antd-mobile";
+import {
+  TeamOutline,
+  HeartOutline,
+  GiftOutline,
   UserAddOutline,
   PayCircleOutline,
-  TravelOutline
-} from 'antd-mobile-icons';
-import { useNavigate } from 'react-router-dom';
-import { getPaginatedUsers } from '../../services/api';
+  TravelOutline,
+} from "antd-mobile-icons";
+import { useNavigate } from "react-router-dom";
+import { getPaginatedUsers } from "../../services/api";
 import "../../styles/scrollHide.css";
-import AdminUserEditor from '../../components/admin/AdminUserEditor';
-import PendingApprovalCard from '../../components/authentication/PendingApprovalCard';
-import { authService } from '../../services';
-import { AuthContext } from '../../context/AuthContext';
+import AdminUserEditor from "../../components/admin/AdminUserEditor";
+import PendingApprovalCard from "../../components/authentication/PendingApprovalCard";
+import { authService } from "../../services";
+import { AuthContext } from "../../context/AuthContext";
 
 // Custom styled Marquee component for donors
 const DonorMarquee = ({ donors }) => {
   return (
-    <div className="donor-marquee-container" style={{ 
-      overflow: 'hidden',
-      backgroundColor: 'rgba(180, 0, 0, 0.07)',
-      borderRadius: '8px',
-      padding: '8px',
-      marginBottom: '16px',
-      border: '1px solid rgba(180, 0, 0, 0.2)'
-    }}>
-      <div className="marquee-header" style={{ 
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '8px'
-      }}>
+    <div
+      className="donor-marquee-container"
+      style={{
+        overflow: "hidden",
+        backgroundColor: "rgba(180, 0, 0, 0.07)",
+        borderRadius: "8px",
+        padding: "8px",
+        marginBottom: "16px",
+        border: "1px solid rgba(180, 0, 0, 0.2)",
+      }}
+    >
+      <div
+        className="marquee-header"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "8px",
+        }}
+      >
         <GiftOutline color="#b00000" fontSize={18} />
-        <span style={{ 
-          marginLeft: '6px',
-          fontWeight: 'bold',
-          color: '#b00000'
-        }}>Recent Donors</span>
+        <span
+          style={{
+            marginLeft: "6px",
+            fontWeight: "bold",
+            color: "#b00000",
+          }}
+        >
+          Recent Donors
+        </span>
       </div>
-      <div className="donor-marquee" style={{ 
-        whiteSpace: 'nowrap',
-        animation: 'marquee 30s linear infinite',
-        padding: '4px 0'
-      }}>
+      <div
+        className="donor-marquee"
+        style={{
+          whiteSpace: "nowrap",
+          animation: "marquee 30s linear infinite",
+          padding: "4px 0",
+        }}
+      >
         {donors.map((donor, index) => (
-          <span key={index} style={{ 
-            padding: '4px 16px 4px 0',
-            display: 'inline-block'
-          }}>
-            <span style={{ fontWeight: 'bold' }}>{donor.name}</span>
-            <span style={{ color: '#b00000' }}> ₹{donor.amount}</span>
+          <span
+            key={index}
+            style={{
+              padding: "4px 16px 4px 0",
+              display: "inline-block",
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>{donor.name}</span>
+            <span style={{ color: "#b00000" }}> ₹{donor.amount}</span>
           </span>
         ))}
       </div>
@@ -80,80 +96,89 @@ const DonorMarquee = ({ donors }) => {
 // User suggestion carousel
 const UserSuggestionBar = ({ users }) => {
   const navigate = useNavigate();
-  
+
   const viewProfile = (userId) => {
-    if(userId) navigate(`/profile/${userId}`);
+    if (userId) navigate(`/profile/${userId}`);
   };
-  
+
   return (
-    <div className="user-suggestions" style={{ marginBottom: '20px' }}>
-      <div style={{ 
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '10px'
-      }}>
-        <h3 style={{ margin: 0, color: '#8b0000' }}>
+    <div className="user-suggestions" style={{ marginBottom: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
+        <h3 style={{ margin: 0, color: "#8b0000" }}>
           <TeamOutline /> Suggested Matches
         </h3>
-        <Button 
-          size='small' 
-          color='primary' 
-          fill='none'
-          style={{ color: '#b00000' }}
-         // onClick={() => navigate('/all-matches')}
+        <Button
+          size="small"
+          color="primary"
+          fill="none"
+          style={{ color: "#b00000" }}
+          // onClick={() => navigate('/all-matches')}
         >
           View All
         </Button>
       </div>
-      
-      <div style={{ 
-        display: 'flex',
-        overflowX: 'auto',
-        paddingBottom: '10px',
-        scrollbarWidth: 'none'
-      }} className="scroll-hide">
-        {users.map(user => (
-          <Card 
+
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto",
+          paddingBottom: "10px",
+          scrollbarWidth: "none",
+        }}
+        className="scroll-hide"
+      >
+        {users.map((user) => (
+          <Card
             key={user.id}
-           // onClick={() => viewProfile(user.id)}
-            style={{ 
-              minWidth: '140px',
-              marginRight: '12px',
-              borderRadius: '8px',
-              border: '1px solid #f0f0f0',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            // onClick={() => viewProfile(user.id)}
+            style={{
+              minWidth: "140px",
+              marginRight: "12px",
+              borderRadius: "8px",
+              border: "1px solid #f0f0f0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
             }}
-            bodyStyle={{ padding: '12px' }}
+            bodyStyle={{ padding: "12px" }}
           >
-            <div style={{ textAlign: 'center' }}>
-              <Badge content={<HeartOutline fontSize={12} />} color='#b00000'>
-                <Avatar 
-                  src={user.avatar} 
-                  style={{ 
-                    width: '70px', 
-                    height: '70px',
-                    border: '2px solid #b00000'
-                  }} 
+            <div style={{ textAlign: "center" }}>
+              <Badge content={<HeartOutline fontSize={12} />} color="#b00000">
+                <Avatar
+                  src={user.avatar}
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    border: "2px solid #b00000",
+                  }}
                 />
               </Badge>
-              <div style={{ 
-                marginTop: '8px',
-                fontSize: '15px',
-                fontWeight: '500',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
+              <div
+                style={{
+                  marginTop: "8px",
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {user.name}, {user.age}
               </div>
-              <div style={{ 
-                fontSize: '12px',
-                color: '#666',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#666",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {user.city}
               </div>
             </div>
@@ -166,7 +191,7 @@ const UserSuggestionBar = ({ users }) => {
 
 // Share profile component
 const ShareProfileCard = ({ userId }) => {
-  console.log(userId)
+  console.log(userId);
   const textToCopy = `http://localhost:3000/profile-view/${userId}`;
 
   const shareProfile = () => {
@@ -174,39 +199,46 @@ const ShareProfileCard = ({ userId }) => {
     //   content: 'Profile link copied to clipboard!',
     //   position: 'bottom',
     // });
-    navigator.clipboard.writeText(textToCopy)
+    navigator.clipboard
+      .writeText(textToCopy)
       .then(() => alert("Copied to clipboard!"))
       .catch((err) => console.error("Failed to copy:", err));
   };
-  
+
   return (
-    <Card style={{ 
-      marginBottom: '16px',
-      borderRadius: '8px',
-      border: '1px solid rgba(180, 0, 0, 0.2)',
-      backgroundColor: 'rgba(180, 0, 0, 0.03)'
-    }}>
-      <div style={{ 
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
+    <Card
+      style={{
+        marginBottom: "16px",
+        borderRadius: "8px",
+        border: "1px solid rgba(180, 0, 0, 0.2)",
+        backgroundColor: "rgba(180, 0, 0, 0.03)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div>
-          <h3 style={{ margin: '0 0 5px 0', color: '#8b0000' }}>Share Your Profile</h3>
-          <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
+          <h3 style={{ margin: "0 0 5px 0", color: "#8b0000" }}>
+            Share Your Profile
+          </h3>
+          <p style={{ margin: 0, fontSize: "14px", color: "#666" }}>
             Invite friends to view your profile
           </p>
         </div>
         <Button
           onClick={shareProfile}
-          color='primary'
-          style={{ 
-            backgroundColor: '#b00000',
-            borderColor: '#b00000',
-            borderRadius: '20px'
+          color="primary"
+          style={{
+            backgroundColor: "#b00000",
+            borderColor: "#b00000",
+            borderRadius: "20px",
           }}
         >
-          <TravelOutline fontSize={16}/>
+          <TravelOutline fontSize={16} />
         </Button>
       </div>
     </Card>
@@ -216,36 +248,48 @@ const ShareProfileCard = ({ userId }) => {
 // Donation link component
 const DonationLink = () => {
   const navigate = useNavigate();
-  
+
   const goToDonation = () => {
-    navigate('/donation');
+    navigate("/donation");
   };
-  
+
   return (
-    <Card style={{ 
-      marginBottom: '16px',
-      borderRadius: '8px',
-      background: 'linear-gradient(45deg, #8b0000, #b00000)',
-      color: 'white'
-    }}>
-      <div style={{ 
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
+    <Card
+      style={{
+        marginBottom: "16px",
+        borderRadius: "8px",
+        background: "linear-gradient(45deg, #8b0000, #b00000)",
+        color: "white",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div>
-          <h3 style={{ margin: '0 0 5px 0', color: 'white' }}>Support Our Community</h3>
-          <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>
+          <h3 style={{ margin: "0 0 5px 0", color: "white" }}>
+            Support Our Community
+          </h3>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "14px",
+              color: "rgba(255,255,255,0.8)",
+            }}
+          >
             Your contribution helps us grow
           </p>
         </div>
         <Button
           //onClick={goToDonation}
-          style={{ 
-            backgroundColor: 'white',
-            color: '#b00000',
-            borderColor: 'white',
-            borderRadius: '20px'
+          style={{
+            backgroundColor: "white",
+            color: "#b00000",
+            borderColor: "white",
+            borderRadius: "20px",
           }}
         >
           <PayCircleOutline fontSize={16} /> Donate
@@ -258,44 +302,49 @@ const DonationLink = () => {
 // Quick shortcuts component
 const QuickShortcuts = () => {
   const navigate = useNavigate();
-  
+
   const shortcuts = [
-    { icon: <TeamOutline />, text: 'Browse', path: '/browse' },
-    { icon: <HeartOutline />, text: 'Matches', path: '/matches' },
-    { icon: <UserAddOutline />, text: 'Invite', path: '/invite' },
-    { icon: <GiftOutline />, text: 'Donate', path: '/donation' }
+    { icon: <TeamOutline />, text: "Browse", path: "/browse" },
+    { icon: <HeartOutline />, text: "Matches", path: "/matches" },
+    { icon: <UserAddOutline />, text: "Invite", path: "/invite" },
+    { icon: <GiftOutline />, text: "Donate", path: "/donation" },
   ];
-  
+
   return (
-    <Card style={{ 
-      marginBottom: '16px',
-      borderRadius: '8px',
-    }}>
-      <h3 style={{ margin: '0 0 12px 0', color: '#8b0000' }}>Quick Actions</h3>
+    <Card
+      style={{
+        marginBottom: "16px",
+        borderRadius: "8px",
+      }}
+    >
+      <h3 style={{ margin: "0 0 12px 0", color: "#8b0000" }}>Quick Actions</h3>
       <Grid columns={4} gap={8}>
         {shortcuts.map((item, index) => (
           <Grid.Item key={index}>
-            <div 
-             // onClick={() => navigate(item.path)}
+            <div
+              // onClick={() => navigate(item.path)}
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '12px',
-                backgroundColor: index === 0 ? 'rgba(180, 0, 0, 0.07)' : '#f5f5f5',
-                borderRadius: '8px',
-                cursor: 'pointer'
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "12px",
+                backgroundColor:
+                  index === 0 ? "rgba(180, 0, 0, 0.07)" : "#f5f5f5",
+                borderRadius: "8px",
+                cursor: "pointer",
               }}
             >
-              <div style={{ 
-                fontSize: '24px',
-                color: '#b00000',
-                marginBottom: '8px' 
-              }}>
+              <div
+                style={{
+                  fontSize: "24px",
+                  color: "#b00000",
+                  marginBottom: "8px",
+                }}
+              >
                 {item.icon}
               </div>
-              <div style={{ fontSize: '12px' }}>{item.text}</div>
+              <div style={{ fontSize: "12px" }}>{item.text}</div>
             </div>
           </Grid.Item>
         ))}
@@ -305,24 +354,24 @@ const QuickShortcuts = () => {
 };
 
 const FeatureTiles = () => {
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [donors, setDonors] = useState([]);
- // const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
   const userStatus = user?.userstatus || "PENDING";
-  console.log("hcm userStatus",userStatus)
+  console.log("hcm userStatus", userStatus);
   useEffect(() => {
     // You can optionally fetch users/donors if needed
     setDonors([
-      { name: 'Pokarji Rathore', amount: 20000 },
-      { name: 'Mangilalji Patel', amount: 1500 },
-      { name: 'Amit Muleva', amount: 2100 },
-      { name: 'Meera bai Hammad', amount: 1500 },
-      { name: 'Vishal Solanki', amount: 3000 },
-      { name: 'Sunita ji Gehlot', amount: 1750 },
-      { name: 'Karan Bhagwan', amount: 1200 },
-      { name: 'Deepak Pawar', amount: 2500 },
+      { name: "Pokarji Rathore", amount: 20000 },
+      { name: "Mangilalji Patel", amount: 1500 },
+      { name: "Amit Muleva", amount: 2100 },
+      { name: "Meera bai Hammad", amount: 1500 },
+      { name: "Vishal Solanki", amount: 3000 },
+      { name: "Sunita ji Gehlot", amount: 1750 },
+      { name: "Karan Bhagwan", amount: 1200 },
+      { name: "Deepak Pawar", amount: 2500 },
     ]);
 
     // Fetch suggested users only if approved
@@ -338,17 +387,15 @@ const FeatureTiles = () => {
   }
 
   return (
-    <div style={{ padding: '16px' }}>
+    <div style={{ padding: "16px" }}>
       <DonorMarquee donors={donors} />
       <QuickShortcuts />
       <DonationLink />
       <ShareProfileCard userId={user?.id} />
       <UserSuggestionBar users={users} />
-      {(
-  user.emeelanrole === "CENTER" ||
-  user.emeelanrole === "ADMIN" ||
-  user.emeelanrole === "SUPERADMIN"
-) && <AdminUserEditor />}
+      {(user.emeelanrole === "CENTER" ||
+        user.emeelanrole === "ADMIN" ||
+        user.emeelanrole === "SUPERADMIN") && <AdminUserEditor />}
     </div>
   );
 };

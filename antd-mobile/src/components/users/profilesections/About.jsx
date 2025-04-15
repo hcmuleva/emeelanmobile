@@ -4,7 +4,7 @@ import { AuthContext } from "../../../context/AuthContext";
 import { updateUserData } from "../../../services/api";
 
 const About = () => {
-  const { user, setUser, jwt } = useContext(AuthContext);
+  const { user, setUser, jwt, setProfileUpdated } = useContext(AuthContext);
   const [form] = Form.useForm();
 
   const aboutmeData = user?.mybasicdata?.aboutme || {
@@ -29,6 +29,7 @@ const About = () => {
       await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
+      setProfileUpdated(true)
       Toast.show({ icon: "success", content: "About Me updated!" });
     } catch (err) {
       console.error("Failed to save About Me", err);

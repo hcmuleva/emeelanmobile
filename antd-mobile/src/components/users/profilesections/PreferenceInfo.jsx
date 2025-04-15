@@ -17,7 +17,7 @@ const businessTypeOptions = [
 ];
 
 const PreferenceInfo = () => {
-  const { user, setUser, jwt } = useContext(AuthContext);
+  const { user, setUser, jwt, setProfileUpdated } = useContext(AuthContext);
   const [preferences, setPreferences] = useState(user?.mybasicdata?.preferences || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
@@ -69,6 +69,7 @@ const PreferenceInfo = () => {
       await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
+      setProfileUpdated(true)
       Toast.show({ icon: "success", content: "Preferences saved!" });
     } catch (err) {
       console.error("Save error", err);

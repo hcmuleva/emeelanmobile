@@ -2,7 +2,7 @@ import React from "react";
 import PicturesImageUploader from "../../common/PicturesImageUploader.jsx";
 import ProfilePictureImageUploader from "../../common/ProfilePictureImageUploader";
 
-export default function PhotoUpload() {
+export default function PhotoUpload({setCompletionBar, setUserUpdated}) {
   return (
     <div>
       <div>

@@ -1,10 +1,6 @@
 import { LogoutOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Divider,
-  ProgressCircle
-} from "antd-mobile";
-import React, { useContext, useState } from "react";
+import { Button, Divider, ProgressCircle } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import About from "../../components/users/profilesections/About";
 import BasicInfoUpdate from "../../components/users/profilesections/BasicInfoUpdate";
@@ -16,7 +12,7 @@ import { AuthContext } from "../../context/AuthContext";
 import Settings from "../../components/users/profilesections/Settings";
 import PreferenceInfo from "../../components/users/profilesections/PreferenceInfo";
 import ResetPassword from "../../components/users/profilesections/ResetPassword";
-
+import { getUserById } from "../../services/api";
 
 const tabLinks = [
   { key: "photos", label: "Photos" },
@@ -32,11 +28,15 @@ const tabLinks = [
 
 const ProfileDetails = () => {
   const authContext = useContext(AuthContext);
-  const {user} =useContext(AuthContext)
+  const { user, jwt } = useContext(AuthContext);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("basic");
 
- 
+  const { completionBar } = useContext(AuthContext);
+  const [userProfileData, setUserProfileData] = useState(null)
+  
+  console.log(user)
+
   return (
     <div style={{ padding: 10, backgroundColor: "#fff", color: "#333" }}>
       <div
@@ -53,14 +53,23 @@ const ProfileDetails = () => {
       >
         <h2 style={{ margin: 0 }}>My Profile</h2>
         <ProgressCircle
-          percent={45}
+          percent={completionBar}
           style={{
             "--size": "48px",
-            "--track-width": "3px",
-            "--fill-color": "#FF5A5A",
+            "--track-width": "5px",
+            "--fill-color":
+              completionBar < 40
+                ? "Red"
+                : completionBar < 60
+                ? "Yellow"
+                : completionBar < 80
+                ? "Blue"
+                : completionBar >= 80
+                ? "Green"
+                : "Chaos",
           }}
         >
-          45%
+          {completionBar}
         </ProgressCircle>
       </div>
 
@@ -72,7 +81,7 @@ const ProfileDetails = () => {
             marginBottom: 16,
             padding: "4px 0",
             borderBottom: "0px solid #eee",
-            scrollbarWidth:"none"
+            scrollbarWidth: "none",
           }}
         >
           {tabLinks.map((tab) => (
@@ -97,40 +106,42 @@ const ProfileDetails = () => {
 
         <div style={{ flex: 1 }}>
           {activeTab === "photos" && (
-            <PhotoUpload />
+            <PhotoUpload
+            />
           )}
 
           {activeTab === "basic" && (
-            <BasicInfoUpdate />
+            <BasicInfoUpdate
+            />
           )}
 
           {activeTab === "family" && (
-            <FamilyInfo />
+            <FamilyInfo
+            />
           )}
 
           {activeTab === "education" && (
-            <EducationInfo />
+            <EducationInfo
+            />
           )}
 
           {activeTab === "profession" && (
-            <ProfessionInfo />
+            <ProfessionInfo
+            />
           )}
 
           {activeTab === "preferences" && (
-            < PreferenceInfo/>
+            <PreferenceInfo
+            />
           )}
 
           {activeTab === "about" && (
-            <About />
+            <About
+            />
           )}
 
-          {activeTab === "settings" && (
-            <Settings />
-          )}
-      {activeTab === "resetpassword" && (
-            <ResetPassword userId={user.id}/>
-          )}
-
+          {activeTab === "settings" && <Settings />}
+          {activeTab === "resetpassword" && <ResetPassword userId={user.id} />}
         </div>
       </div>
 

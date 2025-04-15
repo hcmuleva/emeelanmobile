@@ -13,7 +13,7 @@ const levelOptions = [
 ];
 
 const EducationInfo = () => {
-  const { user, setUser, jwt } = useContext(AuthContext);
+  const { user, setUser, jwt, setProfileUpdated } = useContext(AuthContext);
   const [educations, setEducations] = useState(user?.mybasicdata?.educations || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
@@ -66,7 +66,7 @@ const EducationInfo = () => {
       
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
-
+      setProfileUpdated(true)
       Toast.show({ icon: "success", content: "Education data saved!" });
     } catch (err) {
       console.error("Save error", err);

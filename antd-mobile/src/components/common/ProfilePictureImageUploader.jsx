@@ -6,7 +6,6 @@ import { AuthContext } from '../../context/AuthContext';
 const ProfilePictureImageUploader = () => {
   const { user, setProfileUpdated } = useContext(AuthContext);
   const jwt = localStorage.getItem("jwt");
-
   const [fileList, setFileList] = useState([]);
   const MAX_IMAGES = 1;
 

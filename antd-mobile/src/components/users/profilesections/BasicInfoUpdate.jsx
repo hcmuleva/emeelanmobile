@@ -13,7 +13,7 @@ const maritalOptions = [
 
 export default function BasicInfoUpdate() {
   const [form] = Form.useForm();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, setProfileUpdated } = useContext(AuthContext);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const initialValues = {
@@ -22,6 +22,7 @@ export default function BasicInfoUpdate() {
     email: user?.email || "",
     FirstName: user?.FirstName || "",
     LastName: user?.LastName || "",
+    age: user?.age || "",
     Height: user?.Height || "1",
     mobile: user?.mobile || "",
     City: user?.City || "",
@@ -70,7 +71,7 @@ export default function BasicInfoUpdate() {
       
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
-  
+      setProfileUpdated(true)
       Toast.show({ icon: "success", content: "Profile updated!" });
       setIsEditMode(false);
     } catch (err) {
@@ -96,6 +97,9 @@ export default function BasicInfoUpdate() {
           </p>
           <p>
             <strong>Last Name:</strong> {user?.LastName}
+          </p>
+          <p>
+            <strong>Age:</strong> {user?.age}
           </p>
           <p>
             <strong>Height:</strong> {user?.Height}
@@ -161,6 +165,10 @@ export default function BasicInfoUpdate() {
           </Form.Item>
 
           <Form.Item name="LastName" label="Last Name:">
+            <Input style={{backgroundColor:"#E5E4E2", padding:"10px", borderRadius:"5px", width:"90%"}}/>
+          </Form.Item>
+
+          <Form.Item name="age" label="Age:">
             <Input style={{backgroundColor:"#E5E4E2", padding:"10px", borderRadius:"5px", width:"90%"}}/>
           </Form.Item>
 

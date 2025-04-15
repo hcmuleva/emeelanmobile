@@ -2,7 +2,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { ChatCheckOutline, CheckCircleFill, TeamOutline } from "antd-mobile-icons";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
 import { Badge } from "antd-mobile";
@@ -15,7 +15,7 @@ export default function UserLayout({ children }) {
   const [notificationStats, setNotificationStats] = useState({ total: 0 });
   console.log("Notification ", JSON.stringify(notificationStats))
   const userId = JSON.parse(localStorage.getItem("user"))?.id;
-
+    
   const footerItems = [
     { icon: <HomeOutlined style={{ fontSize: 24 }} />, key: "home" },
     { icon: <TeamOutline style={{ fontSize: 24 }} />, key: "profiles" },
