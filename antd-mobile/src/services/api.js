@@ -86,7 +86,7 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
           _start: start,
           _limit: limit,
           filters: modifiedFilters, // ✅ Use filters
-          _sort: 'id:desc', // Sort by newest first
+          _sort: 'id:asc', // Sort by newest first
           "populate[photos]": "*", // ✅ Populate photos (all fields)
           "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
           "populate[Height]": "*",

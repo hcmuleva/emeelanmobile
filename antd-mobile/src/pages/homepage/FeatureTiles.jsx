@@ -76,7 +76,109 @@ const DonorMarquee = ({ donors }) => {
     </div>
   );
 };
+const BreakingNewsMarquee_EN = () => {
+  const newsItems = [
+    "Easy to register: This is very easy app to register now",
+    "Admins: 350 plus admin to help you to get register profiles details and background verification",
+    "Invite: Invite option to find suitable profile and based on this other side person can accept or reject"
+  ];
 
+  return (
+    <div className="news-marquee-container" style={{ 
+      overflow: 'hidden',
+      backgroundColor: 'rgba(0, 100, 180, 0.07)',
+      borderRadius: '8px',
+      padding: '8px',
+      marginBottom: '16px',
+      border: '1px solid rgba(0, 100, 180, 0.2)'
+    }}>
+      <div className="marquee-header" style={{ 
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '8px'
+      }}>
+        <span style={{ 
+          marginLeft: '6px',
+          fontWeight: 'bold',
+          color: '#0064b4'
+        }}>Breaking News</span>
+      </div>
+      <div className="news-marquee" style={{ 
+        whiteSpace: 'nowrap',
+        animation: 'marquee 30s linear infinite',
+        padding: '4px 0'
+      }}>
+        {newsItems.map((item, index) => (
+          <span key={index} style={{ 
+            padding: '4px 16px 4px 0',
+            display: 'inline-block'
+          }}>
+            {item} • 
+          </span>
+        ))}
+      </div>
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+      `}</style>
+    </div>
+  );
+};
+const BreakingNewsMarquee_HI= () => {
+  const newsItems = [
+    { title: "आसान पंजीकरण:", text: "यह ऐप पंजीकरण के लिए बहुत आसान है, अभी रजिस्टर करें" },
+    { title: "प्रशासक:", text: "350 से अधिक प्रशासक आपकी प्रोफाइल विवरण और पृष्ठभूमि सत्यापन में मदद करने के लिए उपलब्ध हैं" },
+    { title: "आमंत्रण:", text: "उपयुक्त प्रोफाइल खोजने के लिए आमंत्रण विकल्प, जिसके आधार पर दूसरा व्यक्ति स्वीकार या अस्वीकार कर सकता है" }
+  ];
+
+  return (
+    <div className="news-marquee-container" style={{ 
+      overflow: 'hidden',
+      backgroundColor: 'rgba(0, 100, 180, 0.07)',
+      borderRadius: '8px',
+      padding: '8px',
+      marginBottom: '16px',
+      border: '1px solid rgba(0, 100, 180, 0.2)'
+    }}>
+      <div className="marquee-header" style={{ 
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '8px'
+      }}>
+        <span style={{ 
+          marginLeft: '6px',
+          fontWeight: 'bold',
+          color: '#0064b4',
+          fontSize: '18px'
+        }}>ताज़ा खबर</span>
+      </div>
+      <div className="news-marquee" style={{ 
+        whiteSpace: 'nowrap',
+        animation: 'marquee 20s linear infinite',
+        padding: '4px 0',
+        fontSize: '16px'
+      }}>
+        {newsItems.map((item, index) => (
+          <span key={index} style={{ 
+            padding: '4px 16px 4px 0',
+            display: 'inline-block'
+          }}>
+            <span style={{ fontWeight: 'bold' }}>{item.title}</span>
+            <span> {item.text} • </span>
+          </span>
+        ))}
+      </div>
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+      `}</style>
+    </div>
+  );
+};
 // User suggestion carousel
 const UserSuggestionBar = ({ users }) => {
   const navigate = useNavigate();
@@ -218,6 +320,7 @@ const DonationLink = () => {
   const navigate = useNavigate();
   
   const goToDonation = () => {
+    console.log("DonationPage")
     navigate('/donation');
   };
   
@@ -240,7 +343,7 @@ const DonationLink = () => {
           </p>
         </div>
         <Button
-          //onClick={goToDonation}
+          onClick={goToDonation}
           style={{ 
             backgroundColor: 'white',
             color: '#b00000',
@@ -276,7 +379,7 @@ const QuickShortcuts = () => {
         {shortcuts.map((item, index) => (
           <Grid.Item key={index}>
             <div 
-             // onClick={() => navigate(item.path)}
+              onClick={() => navigate(item.path)}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -340,10 +443,12 @@ const FeatureTiles = () => {
   return (
     <div style={{ padding: '16px' }}>
       <DonorMarquee donors={donors} />
-      <QuickShortcuts />
-      <DonationLink />
-      <ShareProfileCard userId={user?.id} />
-      <UserSuggestionBar users={users} />
+      <BreakingNewsMarquee_EN />
+      <BreakingNewsMarquee_HI />
+      {/* <QuickShortcuts />
+      <DonationLink /> */}
+      {/* <ShareProfileCard userId={user?.id} /> */}
+      {/* <UserSuggestionBar users={users} /> */}
       {(
   user.emeelanrole === "CENTER" ||
   user.emeelanrole === "ADMIN" ||
