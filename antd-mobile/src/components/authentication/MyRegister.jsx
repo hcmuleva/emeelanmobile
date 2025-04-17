@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Form, Input, Button, Toast, Radio, Divider } from "antd-mobile";
+import { Form, Input, Button, Toast, Radio, Divider, NavBar, Space } from "antd-mobile";
 import { AuthContext } from '../../context/AuthContext';
 import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
@@ -7,7 +7,7 @@ import gotra from "../../utils/gotra.json";
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
 
-export default function MyRegister() {
+export default function MyRegister({setIsLogined}) {
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
     const [customdata, setCustomdata] = useState({});
@@ -100,7 +100,54 @@ export default function MyRegister() {
     };
 
     return (
-        <div style={{ padding: '16px' }}>
+        <div style={{ padding: '5px' }}>
+              <NavBar
+  back={null}
+  style={{
+    background: '#ff6b6b',
+    color: 'white',
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
+    padding: '10px',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    }}
+  >
+    {/* Left Side: Title */}
+    <div>
+      <div
+        style={{
+          fontWeight: '600',
+          fontSize: '18px',
+          lineHeight: '20px',
+          letterSpacing: '.5px',
+        }}
+      >
+        EMEELAN (गठजोड़)
+      </div>
+     
+    </div>
+
+    {/* Right Side: Logo */}
+    <img
+      src="logo.png" // Replace with your logo path
+      alt="Logo"
+      style={{
+        height: '36px',
+        width: '36px',
+        borderRadius: '50%',
+        objectFit: 'cover',
+      }}
+    />
+  </div>
+</NavBar>
             <Form
                 form={form}
                 onFinish={onFinish}
@@ -190,6 +237,25 @@ export default function MyRegister() {
                         <Radio value="Female">Female</Radio>
                     </Radio.Group>
                 </Form.Item>
+                <Form.Item
+                    name="Profession"
+                    label="Profession"
+                    rules={[{ required: true, message: "Please select your gender" }]}
+                >
+                    <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                        <Radio value="BUSINESS">BUSINESS</Radio>
+                        <Radio value="ENGINEER">ENGINEER</Radio>
+                        <Radio value="DOCTOR">DOCTOR</Radio>
+                        <Radio value="TEACHER">TEACHER</Radio>
+                        <Radio value="CA">CA</Radio>
+                        <Radio value="SERVICE">SERVICE</Radio>
+                        <Radio value="HOUSEWORK">HOUSEWORK</Radio>
+                        <Radio value="GOVTJOB">GOVTJOB</Radio>
+                        <Radio value="PRIVATEJOB">PRIVATEJOB</Radio>
+                        <Radio value="STUDENT">STUDENT</Radio>
+                        <Radio value="OTHER">OTHER</Radio>
+                    </Radio.Group>
+                </Form.Item>
 
                 <GotraSelector
                     gotraData={gotra.Gotra}
@@ -273,6 +339,18 @@ export default function MyRegister() {
                     <Input placeholder="Enter disability details if applicable" />
                 </Form.Item>
             </Form>
+            <Space direction="vertical" style={{ width: '100%' }}>
+            <div style={{ textAlign: 'center', marginTop: 16 }}>
+             {' '}
+              <span
+                style={{ color: '#ff6b6b', fontWeight: 'bold', cursor: 'pointer' }}
+                onClick={() => setIsLogined(true)}
+              >
+                Login
+              </span>
+            </div>
+           
+          </Space>
         </div>
     );
 }

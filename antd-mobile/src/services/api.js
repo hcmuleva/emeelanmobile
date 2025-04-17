@@ -65,7 +65,6 @@ export const getCustomMe = async (jwt) => {
 
 export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
     try {
-      console.log("getPaginatedUsers filters",filters, " end")
       if (filters.DOB_gte) {
         filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
       }
@@ -81,14 +80,13 @@ export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
         )
       );
       const {DOB_gte,DOB_lte, ...modifiedFilters} = strapiFilters;
-      console.log("getPaginatedUsers filters",modifiedFilters, " end")
 
       const response = await api.get(`/users`, {
         params: {
           _start: start,
           _limit: limit,
           filters: modifiedFilters, // ✅ Use filters
-          _sort: 'id:desc', // Sort by newest first
+          _sort: 'id:asc', // Sort by newest first
           "populate[photos]": "*", // ✅ Populate photos (all fields)
           "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
           "populate[Height]": "*",

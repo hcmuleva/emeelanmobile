@@ -43,13 +43,18 @@ const UserRoleProfile = ({ adminProp }) => {
   ];
 
   const professionOptions = [
-    { label: "Engineer", value: "engineer" },
-    { label: "Doctor", value: "doctor" },
-    { label: "Teacher", value: "teacher" },
-    { label: "Business", value: "business" },
-    { label: "Housewife", value: "House work" },
-    { label: "CA", value: "ca" },
-    { label: "Other", value: "other" },
+    { label: "ENGINEER", value: "ENGINEER" },
+    { label: "DOCTOR", value: "DOCTOR" },
+    { label: "TEACHER", value: "TEACHER" },
+    { label: "BUSINESS", value: "BUSINESS" },
+    { label: "HOUSEWORK", value: "HOUSEWORK" },
+    { label: "CA", value: "CA" },
+    { label: "SERVICE", value: "SERVICE" },
+    { label: "GOVTJOB", value: "GOVTJOB" },
+    { label: "PRIVATEJOB", value: "PRIVATEJOB" },
+    { label: "STUDENT", value: "STUDENT" },
+    { label: "GOVTJOB", value: "GOVTJOB" },
+    { label: "OTHER", value: "OTHER" },
   ];
 
   const limit = 10;
