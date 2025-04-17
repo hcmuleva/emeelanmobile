@@ -1,70 +1,122 @@
-# Getting Started with Create React App
+# Getting Started with EMEELAN PLATFORM
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1) Client code: Techstack:
+Framework antd-mobile
+Coding guideline:
 
-## Available Scripts
+2) Deployment steps:
+1. Android command
 
-In the project directory, you can run:
+    ```npm install @capacitor/android```
+    
+    ```export JAVA_HOME=/usr/local/opt/openjdk@21```
 
-### `npm start`
+     ```export PATH=$JAVA_HOME/bin:$PATH```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    
+    ```cd android ``` 
+    
+    
+   ``` ./gradlew clean ```
+    
+    ``` ./gradlew assembleRelease --stacktrace --info ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    ```npx cap sync android```
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+For IOS
 
-### `npm run build`
+``` cd ios/App  ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```npx cap copy ios && npx cap run ios ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<details><summary>android/build.gradle</summary>
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+buildscript {
 
-### `npm run eject`
+    repositories {
+    google()
+    mavenCentral()
+}
+dependencies {
+    classpath 'com.android.tools.build:gradle:8.7.2'
+    classpath 'com.google.gms:google-services:4.4.2'
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    // NOTE: Do not place your application dependencies here; they belong
+    // in the individual module build.gradle files
+}
+}
+apply from: "variables.gradle"
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+allprojects {
+repositories {
+google()
+mavenCentral()
+}
+}
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+task clean(type: Delete) {
+delete rootProject.buildDir
+}
+</details>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Second file
 
-## Learn More
+<details>
+<summary>android/app/build.gradle</summary>
+apply plugin: 'com.android.application'
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+android {
+    namespace "com.emeelan.mastjod"
+    compileSdk 33
+    defaultConfig {
+        applicationId "com.emeelan.mastjod"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 2
+        versionName "2.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
 
-### Code Splitting
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+apply from: 'capacitor.build.gradle'
 
-### Analyzing the Bundle Size
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
