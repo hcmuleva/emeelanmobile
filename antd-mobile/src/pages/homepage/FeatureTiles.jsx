@@ -28,6 +28,7 @@ import AdminUserEditor from "../../components/admin/AdminUserEditor";
 import PendingApprovalCard from "../../components/authentication/PendingApprovalCard";
 import { authService } from "../../services";
 import { AuthContext } from "../../context/AuthContext";
+import Pageflip from "../../components/cards/Pageflip";
 
 // Custom styled Marquee component for donors
 const DonorMarquee = ({ donors }) => {
@@ -392,6 +393,9 @@ const FeatureTiles = () => {
       <QuickShortcuts />
       <DonationLink />
       <ShareProfileCard userId={user?.id} />
+      {/* <button onClick={()=>{
+        navigate("/page-flip")
+      }}>View Book</button> */}
       <UserSuggestionBar users={users} />
       {(user.emeelanrole === "CENTER" ||
         user.emeelanrole === "ADMIN" ||

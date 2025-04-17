@@ -28,6 +28,7 @@ import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
 import { TermsPage } from "./pages/public/TermsPage";
+import Pageflip from "./components/cards/Pageflip";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -193,6 +194,16 @@ function AppContent() {
               <ProtectedRoute>
                 <MainLayout>
                   <SuperAdmin />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/page-flip"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <Pageflip />
                 </MainLayout>
               </ProtectedRoute>
             }
