@@ -71,7 +71,7 @@ const AdminRoleProfiles = ({ adminProp,userrole }) => {
       if (searchQuery) {
         data = await searchUsers(searchQuery, offset, limit);
       } else {
-        data = await getPaginatedAdminUsers(offset, limit, filters);
+        data = await getPaginatedUsers(offset, limit, filters);
       }
   
       const userList = data?.data || [];
