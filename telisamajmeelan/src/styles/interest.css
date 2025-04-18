@@ -1,0 +1,127 @@
+.interest-main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.normal-user-card-list {
+  margin-bottom: 2.5rem;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+#profile-image {
+  width: 100px;
+  height: "100%";
+}
+
+.profile-name {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #d86b6b;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-sub-info-row-1 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.interest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-age-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.like-btn {
+  font-size: 1.4rem;
+  color: #e04c4c;
+}
+
+.request-btn {
+  font-size: 1.4rem;
+  color: #e04c4c;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.liked-from {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.user-likedfrom-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.user-likedfrom-card-user-image {
+  border-radius: 50%;
+}
+
+.likedfrom-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.liked-info-date {
+  align-self: flex-end;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.likedfrom-btn {
+  padding: 0;
+  margin-right: 0.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.profile-card-footer {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+@media screen and (min-width: 485px) {
+  .profile-card-details {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 764px) {
+  .profile-card {
+    height: 240px;
+    width: 100%;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+  .profile-name {
+    font-size: 1.8rem;
+  }
+
+  .profile-card-details {
+    width: 100%;
+  }
+  #profile-image {
+    width: 250px;
+    max-height: 100%;
+  }
+}
