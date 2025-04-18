@@ -73,7 +73,7 @@ const AdminRoleProfiles = ({ adminProp,userrole }) => {
       } else {
         data = await getPaginatedUsers(offset, limit, filters);
       }
-  
+
       const userList = data?.data || [];
   
       if (userList.length === 0) {
