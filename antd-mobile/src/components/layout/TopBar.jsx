@@ -10,6 +10,8 @@ import DynamicLogo from "./DynamicLogo";
 const TopBar = ({ userRole }) => {
   const { jwt, profileUpdated, setProfileUpdated } = useContext(AuthContext);
   const [user, setUser] = useState(null);
+  const [greet, setGreet] = useState("")
+  let greetArr = ["Hello!", "Hey!"]
 
   useEffect(() => {
     const getMe = async () => {
@@ -23,6 +25,11 @@ const TopBar = ({ userRole }) => {
     };
     getMe();
   }, [jwt, profileUpdated]);
+
+  useEffect(() => {
+    let idx = Math.floor(Math.random() * greetArr.length)
+    setGreet(greetArr[idx])
+  }, [])
 
   const [notificationStats, setNotificationStats] = useState({
     PENDING: 0,
@@ -104,7 +111,7 @@ const TopBar = ({ userRole }) => {
                   letterSpacing: ".5px",
                 }}
               >
-                {user?.FirstName} {user?.LastName} {user?.Gotra},
+                {greet} {user?.FirstName}
               </span>
               <br />
               <span

@@ -31,7 +31,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
   const handleTileClick = async (tileKey) => {
-    switch(tileKey){
+    switch (tileKey) {
       case 'password':
         // Handle Password click
         console.log('Password tile clicked');
@@ -49,7 +49,7 @@ const UserProfile = () => {
         break;
       case 'logout':
         await authContext.logout()
-        navigate('/login', { replace: true }); 
+        navigate('/login', { replace: true });
         break;
       case 'help':
         // Handle Help click
@@ -57,38 +57,38 @@ const UserProfile = () => {
         // Add your help logic here
         break;
       default:
-      console.log('Unknown tile clicked');
+        console.log('Unknown tile clicked');
     }
   }
-  return <ProfileDetails/>
+  return <ProfileDetails />
   return (
     <>
-      <Grid columns={2} gap={16} style={{padding:"16px"}}>
-          {tiles.map((tile) => (
-            <Grid.Item key={tile.key}>
-              <Card 
-                style={{
-                  backgroundColor: tile.color,
-                  color: '#212121',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  cursor: 'pointer'
-                }}
-                onClick={() => handleTileClick(tile.key)}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  {tile.icon}
-                  <span style={{ marginTop: 8, fontWeight: 'bold' }}>{tile.title}</span>
-                </div>
-              </Card>
-            </Grid.Item>
-          ))}
+      <Grid columns={2} gap={16} style={{ padding: "16px" }}>
+        {tiles.map((tile) => (
+          <Grid.Item key={tile.key}>
+            <Card
+              style={{
+                backgroundColor: tile.color,
+                color: '#212121',
+                padding: '12px',
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+              onClick={() => handleTileClick(tile.key)}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {tile.icon}
+                <span style={{ marginTop: 8, fontWeight: 'bold' }}>{tile.title}</span>
+              </div>
+            </Card>
+          </Grid.Item>
+        ))}
       </Grid>
-      <ResetPasswordDialog 
-        visible={visiblePassword} 
-        onClose={() => setVisiblePassword(false)} 
+      <ResetPasswordDialog
+        visible={visiblePassword}
+        onClose={() => setVisiblePassword(false)}
       />
-      <UploadImagesDialog visible={visibleUploadImages} onClose={()=>setVisibleUploadImages(false)} />
+      <UploadImagesDialog visible={visibleUploadImages} onClose={() => setVisibleUploadImages(false)} />
     </>
   )
 }

@@ -32,11 +32,11 @@ const tabLinks = [
 
 const ProfileDetails = () => {
   const authContext = useContext(AuthContext);
-  const {user} =useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("basic");
 
- 
+
   return (
     <div style={{ padding: 10, backgroundColor: "#fff", color: "#333" }}>
       <div
@@ -51,7 +51,10 @@ const ProfileDetails = () => {
           color: "white",
         }}
       >
-        <h2 style={{ margin: 0 }}>My Profile</h2>
+        <div>
+          <h2 style={{ margin: 0 }}>My Profile</h2>
+          <p style={{ margin: 0 }}>Id: {user?.id} </p>
+        </div>
         <ProgressCircle
           percent={45}
           style={{
@@ -72,7 +75,7 @@ const ProfileDetails = () => {
             marginBottom: 16,
             padding: "4px 0",
             borderBottom: "0px solid #eee",
-            scrollbarWidth:"none"
+            scrollbarWidth: "none"
           }}
         >
           {tabLinks.map((tab) => (
@@ -117,7 +120,7 @@ const ProfileDetails = () => {
           )}
 
           {activeTab === "preferences" && (
-            < PreferenceInfo/>
+            < PreferenceInfo />
           )}
 
           {activeTab === "about" && (
@@ -127,8 +130,8 @@ const ProfileDetails = () => {
           {activeTab === "settings" && (
             <Settings />
           )}
-      {activeTab === "resetpassword" && (
-            <ResetPassword userId={user.id}/>
+          {activeTab === "resetpassword" && (
+            <ResetPassword userId={user.id} />
           )}
 
         </div>
