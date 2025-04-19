@@ -39,6 +39,7 @@ const MyLogin = ({ setIsLogined }) => {
           top: 0,
           zIndex: 100,
           padding: '10px',
+          paddingTop: 'env(safe-area-inset-top)'
         }}
       >
         <div
@@ -47,6 +48,7 @@ const MyLogin = ({ setIsLogined }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
+            marginTop: "10px"
           }}
         >
           {/* Left Side: Title */}

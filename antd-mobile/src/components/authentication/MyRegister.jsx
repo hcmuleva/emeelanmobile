@@ -112,6 +112,7 @@ export default function MyRegister({ setIsLogined }) {
                     top: 0,
                     zIndex: 100,
                     padding: '10px',
+                    paddingTop: 'env(safe-area-inset-top)'
                 }}
             >
                 <div
@@ -120,6 +121,7 @@ export default function MyRegister({ setIsLogined }) {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         width: '100%',
+                        marginTop: "10px"
                     }}
                 >
                     {/* Left Side: Title */}
