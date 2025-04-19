@@ -238,24 +238,32 @@ export default function MyRegister({setIsLogined}) {
                     </Radio.Group>
                 </Form.Item>
                 <Form.Item
-                    name="Profession"
-                    label="Profession"
-                    rules={[{ required: true, message: "Please select your gender" }]}
-                >
-                    <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                        <Radio value="BUSINESS">BUSINESS</Radio>
-                        <Radio value="ENGINEER">ENGINEER</Radio>
-                        <Radio value="DOCTOR">DOCTOR</Radio>
-                        <Radio value="TEACHER">TEACHER</Radio>
-                        <Radio value="CA">CA</Radio>
-                        <Radio value="SERVICE">SERVICE</Radio>
-                        <Radio value="HOUSEWORK">HOUSEWORK</Radio>
-                        <Radio value="GOVTJOB">GOVTJOB</Radio>
-                        <Radio value="PRIVATEJOB">PRIVATEJOB</Radio>
-                        <Radio value="STUDENT">STUDENT</Radio>
-                        <Radio value="OTHER">OTHER</Radio>
-                    </Radio.Group>
-                </Form.Item>
+    name="Profession"
+    label="Profession"
+    rules={[{ required: true, message: "Please select your gender" }]}
+>
+    <Radio.Group style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        {[
+            "BUSINESS",
+            "ENGINEER",
+            "DOCTOR",
+            "TEACHER",
+            "CA",
+            "SERVICE",
+            "HOUSEWORK",
+            "GOVTJOB",
+            "PRIVATEJOB",
+            "STUDENT",
+            "OTHER",
+        ].map((item) => (
+            <Radio value={item} key={item} style={{ fontSize: "30%" }}>
+                {item}
+            </Radio>
+        ))}
+    </Radio.Group>
+</Form.Item>
+
+
 
                 <GotraSelector
                     gotraData={gotra.Gotra}

@@ -127,16 +127,17 @@ const UserRoleProfile = ({ adminProp }) => {
               />
             </div>
 
-            <div style={{ marginBottom: 8 }}>
-              <strong>Profession:</strong>
-              <Selector
-                showCheckMark
-                columns={3}
-                options={professionOptions}
-                value={[profession]}
-                onChange={(val) => setProfession(val[0])}
-              />
-            </div>
+            <div style={{ marginBottom: 8, fontSize: '14px' }}>
+  <strong>Profession:</strong>
+  <Selector
+    showCheckMark
+    columns={3}
+    options={professionOptions}
+    value={[profession]}
+    onChange={(val) => setProfession(val[0])}
+    style={{ fontSize: '14px' }}  // If Selector accepts style prop
+  />
+</div>
 
             <div style={{ marginBottom: 8 }}>
               <strong>Gotra:</strong>
