@@ -19,8 +19,7 @@ import {
   GiftOutline,
   UserAddOutline,
   PayCircleOutline,
-  TravelOutline,
-  StarOutline
+  TravelOutline
 } from 'antd-mobile-icons';
 import { useNavigate } from 'react-router-dom';
 import { getPaginatedUsers } from '../../services/api';
@@ -107,7 +106,6 @@ const BreakingNewsMarquee_EN = () => {
         alignItems: 'center',
         marginBottom: '8px'
       }}>
-        <StarOutline color='#0064b4' fontSize={18} />
         <span style={{
           marginLeft: '6px',
           fontWeight: 'bold',

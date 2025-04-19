@@ -1,0 +1,19 @@
+{
+    "CATEGORIES": [
+        {
+          "Id": "RathodTeli",
+          "EName": "Rathod Teli (Rathore Teli)",
+          "HName": "राठोड़ तेली (राठौर तेली)"
+        },
+        {
+          "Id": "ModiTeli",
+          "EName": "Modi Teli (Modh Teli)",
+          "HName": "मोदी तेली (मोध तेली)"
+        },
+        {
+          "Id": "SahuTeli",
+          "EName": "Sahu Teli (Sahu Vaishya)",
+          "HName": "साहू तेली (साहू वैश्य)"
+        }
+      ]
+}

@@ -19,7 +19,7 @@ const getDOBRange = (minAge, maxAge) => {
   };
 };
 
-const AdminRoleProfiles = ({ adminProp,userrole }) => {
+const AdminRoleProfiles = ({ adminProp, userrole }) => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -57,25 +57,25 @@ const AdminRoleProfiles = ({ adminProp,userrole }) => {
     try {
       const offset = pageNum * limit;
       let filters = {}
-      
-      if(userrole==="ADMIN"){
-        filters["userstatus"]="PENDING"
-      } 
+
+      if (userrole === "ADMIN") {
+        filters["userstatus"] = "PENDING"
+      }
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;
         filters["DOB_lte"] = to;
       }
-  
+
       let data;
       if (searchQuery) {
         data = await searchUsers(searchQuery, offset, limit);
       } else {
-        data = await getPaginatedAdminUsers(offset, limit, filters);
+        data = await getPaginatedUsers(offset, limit, filters);
       }
-  
+
       const userList = data?.data || [];
-  
+
       if (userList.length === 0) {
         setHasMore(false);
       } else {

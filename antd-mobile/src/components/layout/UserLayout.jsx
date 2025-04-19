@@ -56,6 +56,7 @@ export default function UserLayout({ children }) {
             bottom: 0,
             width: "100%",
             zIndex: 100,
+            paddingBottom: 'env(safe-area-inset-bottom)'
           }}
         >
           {footerItems.map((item) => {
@@ -68,6 +69,7 @@ export default function UserLayout({ children }) {
                   flexDirection: "column",
                   alignItems: "center",
                   color: isActive ? "#FF1E56" : "#999",
+                  paddingBottom: 'env(safe-area-inset-bottom)'
                 }}
                 onClick={() => navigate(`/${item.key}`)}
               >

@@ -1,13 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Form, Input, Button, Toast, Radio, Divider, NavBar, Space } from "antd-mobile";
+import React, { useState, useContext } from 'react';
+import { Form, Input, Button, Toast, Radio } from "antd-mobile";
 import { AuthContext } from '../../context/AuthContext';
 import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
-import gotra from "../../utils/gotra.json";
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
+import gotra from "../../utils/gotra.json";
+import "../../styles/registration.css";
 
-export default function MyRegister({setIsLogined}) {
+export default function MyRegister({ setIsLogined }) {
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
     const [customdata, setCustomdata] = useState({});
@@ -48,15 +49,16 @@ export default function MyRegister({setIsLogined}) {
         }
         return true;
     };
+
     const handleReset = () => {
-      form.resetFields();
-      setCustomdata({});
-  };
+        form.resetFields();
+        setCustomdata({});
+    };
 
     const onFinish = async (values) => {
         if (!validateCustomData()) return;
         setLoading(true);
-        
+
         const payload = {
             ...values,
             emeelanrole,
@@ -70,18 +72,18 @@ export default function MyRegister({setIsLogined}) {
 
         try {
             const response = await register(payload);
-            Toast.show({ 
-                icon: 'success', 
+            Toast.show({
+                icon: 'success',
                 content: "User registration completed successfully",
                 duration: 3000,
                 afterClose: () => form.resetFields()
             });
-            handleReset(); // Reset all fields
+            handleReset();
             console.log("Registration success:", response);
         } catch (err) {
             console.error("Registration error:", err.response?.data || err.message);
-            Toast.show({ 
-                icon: 'fail', 
+            Toast.show({
+                icon: 'fail',
                 content: err.response?.data?.message || "Failed to create user. Please try again.",
                 duration: 2000
             });
@@ -100,257 +102,301 @@ export default function MyRegister({setIsLogined}) {
     };
 
     return (
-        <div style={{ padding: '5px' }}>
-              <NavBar
-  back={null}
-  style={{
-    background: '#ff6b6b',
-    color: 'white',
-    position: 'sticky',
-    top: 0,
-    zIndex: 100,
-    padding: '10px',
-  }}
->
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-    }}
-  >
-    {/* Left Side: Title */}
-    <div>
-      <div
-        style={{
-          fontWeight: '600',
-          fontSize: '18px',
-          lineHeight: '20px',
-          letterSpacing: '.5px',
-        }}
-      >
-        EMEELAN (गठजोड़)
-      </div>
-     
-    </div>
-
-    {/* Right Side: Logo */}
-    <img
-      src="logo.png" // Replace with your logo path
-      alt="Logo"
-      style={{
-        height: '36px',
-        width: '36px',
-        borderRadius: '50%',
-        objectFit: 'cover',
-      }}
-    />
-  </div>
-</NavBar>
-            <Form
-                form={form}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                initialValues={{
-                    Sex: "Male",
-                    isdivyang: false,
-                    Country: "India",
-                }}
-                footer={
-                    <Button 
-                        block 
-                        type="submit" 
-                        color="primary" 
-                        loading={loading}
-                        disabled={loading}
-                    >
-                        {loading ? 'Processing...' : 'Create Account'}
-                    </Button>
-                }
-            >
-               
-                <Form.Item
-                    name="FirstName"
-                    label="First Name"
-                    rules={[{ required: true, message: "Please enter your first name" }]}
-                >
-                    <Input placeholder="Enter First Name" clearable />
-                </Form.Item>
-
-                <Form.Item 
-                    name="FatherName" 
-                    label="Father's Name"
-                    rules={[{ required: true, message: "Please enter your father's name" }]}
-                >
-                    <Input placeholder="Enter Father's Name" clearable />
-                </Form.Item>
-
-                <Form.Item
-                    name="email"
-                    label="Email"
-                    rules={[
-                        { required: true, message: 'Please enter your email' },
-                        { type: 'email', message: 'Please enter a valid email address' },
-                    ]}
-                >
-                    <Input type="email" placeholder="Enter your email" clearable />
-                </Form.Item>
-
-                <Form.Item
-                    name="password"
-                    label="Password"
-                    rules={[
-                        { required: true, message: "Please enter a password" },
-                        { min: 6, message: "Password must be at least 6 characters" },
-                    ]}
-                >
-                    <Input type="password" placeholder="Enter Password" clearable />
-                </Form.Item>
-
-                <Form.Item
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    dependencies={['password']}
-                    rules={[
-                        { required: true, message: 'Please confirm your password' },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!value || getFieldValue('password') === value) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject('The two passwords do not match');
-                            },
-                        }),
-                    ]}
-                >
-                    <Input type="password" placeholder="Confirm Password" clearable />
-                </Form.Item>
-
-                <Form.Item
-                    name="Sex"
-                    label="Gender"
-                    rules={[{ required: true, message: "Please select your gender" }]}
-                >
-                    <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                        <Radio value="Male">Male</Radio>
-                        <Radio value="Female">Female</Radio>
-                    </Radio.Group>
-                </Form.Item>
-                <Form.Item
-                    name="Profession"
-                    label="Profession"
-                    rules={[{ required: true, message: "Please select your gender" }]}
-                >
-                    <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                        <Radio value="BUSINESS">BUSINESS</Radio>
-                        <Radio value="ENGINEER">ENGINEER</Radio>
-                        <Radio value="DOCTOR">DOCTOR</Radio>
-                        <Radio value="TEACHER">TEACHER</Radio>
-                        <Radio value="CA">CA</Radio>
-                        <Radio value="SERVICE">SERVICE</Radio>
-                        <Radio value="HOUSEWORK">HOUSEWORK</Radio>
-                        <Radio value="GOVTJOB">GOVTJOB</Radio>
-                        <Radio value="PRIVATEJOB">PRIVATEJOB</Radio>
-                        <Radio value="STUDENT">STUDENT</Radio>
-                        <Radio value="OTHER">OTHER</Radio>
-                    </Radio.Group>
-                </Form.Item>
-
-                <GotraSelector
-                    gotraData={gotra.Gotra}
-                    customdata={customdata}
-                    setCustomdata={setCustomdata}
+        <div className="registration-container">
+            <div className="auth-header" style={{
+                backgroundColor: '#ff6b6b',
+                padding: '15px 20px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100
+            }}>
+                <div style={{
+                    color: 'white',
+                    fontWeight: 600,
+                    fontSize: '18px',
+                    letterSpacing: '0.5px'
+                }}>
+                    EMEELAN (गठजोड़)
+                </div>
+                <img
+                    src="logo.png"
+                    alt="Logo"
+                    style={{
+                        height: '36px',
+                        width: '36px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                    }}
                 />
-                
-                <MaritialStatus 
-                    customdata={customdata} 
-                    setCustomdata={setCustomdata} 
-                />
-                
-                <DateSelector 
-                    customdata={customdata} 
-                    setCustomdata={setCustomdata} 
-                />
-
-                <Form.Item
-                    name="MobileNumber"
-                    label="Mobile Number"
-                    rules={[
-                        { required: true, message: "Please enter your mobile number" },
-                        { pattern: /^[0-9]{10}$/, message: "Please enter a valid 10-digit mobile number" }
-                    ]}
-                >
-                    <Input placeholder="Enter Mobile Number" maxLength={10} clearable />
-                </Form.Item>
-
-                <Form.Item 
-                    name="pincode" 
-                    label="Pincode"
-                    rules={[
-                        { pattern: /^[0-9]{6}$/, message: "Please enter a valid 6-digit pincode" }
-                    ]}
-                >
-                    <Input 
-                        placeholder="Enter 6-digit pincode" 
-                        maxLength={6} 
-                        onChange={handlePincodeChange}
-                        clearable
-                    />
-                </Form.Item>
-
-                <Form.Item name="City" label="City">
-                    <Input readOnly />
-                </Form.Item>
-
-                <Form.Item name="District" label="District">
-                    <Input readOnly />
-                </Form.Item>
-
-                <Form.Item name="State" label="State">
-                    <Input readOnly />
-                </Form.Item>
-
-                <Form.Item name="Country" label="Country">
-                    <Input readOnly />
-                </Form.Item>
-
-                <Form.Item name="isdivyang" label="Is Divyang?">
-                    <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                        <Radio value={true}>Yes</Radio>
-                        <Radio value={false}>No</Radio>
-                    </Radio.Group>
-                </Form.Item>
-
-                <Form.Item 
-                    name="divyangDescription" 
-                    label="Disability Details"
-                    rules={[
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (getFieldValue('isdivyang') === true && !value) {
-                                    return Promise.reject('Please provide disability details');
-                                }
-                                return Promise.resolve();
-                            },
-                        }),
-                    ]}
-                >
-                    <Input placeholder="Enter disability details if applicable" />
-                </Form.Item>
-            </Form>
-            <Space direction="vertical" style={{ width: '100%' }}>
-            <div style={{ textAlign: 'center', marginTop: 16 }}>
-             {' '}
-              <span
-                style={{ color: '#ff6b6b', fontWeight: 'bold', cursor: 'pointer' }}
-                onClick={() => setIsLogined(true)}
-              >
-                Login
-              </span>
             </div>
-           
-          </Space>
+
+            <div className="registration-content">
+                <div style={{
+                    backgroundColor: 'white',
+                    borderRadius: '8px',
+                    padding: '20px',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                    maxWidth: '450px',
+                    margin: '0 auto'
+                }}>
+                    <h2 style={{
+                        textAlign: 'center',
+                        color: '#ff6b6b',
+                        marginBottom: '20px',
+                        fontSize: '24px'
+                    }}>
+                        Register
+                    </h2>
+                    <p style={{
+                        textAlign: 'center',
+                        color: '#666',
+                        marginBottom: '20px'
+                    }}>
+                        Create a new account to continue
+                    </p>
+
+                    <Form
+                        form={form}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        initialValues={{
+                            Sex: "Male",
+                            isdivyang: false,
+                            Country: "India",
+                        }}
+                        footer={
+                            <Button
+                                block
+                                type="submit"
+                                color="primary"
+                                loading={loading}
+                                disabled={loading}
+                                style={{
+                                    backgroundColor: '#990000',
+                                    borderRadius: '4px',
+                                    marginTop: '20px'
+                                }}
+                            >
+                                {loading ? 'Processing...' : 'Register'}
+                            </Button>
+                        }
+                    >
+                        <Form.Item
+                            name="FirstName"
+                            label={<><span style={{ color: 'red' }}>*</span> First Name</>}
+                            rules={[{ required: true, message: "Please enter your first name" }]}
+                        >
+                            <Input placeholder="Enter First Name" clearable />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="FatherName"
+                            label={<><span style={{ color: 'red' }}>*</span> Father's Name</>}
+                            rules={[{ required: true, message: "Please enter your father's name" }]}
+                        >
+                            <Input placeholder="Enter Father's Name" clearable />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="email"
+                            label={<><span style={{ color: 'red' }}>*</span> Email</>}
+                            rules={[
+                                { required: true, message: 'Please enter your email' },
+                                { type: 'email', message: 'Please enter a valid email address' },
+                            ]}
+                        >
+                            <Input type="email" placeholder="Enter your email" clearable />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="password"
+                            label={<><span style={{ color: 'red' }}>*</span> Password</>}
+                            rules={[
+                                { required: true, message: "Please enter a password" },
+                                { min: 6, message: "Password must be at least 6 characters" },
+                            ]}
+                        >
+                            <Input type="password" placeholder="Enter Password" clearable />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="confirmPassword"
+                            label={<><span style={{ color: 'red' }}>*</span> Confirm Password</>}
+                            dependencies={['password']}
+                            rules={[
+                                { required: true, message: 'Please confirm your password' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject('The two passwords do not match');
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input type="password" placeholder="Confirm Password" clearable />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="Sex"
+                            label={<><span style={{ color: 'red' }}>*</span> Gender</>}
+                            rules={[{ required: true, message: "Please select your gender" }]}
+                        >
+                            <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                                <Radio value="Male">Male</Radio>
+                                <Radio value="Female">Female</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+
+                        <div style={{ marginBottom: '15px' }}>
+                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                                <span style={{ color: 'red' }}>*</span> Gotra
+                            </label>
+                            <GotraSelector
+                                gotraData={gotra.Gotra}
+                                customdata={customdata}
+                                setCustomdata={setCustomdata}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '15px' }}>
+                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                                <span style={{ color: 'red' }}>*</span> Marital Status
+                            </label>
+                            <MaritialStatus
+                                customdata={customdata}
+                                setCustomdata={setCustomdata}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '15px' }}>
+                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                                <span style={{ color: 'red' }}>*</span> Date of Birth
+                            </label>
+                            <DateSelector
+                                customdata={customdata}
+                                setCustomdata={setCustomdata}
+                            />
+                        </div>
+
+                        <Form.Item
+                            name="Profession"
+                            label={<><span style={{ color: 'red' }}>*</span> Profession</>}
+                            rules={[{ required: true, message: "Please select your profession" }]}
+                        >
+                            <Radio.Group style={{ fontSize: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                                {[
+                                    "BUSINESS",
+                                    "ENGINEER",
+                                    "DOCTOR",
+                                    "TEACHER",
+                                    "CA",
+                                    "SERVICE",
+                                    "HOUSEWORK",
+                                    "GOVTJOB",
+                                    "PRIVATEJOB",
+                                    "STUDENT",
+                                    "OTHER",
+                                ].map((item) => (
+                                    <Radio value={item} key={item} style={{ fontSize: "30%", marginRight: "15px" }}>
+                                        <span style={{ fontSize: "15px", textTransform: "capitalize" }}>{item.toLowerCase()}</span>
+                                    </Radio>
+                                ))}
+                            </Radio.Group>
+                        </Form.Item>
+
+                        <Form.Item
+                            name="MobileNumber"
+                            label={<><span style={{ color: 'red' }}>*</span> Mobile Number</>}
+                            rules={[
+                                { required: true, message: "Please enter your mobile number" },
+                                { pattern: /^[0-9]{10}$/, message: "Please enter a valid 10-digit mobile number" }
+                            ]}
+                        >
+                            <Input placeholder="Enter Mobile Number" maxLength={10} clearable />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="pincode"
+                            label="Pincode"
+                            rules={[
+                                { pattern: /^[0-9]{6}$/, message: "Please enter a valid 6-digit pincode" }
+                            ]}
+                        >
+                            <Input
+                                placeholder="Enter 6-digit pincode"
+                                maxLength={6}
+                                onChange={handlePincodeChange}
+                                clearable
+                            />
+                        </Form.Item>
+
+                        <Form.Item name="City" label="City">
+                            <Input readOnly />
+                        </Form.Item>
+
+                        <Form.Item name="District" label="District">
+                            <Input readOnly />
+                        </Form.Item>
+
+                        <Form.Item name="State" label="State">
+                            <Input readOnly />
+                        </Form.Item>
+
+                        <Form.Item name="Country" label="Country">
+                            <Input readOnly />
+                        </Form.Item>
+
+                        <Form.Item name="isdivyang" label="Is Divyang?">
+                            <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                                <Radio value={true} style={{ marginRight: "15px" }}>Yes</Radio>
+                                <Radio value={false}>No</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+
+                        <Form.Item
+                            name="divyangDescription"
+                            label="Disability Details"
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (getFieldValue('isdivyang') === true && !value) {
+                                            return Promise.reject('Please provide disability details');
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input placeholder="Enter disability details if applicable" />
+                        </Form.Item>
+                    </Form>
+
+                    <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                        <p style={{ color: '#666', margin: '10px 0' }}>OR</p>
+                        <p>
+                            Already have an account?{' '}
+                            <span
+                                style={{ color: '#ff6b6b', fontWeight: 'bold', cursor: 'pointer' }}
+                                onClick={() => setIsLogined(true)}
+                            >
+                                Login
+                            </span>
+                        </p>
+                    </div>
+                    <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                        <a href="/terms" style={{ fontSize: "0.875rem", color: "#888" }}>
+                            Terms and Conditions
+                        </a>
+                    </div>
+                    <br />
+                    <br />
+                </div>
+            </div>
         </div>
     );
 }
