@@ -69,7 +69,7 @@ const TopBar = ({ userRole }) => {
       <div
         style={{
           position: "relative",
-          background: '#E83F25',
+          background: '#BC0226',
           padding: "12px 20px",
           color: "white",
         }}

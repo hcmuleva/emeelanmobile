@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Form, Input, Button, Toast, Radio } from "antd-mobile";
+import { Form, Input, Button, Toast, Radio, NavBar } from "antd-mobile";
 import { AuthContext } from '../../context/AuthContext';
 import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
@@ -103,35 +103,53 @@ export default function MyRegister({ setIsLogined }) {
 
     return (
         <div className="registration-container">
-            <div className="auth-header" style={{
-                backgroundColor: '#ff6b6b',
-                padding: '15px 20px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                position: 'sticky',
-                top: 0,
-                zIndex: 100
-            }}>
-                <div style={{
+            <NavBar
+                back={null}
+                style={{
+                    background: '#BC0226',
                     color: 'white',
-                    fontWeight: 600,
-                    fontSize: '18px',
-                    letterSpacing: '0.5px'
-                }}>
-                    EMEELAN (गठजोड़)
-                </div>
-                <img
-                    src="logo.png"
-                    alt="Logo"
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 100,
+                    padding: '10px',
+                }}
+            >
+                <div
                     style={{
-                        height: '36px',
-                        width: '36px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
                     }}
-                />
-            </div>
+                >
+                    {/* Left Side: Title */}
+                    <div>
+                        <div
+                            style={{
+                                fontWeight: '600',
+                                fontSize: '18px',
+                                lineHeight: '20px',
+                                letterSpacing: '.5px',
+                            }}
+                        >
+                            EMEELAN (गठजोड़)
+                        </div>
+
+                    </div>
+
+                    {/* Right Side: Logo */}
+                    <img
+                        src="logo.png" // Replace with your logo path
+                        alt="Logo"
+                        style={{
+                            height: '36px',
+                            width: '36px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                        }}
+                    />
+                </div>
+            </NavBar>
 
             <div className="registration-content">
                 <div style={{

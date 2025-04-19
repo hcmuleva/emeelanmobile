@@ -33,7 +33,7 @@ const MyLogin = ({ setIsLogined }) => {
       <NavBar
         back={null}
         style={{
-          background: '#ff6b6b',
+          background: '#BC0226',
           color: 'white',
           position: 'sticky',
           top: 0,
