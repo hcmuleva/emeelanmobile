@@ -39,7 +39,7 @@
 
     useEffect(() => {
       if (!user?.id) return;
-    
+
       const channel = ably.channels.get(`userrole:${user.id}`);
       
       const handleMessage = (message) => {
@@ -55,6 +55,8 @@
         channel.unsubscribe("connection-request", handleMessage);
       };
     }, [user?.id]);
+
+
     const login = (token, userData) => {
       localStorage.setItem('jwt', token);
       localStorage.setItem('user', JSON.stringify(userData));
