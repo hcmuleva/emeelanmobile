@@ -52,7 +52,7 @@ const ProfileDetails = () => {
         }}
       >
         <div>
-          <h2 style={{ margin: 0 }}>My Profile</h2>
+          <h2 style={{ margin: 0 }}>{user?.FirstNamep} Profile</h2>
           <p style={{ margin: 0 }}>Id: {user?.id} </p>
         </div>
         <ProgressCircle
