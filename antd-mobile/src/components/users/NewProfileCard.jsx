@@ -46,15 +46,15 @@ const NewProfileCard = ({ user, role, action }) => {
   console.log(user)
   let imagesrc = ""
 
-  if ( user?.Pictures?.profilePicture ){
+  if (user?.Pictures?.profilePicture) {
     imagesrc = user?.Pictures.profilePicture?.url
-  } else if (Array.isArray(user?.images?.pictures) && user?.images?.pictures[0]){
+  } else if (Array.isArray(user?.images?.pictures) && user?.images?.pictures[0]) {
     imagesrc = user?.images?.pictures[0]
-  } else if (user?.Pictures?.photos?.[0]?.url){
+  } else if (user?.Pictures?.photos?.[0]?.url) {
     imagesrc = user?.Pictures.photos?.[0]?.url
-  } else if ( user?.Sex === "Female") {
+  } else if (user?.Sex === "Female") {
     imagesrc = "/assets/woman-user-circle-icon.png"
-  } else if (user?.Sex === "Male"){
+  } else if (user?.Sex === "Male") {
     imagesrc = "/assets/man-user-circle-icon.png"
   } else {
     imagesrc = "/assets/question-mark-circle-outline-icon.png"
@@ -66,7 +66,7 @@ const NewProfileCard = ({ user, role, action }) => {
       sender: selfUser?.id,
       receiver: user?.id,
       status: "PENDING",
-      message:`User Status is pending from id ${user?.id}`
+      message: `User Status is pending from id ${user?.id}`
 
     });
     Toast.show({
@@ -272,7 +272,7 @@ const NewProfileCard = ({ user, role, action }) => {
                 marginBottom: "16px",
                 marginTop: "20px",
                 textTransform: "capitalize",
-                flexWrap:"wrap"
+                flexWrap: "wrap"
               }}
             >
               <h2

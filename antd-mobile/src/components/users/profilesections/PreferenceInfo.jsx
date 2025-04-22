@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Form, Input, Selector, Button, Toast, Space, TextArea } from "antd-mobile";
+import React, { useContext, useState, useEffect } from "react";
+import { Form, Input, Selector, Button, Toast, Space, TextArea, Tabs } from "antd-mobile";
 import { AuthContext } from "../../../context/AuthContext";
 import { updateUserData } from "../../../services/api";
 
@@ -16,24 +16,30 @@ const businessTypeOptions = [
   { label: "BusinessAny", value: "BusinessAny" },
 ];
 
+const defaultFormValues = {
+  agerange: "",
+  maritialstatus: "Bachelor",
+  color: "",
+  businesstype: "Job",
+  height: "",
+  description: "",
+};
+
 const PreferenceInfo = () => {
-  const { user, setUser, jwt } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const [preferences, setPreferences] = useState(user?.mybasicdata?.preferences || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
-  console.log("Preferences", preferences)
-  const defaultFormValues = {
-    agerange: "",
-    maritialstatus: "Bachelor",
-    color: "",
-    businesstype: "Job",
-    height: "",
-    description: "",
-  };
+  const [activeTab, setActiveTab] = useState(preferences.length ? "view" : "edit");
+
+  useEffect(() => {
+    if (preferences.length === 0) setActiveTab("edit");
+  }, [preferences]);
 
   const handleEdit = (index) => {
     form.setFieldsValue(preferences[index]);
     setEditingIndex(index);
+    setActiveTab("edit");
   };
 
   const handleDelete = (index) => {
@@ -53,22 +59,20 @@ const PreferenceInfo = () => {
       }
       setPreferences(updated);
       form.resetFields();
+      setActiveTab("view");
     });
   };
 
   const handleSaveToServer = async () => {
     const updatedUser = {
       ...user,
-      mybasicdata: {
-        ...user.mybasicdata,
-        preferences,
-      },
+      mybasicdata: { ...user.mybasicdata, preferences },
     };
 
     try {
       await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
+      localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "Preferences saved!" });
     } catch (err) {
       console.error("Save error", err);
@@ -77,83 +81,132 @@ const PreferenceInfo = () => {
   };
 
   return (
-    <div style={{ padding: "10px" }}>
-      <Form form={form} initialValues={defaultFormValues} layout="horizontal">
-        <Form.Item name="agerange" label="Age Range">
-          <Input placeholder="e.g. 25-30" />
-        </Form.Item>
+    <Tabs activeKey={activeTab} onChange={setActiveTab}>
+      <Tabs.Tab title="View Preferences" key="view">
+        {preferences.length ? (
+          <>
+            {preferences.map((pref, index) => (
+              <div
+                key={index}
+                style={{
+                  background: "linear-gradient(135deg, #ff9966, #ff5e62)",
+                  padding: 16,
+                  borderRadius: 20,
+                  marginBottom: 20,
+                }}
+              >
+                <div
+                  style={{
+                    background: "rgba(255, 255, 255, 0.85)",
+                    borderRadius: 20,
+                    padding: 16,
+                    boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                  }}
+                >
+                  <div style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
+                    💖 Preference Summary
+                  </div>
+                  <div><strong>🎯 Age Range:</strong> {pref.agerange}</div>
+                  <div><strong>💍 Marital Status:</strong> {pref.maritialstatus}</div>
+                  <div><strong>🎨 Color:</strong> {pref.color}</div>
+                  <div><strong>🏢 Business Type:</strong> {pref.businesstype}</div>
+                  <div><strong>📏 Height:</strong> {pref.height}</div>
+                  <div><strong>📝 Description:</strong> {pref.description}</div>
 
-        <Form.Item name="maritialstatus" label="Marital Status">
-          <Selector
-            options={maritalStatusOptions}
-            value={form.getFieldValue("maritialstatus")}
-            onChange={(val) => form.setFieldValue("maritialstatus", val)}
-          />
-        </Form.Item>
+                  <hr style={{ margin: "16px 0" }} />
 
-        <Form.Item name="color" label="Color">
-          <Input placeholder="e.g. Fair, Wheatish" />
-        </Form.Item>
+                  <Space block justify="between">
+                    <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
+                      Edit
+                    </Button>
+                    <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
+                      Delete
+                    </Button>
+                  </Space>
+                </div>
+              </div>
+            ))}
+            <Button
+              block
+              style={{ backgroundColor: "#d42f00", color: "white" }}
+              onClick={handleSaveToServer}
+            >
+              Save Preferences
+            </Button>
+          </>
+        ) : (
+          <div>No preferences added yet.</div>
+        )}
+      </Tabs.Tab>
 
-        <Form.Item name="businesstype" label="Business Type">
-          <Selector
-            options={businessTypeOptions}
-            value={form.getFieldValue("businesstype")}
-            onChange={(val) => form.setFieldValue("businesstype", val)}
-          />
-        </Form.Item>
-
-        <Form.Item name="height" label="Height">
-        <Input placeholder={'e.g. 5\'6"'} />
-
-        </Form.Item>
-
-        <Form.Item name="description" label="Description">
-          <TextArea placeholder="Extra details or expectations" rows={3} />
-        </Form.Item>
-
-        <Button block color="primary" onClick={handleAddOrUpdate}>
-          {editingIndex !== null ? "Update Preference" : "Add Preference"}
-        </Button>
-      </Form>
-
-      <h3 style={{ marginTop: 20 }}>Preference List</h3>
-      {preferences.map((pref, index) => (
+      <Tabs.Tab title="Add / Edit Preference" key="edit">
         <div
-          key={index}
           style={{
-            border: "1px solid #ddd",
-            marginBottom: 10,
+            background: "linear-gradient(135deg, #ff9966, #ff5e62)",
             padding: 10,
-            borderRadius: 6,
+            borderRadius: 20,
           }}
         >
-          <div><b>Age Range:</b> {pref.agerange}</div>
-          <div><b>Marital Status:</b> {pref.maritialstatus}</div>
-          <div><b>Color:</b> {pref.color}</div>
-          <div><b>Business Type:</b> {pref.businesstype}</div>
-          <div><b>Height:</b> {pref.height}</div>
-          <div><b>Description:</b> {pref.description}</div>
+          <div
+            style={{
+              background: "rgba(255, 255, 255, 0.85)",
+              borderRadius: 20,
+              padding: 10,
+              boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+            }}
+          >
+            <Form form={form} initialValues={defaultFormValues} layout="horizontal">
+              <Form.Item name="agerange" label="Age Range">
+                <Input placeholder="e.g. 25-30" />
+              </Form.Item>
 
-          <Space style={{ marginTop: 8 }}>
-            <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
-              Edit
-            </Button>
-            <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
-              Delete
-            </Button>
-          </Space>
+              <Form.Item name="maritialstatus" label="Marital Status">
+                <Selector
+                  options={maritalStatusOptions}
+                  value={form.getFieldValue("maritialstatus")}
+                  onChange={(val) => form.setFieldValue("maritialstatus", val)}
+                />
+              </Form.Item>
+
+              <Form.Item name="color" label="Color">
+                <Input placeholder="e.g. Fair, Wheatish" />
+              </Form.Item>
+
+              <Form.Item name="businesstype" label="Business Type">
+                <Selector
+                  options={businessTypeOptions}
+                  value={form.getFieldValue("businesstype")}
+                  onChange={(val) => form.setFieldValue("businesstype", val)}
+                />
+              </Form.Item>
+
+              <Form.Item name="height" label="Height">
+                <Input placeholder='e.g. 5\6' />
+              </Form.Item>
+
+              <Form.Item name="description" label="Description">
+                <TextArea placeholder="Extra details or expectations" rows={3} />
+              </Form.Item>
+
+              <Space block justify="center" style={{ marginTop: 20 }}>
+                <Button
+                  block
+                  color="primary"
+                  style={{ backgroundColor: "#d42f00", color: "white" }}
+                  onClick={handleAddOrUpdate}
+                >
+                  {editingIndex !== null ? "Update Preference" : "Add Preference"}
+                </Button>
+              </Space>
+            </Form>
+          </div>
         </div>
-      ))}
-
-      <Button
-        block
-        style={{ backgroundColor: "#004080", color: "white", marginTop: 16 }}
-        onClick={handleSaveToServer}
-      >
-        Save Preferences
-      </Button>
-    </div>
+      </Tabs.Tab>
+    </Tabs>
   );
 };
 

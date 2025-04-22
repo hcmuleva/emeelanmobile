@@ -2,7 +2,7 @@ import React from 'react';
 import ProfileDetails from './ProfileDetails';
 
 const UserProfile = () => {
-  return <ProfileDetails/>
+  return <ProfileDetails />
 }
 
 export default UserProfile

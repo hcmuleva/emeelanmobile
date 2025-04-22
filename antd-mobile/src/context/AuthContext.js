@@ -39,7 +39,7 @@
 
     useEffect(() => {
       if (!user?.id) return;
-    
+
       const channel = ably.channels.get(`userrole:${user.id}`);
       
       const handleMessage = (message) => {
