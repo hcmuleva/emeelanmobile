@@ -459,7 +459,7 @@ const FeatureTiles = () => {
       {/* <BreakingNewsMarquee_HI /> */}
       <QuickShortcuts />
       <DonationLink />
-      <SocialMediaCard />
+      {/* <SocialMediaCard /> */}
       {/* <ShareProfileCard userId={user?.id} /> */}
       {/* <UserSuggestionBar users={users} /> */}
       {(
