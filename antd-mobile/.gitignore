@@ -16,7 +16,7 @@
 /dist/
 /ios/
 /android/
-/public/
+
 /.vscode/
 /.idea/
 /.cache/
