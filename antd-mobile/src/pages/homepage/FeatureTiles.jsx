@@ -28,6 +28,7 @@ import AdminUserEditor from '../../components/admin/AdminUserEditor';
 import PendingApprovalCard from '../../components/authentication/PendingApprovalCard';
 import { authService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
+import SocialMediaCard from '../../components/socialmedia/SocialMediaCard';
 
 // Custom styled Marquee component for donors
 const DonorMarquee = ({ donors }) => {
@@ -458,6 +459,7 @@ const FeatureTiles = () => {
       {/* <BreakingNewsMarquee_HI /> */}
       <QuickShortcuts />
       <DonationLink />
+      <SocialMediaCard />
       {/* <ShareProfileCard userId={user?.id} /> */}
       {/* <UserSuggestionBar users={users} /> */}
       {(
