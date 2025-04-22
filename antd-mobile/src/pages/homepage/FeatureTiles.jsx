@@ -280,6 +280,7 @@ const UserSuggestionBar = ({ users }) => {
 
 // Share profile component
 const ShareProfileCard = ({ userId }) => {
+  const navigate = useNavigate();
   console.log(userId)
   const textToCopy = `http://localhost:3000/profile-view/${userId}`;
 
@@ -288,9 +289,10 @@ const ShareProfileCard = ({ userId }) => {
     //   content: 'Profile link copied to clipboard!',
     //   position: 'bottom',
     // });
-    navigator.clipboard.writeText(textToCopy)
-      .then(() => alert("Copied to clipboard!"))
-      .catch((err) => console.error("Failed to copy:", err));
+    navigate("/shareprofile")
+    // navigator.clipboard.writeText(textToCopy)
+    //   .then(() => alert("Copied to clipboard!"))
+    //   .catch((err) => console.error("Failed to copy:", err));
   };
 
   return (
@@ -460,7 +462,7 @@ const FeatureTiles = () => {
       <QuickShortcuts />
       <DonationLink />
       {/* <SocialMediaCard /> */}
-      {/* <ShareProfileCard userId={user?.id} /> */}
+      <ShareProfileCard userId={user?.id} />
       {/* <UserSuggestionBar users={users} /> */}
       {(
         user.emeelanrole === "CENTER" ||

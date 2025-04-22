@@ -24,7 +24,7 @@ const MaritialStatus = ({ customdata, setCustomdata }) => {
   };
 
   return (
-    <Form.Item name={name} label={label}>
+    <Form.Item name={name} >
       <div
         onClick={() => setVisible(true)}
         style={{

@@ -7,6 +7,7 @@ import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
 import gotra from "../../utils/gotra.json";
 import "../../styles/registration.css";
+import { useNavigate } from 'react-router-dom';
 
 export default function MyRegister({ setIsLogined }) {
     const [form] = Form.useForm();
@@ -14,7 +15,7 @@ export default function MyRegister({ setIsLogined }) {
     const [customdata, setCustomdata] = useState({});
     const [loading, setLoading] = useState(false);
     const { user } = useContext(AuthContext);
-
+    const navigate = useNavigate();
     const handlePincodeChange = async () => {
         const pincode = form.getFieldValue("pincode");
         if (/^\d{6}$/.test(pincode)) {
@@ -79,6 +80,7 @@ export default function MyRegister({ setIsLogined }) {
                 afterClose: () => form.resetFields()
             });
             handleReset();
+            navigate("/login")
             console.log("Registration success:", response);
         } catch (err) {
             console.error("Registration error:", err.response?.data || err.message);
@@ -269,6 +271,17 @@ export default function MyRegister({ setIsLogined }) {
                             <Radio.Group style={{ display: "flex", gap: "10px" }}>
                                 <Radio value="Male">Male</Radio>
                                 <Radio value="Female">Female</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        <Form.Item
+                            name="orgsku"
+                            label={<><span style={{ color: 'red' }}>*</span> Cast</>}
+                            rules={[{ required: true, message: "Please select your Cast" }]}
+                        >
+                            <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                                <Radio value="SEERVI0002">SEERVI</Radio>
+                                <Radio value="TELI0001">TELI</Radio>
+                                <Radio value="DEMO003">DEMO</Radio>
                             </Radio.Group>
                         </Form.Item>
 
