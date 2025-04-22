@@ -29,6 +29,8 @@ import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
 import { TermsPage } from "./pages/public/TermsPage";
 import Donation from "./pages/homepage/shortcuts/donation";
+import DeepLinkHandler from "./DeepLinkHandler";
+import ReferralRegistration from "./components/authentication/RefferalRegistration";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -40,10 +42,12 @@ function AppContent() {
   return (
     <AuthProvider>
       <Router>
+      <DeepLinkHandler />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LoginPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/reffereralregistration" element={<ReferralRegistration />} />
 
           {/* Protected Routes */}
           <Route
