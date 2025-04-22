@@ -1,19 +1,26 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { UnderConstruction } from '../UnderConstructionProps'
 import { Button } from 'antd-mobile'
 import DynamicUPIPaymentQR from '../../payment/QRCodeWithLogo'
+import { AuthContext } from '../../../context/AuthContext'
 
 export default function Donation() {
-    const [showConstruction, setShowConstruction] = useState(true)
-    console.log("Donation Page called")
-    const handleBack = () => {
-      setShowConstruction(false)
-    }
+  const { user } = useContext(AuthContext)
+  const [showConstruction, setShowConstruction] = useState(true)
+  console.log("Donation Page called")
+  const handleBack = () => {
+    setShowConstruction(false)
+  }
 
-    return (
-       <>
-       <DynamicUPIPaymentQR/>
-{/*     
+  return (
+    <>
+      {(user?.emeelanrole === "SUPERADMIN") ? (
+        <DynamicUPIPaymentQR />
+      ) : (
+        <h1>DONATION PAGE</h1>
+      )}
+
+      {/*     
           {showConstruction ? (
             <UnderConstruction
               title="Feature Coming Soon"
@@ -31,7 +38,7 @@ export default function Donation() {
               </Button>
             </div>
           )} */}
-       </>
-      )
-    }
-  
+    </>
+  )
+}
+
