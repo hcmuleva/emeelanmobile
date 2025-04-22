@@ -63,46 +63,46 @@ export const getCustomMe = async (jwt) => {
   }
 };
 
-export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
-    try {
-      if (filters.DOB_gte) {
-        filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
-      }
-      if (filters.DOB_lte) {
-        filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
-      }
-       if (filters.gotra) {
-        filters.gotra = {  $ne: filters.gotra };
-      }
-      const strapiFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([_, value]) => value !== '' && value !== null && value !== undefined
-        )
-      );
-      const {DOB_gte,DOB_lte, ...modifiedFilters} = strapiFilters;
-
-      const response = await api.get(`/users`, {
-        params: {
-          _start: start,
-          _limit: limit,
-          filters: modifiedFilters, // ✅ Use filters
-          _sort: 'id:asc', // Sort by newest first
-          "populate[photos]": "*", // ✅ Populate photos (all fields)
-          "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
-          "populate[Height]": "*",
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`
-        }
-      });
-      return response.data;
-      
-    } catch (error) {
-      throw error.response?.data?.message || 'Failed to fetch users';
+export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => {
+  try {
+    if (filters.DOB_gte) {
+      filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
     }
-  };
+    if (filters.DOB_lte) {
+      filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
+    }
+    if (filters.gotra) {
+      filters.gotra = { $ne: filters.gotra };
+    }
+    const strapiFilters = Object.fromEntries(
+      Object.entries(filters).filter(
+        ([_, value]) => value !== '' && value !== null && value !== undefined
+      )
+    );
+    const { DOB_gte, DOB_lte, ...modifiedFilters } = strapiFilters;
+
+    const response = await api.get(`/users`, {
+      params: {
+        _start: start,
+        _limit: limit,
+        filters: modifiedFilters, // ✅ Use filters
+        _sort: 'id:asc', // Sort by newest first
+        "populate[photos]": "*", // ✅ Populate photos (all fields)
+        "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
+        "populate[Height]": "*",
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      }
+    });
+    return response.data;
+
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to fetch users';
+  }
+};
 // get admin
-export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {}) => {
+export const getPaginatedAdminUsers = async (start = 0, limit = 10, filters = {}) => {
   try {
     const response = await api.get("/custom-admins", {
       params: {
@@ -126,16 +126,17 @@ export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {})
   }
 };
 
-export const newConnectionRequest = async( data)=>{
+export const newConnectionRequest = async (data) => {
   const jwt = localStorage.getItem("jwt")
   console.log("jwt", jwt)
   try {
-    const reaponse = await api.post(`/connectionrequests`, 
-        {data: data},
+    const reaponse = await api.post(`/connectionrequests`,
+      { data: data },
       {
         headers: {
           Authorization: `Bearer ${jwt}`, // Use correct token
-          "Content-Type": "application/json",}
+          "Content-Type": "application/json",
+        }
       }
     );
     return reaponse.data
@@ -144,17 +145,18 @@ export const newConnectionRequest = async( data)=>{
   }
 }
 //connectionrequest
-export const updateConnectionRequest = async(id, data)=>{
+export const updateConnectionRequest = async (id, data) => {
   const jwt = localStorage.getItem("jwt")
-  console.log("DATA",data)
+  console.log("DATA", data)
   console.log("jwt", jwt)
   try {
-    const reaponse = await api.put(`/connectionrequests/${id}`, 
-        {data: data},
+    const reaponse = await api.put(`/connectionrequests/${id}`,
+      { data: data },
       {
         headers: {
           Authorization: `Bearer ${jwt}`, // Use correct token
-          "Content-Type": "application/json",}
+          "Content-Type": "application/json",
+        }
       }
     );
     return reaponse.data
@@ -256,7 +258,7 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
 };
 
 //search ADMIN
-export const searchAdmins = async (query, start = 0, limit = 10,filters={}) => {
+export const searchAdmins = async (query, start = 0, limit = 10, filters = {}) => {
   try {
     const params = {
       _start: start,
@@ -337,7 +339,7 @@ export const updateUserData = async (data, userId) => {
 
     const response = await api.put(`/users/${userId}`, {
       ...data,
-    } );
+    });
     return response.data;
 
   } catch (error) {
@@ -368,7 +370,7 @@ export const getUserById = async (userId, jwt) => {
     throw error.response?.data?.message || "Update failed";
   }
 };
-export const customsingleuser = async (userId, jwt) =>{
+export const customsingleuser = async (userId, jwt) => {
   console.log("Request recieved ", userId, " Token ", jwt)
   try {
     const response = await api.get(`/custom-singleuser/${userId}`, {
@@ -407,12 +409,12 @@ const filteredUsers = async () => {
   return data;
 };
 
-export const getPincode = async(pincode) =>{
-  try{
+export const getPincode = async (pincode) => {
+  try {
 
-    const response =await api.get(`/pincodes?filters[pincode]=${pincode}`)
+    const response = await api.get(`/pincodes?filters[pincode]=${pincode}`)
     return response.data
-  } catch(err){
+  } catch (err) {
     throw err.response?.data?.message || "Error in getting pincode"
   }
 }
@@ -433,24 +435,23 @@ export const reverseGeocode = async (latitude, longitude) => {
   try {
     // Make a request to the Mappls API
     console.log("Using Mappls API key:", MAPPLS_API_KEY ? "Key is set" : "Key is not set");
-    
+
     const response = await mapplsApi.get(`/${MAPPLS_API_KEY}/rev_geocode`, {
       params: {
         lat: latitude,
         lng: longitude
       }
     });
-    
+
     return response.data;
   } catch (error) {
     console.error("Mappls API error:", error.response?.data || error.message);
-    
+
     // If we get a CORS error, provide a helpful error message
     if (error.message.includes('Network Error') || error.message.includes('CORS')) {
       throw new Error("CORS issue detected. Please implement a server-side proxy for this API call.");
     }
-    
+
     throw new Error(error.response?.data?.message || 'Location lookup failed');
   }
 };
-

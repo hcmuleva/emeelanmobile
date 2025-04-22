@@ -10,6 +10,8 @@ import DynamicLogo from "./DynamicLogo";
 const TopBar = ({ userRole }) => {
   const { jwt, profileUpdated, setProfileUpdated } = useContext(AuthContext);
   const [user, setUser] = useState(null);
+  const [greet, setGreet] = useState("")
+  let greetArr = ["Hello!", "Hey!"]
 
   useEffect(() => {
     const getMe = async () => {
@@ -24,6 +26,11 @@ const TopBar = ({ userRole }) => {
     getMe();
   }, [jwt, profileUpdated]);
 
+  useEffect(() => {
+    let idx = Math.floor(Math.random() * greetArr.length)
+    setGreet(greetArr[idx])
+  }, [])
+
   const [notificationStats, setNotificationStats] = useState({
     PENDING: 0,
     APPROVED: 0,
@@ -32,7 +39,7 @@ const TopBar = ({ userRole }) => {
   });
 
   const navigate = useNavigate();
-  
+
   let userProfile = "";
   if (user?.Pictures?.profilePicture) {
     userProfile = user?.Pictures.profilePicture?.url;
@@ -56,66 +63,69 @@ const TopBar = ({ userRole }) => {
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        background: '#E83F25',
-        padding: "12px 20px",
-        color: "white",
-      }}
-    >
+    <div style={{
+      paddingTop: 'env(safe-area-inset-top)'
+    }}>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          position: "relative",
+          background: '#BC0226',
+          padding: "12px 20px",
+          color: "white",
         }}
       >
         <div
-          onClick={() => navigate("/userprofile")}
-          style={{ display: "flex", alignItems: "center" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           <div
-            style={{
-              width: "80px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            onClick={() => navigate("/userprofile")}
+            style={{ display: "flex", alignItems: "center" }}
           >
-            <Avatar
-              src={userProfile}
+            <div
               style={{
-                cursor: "pointer",
-                "--size": "55px",
-                borderRadius: "50%",
-              }}
-            />
-          </div>
-          <div style={{ textAlign: "left" }}>
-            <span
-              style={{
-                fontWeight: "600",
-                fontSize: "18px",
-                lineHeight: "30px",
-                letterSpacing: ".5px",
+                width: "80px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
-              {user?.FirstName} {user?.LastName} {user?.Gotra},
-            </span>
-            <br />
-            <span
-              style={{
-                fontWeight: "400",
-                fontSize: "15px",
-              }}
-            >
-              {userRole}
-            </span>
+              <Avatar
+                src={userProfile}
+                style={{
+                  cursor: "pointer",
+                  "--size": "55px",
+                  borderRadius: "50%",
+                }}
+              />
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <span
+                style={{
+                  fontWeight: "600",
+                  fontSize: "18px",
+                  lineHeight: "30px",
+                  letterSpacing: ".5px",
+                }}
+              >
+                {greet} {user?.FirstName}
+              </span>
+              <br />
+              <span
+                style={{
+                  fontWeight: "400",
+                  fontSize: "15px",
+                }}
+              >
+                {userRole}
+              </span>
+            </div>
           </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-        {/* <Avatar
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            {/* <Avatar
               src={"logo.png"}
               style={{
                 cursor: "pointer",
@@ -123,9 +133,9 @@ const TopBar = ({ userRole }) => {
                 borderRadius: "50%",
               }}
             /> */}
-<DynamicLogo color="#FFA500" backgroundColor="#FFFFFF" />
-</div>
-        {/* <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <DynamicLogo color="#FFA500" backgroundColor="#FFFFFF" />
+          </div>
+          {/* <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Popover
             content={
               <List style={{ minWidth: 180 }}>
@@ -182,6 +192,7 @@ const TopBar = ({ userRole }) => {
             setNotificationStats={setNotificationStats}
           />
         </div> */}
+        </div>
       </div>
     </div>
   );

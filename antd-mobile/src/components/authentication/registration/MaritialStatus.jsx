@@ -5,14 +5,13 @@ import { Form, Picker, Button, Toast } from 'antd-mobile';
 
 const marititalstatus = [
   { Id: "MARRIED", EName: "MARRIED", HName: "शादीशुदा" },
-  { Id: "NeverMarried", EName: "BACHELOR", HName: "कुंवारा/कुवारी" },
+  { Id: "NOTMARRIED", EName: "BACHELOR", HName: "कुंवारा/कुवारी" },
   { Id: "DIVORCED", EName: "DIVORCED", HName: "तलाकशुदा" },
- 
 ];
 
-const MaritialStatus = ({customdata,setCustomdata}) => {
-  const [name, label] = ["marititalstatus", "marititalstatus"]; 
-  
+const MaritialStatus = ({ customdata, setCustomdata }) => {
+  const [name, label] = ["marititalstatus", "marititalstatus"];
+
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
@@ -20,15 +19,15 @@ const MaritialStatus = ({customdata,setCustomdata}) => {
     form.setFieldsValue({ [name]: value[0] });
     setVisible(false);
     const selectedMaritialStatus = marititalstatus.find(g => g.EName === value[0]);
-    setCustomdata({...customdata, marititalstatus: selectedMaritialStatus.Id});
+    setCustomdata({ ...customdata, marititalstatus: selectedMaritialStatus.Id });
     Toast.show(`Selected: ${selectedMaritialStatus?.EName}`);
   };
 
   return (
     <Form.Item name={name} label={label}>
-      <div 
+      <div
         onClick={() => setVisible(true)}
-        style={{ 
+        style={{
           padding: '6px 0',
           color: 'var(--adm-color-text)',
           cursor: 'pointer'
@@ -37,12 +36,12 @@ const MaritialStatus = ({customdata,setCustomdata}) => {
         {(() => {
           const selectedValue = form.getFieldValue(name);
           const selectedMaritialStatus = marititalstatus.find(g => g.EName === selectedValue);
-          return selectedMaritialStatus 
-            ? `${selectedMaritialStatus.EName} (${selectedMaritialStatus.HName})` 
+          return selectedMaritialStatus
+            ? `${selectedMaritialStatus.EName} (${selectedMaritialStatus.HName})`
             : 'Select Maritial Status';
         })()}
       </div>
-      
+
       <Picker
         columns={[
           marititalstatus.map(maritial => ({

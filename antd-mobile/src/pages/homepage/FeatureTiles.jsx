@@ -1,22 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { 
-  Card, 
-  Grid, 
-  Avatar, 
-  Button, 
-  SwipeAction, 
-  Toast, 
-  Badge, 
-  List, 
-  Space, 
+import {
+  Card,
+  Grid,
+  Avatar,
+  Button,
+  SwipeAction,
+  Toast,
+  Badge,
+  List,
+  Space,
   FloatingBubble,
   Divider,
   Tag
 } from 'antd-mobile';
-import { 
-  TeamOutline, 
-  HeartOutline, 
-  GiftOutline, 
+import {
+  TeamOutline,
+  HeartOutline,
+  GiftOutline,
   UserAddOutline,
   PayCircleOutline,
   TravelOutline
@@ -28,11 +28,12 @@ import AdminUserEditor from '../../components/admin/AdminUserEditor';
 import PendingApprovalCard from '../../components/authentication/PendingApprovalCard';
 import { authService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
+import SocialMediaCard from '../../components/socialmedia/SocialMediaCard';
 
 // Custom styled Marquee component for donors
 const DonorMarquee = ({ donors }) => {
   return (
-    <div className="donor-marquee-container" style={{ 
+    <div className="donor-marquee-container" style={{
       overflow: 'hidden',
       backgroundColor: 'rgba(180, 0, 0, 0.07)',
       borderRadius: '8px',
@@ -40,25 +41,25 @@ const DonorMarquee = ({ donors }) => {
       marginBottom: '16px',
       border: '1px solid rgba(180, 0, 0, 0.2)'
     }}>
-      <div className="marquee-header" style={{ 
+      <div className="marquee-header" style={{
         display: 'flex',
         alignItems: 'center',
         marginBottom: '8px'
       }}>
         <GiftOutline color="#b00000" fontSize={18} />
-        <span style={{ 
+        <span style={{
           marginLeft: '6px',
           fontWeight: 'bold',
           color: '#b00000'
         }}>Recent Donors</span>
       </div>
-      <div className="donor-marquee" style={{ 
+      <div className="donor-marquee" style={{
         whiteSpace: 'nowrap',
         animation: 'marquee 30s linear infinite',
         padding: '4px 0'
       }}>
         {donors.map((donor, index) => (
-          <span key={index} style={{ 
+          <span key={index} style={{
             padding: '4px 16px 4px 0',
             display: 'inline-block'
           }}>
@@ -78,13 +79,22 @@ const DonorMarquee = ({ donors }) => {
 };
 const BreakingNewsMarquee_EN = () => {
   const newsItems = [
-    "Easy to register: This is very easy app to register now",
-    "Admins: 350 plus admin to help you to get register profiles details and background verification",
-    "Invite: Invite option to find suitable profile and based on this other side person can accept or reject"
+    [
+      "Easy to register: This is very easy app to register now",
+      "आसान पंजीकरण: यह ऐप पंजीकरण के लिए बहुत आसान है, अभी रजिस्टर करें",
+    ],
+    [
+      "Admins: 350 plus admin to help you to get register profiles details and background verification",
+      "प्रशासक: 350 से अधिक प्रशासक आपकी प्रोफाइल विवरण और पृष्ठभूमि सत्यापन में मदद करने के लिए उपलब्ध हैं",
+    ],
+    [
+      "Invite: Invite option to find suitable profile and based on this other side person can accept or reject",
+      "आमंत्रण: उपयुक्त प्रोफाइल खोजने के लिए आमंत्रण विकल्प, जिसके आधार पर दूसरा व्यक्ति स्वीकार या अस्वीकार कर सकता है",
+    ]
   ];
 
   return (
-    <div className="news-marquee-container" style={{ 
+    <div className="news-marquee-container" style={{
       overflow: 'hidden',
       backgroundColor: 'rgba(0, 100, 180, 0.07)',
       borderRadius: '8px',
@@ -92,29 +102,31 @@ const BreakingNewsMarquee_EN = () => {
       marginBottom: '16px',
       border: '1px solid rgba(0, 100, 180, 0.2)'
     }}>
-      <div className="marquee-header" style={{ 
+      <div className="marquee-header" style={{
         display: 'flex',
         alignItems: 'center',
         marginBottom: '8px'
       }}>
-        <span style={{ 
+        <span style={{
           marginLeft: '6px',
           fontWeight: 'bold',
           color: '#0064b4'
         }}>Breaking News</span>
       </div>
-      <div className="news-marquee" style={{ 
+      <div className="news-marquee" style={{
         whiteSpace: 'nowrap',
         animation: 'marquee 30s linear infinite',
         padding: '4px 0'
       }}>
         {newsItems.map((item, index) => (
-          <span key={index} style={{ 
-            padding: '4px 16px 4px 0',
-            display: 'inline-block'
+          <div key={index} style={{
+            padding: '4px 10px 4px 0',
+            display: "inline-block"
           }}>
-            {item} • 
-          </span>
+            {item[0]} •
+            <br />
+            {item[1]} •
+          </div>
         ))}
       </div>
       <style>{`
@@ -126,7 +138,7 @@ const BreakingNewsMarquee_EN = () => {
     </div>
   );
 };
-const BreakingNewsMarquee_HI= () => {
+const BreakingNewsMarquee_HI = () => {
   const newsItems = [
     { title: "आसान पंजीकरण:", text: "यह ऐप पंजीकरण के लिए बहुत आसान है, अभी रजिस्टर करें" },
     { title: "प्रशासक:", text: "350 से अधिक प्रशासक आपकी प्रोफाइल विवरण और पृष्ठभूमि सत्यापन में मदद करने के लिए उपलब्ध हैं" },
@@ -134,7 +146,7 @@ const BreakingNewsMarquee_HI= () => {
   ];
 
   return (
-    <div className="news-marquee-container" style={{ 
+    <div className="news-marquee-container" style={{
       overflow: 'hidden',
       backgroundColor: 'rgba(0, 100, 180, 0.07)',
       borderRadius: '8px',
@@ -142,26 +154,26 @@ const BreakingNewsMarquee_HI= () => {
       marginBottom: '16px',
       border: '1px solid rgba(0, 100, 180, 0.2)'
     }}>
-      <div className="marquee-header" style={{ 
+      <div className="marquee-header" style={{
         display: 'flex',
         alignItems: 'center',
         marginBottom: '8px'
       }}>
-        <span style={{ 
+        <span style={{
           marginLeft: '6px',
           fontWeight: 'bold',
           color: '#0064b4',
           fontSize: '18px'
         }}>ताज़ा खबर</span>
       </div>
-      <div className="news-marquee" style={{ 
+      <div className="news-marquee" style={{
         whiteSpace: 'nowrap',
         animation: 'marquee 20s linear infinite',
         padding: '4px 0',
         fontSize: '16px'
       }}>
         {newsItems.map((item, index) => (
-          <span key={index} style={{ 
+          <span key={index} style={{
             padding: '4px 16px 4px 0',
             display: 'inline-block'
           }}>
@@ -182,14 +194,14 @@ const BreakingNewsMarquee_HI= () => {
 // User suggestion carousel
 const UserSuggestionBar = ({ users }) => {
   const navigate = useNavigate();
-  
+
   const viewProfile = (userId) => {
-    if(userId) navigate(`/profile/${userId}`);
+    if (userId) navigate(`/profile/${userId}`);
   };
-  
+
   return (
     <div className="user-suggestions" style={{ marginBottom: '20px' }}>
-      <div style={{ 
+      <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -198,28 +210,28 @@ const UserSuggestionBar = ({ users }) => {
         <h3 style={{ margin: 0, color: '#8b0000' }}>
           <TeamOutline /> Suggested Matches
         </h3>
-        <Button 
-          size='small' 
-          color='primary' 
+        <Button
+          size='small'
+          color='primary'
           fill='none'
           style={{ color: '#b00000' }}
-         // onClick={() => navigate('/all-matches')}
+        // onClick={() => navigate('/all-matches')}
         >
           View All
         </Button>
       </div>
-      
-      <div style={{ 
+
+      <div style={{
         display: 'flex',
         overflowX: 'auto',
         paddingBottom: '10px',
         scrollbarWidth: 'none'
       }} className="scroll-hide">
         {users.map(user => (
-          <Card 
+          <Card
             key={user.id}
-           // onClick={() => viewProfile(user.id)}
-            style={{ 
+            // onClick={() => viewProfile(user.id)}
+            style={{
               minWidth: '140px',
               marginRight: '12px',
               borderRadius: '8px',
@@ -230,16 +242,16 @@ const UserSuggestionBar = ({ users }) => {
           >
             <div style={{ textAlign: 'center' }}>
               <Badge content={<HeartOutline fontSize={12} />} color='#b00000'>
-                <Avatar 
-                  src={user.avatar} 
-                  style={{ 
-                    width: '70px', 
+                <Avatar
+                  src={user.avatar}
+                  style={{
+                    width: '70px',
                     height: '70px',
                     border: '2px solid #b00000'
-                  }} 
+                  }}
                 />
               </Badge>
-              <div style={{ 
+              <div style={{
                 marginTop: '8px',
                 fontSize: '15px',
                 fontWeight: '500',
@@ -249,7 +261,7 @@ const UserSuggestionBar = ({ users }) => {
               }}>
                 {user.name}, {user.age}
               </div>
-              <div style={{ 
+              <div style={{
                 fontSize: '12px',
                 color: '#666',
                 whiteSpace: 'nowrap',
@@ -280,15 +292,15 @@ const ShareProfileCard = ({ userId }) => {
       .then(() => alert("Copied to clipboard!"))
       .catch((err) => console.error("Failed to copy:", err));
   };
-  
+
   return (
-    <Card style={{ 
+    <Card style={{
       marginBottom: '16px',
       borderRadius: '8px',
       border: '1px solid rgba(180, 0, 0, 0.2)',
       backgroundColor: 'rgba(180, 0, 0, 0.03)'
     }}>
-      <div style={{ 
+      <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -302,13 +314,13 @@ const ShareProfileCard = ({ userId }) => {
         <Button
           onClick={shareProfile}
           color='primary'
-          style={{ 
+          style={{
             backgroundColor: '#b00000',
             borderColor: '#b00000',
             borderRadius: '20px'
           }}
         >
-          <TravelOutline fontSize={16}/>
+          <TravelOutline fontSize={16} />
         </Button>
       </div>
     </Card>
@@ -318,20 +330,20 @@ const ShareProfileCard = ({ userId }) => {
 // Donation link component
 const DonationLink = () => {
   const navigate = useNavigate();
-  
+
   const goToDonation = () => {
     console.log("DonationPage")
     navigate('/donation');
   };
-  
+
   return (
-    <Card style={{ 
+    <Card style={{
       marginBottom: '16px',
       borderRadius: '8px',
       background: 'linear-gradient(45deg, #8b0000, #b00000)',
       color: 'white'
     }}>
-      <div style={{ 
+      <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -344,7 +356,7 @@ const DonationLink = () => {
         </div>
         <Button
           onClick={goToDonation}
-          style={{ 
+          style={{
             backgroundColor: 'white',
             color: '#b00000',
             borderColor: 'white',
@@ -361,16 +373,16 @@ const DonationLink = () => {
 // Quick shortcuts component
 const QuickShortcuts = () => {
   const navigate = useNavigate();
-  
+
   const shortcuts = [
-    { icon: <TeamOutline />, text: 'Browse', path: '/browse' },
-    { icon: <HeartOutline />, text: 'Matches', path: '/matches' },
-    { icon: <UserAddOutline />, text: 'Invite', path: '/invite' },
+    { icon: <TeamOutline />, text: 'Browse', path: '/profiles' },
+    { icon: <HeartOutline />, text: 'Matches', path: '/status' },
+    { icon: <UserAddOutline />, text: 'Invite', path: '/status' },
     { icon: <GiftOutline />, text: 'Donate', path: '/donation' }
   ];
-  
+
   return (
-    <Card style={{ 
+    <Card style={{
       marginBottom: '16px',
       borderRadius: '8px',
     }}>
@@ -378,7 +390,7 @@ const QuickShortcuts = () => {
       <Grid columns={4} gap={8}>
         {shortcuts.map((item, index) => (
           <Grid.Item key={index}>
-            <div 
+            <div
               onClick={() => navigate(item.path)}
               style={{
                 display: 'flex',
@@ -391,10 +403,10 @@ const QuickShortcuts = () => {
                 cursor: 'pointer'
               }}
             >
-              <div style={{ 
+              <div style={{
                 fontSize: '24px',
                 color: '#b00000',
-                marginBottom: '8px' 
+                marginBottom: '8px'
               }}>
                 {item.icon}
               </div>
@@ -408,13 +420,13 @@ const QuickShortcuts = () => {
 };
 
 const FeatureTiles = () => {
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [donors, setDonors] = useState([]);
- // const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
   const userStatus = user?.userstatus || "PENDING";
-  console.log("hcm userStatus",userStatus)
+  console.log("hcm userStatus", userStatus)
   useEffect(() => {
     // You can optionally fetch users/donors if needed
     setDonors([
@@ -444,16 +456,17 @@ const FeatureTiles = () => {
     <div style={{ padding: '16px' }}>
       <DonorMarquee donors={donors} />
       <BreakingNewsMarquee_EN />
-      <BreakingNewsMarquee_HI />
-      {/* <QuickShortcuts />
-      <DonationLink /> */}
+      {/* <BreakingNewsMarquee_HI /> */}
+      <QuickShortcuts />
+      <DonationLink />
+      <SocialMediaCard />
       {/* <ShareProfileCard userId={user?.id} /> */}
       {/* <UserSuggestionBar users={users} /> */}
       {(
-  user.emeelanrole === "CENTER" ||
-  user.emeelanrole === "ADMIN" ||
-  user.emeelanrole === "SUPERADMIN"
-) && <AdminUserEditor />}
+        user.emeelanrole === "CENTER" ||
+        user.emeelanrole === "ADMIN" ||
+        user.emeelanrole === "SUPERADMIN"
+      ) && <AdminUserEditor />}
     </div>
   );
 };
