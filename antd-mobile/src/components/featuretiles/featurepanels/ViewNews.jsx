@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import { getBreakingNews } from "../../../services/api";
 import { EyeOutline } from "antd-mobile-icons";
+import { NavBar, Space } from "antd-mobile";
 
 export default function ViewNews() {
   const { jwt } = useContext(AuthContext);
@@ -27,6 +28,11 @@ export default function ViewNews() {
 
   return (
     <div style={{ padding: "16px" }}>
+      <NavBar onBack={() => navigate(-1)} style={{ "--height": "48px" }}>
+        <h3 style={{ marginBottom: "12px", color: "#b00000" }}>All News</h3>
+      </NavBar>
+      <Space />
+
       {breakingMessages.map((news, i) => {
         const attr = news.attributes || {};
         return (
