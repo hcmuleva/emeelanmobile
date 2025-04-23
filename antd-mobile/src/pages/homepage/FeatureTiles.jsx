@@ -454,6 +454,11 @@ const FeatureTiles = () => {
     return <PendingApprovalCard />;
   }
 
+  /***
+   *  1) check for emeelanrole == SUPERADMIN  then show one button to create Donation data
+   *  2) Create Donation data if emeelanrole ===<ADMIN /> <SUPERADMIN /><CENTER></CENTER>
+   *  3) For all User Donation Button should be available 
+   */
   return (
     <div style={{ padding: '16px' }}>
       <DonorMarquee donors={donors} />
@@ -468,6 +473,7 @@ const FeatureTiles = () => {
         user.emeelanrole === "CENTER" ||
         user.emeelanrole === "ADMIN" ||
         user.emeelanrole === "SUPERADMIN"
+        
       ) && <AdminUserEditor />}
     </div>
   );

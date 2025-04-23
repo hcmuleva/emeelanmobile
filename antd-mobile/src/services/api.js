@@ -331,13 +331,30 @@ export const uploadImage = async (formData, jwt) => {
   }
 };
 
+export const updateUser = async (data,userId) =>{
+  try {
+    // console.log("Sending update:", { photos: photoIds });
+
+    const response = await api.put(`/users/${userId}`, {
+      ...data,
+    });
+    return response.data;
+
+  } catch (error) {
+    console.error(
+      "Strapi update error:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data?.message || "Update failed";
+  }
+}
 // new Apicalls start
 // update Data of me,
 export const updateUserData = async (data, userId) => {
   try {
     // console.log("Sending update:", { photos: photoIds });
 
-    const response = await api.put(`/users/${userId}`, {
+    const response = await api.put(`/customupdateuser/${userId}`, {
       ...data,
     });
     return response.data;

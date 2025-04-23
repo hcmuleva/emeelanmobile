@@ -13,7 +13,7 @@ import {
 } from 'antd-mobile';
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
-import { getUserById, updateUserData, uploadImage } from '../../services/api';
+import { getUserById, updateUser, updateUserData, uploadImage } from '../../services/api';
 
 const DynamicUPIPaymentQR = () => {
   const jwt = localStorage.getItem('jwt');
@@ -67,7 +67,7 @@ const DynamicUPIPaymentQR = () => {
     );
 
     setQrValue(upiLink);
-    setLogoUrl(values.logoUrl || '');
+    setLogoUrl(values.logoUrl || '/logo.png');
     setShowQR(true);
 
     Toast.show({ content: 'UPI Payment QR Code generated successfully!' });
@@ -96,7 +96,7 @@ const DynamicUPIPaymentQR = () => {
 
           const uploaded = await uploadImage(formData, jwt);
           const uploadedFile = uploaded[0];
-          await updateUserData({ qrimage: uploadedFile.id }, merchantData.adminId);
+          await updateUser({ qrimage: uploadedFile.id }, merchantData.adminId);
           const updated = { ...merchantData, qrimage: uploadedFile };
           localStorage.setItem('user', JSON.stringify(updated));
           Toast.show({ content: 'Admin QR image uploaded successfully!' });

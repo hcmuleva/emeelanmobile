@@ -67,36 +67,3 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
 };
 
 export default StatusNotification;
-
-// import React, { useState } from 'react';
-// import useAblySubscription from '../../utils/useAblySubscription';
-
-// const StatusNotification = ({ userId, setNotificationStats }) => {
-//   const [messages, setMessages] = useState([]);
-
-//   useAblySubscription({
-//     channelName: `user:${userId}`,
-//     event: 'status-updated',
-//     onMessage: (data) => {
-//       console.log('[StatusUpdate]', data);
-//       setMessages((prev) => {
-//         const all = [...prev, data];
-//         const stats = all.reduce((acc, { status }) => {
-//           acc[status] = (acc[status] || 0) + 1;
-//           acc.total++;
-//           return acc;
-//         }, { PENDING: 0, APPROVED: 0, REJECTED: 0, total: 0 });
-//         setNotificationStats({ ...stats, lastMessage: data.text });
-//         return all;
-//       });
-//     },
-//     toastFormatter: ({ text, status }) => ({
-//       icon: 'success',
-//       content: `${text} – ${status}`,
-//     }),
-//   });
-
-//   return null;
-// };
-
-// export default StatusNotification;

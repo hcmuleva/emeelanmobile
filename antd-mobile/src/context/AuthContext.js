@@ -37,15 +37,18 @@
       }
     }, [user]);
 
-    useEffect(() => {
-      if (!user?.id) return;
-
-      const channel = ably.channels.get(`userrole:${user.id}`);
+   const getMessage = (channelName) =>{
+    console.log("Channeld Name", channelName)
+    const channel = ably.channels.get(channelName);
       
       const handleMessage = (message) => {
         console.log("EMEELAN ROLE Changes", message?.data)
-        if (message.data?.emeelanrole) {
+
+        if(channelName.includes("userrole")&&message.data?.emeelanrole){
           updateUserField("emeelanrole", message.data.emeelanrole);
+        }
+        if (channelName.includes("userstatus")&&message.data?.userstatus) {
+          updateUserField("userstatus", message.data.userstatus);
         }
       };
     
@@ -54,6 +57,14 @@
       return () => {
         channel.unsubscribe("connection-request", handleMessage);
       };
+   }
+    
+    useEffect(() => {
+      if (!user?.id) return;
+      
+      getMessage(`userrole:${user.id}`)
+      getMessage(`userstatus:${user.id}`)
+      
     }, [user?.id]);
 
     
