@@ -331,6 +331,17 @@ export const uploadImage = async (formData, jwt) => {
   }
 };
 
+export const createQRCODEBySuperAdmin = async(data) =>{
+  try{
+  const responst = await api.post('/donationqrcodes',{
+    ...data
+  });
+  return response.data
+} catch(error){
+  throw error.response?.data||error.message
+}
+}
+  
 export const updateUser = async (data,userId) =>{
   try {
     // console.log("Sending update:", { photos: photoIds });
