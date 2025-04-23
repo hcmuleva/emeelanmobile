@@ -1,6 +1,6 @@
 {
   "name": "emeelan",
-  "version": "0.1.0",
+  "version": "3.0.0.6",
   "private": true,
   "dependencies": {
     "@ably-labs/react-hooks": "^2.1.2",

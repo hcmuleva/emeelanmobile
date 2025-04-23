@@ -1,0 +1,15 @@
+{
+	"appId": "com.emeelan.mastjod",
+	"appName": "EMEELAN",
+	"webDir": "build",
+	"ios": {
+		"scheme": "emeelan"
+	},
+	"server": {
+		"androidScheme": "https"
+	},
+	"packageClassList": [
+		"AppPlugin",
+		"CAPBrowserPlugin"
+	]
+}
