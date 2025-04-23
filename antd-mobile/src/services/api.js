@@ -291,6 +291,9 @@ export const searchAdmins = async (query, start = 0, limit = 10, filters = {}) =
 export const getBreakingNews = async (jwt) => {
   try {
     const response = await api.get("/breakingmessages", {
+      params: {
+        populate: "*", // Populates all relations
+      },
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "multipart/form-data",
@@ -465,6 +468,33 @@ const filteredUsers = async () => {
   const data = await response.json();
   return data;
 };
+
+export const createBreakingNews = async (data, jwt) => {
+  try {
+    const response = await api.post("/breakingmessages", {
+      ...data
+    })
+    return response.data
+  } catch (err) {
+    throw err.response?.data?.message || "Error in creating breaking news"
+  }
+}
+
+export const getQrCards = async (jwt) => {
+  try {
+    const response = await api.get("/donationqrcodes", {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+    return response.data
+  } catch (err) {
+    throw err.response?.data?.message || "Error in getting donation qr cards"
+  }
+}
 
 export const getPincode = async (pincode) => {
   try {

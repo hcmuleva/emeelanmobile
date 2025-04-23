@@ -10,6 +10,11 @@ import { AuthContext } from '../../context/AuthContext';
 import { getPaginatedUsers } from '../../services/api';
 import "../../styles/scrollHide.css";
 import { Button } from 'antd-mobile';
+import DonationPage from './shortcuts/DonationPage.jsx';
+import DonationCard from '../../components/featuretiles/DonationCard.jsx';
+import QuickShortcutsUser from '../../components/featuretiles/QuickShortcutsUser.jsx';
+import QuickShortcutsAdmin from '../../components/featuretiles/QuickShortcutsAdmin.jsx';
+import GreetCard from '../../components/featuretiles/GreetCard.jsx';
 
 const FeatureTiles = () => {
   const { user } = useContext(AuthContext)
@@ -34,26 +39,30 @@ const FeatureTiles = () => {
     return <PendingApprovalCard />;
   }
 
-  /***
-   *  1) check for emeelanrole == SUPERADMIN  then show one button to create Donation data
-   *  2) Create Donation data if emeelanrole ===<ADMIN /> <SUPERADMIN /><CENTER></CENTER>
-   *  3) For all User Donation Button should be available 
-   */
   return (
     <div style={{ padding: '16px' }}>
+
+      <GreetCard />
       <DonorMarquee />
 
-      <BreakingNewsMarqueeEN />
-
-
+      <DonationCard />
       {user?.emeelanrole === "SUPERADMIN" ?
         <DynamicQrGenerater /> :
         ""
       }
+      
+      <BreakingNewsMarqueeEN />
 
-      <Button onClick={() => navigate("/donation")}>Donation Page</Button>
 
-      <ShareProfileCard userId={user?.id} />
+
+      {user?.emeelanrole?.includes("ADMIN", "CENTER", "SUPERADMIN") ? (
+        <QuickShortcutsAdmin />
+      ) : (
+        <QuickShortcutsUser />
+      )}
+
+
+      {/* <ShareProfileCard userId={user?.id} / > */}
 
       {(
         user?.emeelanrole === "CENTER" ||

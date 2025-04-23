@@ -10,10 +10,7 @@ export default function QuickShortcutsAdmin() {
 
   const shortcuts = [
     { icon: <TeamOutline />, text: 'Verify Profiles', path: '/profiles' },
-    { icon: <HeartOutline />, text: 'Matches', path: '/status' },
     { icon: <UserAddOutline />, text: 'Create News', path: '/status' },
-
-    { icon: <GiftOutline />, text: 'Donate', path: '/donation' }
   ];
   return (
     <Card style={{
@@ -21,7 +18,7 @@ export default function QuickShortcutsAdmin() {
       borderRadius: '8px',
     }}>
       <h3 style={{ margin: '0 0 12px 0', color: '#8b0000' }}>Quick Actions</h3>
-      <Grid columns={4} gap={8}>
+      <Grid columns={2} gap={8}>
         {shortcuts.map((item, index) => (
           <Grid.Item key={index}>
             <div
