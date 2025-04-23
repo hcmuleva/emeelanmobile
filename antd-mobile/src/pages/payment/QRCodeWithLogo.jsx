@@ -10,10 +10,11 @@ import {
   Switch,
   List,
   NavBar,
+  Radio,
 } from 'antd-mobile';
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
-import { getUserById, updateUser, updateUserData, uploadImage } from '../../services/api';
+import { createQRCODEBySuperAdmin, getUserById, updateUser, updateUserData, uploadImage } from '../../services/api';
 
 const DynamicUPIPaymentQR = () => {
   const jwt = localStorage.getItem('jwt');

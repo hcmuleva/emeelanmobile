@@ -333,7 +333,7 @@ export const uploadImage = async (formData, jwt) => {
 
 export const createQRCODEBySuperAdmin = async(data) =>{
   try{
-  const responst = await api.post('/donationqrcodes',{
+  const response = await api.post('/donationqrcodes',{
     ...data
   });
   return response.data
