@@ -4,6 +4,7 @@ import ResetPassword from '../users/profilesections/ResetPassword'
 import { Button, CapsuleTabs, Form, Input, Space,Switch } from 'antd-mobile'
 import EnggagedRequestsTable from './EnggagedRequestsTable'
 import UpdateStatusToEnggaged from './UpdateUserEnggagement'
+import DonationForm from './DonationForm'
 
 export default function AdminUserEditor() {
     const [userId, setUserId] = useState("")
@@ -44,6 +45,9 @@ export default function AdminUserEditor() {
     </CapsuleTabs.Tab>
     <CapsuleTabs.Tab title='Engaggements' key='engaggements'>
     Engaggement list
+    </CapsuleTabs.Tab>
+    <CapsuleTabs.Tab title="DonationForm" key="donationform">
+      <DonationForm/>
     </CapsuleTabs.Tab>
   </CapsuleTabs>
   </>)

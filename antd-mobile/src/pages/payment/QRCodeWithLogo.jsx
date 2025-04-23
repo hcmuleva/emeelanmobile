@@ -10,10 +10,11 @@ import {
   Switch,
   List,
   NavBar,
+  Radio,
 } from 'antd-mobile';
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
-import { getUserById, updateUserData, uploadImage } from '../../services/api';
+import { createQRCODEBySuperAdmin, getUserById, updateUser, updateUserData, uploadImage } from '../../services/api';
 
 const DynamicUPIPaymentQR = () => {
   const jwt = localStorage.getItem('jwt');
@@ -27,19 +28,6 @@ const DynamicUPIPaymentQR = () => {
   const [merchantData, setMerchantData] = useState(null);
   const navigate = useNavigate();
 
-  // const checkAdminId = async () => {
-  //   const res = await getUserById(merchantData?.adminId, jwt)
-  //   if (!res) {
-  //     Toast.show("No Admin / SuperAdmin associated with this ID")
-  //     return
-  //   } else {
-  //     handleMerchantSetup()
-  //   }
-  // }
-  // useEffect(() => {
-  //   if (!merchantData) { return }
-  //   checkAdminId()
-  // }, [merchantData]);
 
   const generateUPILink = (merchantInfo, amount = null, note = '') => {
     const upiUrl = new URL('upi://pay');
@@ -57,7 +45,7 @@ const DynamicUPIPaymentQR = () => {
       Toast.show({ content: 'Admin ID is invalid or unauthorized.' });
       return;
     }
-
+    
     setMerchantData(values);
 
     const upiLink = generateUPILink(
@@ -67,7 +55,7 @@ const DynamicUPIPaymentQR = () => {
     );
 
     setQrValue(upiLink);
-    setLogoUrl(values.logoUrl || '');
+    setLogoUrl(values.logoUrl || '/logo.png');
     setShowQR(true);
 
     Toast.show({ content: 'UPI Payment QR Code generated successfully!' });
@@ -96,7 +84,8 @@ const DynamicUPIPaymentQR = () => {
 
           const uploaded = await uploadImage(formData, jwt);
           const uploadedFile = uploaded[0];
-          await updateUserData({ qrimage: uploadedFile.id }, merchantData.adminId);
+
+          await createQRCODEBySuperAdmin({ qrimage: uploadedFile.id ,orgsku:merchantData.orgsku});
           const updated = { ...merchantData, qrimage: uploadedFile };
           localStorage.setItem('user', JSON.stringify(updated));
           Toast.show({ content: 'Admin QR image uploaded successfully!' });
@@ -221,9 +210,17 @@ const DynamicUPIPaymentQR = () => {
           <h1 style={titleStyle}>UPI Payment Setup</h1>
           <Card title="Merchant Details">
             <Form form={merchantForm} onFinish={handleMerchantSetup} mode="card" layout="vertical">
-              <Form.Item label="Admin ID" name="adminId" rules={[{ required: true, message: 'Please enter Admin ID' }]}>
-                <Input placeholder="Enter Admin ID (e.g., 1234)" />
-              </Form.Item>
+            <Form.Item
+                            name="orgsku"
+                            label={<><span style={{ color: 'red' }}>*</span> Cast</>}
+                            rules={[{ required: true, message: "Please select your Cast" }]}
+                        >
+                            <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                                <Radio value="SEERVI0002">SEERVI</Radio>
+                                <Radio value="TELI0001">TELI</Radio>
+                                <Radio value="DEMO0003">DEMO</Radio>
+                            </Radio.Group>
+                        </Form.Item>
               <Form.Item label="UPI ID" name="upiId" rules={[{ required: true, message: 'Please enter UPI ID' }]}>
                 <Input placeholder="Enter UPI ID (e.g., example@upi)" />
               </Form.Item>

@@ -125,73 +125,10 @@ const TopBar = ({ userRole }) => {
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            {/* <Avatar
-              src={"logo.png"}
-              style={{
-                cursor: "pointer",
-                "--size": "55px",
-                borderRadius: "50%",
-              }}
-            /> */}
+           
             <DynamicLogo color="#FFA500" backgroundColor="#FFFFFF" />
           </div>
-          {/* <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <Popover
-            content={
-              <List style={{ minWidth: 180 }}>
-                <List.Item onClick={() => handleStatusClick("PENDING")}>
-                  🕒 Pending ({notificationStats.PENDING})
-                </List.Item>
-                <List.Item onClick={() => handleStatusClick("APPROVED")}>
-                  ✅ Approved ({notificationStats.APPROVED})
-                </List.Item>
-                <List.Item onClick={() => handleStatusClick("REJECTED")}>
-                  ❌ Rejected ({notificationStats.REJECTED})
-                </List.Item>
-              </List>
-            }
-            trigger="click"
-            placement="bottom"
-          >
-            <Badge
-              content={
-                <div
-                  style={{
-                    backgroundColor: "white",
-                    color: "black",
-                    borderRadius: "12px",
-                    fontSize: "14px",
-                    minWidth: "20px",
-                    textAlign: "center",
-                    lineHeight: "20px",
-                    fontWeight: 600,
-                  }}
-                >
-                  {notificationStats.total}
-                </div>
-              }
-            >
-              <div
-                style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "50%",
-                  width: "42px",
-                  height: "42px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <MessageOutlined style={{ fontSize: 25, color: "white" }} />
-              </div>
-            </Badge>
-          </Popover>
-
-          <StatusNotification
-            userId={JSON.parse(localStorage.getItem("user"))?.id}
-            setNotificationStats={setNotificationStats}
-          />
-        </div> */}
+        
         </div>
       </div>
     </div>

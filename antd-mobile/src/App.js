@@ -47,7 +47,7 @@ function AppContent() {
           {/* Public Routes */}
           <Route path="/" element={<LoginPage />} />
           <Route path="/terms" element={<TermsPage />} />
-          <Route path="/reffereralregistration" element={<ReferralRegistration />} />
+          {/* <Route path="/reffereralregistration" element={<ReferralRegistration />} /> */}
 
           {/* Protected Routes */}
           <Route
@@ -80,12 +80,23 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          
           <Route
             path="/chat"
             element={
               <ProtectedRoute>
                 <MainLayout>
                   <Chat />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/shareprofile"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <SocialSharingCard />
                 </MainLayout>
               </ProtectedRoute>
             }

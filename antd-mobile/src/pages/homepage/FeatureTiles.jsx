@@ -280,6 +280,7 @@ const UserSuggestionBar = ({ users }) => {
 
 // Share profile component
 const ShareProfileCard = ({ userId }) => {
+  const navigate = useNavigate();
   console.log(userId)
   const textToCopy = `http://localhost:3000/profile-view/${userId}`;
 
@@ -288,9 +289,10 @@ const ShareProfileCard = ({ userId }) => {
     //   content: 'Profile link copied to clipboard!',
     //   position: 'bottom',
     // });
-    navigator.clipboard.writeText(textToCopy)
-      .then(() => alert("Copied to clipboard!"))
-      .catch((err) => console.error("Failed to copy:", err));
+    navigate("/shareprofile")
+    // navigator.clipboard.writeText(textToCopy)
+    //   .then(() => alert("Copied to clipboard!"))
+    //   .catch((err) => console.error("Failed to copy:", err));
   };
 
   return (
@@ -452,6 +454,11 @@ const FeatureTiles = () => {
     return <PendingApprovalCard />;
   }
 
+  /***
+   *  1) check for emeelanrole == SUPERADMIN  then show one button to create Donation data
+   *  2) Create Donation data if emeelanrole ===<ADMIN /> <SUPERADMIN /><CENTER></CENTER>
+   *  3) For all User Donation Button should be available 
+   */
   return (
     <div style={{ padding: '16px' }}>
       <DonorMarquee donors={donors} />
@@ -460,12 +467,13 @@ const FeatureTiles = () => {
       <QuickShortcuts />
       <DonationLink />
       {/* <SocialMediaCard /> */}
-      {/* <ShareProfileCard userId={user?.id} /> */}
+      <ShareProfileCard userId={user?.id} />
       {/* <UserSuggestionBar users={users} /> */}
       {(
         user.emeelanrole === "CENTER" ||
         user.emeelanrole === "ADMIN" ||
         user.emeelanrole === "SUPERADMIN"
+        
       ) && <AdminUserEditor />}
     </div>
   );

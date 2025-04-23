@@ -12,8 +12,11 @@ import {
   Collapse
 } from "antd-mobile"
 import { ShareAltOutlined, DownloadOutlined } from "@ant-design/icons"
+import { AuthContext } from "../../context/AuthContext"
+import { useOutletContext } from "react-router-dom"
 
 export default function SocialMediaCard() {
+  const {user} = useOutletContext(AuthContext)
   const [copied, setCopied] = useState(false)
   const cardRef = useRef(null)
 
