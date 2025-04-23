@@ -3,18 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import AdminUserEditor from '../../components/admin/AdminUserEditor';
 import PendingApprovalCard from '../../components/authentication/PendingApprovalCard';
 import BreakingNewsMarqueeEN from '../../components/featuretiles/BreakingNewsMarqueeEN';
+import DonationCard from '../../components/featuretiles/DonationCard.jsx';
 import DonorMarquee from '../../components/featuretiles/DonorMarquee';
 import DynamicQrGenerater from '../../components/featuretiles/DynamicQrGenerater.jsx';
-import ShareProfileCard from '../../components/featuretiles/ShareProfileCard';
+import GreetCard from '../../components/featuretiles/GreetCard.jsx';
+import QuickShortcutsAdmin from '../../components/featuretiles/QuickShortcutsAdmin.jsx';
+import QuickShortcutsUser from '../../components/featuretiles/QuickShortcutsUser.jsx';
 import { AuthContext } from '../../context/AuthContext';
 import { getPaginatedUsers } from '../../services/api';
 import "../../styles/scrollHide.css";
-import { Button } from 'antd-mobile';
-import DonationPage from './shortcuts/DonationPage.jsx';
-import DonationCard from '../../components/featuretiles/DonationCard.jsx';
-import QuickShortcutsUser from '../../components/featuretiles/QuickShortcutsUser.jsx';
-import QuickShortcutsAdmin from '../../components/featuretiles/QuickShortcutsAdmin.jsx';
-import GreetCard from '../../components/featuretiles/GreetCard.jsx';
 
 const FeatureTiles = () => {
   const { user } = useContext(AuthContext)
@@ -43,8 +40,8 @@ const FeatureTiles = () => {
     <div style={{ padding: '16px' }}>
 
       <GreetCard />
-      <DonorMarquee />
 
+      <DonorMarquee />
       <DonationCard />
       {user?.emeelanrole === "SUPERADMIN" ?
         <DynamicQrGenerater /> :
