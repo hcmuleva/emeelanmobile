@@ -1,26 +1,26 @@
-  /**
-     *  Need to Create form for with following fields and types:
-     *  1) name,fathername or husband,purpose ,cast, gotra,gender (Select using radio buttonfrom MALE/FEMALE), donnertype (radio button from NDIVIDUAL/FAMILY/GROUP/SANSTHA/OTHER)
-     *  maritial (Select using radio buttonfrom MARRIED/BACHELOR/DIVEROCED/NA), 
-        description (TextArea 3 line) , amount(integer),
-        receipt(Image uploader), photo (Image uploader)
-    */ 
-  
-        import React, { useState } from 'react';
-        import {
-          Form,
-          Input,
-          TextArea,
-          Radio,
-          Picker,
-          ImageUploader,
-          Button,
-          Toast
-        } from 'antd-mobile';
-        import { UploadOutlined } from '@ant-design/icons';
-        
-        const DonationForm = () => {
-          const [form] = Form.useForm();
+/**
+   *  Need to Create form for with following fields and types:
+   *  1) name,fathername or husband,purpose ,cast, gotra,gender (Select using radio buttonfrom MALE/FEMALE), donnertype (radio button from NDIVIDUAL/FAMILY/GROUP/SANSTHA/OTHER)
+   *  maritial (Select using radio buttonfrom MARRIED/BACHELOR/DIVEROCED/NA), 
+      description (TextArea 3 line) , amount(integer),
+      receipt(Image uploader), photo (Image uploader)
+  */
+
+import React, { useState } from 'react';
+import {
+  Form,
+  Input,
+  TextArea,
+  Radio,
+  Picker,
+  ImageUploader,
+  Button,
+  Toast
+} from 'antd-mobile';
+import { UploadOutlined } from '@ant-design/icons';
+
+const DonationForm = () => {
+  const [form] = Form.useForm();
   const [photoFileList, setPhotoFileList] = useState([]);
   const [receiptFileList, setReceiptFileList] = useState([]);
   const [donorType, setDonorType] = useState('individual'); // Default to individual
@@ -89,14 +89,14 @@
       }
     >
       <Form.Header>Donation Form</Form.Header>
-      
+
       <Form.Item name='name' label='Full Name' rules={[{ required: true }]}>
         <Input placeholder='Enter full name' />
       </Form.Item>
 
-      <Form.Item 
-        name='donorType' 
-        label='Donor Type' 
+      <Form.Item
+        name='donorType'
+        label='Donor Type'
         rules={[{ required: true }]}
       >
         <Radio.Group onChange={(val) => handleDonorTypeChange(val)}>
@@ -109,9 +109,9 @@
 
       {/* Show parent name only for individual */}
       {(donorType === 'individual') && (
-        <Form.Item 
-          name='parentName' 
-          label='Father/Husband Name' 
+        <Form.Item
+          name='parentName'
+          label='Father/Husband Name'
           rules={donorType === 'individual' ? [{ required: true }] : []}
         >
           <Input placeholder="Enter father's or husband's name" />
@@ -136,9 +136,9 @@
 
       {/* Show gotra only for individual and family */}
       {(donorType === 'individual' || donorType === 'family') && (
-        <Form.Item 
-          name='gotra' 
-          label='Gotra' 
+        <Form.Item
+          name='gotra'
+          label='Gotra'
           rules={donorType === 'individual' ? [{ required: true }] : []}
         >
           <Picker columns={[gotraOptions]}>

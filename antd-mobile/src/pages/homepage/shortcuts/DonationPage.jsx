@@ -3,8 +3,9 @@ import { UnderConstruction } from '../UnderConstructionProps'
 import { Button } from 'antd-mobile'
 import DynamicUPIPaymentQR from '../../payment/QRCodeWithLogo'
 import { AuthContext } from '../../../context/AuthContext'
+import Donation from '../../../components/featuretiles/Donation'
 
-export default function Donation() {
+export default function DonationPage() {
   const { user } = useContext(AuthContext)
   const [showConstruction, setShowConstruction] = useState(true)
   console.log("Donation Page called")
@@ -14,12 +15,8 @@ export default function Donation() {
 
   return (
     <>
-      {(user?.emeelanrole === "SUPERADMIN") ? (
-        <DynamicUPIPaymentQR />
-      ) : (
-        <h1>DONATION PAGE</h1>
-      )}
 
+      <Donation />
       {/*     
           {showConstruction ? (
             <UnderConstruction

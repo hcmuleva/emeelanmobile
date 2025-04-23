@@ -28,9 +28,11 @@ import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
 import { TermsPage } from "./pages/public/TermsPage";
-import Donation from "./pages/homepage/shortcuts/donation";
+import Donation from "./pages/homepage/shortcuts/DonationPage";
 import DeepLinkHandler from "./DeepLinkHandler";
 import ReferralRegistration from "./components/authentication/RefferalRegistration";
+import DonationForm from "./components/admin/DonationForm";
+import DynamicUPIPaymentQR from "./pages/payment/QRCodeWithLogo";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -42,7 +44,7 @@ function AppContent() {
   return (
     <AuthProvider>
       <Router>
-      <DeepLinkHandler />
+        <DeepLinkHandler />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LoginPage />} />
@@ -80,7 +82,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/chat"
             element={
@@ -91,7 +93,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/shareprofile"
             element={
               <ProtectedRoute>
@@ -101,6 +103,27 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/qr-creation"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <DynamicUPIPaymentQR />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donation-collection"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <DonationForm />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/donation"
             element={

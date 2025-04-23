@@ -288,6 +288,35 @@ export const searchAdmins = async (query, start = 0, limit = 10, filters = {}) =
 };
 
 
+export const getBreakingNews = async (jwt) => {
+  try {
+    const response = await api.get("/breakingmessages", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+
+export const getDonners = async (jwt) => {
+  try {
+    const response = await api.get("/donners", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+
+
 export const resetpassword = async (userId, newPassword) => {
   try {
     const response = await api.post("/reset-password", {
@@ -331,18 +360,18 @@ export const uploadImage = async (formData, jwt) => {
   }
 };
 
-export const createQRCODEBySuperAdmin = async(data) =>{
-  try{
-  const response = await api.post('/donationqrcodes',{
-    ...data
-  });
-  return response.data
-} catch(error){
-  throw error.response?.data||error.message
+export const createQRCODEBySuperAdmin = async (data) => {
+  try {
+    const response = await api.post('/donationqrcodes', {
+      ...data
+    });
+    return response.data
+  } catch (error) {
+    throw error.response?.data || error.message
+  }
 }
-}
-  
-export const updateUser = async (data,userId) =>{
+
+export const updateUser = async (data, userId) => {
   try {
     // console.log("Sending update:", { photos: photoIds });
 

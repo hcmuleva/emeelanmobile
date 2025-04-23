@@ -45,7 +45,7 @@ const DynamicUPIPaymentQR = () => {
       Toast.show({ content: 'Admin ID is invalid or unauthorized.' });
       return;
     }
-    
+
     setMerchantData(values);
 
     const upiLink = generateUPILink(
@@ -85,7 +85,7 @@ const DynamicUPIPaymentQR = () => {
           const uploaded = await uploadImage(formData, jwt);
           const uploadedFile = uploaded[0];
 
-          await createQRCODEBySuperAdmin({ qrimage: uploadedFile.id ,orgsku:merchantData.orgsku});
+          await createQRCODEBySuperAdmin({ qrimage: uploadedFile.id, orgsku: merchantData.orgsku });
           const updated = { ...merchantData, qrimage: uploadedFile };
           localStorage.setItem('user', JSON.stringify(updated));
           Toast.show({ content: 'Admin QR image uploaded successfully!' });
@@ -210,17 +210,17 @@ const DynamicUPIPaymentQR = () => {
           <h1 style={titleStyle}>UPI Payment Setup</h1>
           <Card title="Merchant Details">
             <Form form={merchantForm} onFinish={handleMerchantSetup} mode="card" layout="vertical">
-            <Form.Item
-                            name="orgsku"
-                            label={<><span style={{ color: 'red' }}>*</span> Cast</>}
-                            rules={[{ required: true, message: "Please select your Cast" }]}
-                        >
-                            <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                                <Radio value="SEERVI0002">SEERVI</Radio>
-                                <Radio value="TELI0001">TELI</Radio>
-                                <Radio value="DEMO0003">DEMO</Radio>
-                            </Radio.Group>
-                        </Form.Item>
+              <Form.Item
+                name="orgsku"
+                label={<><span style={{ color: 'red' }}>*</span> Cast</>}
+                rules={[{ required: true, message: "Please select your Cast" }]}
+              >
+                <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                  <Radio value="SEERVI0002">SEERVI</Radio>
+                  <Radio value="TELI0001">TELI</Radio>
+                  <Radio value="DEMO0003">DEMO</Radio>
+                </Radio.Group>
+              </Form.Item>
               <Form.Item label="UPI ID" name="upiId" rules={[{ required: true, message: 'Please enter UPI ID' }]}>
                 <Input placeholder="Enter UPI ID (e.g., example@upi)" />
               </Form.Item>
