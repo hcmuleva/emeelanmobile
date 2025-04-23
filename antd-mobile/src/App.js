@@ -33,6 +33,10 @@ import DeepLinkHandler from "./DeepLinkHandler";
 import ReferralRegistration from "./components/authentication/RefferalRegistration";
 import DonationForm from "./components/admin/DonationForm";
 import DynamicUPIPaymentQR from "./pages/payment/QRCodeWithLogo";
+import ViewDonors from "./components/featuretiles/featurepanels/ViewDonors";
+import ViewDonorCard from "./components/featuretiles/featurepanels/ViewDonorCard";
+import ViewNews from "./components/featuretiles/featurepanels/ViewNews";
+import ViewNewsCard from "./components/featuretiles/featurepanels/ViewNewsCard";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -180,6 +184,46 @@ function AppContent() {
               <ProtectedRoute>
                 <MainLayout>
                   <NewUserRegistration />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />ViewDonors
+          <Route
+            path="/donors"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewDonors />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donors/:donorid"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewDonorCard />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/allnews"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewNews />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/allnews/:newsid"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewNewsCard />
                 </MainLayout>
               </ProtectedRoute>
             }

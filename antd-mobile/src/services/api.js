@@ -305,9 +305,47 @@ export const getBreakingNews = async (jwt) => {
   }
 }
 
+
+export const getSingleNews = async (newsId, jwt) => {
+  try {
+    const response = await api.get(`/breakingmessages/${newsId}`, {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+
 export const getDonners = async (jwt) => {
   try {
     const response = await api.get("/donners", {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+
+export const getSingleDonner = async (donorId, jwt) => {
+  try {
+    const response = await api.get(`/donners/${donorId}`, {
+      params: {
+        populate: "*", // Populates all relations
+      },
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "multipart/form-data",
@@ -363,14 +401,36 @@ export const uploadImage = async (formData, jwt) => {
   }
 };
 
-export const createQRCODEBySuperAdmin = async (data) => {
+export const createQRCODEBySuperAdmin = async (data, jwt) => {
+  //   try {
+  //     console.log(data, "API DATA")
+
+  //     const response = await api.post('/donationqrcodes', {
+  //       { data: data },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${jwt}`, // Use correct token
+  //           "Content-Type": "application/json",
+  //         }
+  //       }
+  //     });
+  //   return response.data
+  // } catch (error) {
+  //   throw error.response?.data || error.message
+  // }
   try {
-    const response = await api.post('/donationqrcodes', {
-      ...data
-    });
-    return response.data
+    const reaponse = await api.post(`/donationqrcodes`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return reaponse.data
   } catch (error) {
-    throw error.response?.data || error.message
+    console.error("error", error)
   }
 }
 

@@ -50,17 +50,14 @@ const FeatureTiles = () => {
         <DynamicQrGenerater /> :
         ""
       }
-      
+
       <BreakingNewsMarqueeEN />
-
-
 
       {user?.emeelanrole?.includes("ADMIN", "CENTER", "SUPERADMIN") ? (
         <QuickShortcutsAdmin />
       ) : (
         <QuickShortcutsUser />
       )}
-
 
       {/* <ShareProfileCard userId={user?.id} / > */}
 

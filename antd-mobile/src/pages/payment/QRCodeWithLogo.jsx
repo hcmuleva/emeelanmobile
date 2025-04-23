@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SafeArea,
   Button,
@@ -15,9 +15,10 @@ import {
 import { QRCodeSVG } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
 import { createQRCODEBySuperAdmin, getUserById, updateUser, updateUserData, uploadImage } from '../../services/api';
+import { AuthContext } from '../../context/AuthContext';
 
 const DynamicUPIPaymentQR = () => {
-  const jwt = localStorage.getItem('jwt');
+  const { jwt } = useContext(AuthContext);
   const [form] = Form.useForm();
   const [merchantForm] = Form.useForm();
   const [qrValue, setQrValue] = useState('');
@@ -38,14 +39,7 @@ const DynamicUPIPaymentQR = () => {
     return upiUrl.toString();
   };
 
-
   const handleMerchantSetup = async (values) => {
-    const user = await getUserById(values.adminId, jwt);
-    if (!user || !["ADMIN", "SUPERADMIN"].includes(user.emeelanrole)) {
-      Toast.show({ content: 'Admin ID is invalid or unauthorized.' });
-      return;
-    }
-
     setMerchantData(values);
 
     const upiLink = generateUPILink(
@@ -85,8 +79,18 @@ const DynamicUPIPaymentQR = () => {
           const uploaded = await uploadImage(formData, jwt);
           const uploadedFile = uploaded[0];
 
-          await createQRCODEBySuperAdmin({ qrimage: uploadedFile.id, orgsku: merchantData.orgsku });
-          const updated = { ...merchantData, qrimage: uploadedFile };
+          const data = {
+            qrimage: uploadedFile.id,
+            orgsku: merchantData.orgsku,
+            title: merchantData.title,
+            cause: merchantData.cause,
+            createdby: merchantData.createdby
+          }
+
+          console.log(data, "QR DATA")
+
+
+          const updated = await createQRCODEBySuperAdmin(data, jwt);
           localStorage.setItem('user', JSON.stringify(updated));
           Toast.show({ content: 'Admin QR image uploaded successfully!' });
         } catch (err) {
@@ -122,8 +126,6 @@ const DynamicUPIPaymentQR = () => {
       Toast.show({ content: 'UPI link copied!' });
     });
   };
-
-
 
   const downloadQR = () => {
     const svg = document.getElementById('upi-qrcode-svg');
@@ -210,6 +212,15 @@ const DynamicUPIPaymentQR = () => {
           <h1 style={titleStyle}>UPI Payment Setup</h1>
           <Card title="Merchant Details">
             <Form form={merchantForm} onFinish={handleMerchantSetup} mode="card" layout="vertical">
+              <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Please enter Title' }]}>
+                <Input placeholder="Enter Title" />
+              </Form.Item>
+              <Form.Item label="Cause" name="cause" rules={[{ required: true, message: 'Please enter Cause' }]}>
+                <Input placeholder="Enter Cause" />
+              </Form.Item>
+              <Form.Item label="Created By" name="createdby" rules={[{ required: true, message: 'Please enter Created by fullname' }]}>
+                <Input placeholder="Enter Created by (Full-Name)" />
+              </Form.Item>
               <Form.Item
                 name="orgsku"
                 label={<><span style={{ color: 'red' }}>*</span> Cast</>}
@@ -312,7 +323,7 @@ const DynamicUPIPaymentQR = () => {
               <div style={verticalGap}>
                 <Button block onClick={copyToClipboard}>Copy UPI Link</Button>
                 <Button block color="primary" onClick={downloadQR}>Download QR Code</Button>
-                <Button block color="primary" onClick={handleQrUpdate}>Update Admin</Button>
+                <Button block color="primary" onClick={handleQrUpdate}>Set Qr Code</Button>
                 <Button block onClick={() => setMerchantData(null)}>Reset Setup</Button>
               </div>
 

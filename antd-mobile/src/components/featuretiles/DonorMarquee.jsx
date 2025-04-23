@@ -1,8 +1,8 @@
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { GiftOutline } from "antd-mobile-icons";
-import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { getDonners } from "../../services/api";
-import { useNavigate } from "react-router-dom";
 
 export default function DonorMarquee() {
   const { jwt } = useContext(AuthContext);
@@ -22,12 +22,25 @@ export default function DonorMarquee() {
       }
     };
     fetchDonors();
-  }, []);
+  }, [jwt]);
 
   const truncateWords = (text = "", limit = 2) => {
     if (typeof text !== "string") return "";
     const words = text.trim().split(" ");
     return words.slice(0, limit).join(" ") + (words.length > limit ? "..." : "");
+  };
+
+  const getProfileSrc = (attr) => {
+    if (attr?.photo?.data?.attributes?.url) {
+      return attr.photo.data.attributes.url;
+    }
+    if (attr?.gender?.toUpperCase() === "MALE") {
+      return "/assets/man-user-circle-icon.png";
+    }
+    if (attr?.gender?.toUpperCase() === "FEMALE") {
+      return "/assets/woman-user-circle-icon.png";
+    }
+    return "/assets/question-mark-circle-outline-icon.png";
   };
 
   return (
@@ -106,16 +119,20 @@ export default function DonorMarquee() {
                     boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
                     width: "240px",
                     cursor: "pointer",
-                    verticalAlign: "top"
+                    verticalAlign: "top",
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <img
-                      src={attr?.profileImage || "/placeholder.png"}
+                      src={getProfileSrc(attr)}
                       alt="Profile"
                       width="40"
                       height="40"
-                      style={{ borderRadius: "50%", marginRight: "12px" }}
+                      style={{
+                        borderRadius: "50%",
+                        marginRight: "12px",
+                        objectFit: "cover",
+                      }}
                     />
                     <div>
                       <div style={{ fontWeight: "bold", fontSize: "14px" }}>
@@ -133,25 +150,27 @@ export default function DonorMarquee() {
                       marginTop: "6px",
                       whiteSpace: "normal",
                       overflow: "hidden",
-                      textOverflow: "ellipsis"
+                      textOverflow: "ellipsis",
                     }}
                   >
                     <span style={{ color: "#555" }}>Purpose: </span>
-                    {truncateWords(attr?.purpose, 1)}
+                    {truncateWords(attr?.purpose, 5)}
                   </div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "#555",
-                      marginTop: "4px",
-                      whiteSpace: "normal",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
-                    }}
-                  >
-                    <span style={{ fontWeight: "500" }}>Description: </span>
-                    {truncateWords(attr?.description, 1)}
-                  </div>
+                  {attr?.description && (
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#555",
+                        marginTop: "4px",
+                        whiteSpace: "normal",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      <span style={{ fontWeight: "500" }}>Description: </span>
+                      {truncateWords(attr?.description, 5)}
+                    </div>
+                  )}
                 </div>
               );
             })}

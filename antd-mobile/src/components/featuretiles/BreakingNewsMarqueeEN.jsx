@@ -38,7 +38,7 @@ export default function BreakingNewsMarqueeEN() {
         <Button
           size="mini"
           color="primary"
-          onClick={() => navigate('/news')}
+          onClick={() => navigate('/allnews')}
           style={{ borderRadius: '16px', padding: '2px 12px' }}
         >
           View All News
@@ -63,7 +63,7 @@ export default function BreakingNewsMarqueeEN() {
           {[...breakingMessages, ...breakingMessages].map((news, index) => (
             <div
               key={index}
-              onClick={() => navigate(`/news/${news.id}`)}
+              onClick={() => navigate(`/allnews/${news.id}`)}
               style={{
                 display: 'inline-block',
                 minWidth: '250px',
@@ -76,7 +76,7 @@ export default function BreakingNewsMarqueeEN() {
               }}
             >
               <img
-                src={news.attributes?.image?.imageUrl || "/assets/news-placeholder.png"}
+                src={news?.attributes?.image?.data?.attributes?.url || "/assets/news-placeholder.png"}
                 alt="news-image"
                 style={{
                   width: '100%',
