@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Form, Input, Selector, Button, Tabs, Toast, Space } from "antd-mobile";
+import { Button, Form, Input, Selector, Space, Tabs, Toast } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const levelOptions = [
   { label: "Primary", value: "PRIMARY" },
@@ -65,7 +65,7 @@ const EducationInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "Education data saved!" });

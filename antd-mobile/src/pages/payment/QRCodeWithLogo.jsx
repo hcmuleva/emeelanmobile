@@ -1,21 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
 import {
-  SafeArea,
   Button,
-  Input,
-  Toast,
   Card,
   Form,
-  Space,
-  Switch,
+  Input,
   List,
   NavBar,
   Radio,
+  SafeArea,
+  Switch,
+  Toast
 } from 'antd-mobile';
 import { QRCodeSVG } from 'qrcode.react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createQRCODEBySuperAdmin, getUserById, updateUser, updateUserData, uploadImage } from '../../services/api';
 import { AuthContext } from '../../context/AuthContext';
+import { createQRCODEBySuperAdmin, uploadImage } from '../../services/api';
 
 const DynamicUPIPaymentQR = () => {
   const { jwt } = useContext(AuthContext);

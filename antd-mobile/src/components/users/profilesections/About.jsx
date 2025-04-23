@@ -1,7 +1,7 @@
+import { Button, Form, Input, Space, TextArea, Toast } from "antd-mobile";
 import React, { useContext, useState } from "react";
-import { Form, Input, TextArea, Button, Toast, Space } from "antd-mobile";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const About = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -26,7 +26,7 @@ const About = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "About Me updated!" });

@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Form, Input, Selector, Button, Toast, Radio, Divider, Card, Space, Tag, Image } from "antd-mobile";
+import { Button, Card, Form, Image, Input, Radio, Space, Toast } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
+import { getPincode, updateUser } from "../../../services/api";
 import TitleSelector from "../../common/TitleSelector";
-import { updateUserData, getPincode } from "../../../services/api";
 
 const maritalOptions = [
   { label: "Single", value: "Never Married" },
@@ -12,6 +12,7 @@ const maritalOptions = [
 ];
 
 export default function BasicInfoUpdate() {
+
   const [form] = Form.useForm();
   const { user, setUser } = useContext(AuthContext);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -65,7 +66,7 @@ export default function BasicInfoUpdate() {
 
   const handleFinish = async (values) => {
     try {
-      await updateUserData(values, user.id);
+      await updateUser(values, user.id);
       const updatedUser = { ...user, ...values };
 
       setUser(updatedUser);
@@ -74,7 +75,7 @@ export default function BasicInfoUpdate() {
       Toast.show({ icon: "success", content: "Profile updated!" });
       setIsEditMode(false);
     } catch (err) {
-      console.log("updateUserData Error", err);
+      console.log("updateUser Error", err);
       Toast.show({ icon: "fail", content: "Update failed." });
     }
   };

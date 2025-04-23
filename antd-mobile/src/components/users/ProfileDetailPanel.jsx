@@ -1,15 +1,14 @@
+import { Button, Space, Tag, Toast } from "antd-mobile";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 import {
   customsingleuser,
   newConnectionRequest,
   updateConnectionRequest,
-  updateConnectionStatus,
-  updateUserData,
+  updateUserData
 } from "../../services/api";
-import { AuthContext } from "../../context/AuthContext";
 import UserDetails from "./useractions/UserDetails";
-import { Button, Card, Space, Tag, Toast } from "antd-mobile";
 
 const ProfileDetailPanel = () => {
   const { user, jwt } = useContext(AuthContext);
@@ -43,7 +42,7 @@ const ProfileDetailPanel = () => {
         sender: user.id,
         receiver: profileid,
         status: "PENDING",
-        message:`User Status is pending from id ${profileid}`
+        message: `User Status is pending from id ${profileid}`
       });
       Toast.show({ icon: "success", content: "Connection request sent" });
 
@@ -121,56 +120,56 @@ const ProfileDetailPanel = () => {
     if (role === "MEELAN") {
       if (!connRequest) {
         return (
-          <Button 
-          style={{ 
-            backgroundColor: '#8B0000', 
-            color: 'white',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-            borderRadius: '4px',
-            border: 'none'
-          }} 
-          loading={loading} 
-          onClick={handleRequest}
-        >
-          Request
-        </Button>
-      );
-    } else if (isSender) {
-      return (
-        <Tag color={status === "ACCEPTED" ? "green" : "red"}>
-          Your request status: {status}
-        </Tag>
-      );
-    } else if (isReceiver && status === "PENDING") {
-      return (
-        <Space>
           <Button
-            style={{ 
-              backgroundColor: '#4CAF50', 
+            style={{
+              backgroundColor: '#8B0000',
               color: 'white',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
               borderRadius: '4px',
               border: 'none'
             }}
             loading={loading}
-            onClick={() => handleConnectionUpdate("ACCEPTED")}
+            onClick={handleRequest}
           >
-            Accept
+            Request
           </Button>
-          <Button
-            style={{ 
-              backgroundColor: '#8B0000', 
-              color: 'white',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-              borderRadius: '4px',
-              border: 'none'
-            }}
-            loading={loading}
-            onClick={() => handleConnectionUpdate("DECLINED")}
-          >
-            Decline
-          </Button>
-        </Space>
+        );
+      } else if (isSender) {
+        return (
+          <Tag color={status === "ACCEPTED" ? "green" : "red"}>
+            Your request status: {status}
+          </Tag>
+        );
+      } else if (isReceiver && status === "PENDING") {
+        return (
+          <Space>
+            <Button
+              style={{
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                borderRadius: '4px',
+                border: 'none'
+              }}
+              loading={loading}
+              onClick={() => handleConnectionUpdate("ACCEPTED")}
+            >
+              Accept
+            </Button>
+            <Button
+              style={{
+                backgroundColor: '#8B0000',
+                color: 'white',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                borderRadius: '4px',
+                border: 'none'
+              }}
+              loading={loading}
+              onClick={() => handleConnectionUpdate("DECLINED")}
+            >
+              Decline
+            </Button>
+          </Space>
         );
       } else if (isReceiver && status !== "PENDING") {
         return (
@@ -253,7 +252,7 @@ const ProfileDetailPanel = () => {
           "Loading..."
         )}
       </div>
-  
+
       {/* Sticky Footer */}
       <div style={{
         position: 'sticky',
@@ -267,7 +266,7 @@ const ProfileDetailPanel = () => {
         {renderActionButtons()}
       </div>
     </div>
-  );  
+  );
 };
 
 export default ProfileDetailPanel;

@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Form, Input, Selector, Button, Toast, Space, TextArea, Tabs } from "antd-mobile";
+import { Button, Form, Input, Selector, Space, Tabs, TextArea, Toast } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const professionOptions = [
   { label: "Job", value: "JOB" },
@@ -67,7 +67,7 @@ const ProfessionInfo = () => {
       mybasicdata: { ...user.mybasicdata, professions },
     };
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "Profession data saved!" });

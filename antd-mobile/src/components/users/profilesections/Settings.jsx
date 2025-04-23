@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
-import { Form, Switch, Button, Toast, Space } from "antd-mobile";
+import { Button, Form, Space, Switch, Toast } from "antd-mobile";
 import { CheckOutline, CloseOutline } from "antd-mobile-icons";
+import React, { useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 export default function Settings() {
   const { user, setUser } = useContext(AuthContext);
@@ -26,7 +26,7 @@ export default function Settings() {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
