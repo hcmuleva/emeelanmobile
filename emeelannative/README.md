@@ -1,50 +1,126 @@
-# Welcome to your Expo app 👋
+# EMeelanReactNative
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Added Basic Structure to ReactNative App
 
-## Get started
+p/app
+├── index.js                    # Main entry point with AppWithAuth component
+├── App.js                      # Routes configuration only
+├── /contexts
+│   └── AuthContext.js          # Authentication context and provider(Use Dummy Data)
+├── /screens
+│   ├── SplashScreen.jsx        # Loading screen
+│   ├── /public
+│   │   └── LoginScreen.js      # Public login screen
+│   └── /private
+│       └── HomeScreen.js       # Protected home screen
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
+# React Native Authentication Flow
 
-2. Start the app
+A React Native application built with Expo that demonstrates a complete authentication flow with public and private routing.
 
-   ```bash
-    npx expo start
-   ```
+## Features
 
-In the output, you'll find options to open the app in a
+- Public and private route handling
+- Authentication with dummy user data
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+/app
+  │
+  ├── /contexts
+  │   └── AuthContext.js          # Authentication context and provider
+  ├── /screens
+  │   ├── SplashScreen.jsx        # Loading screen
+  │   ├── /public
+  │   │   └── LoginScreen.js      # Public login screen
+  │   └── /private
+  │       └── HomeScreen.js       # Protected home screen
+  │ 
+  │ 
+  ├── index.js                    # Main entry point with AppWithAuth component
+  ├── App.js                      # Routes configuration only
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Prerequisites
 
-## Learn more
+- Node.js (v14 or newer)
+- npm or yarn
+- Expo CLI
 
-To learn more about developing your project with Expo, look at the following resources:
+## Installation
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-## Join the community
+2. Install Expo CLI globally if you haven't already:
+   ```bash
+   npm install -g expo-cli
+   # or
+   yarn global add expo-cli
+   ```
 
-Join our community of developers creating universal apps.
+## Required Dependencies
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Make sure to install these packages:
+
+```bash
+npm install @react-navigation/native @react-navigation/stack react-native-screens react-native-safe-area-context react-native-gesture-handler @react-native-async-storage/async-storage
+# or
+yarn add @react-navigation/native @react-navigation/stack react-native-screens react-native-safe-area-context react-native-gesture-handler @react-native-async-storage/async-storage
+```
+
+## Running the App
+
+1. Start the Expo development server:
+   ```bash
+   expo start
+   # or
+   npm start
+   # or
+   yarn start
+   ```
+
+2. Run on a simulator or device:
+   - For iOS simulator: Press `i` in the terminal or click "Run on iOS simulator" in the Expo DevTools
+   - For Android emulator: Press `a` in the terminal or click "Run on Android device/emulator" in the Expo DevTools
+   - For a physical device: Scan the QR code with the Expo Go app (available on [iOS App Store](https://apps.apple.com/app/apple-store/id982107779) and [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent))
+
+## Testing the Authentication
+
+Use the following credentials to log in:
+
+- Email: `user@hph.com`
+- Password: `welcome123`
+
+Or:
+
+- Email: `admin@hph.com`
+- Password: `admin123`
+
+## Development Commands
+
+- `expo start`: Start the development server
+- `expo start --android`: Start the development server and open Android emulator
+- `expo start --ios`: Start the development server and open iOS simulator
+- `expo start --web`: Start the development server and open in web browser
+- `expo eject`: Eject from Expo managed workflow to bare workflow
+
+## Building for Production
+
+To create a production build:
+
+```bash
+expo build:android  # For Android APK or bundle
+expo build:ios      # For iOS IPA
+expo build:web      # For web deployment
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
