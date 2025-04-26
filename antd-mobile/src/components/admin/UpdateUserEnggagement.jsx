@@ -16,14 +16,10 @@ const UpdateStatusToEnggaged = () => {
     setLoading(true);
 
     try {
-      const row = await findConnectionRequest(senderId, receiverId);
+      console.log("sender", senderId, "receiver", receiverId)
 
-      if (!row) {
-        Toast.show({ content: "No matching connection request found" });
-        return;
-      }
 
-      const result = await updateConnectionRequest(row.id, { status: "ENGGAGED", message:`Congratulation for engaggement of ${receiverId} with ${senderId}` });
+      const result = await updateConnectionRequest({ sender: senderId, receiver: receiverId, status: "ENGGAGED", message: `Congratulation for engaggement of ${receiverId} with ${senderId}` });
 
       if (result) {
         Toast.show({ content: "Status updated to ENGGAGED ✅" });

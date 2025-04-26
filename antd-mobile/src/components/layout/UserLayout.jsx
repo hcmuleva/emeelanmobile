@@ -16,6 +16,8 @@ export default function UserLayout({ children }) {
   console.log("Notification ", JSON.stringify(notificationStats))
   const userId = JSON.parse(localStorage.getItem("user"))?.id;
 
+  console.log(notificationStats, "NEw")
+
   const footerItems = [
     { icon: <HomeOutlined style={{ fontSize: 24 }} />, key: "home" },
     { icon: <TeamOutline style={{ fontSize: 24 }} />, key: "profiles" },
@@ -44,10 +46,6 @@ export default function UserLayout({ children }) {
       {/* StatusNotification hooks into Ably */}
 
       <StatusNotification userId={userId} setNotificationStats={setNotificationStats} />
-
-      {/* <div>
-        <div style={{ height: "70px" }} />
-      </div> */}
 
       <div
         style={{

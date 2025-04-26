@@ -1,5 +1,5 @@
 import { Card, Grid } from "antd-mobile";
-import { GiftOutline, HeartOutline, TeamOutline, UserAddOutline } from "antd-mobile-icons";
+import { TeamOutline, UserAddOutline } from "antd-mobile-icons";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -10,7 +10,7 @@ export default function QuickShortcutsAdmin() {
 
   const shortcuts = [
     { icon: <TeamOutline />, text: 'Verify Profiles', path: '/profiles' },
-    { icon: <UserAddOutline />, text: 'Create News', path: '/status' },
+    { icon: <UserAddOutline />, text: 'Create News', path: '/create-news' },
   ];
   return (
     <Card style={{

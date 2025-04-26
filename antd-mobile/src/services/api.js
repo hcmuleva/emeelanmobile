@@ -145,12 +145,13 @@ export const newConnectionRequest = async (data) => {
   }
 }
 //connectionrequest
-export const updateConnectionRequest = async (id, data) => {
+export const updateConnectionRequest = async (data) => {
   const jwt = localStorage.getItem("jwt")
   console.log("DATA", data)
   console.log("jwt", jwt)
+  const id = 1;
   try {
-    const reaponse = await api.put(`/connectionrequests/${id}`,
+    const reaponse = await api.put(`/custom-requests/${id}`,
       { data: data },
       {
         headers: {
@@ -169,29 +170,15 @@ export const getEngagedRequests = async (page = 1, pageSize = 10) => {
 
   try {
     const response = await api.get(
-      `/connectionrequests?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort[0]=updatedAt:desc&filters[status][$eq]=ENGGAGED&populate[sender][populate]=*&populate[receiver][populate]=*`,
+      `/custom-requests`,
       {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }
     );
+    return response.data
 
-    return {
-      data: response.data.data.map((item) => ({
-        id: item.id,
-        updatedAt: item.attributes.updatedAt,
-        sender: {
-          ...item.attributes.sender?.data?.attributes,
-          id: item.attributes.sender?.data?.id,
-        },
-        receiver: {
-          ...item.attributes.receiver?.data?.attributes,
-          id: item.attributes.receiver?.data?.id,
-        },
-      })),
-      pagination: response.data.meta.pagination,
-    };
   } catch (error) {
     console.error("Failed to fetch ENGAGED requests", error);
     return {
@@ -339,6 +326,22 @@ export const getDonners = async (jwt) => {
     throw error.response?.data?.message || "Get failed";
   }
 }
+export const createAndUpdateDonners = async (data, jwt) => {
+  try {
+    const reaponse = await api.post(`/donners`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
+  }
+}
 
 export const getSingleDonner = async (donorId, jwt) => {
   try {
@@ -402,22 +405,6 @@ export const uploadImage = async (formData, jwt) => {
 };
 
 export const createQRCODEBySuperAdmin = async (data, jwt) => {
-  //   try {
-  //     console.log(data, "API DATA")
-
-  //     const response = await api.post('/donationqrcodes', {
-  //       { data: data },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${jwt}`, // Use correct token
-  //           "Content-Type": "application/json",
-  //         }
-  //       }
-  //     });
-  //   return response.data
-  // } catch (error) {
-  //   throw error.response?.data || error.message
-  // }
   try {
     const reaponse = await api.post(`/donationqrcodes`,
       { data: data },
@@ -453,13 +440,18 @@ export const updateUser = async (data, userId) => {
 }
 // new Apicalls start
 // update Data of me,
-export const updateUserData = async (data, userId) => {
+export const updateUserData = async (data, userId, jwt) => {
   try {
     // console.log("Sending update:", { photos: photoIds });
-
-    const response = await api.put(`/customupdateuser/${userId}`, {
-      ...data,
-    });
+    console.log(data, userId)
+    const response = await api.put(`/customupdateuser/${userId}`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      })
     return response.data;
 
   } catch (error) {
@@ -531,12 +523,18 @@ const filteredUsers = async () => {
 
 export const createBreakingNews = async (data, jwt) => {
   try {
-    const response = await api.post("/breakingmessages", {
-      ...data
-    })
-    return response.data
-  } catch (err) {
-    throw err.response?.data?.message || "Error in creating breaking news"
+    const reaponse = await api.post(`/breakingmessages`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
   }
 }
 

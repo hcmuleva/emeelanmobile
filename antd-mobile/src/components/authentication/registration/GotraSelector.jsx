@@ -20,7 +20,7 @@ const GotraSelector = ({ gotra_for, gotraData, customdata, setCustomdata }) => {
   return (
     <Form.Item
       name={name}
-    
+
     >
       {" "}
       <div
