@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comunitymembers",
+  "info": {
+    "singularName": "comunitymember",
+    "pluralName": "comunitymembers",
+    "displayName": "comunitymember"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "role": {
+      "type": "string"
+    },
+    "users_permissions_users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "comunitymembers"
+    },
+    "communities": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::community.community",
+      "inversedBy": "comunitymembers"
+    },
+    "startdate": {
+      "type": "date"
+    },
+    "enddate": {
+      "type": "date"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "ACTIVE",
+        "RESIGNED",
+        "RETIRED",
+        "BLOCKED",
+        "REMOVED",
+        "SUSPENDED"
+      ]
+    }
+  }
+}

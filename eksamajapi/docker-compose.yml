@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  strapi:
+    container_name: baderapi
+    image: baderapi:1.0
+    restart: always
+    environment:
+      - DATABASE_CLIENT=postgres
+      - DATABASE_HOST=db
+      - NODE_ENV=development
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=baderdbdev
+      - DATABASE_USERNAME=strapi
+      - DATABASE_PASSWORD=strapi
+      - CENTRALIZED_SERVER=https://eksamaj.in/hphmeelan
+    ports:
+      - 1337:1337
+    volumes:
+      - ./app:/srv/app
+    depends_on:
+      - db
+    
+    
+
+  db:
+    container_name: baderdb
+    image: postgres
+    restart: always
+    ports:
+      - 5434:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    environment:
+      - POSTGRES_USER=strapi
+      - POSTGRES_PASSWORD=strapi
+      - POSTGRES_DB=baderdbdev

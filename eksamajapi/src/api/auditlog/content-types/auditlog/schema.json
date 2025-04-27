@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "auditlogs",
+  "info": {
+    "singularName": "auditlog",
+    "pluralName": "auditlogs",
+    "displayName": "auditlog",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userstatus": {
+      "type": "string"
+    },
+    "changedby": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "auditlogs"
+    },
+    "userid": {
+      "type": "string"
+    },
+    "emeelanrole": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "kind": "collectionType",
+  "collectionName": "donners",
+  "info": {
+    "singularName": "donner",
+    "pluralName": "donners",
+    "displayName": "donner",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "fathername": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "string"
+    },
+    "husband": {
+      "type": "string"
+    },
+    "gotra": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "cast": {
+      "type": "string"
+    },
+    "donationreciever": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "donners"
+    },
+    "donnertype": {
+      "type": "enumeration",
+      "enum": [
+        "INDIVIDUAL",
+        "FAMILY",
+        "GROUP",
+        "SANSTHA",
+        "OTHER"
+      ]
+    },
+    "receipt": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "maritial": {
+      "type": "enumeration",
+      "enum": [
+        "MARRIED",
+        "BACHELOR",
+        "DIVEROCED",
+        "NA"
+      ]
+    }
+  }
+}

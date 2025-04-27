@@ -1,0 +1,84 @@
+{
+  "kind": "collectionType",
+  "collectionName": "addresses",
+  "info": {
+    "singularName": "address",
+    "pluralName": "addresses",
+    "displayName": "address",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "addresstype": {
+      "type": "string"
+    },
+    "housename": {
+      "type": "string"
+    },
+    "landmark": {
+      "type": "string"
+    },
+    "tehsil": {
+      "type": "string"
+    },
+    "village": {
+      "type": "string"
+    },
+    "district": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "pincode": {
+      "type": "integer"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "addresses"
+    },
+    "latitude": {
+      "type": "float"
+    },
+    "longitude": {
+      "type": "float"
+    },
+    "from": {
+      "type": "date"
+    },
+    "enddate": {
+      "type": "date"
+    },
+    "address_raw": {
+      "type": "text"
+    },
+    "userroles": {
+      "type": "enumeration",
+      "enum": [
+        "USER",
+        "SUPER_ADMIN",
+        "ADMIN"
+      ]
+    },
+    "record_create_by_user": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "org": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::org.org",
+      "mappedBy": "address"
+    }
+  }
+}

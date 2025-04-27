@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "connectionrequests",
+  "info": {
+    "singularName": "connectionrequest",
+    "pluralName": "connectionrequests",
+    "displayName": "connectionrequest",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "ACCEPTED",
+        "APPROVED",
+        "REJECTED",
+        "ENGGAGED",
+        "BLOCKED",
+        "SUSPEND"
+      ]
+    },
+    "message": {
+      "type": "text"
+    },
+    "sender": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "sentRequests"
+    },
+    "receiver": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "receivedRequests"
+    }
+  }
+}

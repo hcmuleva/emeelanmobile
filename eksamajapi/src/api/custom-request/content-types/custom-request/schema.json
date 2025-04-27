@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "custom_requests",
+  "info": {
+    "singularName": "custom-request",
+    "pluralName": "custom-requests",
+    "displayName": "custom-request"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

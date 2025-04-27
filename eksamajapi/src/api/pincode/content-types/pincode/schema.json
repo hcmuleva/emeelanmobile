@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pincodes",
+  "info": {
+    "singularName": "pincode",
+    "pluralName": "pincodes",
+    "displayName": "pincode"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "officeName": {
+      "type": "string"
+    },
+    "pincode": {
+      "type": "integer"
+    },
+    "taluk": {
+      "type": "string"
+    },
+    "districtName": {
+      "type": "string"
+    },
+    "stateName": {
+      "type": "string"
+    }
+  }
+}
