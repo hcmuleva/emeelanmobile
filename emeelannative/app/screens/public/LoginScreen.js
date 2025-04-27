@@ -77,10 +77,6 @@ export default function LoginScreen() {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Text>
           </TouchableOpacity>
-          
-          <Text style={styles.hint}>
-            Hint: use user@hph.com / welcome123
-          </Text>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -136,10 +132,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  hint: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: '#888',
-    fontSize: 14,
-  }
 });

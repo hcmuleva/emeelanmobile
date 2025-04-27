@@ -2,17 +2,8 @@
 
 Added Basic Structure to ReactNative App
 
-p/app
-├── index.js                    # Main entry point with AppWithAuth component
-├── App.js                      # Routes configuration only
-├── /contexts
-│   └── AuthContext.js          # Authentication context and provider(Use Dummy Data)
-├── /screens
-│   ├── SplashScreen.jsx        # Loading screen
-│   ├── /public
-│   │   └── LoginScreen.js      # Public login screen
-│   └── /private
-│       └── HomeScreen.js       # Protected home screen
+Added login service with api / and for to check change link at app/services/api.js
+problem in api handling?
 
 
 # React Native Authentication Flow
