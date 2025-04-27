@@ -20,7 +20,7 @@ const GotraSelector = ({ gotra_for, gotraData, customdata, setCustomdata }) => {
   return (
     <Form.Item
       name={name}
-      label={gotra_for === "MATERNAL_GOTRA" ? "NanajiGotra" : "Gotra"}
+
     >
       {" "}
       <div

@@ -1,12 +1,12 @@
 
+import { Collapse, InfiniteScroll, Input, List,Button, SearchBar, Selector } from "antd-mobile";
 import React, { useEffect, useState } from "react";
-import { List, InfiniteScroll, SearchBar, Selector, Collapse } from "antd-mobile";
-import { getPaginatedAdminUsers, getPaginatedUsers, searchUsers } from "../../../services/api"; // ✅ Import both
+import { getPaginatedUsers, searchUsers } from "../../../services/api"; // ✅ Import both
 
-import NewProfileCard from "../NewProfileCard";
 import { CollapsePanel } from "antd-mobile/es/components/collapse/collapse";
-import GotraSelector from "../../authentication/registration/GotraSelector";
 import gotraData from "../../../utils/gotra.json";
+import GotraSelector from "../../authentication/registration/GotraSelector";
+import NewProfileCard from "../NewProfileCard";
 // Helper to calculate DOB range from age range
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
@@ -20,14 +20,18 @@ const getDOBRange = (minAge, maxAge) => {
 };
 
 const AdminRoleProfiles = ({ adminProp, userrole }) => {
+
+  console.log("AdminRoleProfiles", adminProp, userrole, "userRole")
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const [search, setSearch] = useState("");
+  const [idFilter, setIdFilter] = useState('');
 
   const [marital, setMarital] = useState();
   const [profession, setProfession] = useState();
+  const [userstatus, setUserstatus] = useState();
   const [gotra, setGotra] = useState(); // Will store Gotra.Id
   const [minAge, setMinAge] = useState("");
   const [maxAge, setMaxAge] = useState("");
@@ -39,6 +43,15 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
     { label: "Widow", value: "Widow" },
     { label: "Vidur", value: "VIDUR" },
     { label: "Separated", value: "Separated" },
+  ];
+  const userstatusOptiopns = [
+    { label: "APPROVED", value: "APPROVED" },
+    { label: "UNAPPROVED", value: "UNAPPROVED" },
+    { label: "REJECTED", value: "REJECTED" },
+    { label: "BLOCKED", value: "BLOCKED" },
+    { label: "PENDING", value: "PENDING" },
+    { label: "ENGAGED", value: "ENGAGED" },
+    {label: "SUSPENDED", value: "SUSPENDED" },
   ];
 
   const professionOptions = [
@@ -61,6 +74,12 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
       if (userrole === "ADMIN") {
         filters["userstatus"] = "PENDING"
       }
+      if(userrole === "CENTER" || userrole === "SUPERADMIN"){
+        if(userstatus) filters["userstatus"] = userstatus
+        if(idFilter) filters["id"] = idFilter
+        
+
+      }
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;
@@ -69,6 +88,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
 
       let data;
       if (searchQuery) {
+        console.log("searchQuery", searchQuery)
         data = await searchUsers(searchQuery, offset, limit);
       } else {
         data = await getPaginatedUsers(offset, limit, filters);
@@ -89,6 +109,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
+      console.log("Search triggered:", inputValue);
       setSearch(inputValue);
     }, 300);
 
@@ -101,7 +122,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
     setPage(0);
     setHasMore(true);
     fetchUsers(0, search);
-  }, [search, marital, profession, gotra, minAge, maxAge]);
+  }, [search, marital, profession, gotra, userstatus, minAge, maxAge,idFilter]);
 
   return (
     <div>
@@ -119,7 +140,20 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
                 onChange={(val) => setMarital(val[0])}
               />
             </div>
-
+            <div style={{ marginBottom: 8 }}>
+        <strong>User ID:</strong>
+        <Input
+          type="number"
+          placeholder="Enter user ID"
+          value={idFilter}
+          onChange={val => setIdFilter(val)}
+          clearable
+          style={{ width: '100%', marginTop: 4 }}
+        />
+        {/* <Button color="primary" size="small" onClick={onSearchById} style={{ marginTop: 8 }}>
+          Search by ID
+        </Button> */}
+      </div>
             <div style={{ marginBottom: 8 }}>
               <strong>Profession:</strong>
               <Selector
@@ -128,6 +162,16 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
                 options={professionOptions}
                 value={[profession]}
                 onChange={(val) => setProfession(val[0])}
+              />
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <strong>Status:</strong>
+              <Selector
+                showCheckMark
+                columns={3}
+                options={userstatusOptiopns}
+                value={[userstatus]}
+                onChange={(val) => setUserstatus(val[0])}
               />
             </div>
 
@@ -140,7 +184,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
                 setCustomdata={(val) => setGotra(val.gotra)}
               />
             </div>
-
+          
             <div style={{ marginBottom: 8 }}>
               <strong>Age Range:</strong>
               <div style={{ display: "flex", gap: 10 }}>
@@ -163,13 +207,13 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
           </CollapsePanel>
         </Collapse>
       </div>
-      <SearchBar
+      {/* <SearchBar
         key="UniqueKey"
         placeholder="Search Users..."
         value={inputValue}
         onChange={val => setInputValue(val)}
         style={{ marginBottom: 10, padding: "16px" }}
-      />
+      /> */}
 
       <List>
         {users.map((user) => (

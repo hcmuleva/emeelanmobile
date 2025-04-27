@@ -1,7 +1,7 @@
+import { Button, Card, Form, Input, Space, TextArea, Toast } from "antd-mobile";
 import React, { useContext, useState } from "react";
-import { Form, Input, TextArea, Button, Toast, Space } from "antd-mobile";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const About = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -26,7 +26,7 @@ const About = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "About Me updated!" });
@@ -38,109 +38,145 @@ const About = () => {
   };
 
   return (
-    <div
+    <Card
       style={{
-        padding: 16,
-        minHeight: "100%",
-        background: "linear-gradient(135deg, #e0f7fa, #c1d5ff)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "15px"
+        borderRadius: '8px',
+        margin: '10px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #eee',
       }}
+      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      title={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>👤 About Me</span>
+        </div>
+      }
     >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 600,
-          padding: 24,
-          borderRadius: 20,
-          background: "rgba(255, 255, 255, 0.2)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-        }}
-      >
-        {isEditing ? (
-          <Form
-            form={form}
-            initialValues={aboutmeData}
-            layout="horizontal"
-            footer={
-              <Space block style={{ marginTop: 24 }}>
-                <Button
-                  block
-                  color="default"
-                  onClick={() => setIsEditing(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  block
-                  color="primary"
-                  onClick={handleSave}
-                  style={{ backgroundColor: "#004080", color: "#fff" }}
-                >
-                  Save
-                </Button>
-              </Space>
-            }
-          >
-            <h2 style={{ fontSize: 22, fontWeight: 600, color: "#003366" }}>
-              Edit About Me
-            </h2>
+      {isEditing ? (
+        <Form
+          form={form}
+          initialValues={aboutmeData}
+          layout="vertical"
+          style={{ padding: '10px 0' }}
+        >
+          <Form.Item name="about" label="About Me">
+            <TextArea
+              rows={5}
+              maxLength={500}
+              showCount
+              placeholder="Write about yourself..."
+              style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+            />
+          </Form.Item>
 
-            <Form.Item name="about" label="About Me">
-              <TextArea
-                rows={5}
-                maxLength={500}
-                showCount
-                placeholder="Write about yourself..."
-              />
-            </Form.Item>
+          <Form.Item name="height" label="Height">
+            <Input
+              placeholder="e.g. 5'6"
+              style={{ border: "1px", solid: "#ddd", borderRadius: "4px" }}
+            />
+          </Form.Item>
 
-            <Form.Item name="height" label="Height">
-              <Input placeholder="e.g. 5'6&quot;" />
-            </Form.Item>
+          <Form.Item name="hobby" label="Hobbies">
+            <Input
+              placeholder="e.g. Reading, Painting, Cycling"
+              style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+            />
+          </Form.Item>
 
-            <Form.Item name="hobby" label="Hobbies">
-              <Input placeholder="e.g. Reading, Painting, Cycling" />
-            </Form.Item>
+          <Form.Item name="color" label="Skin Tone">
+            <Input
+              placeholder="e.g. Fair, Wheatish, Dark"
+              style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+            />
+          </Form.Item>
 
-            <Form.Item name="color" label="Skin Tone">
-              <Input placeholder="e.g. Fair, Wheatish, Dark" />
-            </Form.Item>
-          </Form>
-        ) : (
-          <>
-            <h2 style={{ fontSize: 22, fontWeight: 600, color: "#003366" }}>
-              About Me
-            </h2>
-            <div style={{ fontSize: 16, margin: "12px 0" }}>
-              <b>Bio:</b> {aboutmeData.about || "Not provided"}
-            </div>
-            <div style={{ fontSize: 16, marginBottom: 8 }}>
-              <b>Height:</b> {aboutmeData.height || "Not specified"}
-            </div>
-            <div style={{ fontSize: 16, marginBottom: 8 }}>
-              <b>Hobbies:</b> {aboutmeData.hobby || "Not specified"}
-            </div>
-            <div style={{ fontSize: 16, marginBottom: 20 }}>
-              <b>Skin Tone:</b> {aboutmeData.color || "Not specified"}
-            </div>
+          <Space block style={{ marginTop: 15 }}>
             <Button
-              block
-              color="primary"
-              onClick={() => setIsEditing(true)}
-              style={{ backgroundColor: "#004080", color: "#fff" }}
+              style={{
+                backgroundColor: "#888",
+                color: "white",
+                borderRadius: "4px",
+                border: "none",
+                flex: 1
+              }}
+              onClick={() => setIsEditing(false)}
             >
-              Edit Info
+              Cancel
             </Button>
-          </>
-        )}
-      </div>
-    </div>
+            <Button
+              style={{
+                backgroundColor: "#8B0000",
+                color: "white",
+                borderRadius: "4px",
+                border: "none",
+                flex: 1
+              }}
+              onClick={handleSave}
+            >
+              Save
+            </Button>
+          </Space>
+        </Form>
+      ) : (
+        <div style={{ padding: '10px 0' }}>
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.85)',
+            borderRadius: '8px',
+            padding: '15px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #eee',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                backgroundColor: '#8B0000',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '20px'
+              }}>
+                👤
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000", marginBottom: '8px' }}>
+                  Personal Information
+                </div>
+
+                <div style={{ fontSize: 14, marginBottom: 8 }}>
+                  <strong>Bio:</strong> {aboutmeData.about || "Not provided"}
+                </div>
+                <div style={{ fontSize: 14, marginBottom: 8 }}>
+                  <strong>Height:</strong> {aboutmeData.height || "Not specified"}
+                </div>
+                <div style={{ fontSize: 14, marginBottom: 8 }}>
+                  <strong>Hobbies:</strong> {aboutmeData.hobby || "Not specified"}
+                </div>
+                <div style={{ fontSize: 14, marginBottom: 8 }}>
+                  <strong>Skin Tone:</strong> {aboutmeData.color || "Not specified"}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Button
+            block
+            style={{
+              backgroundColor: "#8B0000",
+              color: "white",
+              marginTop: 15,
+              borderRadius: "4px",
+              border: "none"
+            }}
+            onClick={() => setIsEditing(true)}
+          >
+            Edit Info
+          </Button>
+        </div>
+      )}
+    </Card>
   );
 };
 

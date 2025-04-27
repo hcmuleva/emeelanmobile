@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Form, Input, Selector, Button, Toast, Space, TextArea, Tabs } from "antd-mobile";
+import { Button, Card, Form, Input, Selector, Space, Tabs, TextArea, Toast } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const professionOptions = [
   { label: "Job", value: "JOB" },
@@ -29,10 +29,6 @@ const ProfessionInfo = () => {
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
   const [activeTab, setActiveTab] = useState(professions.length ? "view" : "edit");
-
-  useEffect(() => {
-    if (professions.length === 0) setActiveTab("edit");
-  }, [professions]);
 
   const handleEdit = (index) => {
     form.setFieldsValue(professions[index]);
@@ -67,7 +63,7 @@ const ProfessionInfo = () => {
       mybasicdata: { ...user.mybasicdata, professions },
     };
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "Profession data saved!" });
@@ -77,147 +73,229 @@ const ProfessionInfo = () => {
     }
   };
 
+  // Get appropriate emoji based on profession type
+  const getProfessionEmoji = (type) => {
+    const emojis = {
+      'JOB': '💼',
+      'BUSINESS': '🏢',
+      'FREELANCE': '💻',
+      'RESEARCH': '🔬',
+      'OTHER': '📋',
+    };
+    return emojis[type] || '💼';
+  };
+
   return (
-    <Tabs activeKey={activeTab} onChange={setActiveTab}>
-      <Tabs.Tab title="View Profession History" key="view">
-        {professions.length ? (
-          <>
-            {professions.map((prof, index) => (
-              <div
-                key={index}
-                style={{
-                  background: "linear-gradient(135deg, #89f7fe, #66a6ff)",
-                  padding: 16,
-                  borderRadius: 20,
-                  marginBottom: 20,
-                }}
-              >
-                <div
+    <Card
+      style={{
+        borderRadius: '8px',
+        margin: '10px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #eee',
+      }}
+      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      title={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>💼 Professional History</span>
+        </div>
+      }
+    >
+      <Tabs
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        style={{
+          '--title-active-color': '#8B0000',
+          '--active-line-color': '#8B0000',
+        }}
+      >
+        <Tabs.Tab title="View Profession History" key="view">
+          {professions.length > 0 ? (
+            <>
+              {professions.map((prof, index) => (
+                <Card
+                  key={index}
                   style={{
-                    background: "rgba(255, 255, 255, 0.85)",
-                    borderRadius: 20,
-                    padding: 16,
-                    boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
+                    margin: '10px 0',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                    border: '1px solid #eee',
                   }}
                 >
-                  <div style={{ fontSize: 20, fontWeight: "bold", color: "#003366" }}>
-                    🔧 {prof.title} <span style={{ fontSize: 14 }}>({prof.type})</span>
-                  </div>
-                  <div style={{ fontSize: 16, marginBottom: 4 }}>
-                    🏢 <b>{prof.organization}</b> | 📍 {prof.location}
-                  </div>
-                  <div style={{ fontSize: 14, marginBottom: 8 }}>
-                    🗓 {prof.fromYear} – {prof.toYear || "Present"}
-                  </div>
-                  {prof.details && (
-                    <div style={{ fontSize: 14, fontStyle: "italic", marginBottom: 6 }}>
-                      “{prof.details}”
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: '#8B0000',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '20px'
+                    }}>
+                      {getProfessionEmoji(prof.type)}
                     </div>
-                  )}
-                  <div style={{ fontSize: 14 }}>
-                    💰 <b>Salary:</b> ₹{prof.salary} | ⏳ <b>Experience:</b> {prof.totalExperience} years
+                    <div>
+                      <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000" }}>
+                        {prof.title}
+                      </div>
+                      <div style={{ fontSize: 14, color: "#666" }}>
+                        {prof.organization}
+                      </div>
+                    </div>
                   </div>
 
-                  <Space justify="between" style={{ marginTop: 12 }}>
-                    <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
+                  <div style={{ margin: '10px 0', fontSize: 14, color: "#333" }}>
+                    <div style={{ margin: '3px 0' }}><strong>Type:</strong> {prof.type}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Duration:</strong> {prof.fromYear} - {prof.toYear || "Present"}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Location:</strong> {prof.location}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Salary:</strong> ₹{prof.salary}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Experience:</strong> {prof.totalExperience} years</div>
+                    {prof.details && <div style={{ margin: '3px 0' }}><strong>Details:</strong> {prof.details}</div>}
+                  </div>
+
+                  <Space block justify="between" style={{ marginTop: 10 }}>
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: "#8B0000",
+                        color: "white",
+                        borderRadius: "4px",
+                        border: "none"
+                      }}
+                      onClick={() => handleEdit(index)}
+                    >
                       Edit
                     </Button>
-                    <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: "#888",
+                        color: "white",
+                        borderRadius: "4px",
+                        border: "none"
+                      }}
+                      onClick={() => handleDelete(index)}
+                    >
                       Delete
                     </Button>
                   </Space>
-                </div>
-              </div>
-            ))}
+                </Card>
+              ))}
+
+            </>
+          ) : (
+            <div>No profession records yet.</div>
+          )}
+          <Button
+            block
+            style={{
+              backgroundColor: "#8B0000",
+              color: "white",
+              marginTop: 15,
+              borderRadius: "4px",
+              border: "none"
+            }}
+            onClick={handleSaveToServer}
+          >
+            Save All Profession Info
+          </Button>
+        </Tabs.Tab>
+
+        <Tabs.Tab title="Add / Edit Profession" key="edit">
+          <Form
+            form={form}
+            initialValues={defaultFormValues}
+            layout="vertical"
+            style={{ padding: '10px 0' }}
+          >
+            <Form.Item name="type" label="Profession Type">
+              <Selector
+                options={professionOptions}
+                value={form.getFieldValue("type")}
+                onChange={(val) => form.setFieldValue("type", val)}
+                style={{ '--checked-color': '#8B000040' }}
+              />
+            </Form.Item>
+
+            <Form.Item name="title" label="Title / Role">
+              <Input
+                placeholder="e.g. Software Engineer, Founder"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="organization" label="Organization">
+              <Input
+                placeholder="e.g. Google, MyStartup"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="fromYear" label="From (Year)">
+              <Input
+                type="number"
+                placeholder="e.g. 2019"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="toYear" label="To (Year)">
+              <Input
+                type="text"
+                placeholder="e.g. 2023 or Present"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="location" label="Location">
+              <Input
+                placeholder="e.g. Bengaluru"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="salary" label="Salary">
+              <Input
+                type="number"
+                placeholder="e.g. 60000"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="totalExperience" label="Total Experience (Years)">
+              <Input
+                type="number"
+                placeholder="e.g. 3"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="details" label="Details">
+              <TextArea
+                placeholder="Describe responsibilities or key highlights"
+                rows={3}
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
             <Button
               block
-              style={{ backgroundColor: "#003366", color: "white" }}
-              onClick={handleSaveToServer}
+              style={{
+                backgroundColor: "#8B0000",
+                color: "white",
+                marginTop: 15,
+                borderRadius: "4px",
+                border: "none"
+              }}
+              onClick={handleAddOrUpdate}
             >
-              Save Profession Info
+              {editingIndex !== null ? "Update Profession" : "Add Profession"}
             </Button>
-          </>
-        ) : (
-          <div>No profession records yet.</div>
-        )}
-      </Tabs.Tab>
-
-      <Tabs.Tab title="Add / Edit Profession" key="edit">
-        <div
-          style={{
-            background: "linear-gradient(135deg, #89f7fe, #66a6ff)",
-            padding: 10,
-            borderRadius: 20,
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(255, 255, 255, 0.85)",
-              borderRadius: 20,
-              padding: 10,
-              boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-            }}
-          >
-            <Form form={form} initialValues={defaultFormValues} layout="horizontal">
-              <Form.Item name="type" label="Profession Type">
-                <Selector
-                  options={professionOptions}
-                  value={form.getFieldValue("type")}
-                  onChange={(val) => form.setFieldValue("type", val)}
-                />
-              </Form.Item>
-
-              <Form.Item name="title" label="Title / Role">
-                <Input placeholder="e.g. Software Engineer, Founder" />
-              </Form.Item>
-
-              <Form.Item name="organization" label="Organization">
-                <Input placeholder="e.g. Google, MyStartup" />
-              </Form.Item>
-
-              <Form.Item name="fromYear" label="From (Year)">
-                <Input type="number" placeholder="e.g. 2019" />
-              </Form.Item>
-
-              <Form.Item name="toYear" label="To (Year)">
-                <Input type="text" placeholder="e.g. 2023 or Present" />
-              </Form.Item>
-
-              <Form.Item name="details" label="Details">
-                <TextArea placeholder="Describe responsibilities or key highlights" rows={3} />
-              </Form.Item>
-
-              <Form.Item name="salary" label="Salary">
-                <Input type="number" placeholder="e.g. 60000" />
-              </Form.Item>
-
-              <Form.Item name="totalExperience" label="Total Experience (Years)">
-                <Input type="number" placeholder="e.g. 3" />
-              </Form.Item>
-
-              <Form.Item name="location" label="Location">
-                <Input placeholder="e.g. Bengaluru" />
-              </Form.Item>
-
-              <Space block justify="center" style={{ marginTop: 20 }}>
-                <Button
-                  block
-                  color="primary"
-                  style={{ backgroundColor: "#003366", color: "white" }}
-                  onClick={handleAddOrUpdate}
-                >
-                  {editingIndex !== null ? "Update Profession" : "Add Profession"}
-                </Button>
-              </Space>
-            </Form>
-          </div>
-        </div>
-      </Tabs.Tab>
-    </Tabs>
+          </Form>
+        </Tabs.Tab>
+      </Tabs>
+    </Card>
   );
 };
 

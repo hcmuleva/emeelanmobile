@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Switch, Form, Input, Button, Toast } from 'antd-mobile';
+import { Button, Card, Form, Switch, Toast } from 'antd-mobile';
 import { CheckOutline, CloseOutline } from 'antd-mobile-icons';
-import { getCustomMe, updateUserData } from '../../../../services/api';
+import React, { useEffect, useState } from 'react';
+import { getCustomMe, updateUser } from '../../../../services/api';
 
 export default function Preferences() {
   const [form] = Form.useForm();
@@ -26,7 +26,7 @@ export default function Preferences() {
 
         if (userdata?.settingjson?.prerence) {
           const pref = userdata.settingjson.prerence;
-          
+
           // Set initial preferences from API
           setInitialPreferences({
             hidePhoneNumber: pref.hidePhoneNumber || false,
@@ -72,14 +72,14 @@ export default function Preferences() {
         ...initialPreferences,
         ...formValues
       };
-      
+
       console.log('Submitted Preferences:', allValues);
       const userObj = JSON.parse(localStorage.getItem("user"));
-      const settingjson = {"prerence": allValues};
-      const updatedresponse=await updateUserData({settingjson:settingjson}, localStorage.getItem("jwt"), userObj?.id);
+      const settingjson = { "prerence": allValues };
+      const updatedresponse = await updateUser({ settingjson: settingjson }, localStorage.getItem("jwt"), userObj?.id);
       // Here you would typically call an API to save preferences
       // await savePreferences(allValues);
-       console.log("updated res", updatedresponse)
+      console.log("updated res", updatedresponse)
       Toast.show({
         content: 'Preferences saved successfully',
         position: 'bottom'
@@ -130,8 +130,8 @@ export default function Preferences() {
           />
         </div>
 
-        <Form 
-          form={form} 
+        <Form
+          form={form}
           className="original-settings"
           initialValues={{
             notifications: initialPreferences.notifications,
@@ -155,11 +155,11 @@ export default function Preferences() {
           <Form.Item name="theme" label="Theme">
             <Input placeholder="Select theme" />
           </Form.Item> */}
-          
+
           <Form.Item>
-            <Button 
-              block 
-              color="primary" 
+            <Button
+              block
+              color="primary"
               size="large"
               onClick={handleSubmit}
               loading={loading}

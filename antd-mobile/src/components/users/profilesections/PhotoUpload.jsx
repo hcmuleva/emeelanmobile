@@ -11,7 +11,6 @@ export default function PhotoUpload() {
         style={{
           marginBottom: "16px",
           borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           padding: "16px",
         }}
       >
@@ -27,9 +26,9 @@ export default function PhotoUpload() {
       <Card
         style={{
           borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          padding: "16px",
+
         }}
+
       >
         <h3 style={{ color: "#8B0000", fontWeight: "bold", fontSize: "18px" }}>
           My Pictures:

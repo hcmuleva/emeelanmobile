@@ -1,14 +1,25 @@
 import { ConfigProvider } from "antd-mobile";
 import enUS from "antd-mobile/es/locales/en-US";
-import React, { useState } from "react";
+import React from "react";
 import {
   Navigate,
   Route,
   BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
+import DeepLinkHandler from "./DeepLinkHandler";
+import DonationForm from "./components/admin/DonationForm";
 import Search from "./components/common/Search";
+import BreakingNewsCreate from "./components/featuretiles/featurepanels/BreakingNewsCreate";
+import ViewDonorCard from "./components/featuretiles/featurepanels/ViewDonorCard";
+import ViewDonors from "./components/featuretiles/featurepanels/ViewDonors";
+import ViewNews from "./components/featuretiles/featurepanels/ViewNews";
+import ViewNewsCard from "./components/featuretiles/featurepanels/ViewNewsCard";
 import MainLayout from "./components/layout/MainLayout";
+import StatusNotification from "./components/layout/StatusNotification";
+import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
+import ProfileDetailPanel from "./components/users/ProfileDetailPanel";
+import { SettingsDialog } from "./components/users/profilesections/settings/SettingsDialog";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { locales } from "./locales";
@@ -16,21 +27,16 @@ import Chat from "./pages/Chat";
 import Home from "./pages/Home";
 import Mail from "./pages/Mail";
 import ProfileStatusPage from "./pages/ProfileStatusPage";
-import LoginPage from "./pages/public/LoginPage";
-import ProfilesPage from "./pages/user/ProfilesPage";
-import UserProfile from "./pages/user/UserProfile";
-import StatusNotification from "./components/layout/StatusNotification";
-import ProfileDetailPanel from "./components/users/ProfileDetailPanel";
 import Admin from "./pages/admin/Admin";
-import SuperAdmin from "./pages/superadmin/SuperAdmin";
-import { SettingsDialog } from "./components/users/profilesections/settings/SettingsDialog";
 import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
-import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
+import Donation from "./pages/homepage/shortcuts/DonationPage";
+import DynamicUPIPaymentQR from "./pages/payment/QRCodeWithLogo";
+import LoginPage from "./pages/public/LoginPage";
 import { TermsPage } from "./pages/public/TermsPage";
-import Donation from "./pages/homepage/shortcuts/donation";
-import DeepLinkHandler from "./DeepLinkHandler";
-import ReferralRegistration from "./components/authentication/RefferalRegistration";
+import SuperAdmin from "./pages/superadmin/SuperAdmin";
+import ProfilesPage from "./pages/user/ProfilesPage";
+import UserProfile from "./pages/user/UserProfile";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -42,12 +48,12 @@ function AppContent() {
   return (
     <AuthProvider>
       <Router>
-      <DeepLinkHandler />
+        <DeepLinkHandler />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LoginPage />} />
           <Route path="/terms" element={<TermsPage />} />
-          <Route path="/reffereralregistration" element={<ReferralRegistration />} />
+          {/* <Route path="/reffereralregistration" element={<ReferralRegistration />} /> */}
 
           {/* Protected Routes */}
           <Route
@@ -80,6 +86,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/chat"
             element={
@@ -90,6 +97,37 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/shareprofile"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <SocialSharingCard />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/qr-creation"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <DynamicUPIPaymentQR />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donation-collection"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <DonationForm />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/donation"
             element={
@@ -146,6 +184,46 @@ function AppContent() {
               <ProtectedRoute>
                 <MainLayout>
                   <NewUserRegistration />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />ViewDonors
+          <Route
+            path="/donors"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewDonors />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donors/:donorid"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewDonorCard />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/allnews"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewNews />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/allnews/:newsid"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <ViewNewsCard />
                 </MainLayout>
               </ProtectedRoute>
             }
@@ -212,10 +290,26 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/create-news"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <BreakingNewsCreate />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
+      <style>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+        `}
+      </style>
     </AuthProvider>
   );
 }

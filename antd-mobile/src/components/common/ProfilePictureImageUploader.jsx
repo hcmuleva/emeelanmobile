@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { ImageUploader, Toast, Dialog } from 'antd-mobile';
-import { getUserById, updateUserData, uploadImage } from '../../services/api';
+import { Dialog, ImageUploader, Toast } from 'antd-mobile';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { getUserById, updateUser, uploadImage } from '../../services/api';
 
 const ProfilePictureImageUploader = () => {
   const { user, setProfileUpdated } = useContext(AuthContext);
@@ -64,7 +64,7 @@ const ProfilePictureImageUploader = () => {
       const response = await uploadImage(formData, jwt);
       const uploadedFile = response[0];
 
-      const updatedUser = await updateUserData(
+      const updatedUser = await updateUser(
         { profilePicture: uploadedFile.id },
         user.id
       );
@@ -90,14 +90,14 @@ const ProfilePictureImageUploader = () => {
 
     if (newList.length === 0) {
       // Image removed
-      await updateUserData({ profilePicture: null }, user.id);
+      await updateUser({ profilePicture: null }, user.id);
       localStorage.setItem("user", JSON.stringify({ ...user, profilePicture: null }));
       setProfileUpdated(true);
       return;
     }
 
     const latestImage = newList[0];
-    await updateUserData({ profilePicture: latestImage.id }, user.id);
+    await updateUser({ profilePicture: latestImage.id }, user.id);
     localStorage.setItem("user", JSON.stringify({ ...user, profilePicture: latestImage }));
     setProfileUpdated(true);
   };

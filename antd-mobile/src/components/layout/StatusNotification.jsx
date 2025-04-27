@@ -7,6 +7,7 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
   const messagesRef = useRef([]);
 
   useEffect(() => {
+    console.log("Use Effect for Status Notification")
     if (!userId) return;
 
     const channel = ably.channels.get(`user:${userId}`);
@@ -24,12 +25,10 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
 
       const { message: text, status, requestId } = message.data;
 
-      // Update message list
       const updated = [...messagesRef.current, { status, requestId }];
       messagesRef.current = updated;
       setMessages(updated);
 
-      // Count messages by status
       const grouped = updated.reduce(
         (acc, msg) => {
           acc[msg.status] = (acc[msg.status] || 0) + 1;
@@ -39,7 +38,7 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
         { PENDING: 0, APPROVED: 0, REJECTED: 0, total: 0, message: text }
       );
 
-      console.log("🔢 Grouped Stats:", grouped); // For debugging
+      console.log("🔢 Grouped Stats:", grouped);
 
       // ✅ Set full stats object
       if (setNotificationStats) {
@@ -52,7 +51,6 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
         content: `${text} - Status: ${status}`,
       });
     };
-
 
     channel.subscribe("connection-request", handleMessage);
 
@@ -67,36 +65,3 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
 };
 
 export default StatusNotification;
-
-// import React, { useState } from 'react';
-// import useAblySubscription from '../../utils/useAblySubscription';
-
-// const StatusNotification = ({ userId, setNotificationStats }) => {
-//   const [messages, setMessages] = useState([]);
-
-//   useAblySubscription({
-//     channelName: `user:${userId}`,
-//     event: 'status-updated',
-//     onMessage: (data) => {
-//       console.log('[StatusUpdate]', data);
-//       setMessages((prev) => {
-//         const all = [...prev, data];
-//         const stats = all.reduce((acc, { status }) => {
-//           acc[status] = (acc[status] || 0) + 1;
-//           acc.total++;
-//           return acc;
-//         }, { PENDING: 0, APPROVED: 0, REJECTED: 0, total: 0 });
-//         setNotificationStats({ ...stats, lastMessage: data.text });
-//         return all;
-//       });
-//     },
-//     toastFormatter: ({ text, status }) => ({
-//       icon: 'success',
-//       content: `${text} – ${status}`,
-//     }),
-//   });
-
-//   return null;
-// };
-
-// export default StatusNotification;

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Toast, Space } from "antd-mobile";
+import { Button, Card, Form, Input, Space, Toast } from "antd-mobile";
 import { EyeInvisibleOutline, EyeOutline } from "antd-mobile-icons";
 import React, { useState } from "react";
 import { resetpassword } from "../../../services/api";
@@ -33,6 +33,7 @@ export default function ResetPassword({ userId }) {
 
       console.log("New Password:", values.password);
       Toast.show({
+        icon: "success",
         content: "Password reset successfully!",
         position: "bottom",
         duration: 2000,
@@ -40,6 +41,7 @@ export default function ResetPassword({ userId }) {
     } catch (error) {
       console.error("Password reset error:", error);
       Toast.show({
+        icon: "fail",
         content: "An error occurred during password reset",
         position: "bottom",
         duration: 4000,
@@ -48,94 +50,113 @@ export default function ResetPassword({ userId }) {
   };
 
   return (
-    <div
+    <Card
       style={{
-        padding: 16,
-        minHeight: "100%",
-        background: "linear-gradient(135deg, #e0f7fa, #c1d5ff)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "15px",
+        borderRadius: '8px',
+        margin: '10px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #eee',
       }}
+      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      title={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: '#8B0000',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '20px'
+          }}>
+            🔐
+          </div>
+          <span style={{ fontSize: '18px' }}>Reset Password</span>
+        </div>
+      }
     >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 600,
-          padding: 24,
-          borderRadius: 20,
-          background: "rgba(255, 255, 255, 0.2)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-        }}
-      >
-        <h2 style={{ fontSize: 22, fontWeight: 600, color: "#003366" }}>
-          Reset Password
-        </h2>
+      <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ padding: '10px 0' }}>
+        <Form.Item
+          name="password"
+          label="New Password"
+          rules={[
+            { required: true, message: "Please enter new password" },
+            { min: 6, message: "Password must be at least 6 characters" },
+          ]}
+        >
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter new password"
+            clearable
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              '--placeholder-color': '#888'
+            }}
+            suffix={
+              <div
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ color: '#8B0000' }}
+              >
+                {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
+              </div>
+            }
+          />
+        </Form.Item>
 
-        <Form form={form} layout="horizontal" onFinish={handleSubmit}>
-          <Form.Item
-            name="password"
-            rules={[
-              { required: true, message: "Please enter new password" },
-              { min: 6, message: "Password must be at least 6 characters" },
-            ]}
-          >
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="New Password"
-              clearable
-              style={{ backgroundColor: "transparent", border: "1px solid #ccc" }}
-              suffix={
-                <div onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
-                </div>
-              }
-            />
-          </Form.Item>
+        <Form.Item
+          name="confirmPassword"
+          label="Confirm Password"
+          rules={[
+            { required: true, message: "Please confirm password" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Passwords do not match!"));
+              },
+            }),
+          ]}
+        >
+          <Input
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm your password"
+            clearable
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              '--placeholder-color': '#888'
+            }}
+            suffix={
+              <div
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{ color: '#8B0000' }}
+              >
+                {showConfirmPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
+              </div>
+            }
+          />
+        </Form.Item>
 
-          <Form.Item
-            name="confirmPassword"
-            rules={[
-              { required: true, message: "Please confirm password" },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error("Passwords do not match!"));
-                },
-              }),
-            ]}
-          >
-            <Input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
-              clearable
-              style={{ backgroundColor: "transparent", border: "1px solid #ccc" }}
-              suffix={
-                <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                  {showConfirmPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
-                </div>
-              }
-            />
-          </Form.Item>
-
-          <Space block style={{ marginTop: 24 }}>
-            <Button
-              block
-              color="primary"
-              style={{ backgroundColor: "#004080", color: "#fff" }}
-              type="submit"
-            >
-              Save Password
-            </Button>
-          </Space>
-        </Form>
-      </div>
-    </div>
+        <Button
+          block
+          style={{
+            backgroundColor: "#8B0000",
+            color: "white",
+            marginTop: 15,
+            borderRadius: "4px",
+            border: "none",
+            height: '40px',
+            fontWeight: '500'
+          }}
+          type="submit"
+        >
+          Save Password
+        </Button>
+      </Form>
+    </Card>
   );
 }

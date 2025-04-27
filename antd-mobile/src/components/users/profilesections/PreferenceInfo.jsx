@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Form, Input, Selector, Button, Toast, Space, TextArea, Tabs } from "antd-mobile";
+import { Button, Card, Form, Input, Selector, Space, Tabs, TextArea, Toast } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const maritalStatusOptions = [
   { label: "Married", value: "Married" },
@@ -31,10 +31,6 @@ const PreferenceInfo = () => {
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
   const [activeTab, setActiveTab] = useState(preferences.length ? "view" : "edit");
-
-  useEffect(() => {
-    if (preferences.length === 0) setActiveTab("edit");
-  }, [preferences]);
 
   const handleEdit = (index) => {
     form.setFieldsValue(preferences[index]);
@@ -70,7 +66,7 @@ const PreferenceInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "Preferences saved!" });
@@ -80,133 +76,198 @@ const PreferenceInfo = () => {
     }
   };
 
+  // Get appropriate emoji based on preference
+  const getPreferenceEmoji = (pref) => {
+    return "💖";
+  };
+
   return (
-    <Tabs activeKey={activeTab} onChange={setActiveTab}>
-      <Tabs.Tab title="View Preferences" key="view">
-        {preferences.length ? (
-          <>
-            {preferences.map((pref, index) => (
-              <div
-                key={index}
-                style={{
-                  background: "linear-gradient(135deg, #ff9966, #ff5e62)",
-                  padding: 16,
-                  borderRadius: 20,
-                  marginBottom: 20,
-                }}
-              >
-                <div
+    <Card
+      style={{
+        borderRadius: '8px',
+        margin: '10px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #eee',
+      }}
+      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      title={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>💖 Partner Preferences</span>
+        </div>
+      }
+    >
+      <Tabs
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        style={{
+          '--title-active-color': '#8B0000',
+          '--active-line-color': '#8B0000',
+        }}
+      >
+        <Tabs.Tab title="View Preferences" key="view">
+          {preferences.length > 0 ? (
+            <>
+              {preferences.map((pref, index) => (
+                <Card
+                  key={index}
                   style={{
-                    background: "rgba(255, 255, 255, 0.85)",
-                    borderRadius: 20,
-                    padding: 16,
-                    boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
+                    margin: '10px 0',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                    border: '1px solid #eee',
                   }}
                 >
-                  <div style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
-                    💖 Preference Summary
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: '#8B0000',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '20px'
+                    }}>
+                      {getPreferenceEmoji(pref)}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000" }}>
+                        Preference {index + 1}
+                      </div>
+                      <div style={{ fontSize: 14, color: "#666" }}>
+                        {pref.agerange} Years
+                      </div>
+                    </div>
                   </div>
-                  <div><strong>🎯 Age Range:</strong> {pref.agerange}</div>
-                  <div><strong>💍 Marital Status:</strong> {pref.maritialstatus}</div>
-                  <div><strong>🎨 Color:</strong> {pref.color}</div>
-                  <div><strong>🏢 Business Type:</strong> {pref.businesstype}</div>
-                  <div><strong>📏 Height:</strong> {pref.height}</div>
-                  <div><strong>📝 Description:</strong> {pref.description}</div>
 
-                  <hr style={{ margin: "16px 0" }} />
+                  <div style={{ margin: '10px 0', fontSize: 14, color: "#333" }}>
+                    <div style={{ margin: '3px 0' }}><strong>Marital Status:</strong> {pref.maritialstatus}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Skin Tone:</strong> {pref.color}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Business Type:</strong> {pref.businesstype}</div>
+                    <div style={{ margin: '3px 0' }}><strong>Height:</strong> {pref.height}</div>
+                    {pref.description && <div style={{ margin: '3px 0' }}><strong>Description:</strong> {pref.description}</div>}
+                  </div>
 
-                  <Space block justify="between">
-                    <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
+                  <Space block justify="between" style={{ marginTop: 10 }}>
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: "#8B0000",
+                        color: "white",
+                        borderRadius: "4px",
+                        border: "none"
+                      }}
+                      onClick={() => handleEdit(index)}
+                    >
                       Edit
                     </Button>
-                    <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: "#888",
+                        color: "white",
+                        borderRadius: "4px",
+                        border: "none"
+                      }}
+                      onClick={() => handleDelete(index)}
+                    >
                       Delete
                     </Button>
                   </Space>
-                </div>
-              </div>
-            ))}
+                </Card>
+              ))}
+
+            </>
+          ) : (
+            <div>No preferences added yet.</div>
+          )}
+          <Button
+            block
+            style={{
+              backgroundColor: "#8B0000",
+              color: "white",
+              marginTop: 15,
+              borderRadius: "4px",
+              border: "none"
+            }}
+            onClick={handleSaveToServer}
+          >
+            Save All Preferences
+          </Button>
+        </Tabs.Tab>
+
+        <Tabs.Tab title="Add / Edit Preference" key="edit">
+          <Form
+            form={form}
+            initialValues={defaultFormValues}
+            layout="vertical"
+            style={{ padding: '10px 0' }}
+          >
+            <Form.Item name="agerange" label="Age Range">
+              <Input
+                placeholder="e.g. 25-30"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="maritialstatus" label="Marital Status">
+              <Selector
+                options={maritalStatusOptions}
+                value={form.getFieldValue("maritialstatus")}
+                onChange={(val) => form.setFieldValue("maritialstatus", val)}
+                style={{ '--checked-color': '#8B000040' }}
+              />
+            </Form.Item>
+
+            <Form.Item name="color" label="Skin Tone">
+              <Input
+                placeholder="e.g. Fair, Wheatish"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="businesstype" label="Business Type">
+              <Selector
+                options={businessTypeOptions}
+                value={form.getFieldValue("businesstype")}
+                onChange={(val) => form.setFieldValue("businesstype", val)}
+                style={{ '--checked-color': '#8B000040' }}
+              />
+            </Form.Item>
+
+            <Form.Item name="height" label="Height">
+              <Input
+                placeholder="e.g. 5'6"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="description" label="Description">
+              <TextArea
+                placeholder="Extra details or expectations"
+                rows={3}
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
             <Button
               block
-              style={{ backgroundColor: "#d42f00", color: "white" }}
-              onClick={handleSaveToServer}
+              style={{
+                backgroundColor: "#8B0000",
+                color: "white",
+                marginTop: 15,
+                borderRadius: "4px",
+                border: "none"
+              }}
+              onClick={handleAddOrUpdate}
             >
-              Save Preferences
+              {editingIndex !== null ? "Update Preference" : "Add Preference"}
             </Button>
-          </>
-        ) : (
-          <div>No preferences added yet.</div>
-        )}
-      </Tabs.Tab>
-
-      <Tabs.Tab title="Add / Edit Preference" key="edit">
-        <div
-          style={{
-            background: "linear-gradient(135deg, #ff9966, #ff5e62)",
-            padding: 10,
-            borderRadius: 20,
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(255, 255, 255, 0.85)",
-              borderRadius: 20,
-              padding: 10,
-              boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-            }}
-          >
-            <Form form={form} initialValues={defaultFormValues} layout="horizontal">
-              <Form.Item name="agerange" label="Age Range">
-                <Input placeholder="e.g. 25-30" />
-              </Form.Item>
-
-              <Form.Item name="maritialstatus" label="Marital Status">
-                <Selector
-                  options={maritalStatusOptions}
-                  value={form.getFieldValue("maritialstatus")}
-                  onChange={(val) => form.setFieldValue("maritialstatus", val)}
-                />
-              </Form.Item>
-
-              <Form.Item name="color" label="Color">
-                <Input placeholder="e.g. Fair, Wheatish" />
-              </Form.Item>
-
-              <Form.Item name="businesstype" label="Business Type">
-                <Selector
-                  options={businessTypeOptions}
-                  value={form.getFieldValue("businesstype")}
-                  onChange={(val) => form.setFieldValue("businesstype", val)}
-                />
-              </Form.Item>
-
-              <Form.Item name="height" label="Height">
-                <Input placeholder='e.g. 5\6' />
-              </Form.Item>
-
-              <Form.Item name="description" label="Description">
-                <TextArea placeholder="Extra details or expectations" rows={3} />
-              </Form.Item>
-
-              <Space block justify="center" style={{ marginTop: 20 }}>
-                <Button
-                  block
-                  color="primary"
-                  style={{ backgroundColor: "#d42f00", color: "white" }}
-                  onClick={handleAddOrUpdate}
-                >
-                  {editingIndex !== null ? "Update Preference" : "Add Preference"}
-                </Button>
-              </Space>
-            </Form>
-          </div>
-        </div>
-      </Tabs.Tab>
-    </Tabs>
+          </Form>
+        </Tabs.Tab>
+      </Tabs>
+    </Card>
   );
 };
 

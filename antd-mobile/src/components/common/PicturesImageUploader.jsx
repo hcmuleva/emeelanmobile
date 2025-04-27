@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { ImageUploader, Toast, Dialog } from 'antd-mobile';
-import {  getUserById, updateUserData, uploadImage } from '../../services/api';
+import { Dialog, ImageUploader, Toast } from 'antd-mobile';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { getUserById, updateUser, uploadImage } from '../../services/api';
 
 const PicturesImageUploader = () => {
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const jwt = localStorage.getItem("jwt");
   // console.log(user)
   const [fileList, setFileList] = useState([]);
   const MAX_IMAGES = 5; // Set your maximum limit here
-  
+
   useEffect(() => {
     const loadImages = async () => {
       const jwt = localStorage.getItem("jwt");
@@ -32,13 +32,13 @@ const PicturesImageUploader = () => {
 
     loadImages();
   }, [user.id]);
-  
+
 
   const beforeUpload = (file) => {
     if (fileList.length >= MAX_IMAGES) {
-        Toast.show(`You can only upload up to ${MAX_IMAGES} images`);
-        return null;
-      }
+      Toast.show(`You can only upload up to ${MAX_IMAGES} images`);
+      return null;
+    }
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       Toast.show('You can only upload JPG/PNG files!');
@@ -61,7 +61,7 @@ const PicturesImageUploader = () => {
       const response = await uploadImage(formData, jwt);
       // console.log(response)
       const uploadedFile = response[0];
-      const updatedUser = await updateUserData({ photos: uploadedFile.id }, user.id);
+      const updatedUser = await updateUser({ photos: uploadedFile.id }, user.id);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
       // Return file for ImageUploader control
       return {
@@ -74,17 +74,17 @@ const PicturesImageUploader = () => {
       console.error('Upload error:', error);
       throw error;
     }
-  };  
+  };
 
   const onChange = async (newList) => {
     setFileList(newList);
     const photoIds = newList.map(file => file.id).filter(Boolean);
-    const updatedUser = await updateUserData({ photos: photoIds }, user.id);
+    const updatedUser = await updateUser({ photos: photoIds }, user.id);
     localStorage.setItem("user", JSON.stringify(updatedUser)); // ✅ Sync localStorage
-  };  
-  
+  };
+
   // console.log(user)
-  
+
   const onPreview = (file) => {
     if (file.url) {
       Dialog.show({
@@ -100,7 +100,7 @@ const PicturesImageUploader = () => {
             <button>Set As Profile Picture</button>
           </>
         ),
-        
+
       });
     }
   };
@@ -115,7 +115,7 @@ const PicturesImageUploader = () => {
       onPreview={onPreview}
       maxCount={MAX_IMAGES}
       showUpload={fileList.length < MAX_IMAGES}
-      style={{ '--cell-size': '80px', margin:'10px' }}
+      style={{ '--cell-size': '80px', margin: '10px' }}
     />
   );
 };

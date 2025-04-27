@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Form, Input, Selector, Button, Tabs, Toast, Space } from "antd-mobile";
+import { Button, Form, Input, Selector, Space, Tabs, Toast, Card } from "antd-mobile";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { updateUserData } from "../../../services/api";
+import { updateUser } from "../../../services/api";
 
 const levelOptions = [
   { label: "Primary", value: "PRIMARY" },
@@ -26,10 +26,6 @@ const EducationInfo = () => {
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
   const [activeTab, setActiveTab] = useState(educations.length ? "view" : "edit");
-
-  useEffect(() => {
-    if (educations.length === 0) setActiveTab("edit");
-  }, [educations]);
 
   const handleEdit = (index) => {
     form.setFieldsValue(educations[index]);
@@ -65,7 +61,7 @@ const EducationInfo = () => {
     };
 
     try {
-      await updateUserData({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "Education data saved!" });
@@ -76,130 +72,165 @@ const EducationInfo = () => {
   };
 
   return (
-    <Tabs activeKey={activeTab} onChange={setActiveTab}>
-      <Tabs.Tab title="Education Cards" key="view">
-        {educations.length ? (
-          <>
-            {educations.map((edu, index) => (
-              <div
-                key={index}
-                style={{
-                  background: "linear-gradient(135deg, #43cea2, #185a9d)",
-                  padding: 16,
-                  borderRadius: 20,
-                  marginBottom: 20,
-                }}
-              >
-                <div
+    <Card
+      style={{
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #eee',
+      }}
+      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      title={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>🎓 Education Information</span>
+        </div>
+      }
+    >
+      <Tabs
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        style={{
+          '--title-active-color': '#8B0000',
+          '--active-line-color': '#8B0000',
+        }}
+      >
+        <Tabs.Tab title="Education Records" key="view">
+          {educations.length ? (
+            <>
+              {educations.map((edu, index) => (
+                <Card
+                  key={index}
                   style={{
-                    background: "rgba(255, 255, 255, 0.85)",
-                    borderRadius: 20,
-                    padding: 16,
-                    boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
+                    margin: '10px 0',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                    border: '1px solid #eee',
                   }}
                 >
-                  <div style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
-                    🎓 {edu.degreeName || "Degree Name"}
-                  </div>
-                  <div style={{ fontSize: 16, marginBottom: 4 }}>
-                    <strong>📘 Level:</strong> {edu.level}
-                  </div>
-                  <div style={{ fontSize: 16, marginBottom: 4 }}>
-                    <strong>🏛️ Institute:</strong> {edu.institute}
-                  </div>
-                  <div style={{ fontSize: 16, marginBottom: 4 }}>
-                    <strong>📍 Location:</strong> {edu.location}
-                  </div>
-                  <div style={{ fontSize: 16 }}>
-                    <strong>📅 Year:</strong> {edu.year}
+                  <div style={{ margin: '5px 0' }}>
+                    <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000", marginBottom: 5 }}>
+                      {edu.degreeName || "Degree"}
+                    </div>
+                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                      <strong>Level:</strong> {edu.level}
+                    </div>
+                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                      <strong>Institute:</strong> {edu.institute}
+                    </div>
+                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                      <strong>Location:</strong> {edu.location}
+                    </div>
+                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                      <strong>Year:</strong> {edu.year}
+                    </div>
                   </div>
 
-                  <hr style={{ margin: "16px 0" }} />
-
-                  <Space block justify="between">
-                    <Button size="mini" color="primary" onClick={() => handleEdit(index)}>
+                  <Space block justify="between" style={{ marginTop: 10 }}>
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: "#8B0000",
+                        color: "white",
+                        borderRadius: "4px",
+                        border: "none"
+                      }}
+                      onClick={() => handleEdit(index)}
+                    >
                       Edit
                     </Button>
-                    <Button size="mini" color="danger" onClick={() => handleDelete(index)}>
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: "#888",
+                        color: "white",
+                        borderRadius: "4px",
+                        border: "none"
+                      }}
+                      onClick={() => handleDelete(index)}
+                    >
                       Delete
                     </Button>
                   </Space>
-                </div>
-              </div>
-            ))}
+                </Card>
+              ))}
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '20px 0', color: '#666' }}>
+              No education records added yet. Click the "Add / Edit Education" tab to add information.
+            </div>
+          )}
+
+          <Button
+            block
+            style={{
+              backgroundColor: "#8B0000",
+              color: "white",
+              marginTop: 15,
+              borderRadius: "4px",
+              border: "none"
+            }}
+            onClick={handleSaveToServer}
+          >
+            Save All Changes
+          </Button>
+        </Tabs.Tab>
+
+        <Tabs.Tab title="Add / Edit Education" key="edit">
+          <Form form={form} initialValues={defaultFormValues} layout="vertical" style={{ padding: '10px 0' }}>
+            <Form.Item name="level" label="Education Level">
+              <Selector
+                options={levelOptions}
+                value={form.getFieldValue("level")}
+                onChange={(val) => form.setFieldValue("level", val)}
+                style={{ '--checked-color': '#8B000040' }}
+              />
+            </Form.Item>
+
+            <Form.Item name="degreeName" label="Degree Name">
+              <Input
+                placeholder="e.g. BSc Computer Science"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="year" label="Passing Year">
+              <Input
+                type="number"
+                placeholder="e.g. 2022"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="institute" label="Institute Name">
+              <Input
+                placeholder="e.g. BITS Pilani"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="location" label="Institute Location">
+              <Input
+                placeholder="e.g. Hyderabad"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
             <Button
               block
-              style={{ backgroundColor: "#004080", color: "white" }}
-              onClick={handleSaveToServer}
+              style={{
+                backgroundColor: "#8B0000",
+                color: "white",
+                marginTop: 15,
+                borderRadius: "4px",
+                border: "none"
+              }}
+              onClick={handleAddOrUpdate}
             >
-              Save Education Info
+              {editingIndex !== null ? "Update Education" : "Add Education"}
             </Button>
-          </>
-        ) : (
-          <div>No education records added yet.</div>
-        )}
-      </Tabs.Tab>
-
-      <Tabs.Tab title="Add / Edit Education" key="edit">
-        <div
-          style={{
-            background: "linear-gradient(135deg, #43cea2, #185a9d)",
-            padding: 10,
-            borderRadius: 20,
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(255, 255, 255, 0.85)",
-              borderRadius: 20,
-              padding: 10,
-              boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-            }}
-          >
-            <Form form={form} initialValues={defaultFormValues} layout="horizontal">
-              <Form.Item name="level" label="Level">
-                <Selector
-                  options={levelOptions}
-                  value={form.getFieldValue("level")}
-                  onChange={(val) => form.setFieldValue("level", val)}
-                />
-              </Form.Item>
-
-              <Form.Item name="degreeName" label="Degree Name">
-                <Input placeholder="e.g. BSc Computer Science" />
-              </Form.Item>
-
-              <Form.Item name="year" label="Passing Year">
-                <Input type="number" placeholder="e.g. 2022" />
-              </Form.Item>
-
-              <Form.Item name="institute" label="Institute Name">
-                <Input placeholder="e.g. BITS Pilani" />
-              </Form.Item>
-
-              <Form.Item name="location" label="Institute Location">
-                <Input placeholder="e.g. Hyderabad" />
-              </Form.Item>
-
-              <Space block justify="center" style={{ marginTop: 20 }}>
-                <Button
-                  block
-                  color="primary"
-                  style={{ backgroundColor: "#004080", color: "white" }}
-                  onClick={handleAddOrUpdate}
-                >
-                  {editingIndex !== null ? "Update Education" : "Add Education"}
-                </Button>
-              </Space>
-            </Form>
-          </div>
-        </div>
-      </Tabs.Tab>
-    </Tabs>
+          </Form>
+        </Tabs.Tab>
+      </Tabs>
+    </Card>
   );
 };
 
