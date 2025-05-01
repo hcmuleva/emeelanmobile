@@ -45,12 +45,18 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function AppContent() {
+  const isAuthenticated = localStorage.getItem("authenticated") 
   return (
     <AuthProvider>
       <Router>
         <DeepLinkHandler />
         <Routes>
           {/* Public Routes */}
+          <Route path="/" element={isAuthenticated ? <MainLayout>
+                  <Home />
+                  
+                </MainLayout> : <Navigate to="/login" />} />
+
           <Route path="/" element={<LoginPage />} />
           <Route path="/terms" element={<TermsPage />} />
           {/* <Route path="/reffereralregistration" element={<ReferralRegistration />} /> */}
