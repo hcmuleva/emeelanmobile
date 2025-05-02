@@ -10,6 +10,8 @@ import "../../styles/registration.css";
 import { useNavigate } from 'react-router-dom';
 
 export default function MyRegister({ setIsLogined }) {
+    console.log("My Register");
+    
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
     const [customdata, setCustomdata] = useState({});
@@ -63,6 +65,7 @@ export default function MyRegister({ setIsLogined }) {
         const payload = {
             ...values,
             emeelanrole,
+            orgsku: "SEERVI0002",
             username: values.MobileNumber,
             userstatus: "PENDING",
             role: 1,
@@ -273,7 +276,7 @@ export default function MyRegister({ setIsLogined }) {
                                 <Radio value="Female">Female</Radio>
                             </Radio.Group>
                         </Form.Item>
-                        <Form.Item
+                        {/* <Form.Item
                             name="orgsku"
                             label={<><span style={{ color: 'red' }}>*</span> Cast</>}
                             rules={[{ required: true, message: "Please select your Cast" }]}
@@ -283,7 +286,7 @@ export default function MyRegister({ setIsLogined }) {
                                 <Radio value="TELI0001">TELI</Radio>
                                 <Radio value="DEMO0003">DEMO</Radio>
                             </Radio.Group>
-                        </Form.Item>
+                        </Form.Item> */}
 
                         <div style={{ marginBottom: '15px' }}>
                             <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>

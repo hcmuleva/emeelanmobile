@@ -7,7 +7,7 @@ import UserLayout from './UserLayout';
 const MainLayout = ({ children }) => {
   const { user } = useContext(AuthContext);
   // const role = user?.role || 'USER';
-  const emeelanrole = user.emeelanrole
+  const emeelanrole = user?.emeelanrole
   console.log("Meeelan rol", emeelanrole)
   const LayoutMap = {
     ADMIN: AdminLayout,
