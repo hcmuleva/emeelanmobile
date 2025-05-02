@@ -10,14 +10,14 @@ const MyLogin = ({ setIsLogined }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
-  
+
   const onFinish = async (values) => {
     setLoading(true);
     try {
       const { jwt, user } = await login(values.email, values.password);
-      console.log("jwt",jwt)
+      console.log("jwt", jwt)
       await authContext.login(jwt, user);
-      navigate('/home', { replace: true }); 
+      navigate('/home', { replace: true });
     } catch (error) {
       Toast.show({
         icon: 'fail',
@@ -30,53 +30,55 @@ const MyLogin = ({ setIsLogined }) => {
 
   return (
     <div className="login-container">
-     <NavBar
-  back={null}
-  style={{
-    background: '#ff6b6b',
-    color: 'white',
-    position: 'sticky',
-    top: 0,
-    zIndex: 100,
-    padding: '10px',
-  }}
->
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-    }}
-  >
-    {/* Left Side: Title */}
-    <div>
-      <div
+      <NavBar
+        back={null}
         style={{
-          fontWeight: '600',
-          fontSize: '18px',
-          lineHeight: '20px',
-          letterSpacing: '.5px',
+          background: '#BC0226',
+          color: 'white',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          padding: '10px',
+          paddingTop: 'env(safe-area-inset-top)'
         }}
       >
-        EMEELAN (गठजोड़)
-      </div>
-     
-    </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: "10px"
+          }}
+        >
+          {/* Left Side: Title */}
+          <div>
+            <div
+              style={{
+                fontWeight: '600',
+                fontSize: '18px',
+                lineHeight: '20px',
+                letterSpacing: '.5px',
+              }}
+            >
+              EMEELAN (गठजोड़)
+            </div>
 
-    {/* Right Side: Logo */}
-    <img
-      src="logo.png" // Replace with your logo path
-      alt="Logo"
-      style={{
-        height: '36px',
-        width: '36px',
-        borderRadius: '50%',
-        objectFit: 'cover',
-      }}
-    />
-  </div>
-</NavBar>
+          </div>
+
+          {/* Right Side: Logo */}
+          <img
+            src="logo.png" // Replace with your logo path
+            alt="Logo"
+            style={{
+              height: '36px',
+              width: '36px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+            }}
+          />
+        </div>
+      </NavBar>
 
 
 
@@ -88,18 +90,18 @@ const MyLogin = ({ setIsLogined }) => {
               <p style={{ color: '#666', margin: 0 }}>Sign in to continue</p>
             </div>
           </AutoCenter>
-          
+
           <Divider />
 
           <Form
             onFinish={onFinish}
             layout="vertical"
             footer={
-              <Button 
-                block 
-                type='submit' 
-                color='primary' 
-                size='large' 
+              <Button
+                block
+                type='submit'
+                color='primary'
+                size='large'
                 loading={loading}
                 style={{ marginTop: '24px' }}
               >
@@ -116,7 +118,7 @@ const MyLogin = ({ setIsLogined }) => {
             >
               <Input placeholder='Enter your email' prefix={<MailOutline />} />
             </Form.Item>
-            
+
             <Form.Item
               name='password'
               label='Password'
@@ -142,13 +144,15 @@ const MyLogin = ({ setIsLogined }) => {
                 Register
               </span>
             </div>
-           
+
           </Space>
           <div style={{ textAlign: "center", marginTop: "1rem" }}>
-  <a href="/terms" style={{ fontSize: "0.875rem", color: "#888" }}>
-    Terms and Conditions
-  </a>
-</div>
+            <a href="/terms" style={{ fontSize: "0.875rem", color: "#888" }}>
+              Terms and Conditions
+            </a>
+          </div>
+          <br />
+          <br />
         </Card>
       </div>
     </div>

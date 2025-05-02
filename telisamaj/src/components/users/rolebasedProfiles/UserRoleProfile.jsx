@@ -67,22 +67,22 @@ const UserRoleProfile = ({ adminProp }) => {
         profession: profession || "",
         gotra: gotra || "",
       };
-  
+
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;
         filters["DOB_lte"] = to;
       }
-  
+
       let data;
       if (searchQuery) {
         data = await searchUsers(searchQuery, offset, limit);
       } else {
         data = await getPaginatedUsers(offset, limit, filters);
       }
-  
+
       const userList = data?.data || [];
-  
+
       if (userList.length === 0) {
         setHasMore(false);
       } else {
@@ -127,7 +127,7 @@ const UserRoleProfile = ({ adminProp }) => {
               />
             </div>
 
-            <div style={{ marginBottom: 8 }}>
+            <div style={{ marginBottom: 8, fontSize: '14px' }}>
               <strong>Profession:</strong>
               <Selector
                 showCheckMark
@@ -135,6 +135,7 @@ const UserRoleProfile = ({ adminProp }) => {
                 options={professionOptions}
                 value={[profession]}
                 onChange={(val) => setProfession(val[0])}
+                style={{ fontSize: '14px' }}  // If Selector accepts style prop
               />
             </div>
 

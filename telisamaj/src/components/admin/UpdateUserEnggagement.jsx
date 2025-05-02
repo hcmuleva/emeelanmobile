@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input, Button, Toast } from "antd-mobile";
 import { findConnectionRequest, updateConnectionRequest } from "../../services/api";
+import EngagementCard from "./EngagementCard";
 
 const UpdateStatusToEnggaged = () => {
   const [senderId, setSenderId] = useState("");
@@ -16,14 +17,10 @@ const UpdateStatusToEnggaged = () => {
     setLoading(true);
 
     try {
-      const row = await findConnectionRequest(senderId, receiverId);
+      console.log("sender", senderId, "receiver", receiverId)
 
-      if (!row) {
-        Toast.show({ content: "No matching connection request found" });
-        return;
-      }
 
-      const result = await updateConnectionRequest(row.id, { status: "ENGGAGED", message:`Congratulation for engaggement of ${receiverId} with ${senderId}` });
+      const result = await updateConnectionRequest({ sender: senderId, receiver: receiverId, status: "ENGGAGED", message: `Congratulation for engaggement of ${receiverId} with ${senderId}` });
 
       if (result) {
         Toast.show({ content: "Status updated to ENGGAGED ✅" });
@@ -39,27 +36,8 @@ const UpdateStatusToEnggaged = () => {
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h3>Mark Connection as ENGGAGED</h3>
-
-      <Input
-        value={senderId}
-        onChange={setSenderId}
-        placeholder="Enter Sender User ID"
-        clearable
-        style={{ marginBottom: "0.5rem" }}
-      />
-
-      <Input
-        value={receiverId}
-        onChange={setReceiverId}
-        placeholder="Enter Receiver User ID"
-        clearable
-        style={{ marginBottom: "1rem" }}
-      />
-
-      <Button color="primary" loading={loading} onClick={handleUpdate} block>
-        Update Status
-      </Button>
+     
+      <EngagementCard/>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import GotraSelector from '../authentication/registration/GotraSelector';
 import gotra from "../../utils/gotra.json";
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
-const ORGSKU = process.env.REACT_APP_ORGSKU
+
 export default function RegisterUser() {
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
@@ -112,7 +112,6 @@ export default function RegisterUser() {
         const payload = {
             ...values,
             emeelanrole,
-            orgsku:ORGSKU,
             username: values.MobileNumber,
             userstatus: "APPROVED",
             role: 1,

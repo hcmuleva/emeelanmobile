@@ -3,7 +3,6 @@ import qs from "qs";
 
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
 const API_URL = process.env.REACT_APP_API_URL;
-const ORGSKU= process.env.REACT_APP_ORGSKU
 console.log("API_URL", API_URL);
 const api = axios.create({
   baseURL: API_URL,
@@ -25,8 +24,6 @@ export const login = async (identifier, password) => {
 };
 
 export const register = async (data) => {
-  data["orgsku"] = ORGSKU
-
   try {
     const response = await api.post("/auth/local/register", {
       ...data,
@@ -37,7 +34,21 @@ export const register = async (data) => {
   }
 };
 
-
+export const getAuthenticatedUser = async (jwt) => {
+  try {
+    const response = await api.get("/users/me", {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch user";
+  }
+};
 
 export const getCustomMe = async (jwt) => {
   try {
@@ -52,48 +63,46 @@ export const getCustomMe = async (jwt) => {
   }
 };
 
-export const getPaginatedUsers = async (start = 0, limit = 10,filters = {}) => {
-    filters.orgsku = {$eq: filters.ORGSKU}
-    try {
-      if (filters.DOB_gte) {
-        filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
-      }
-      if (filters.DOB_lte) {
-        filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
-      }
-       if (filters.gotra) {
-        filters.gotra = {  $ne: filters.gotra };
-      }
-      const strapiFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([_, value]) => value !== '' && value !== null && value !== undefined
-        )
-      );
-      const {DOB_gte,DOB_lte, ...modifiedFilters} = strapiFilters;
-
-      const response = await api.get(`/users`, {
-        params: {
-          _start: start,
-          _limit: limit,
-          filters: modifiedFilters, // ✅ Use filters
-          _sort: 'id:asc', // Sort by newest first
-          "populate[photos]": "*", // ✅ Populate photos (all fields)
-          "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
-          "populate[Height]": "*",
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`
-        }
-      });
-      return response.data;
-      
-    } catch (error) {
-      throw error.response?.data?.message || 'Failed to fetch users';
+export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => {
+  try {
+    if (filters.DOB_gte) {
+      filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
     }
-  };
+    if (filters.DOB_lte) {
+      filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
+    }
+    if (filters.gotra) {
+      filters.gotra = { $ne: filters.gotra };
+    }
+    const strapiFilters = Object.fromEntries(
+      Object.entries(filters).filter(
+        ([_, value]) => value !== '' && value !== null && value !== undefined
+      )
+    );
+    const { DOB_gte, DOB_lte, ...modifiedFilters } = strapiFilters;
+
+    const response = await api.get(`/users`, {
+      params: {
+        _start: start,
+        _limit: limit,
+        filters: modifiedFilters, // ✅ Use filters
+        _sort: 'id:asc', // Sort by newest first
+        "populate[photos]": "*", // ✅ Populate photos (all fields)
+        "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
+        "populate[Height]": "*",
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      }
+    });
+    return response.data;
+
+  } catch (error) {
+    throw error.response?.data?.message || 'Failed to fetch users';
+  }
+};
 // get admin
-export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {}) => {
-  filters.orgsku = {$eq: filters.ORGSKU}
+export const getPaginatedAdminUsers = async (start = 0, limit = 10, filters = {}) => {
   try {
     const response = await api.get("/custom-admins", {
       params: {
@@ -117,16 +126,17 @@ export const getPaginatedAdminUsers = async (start = 0, limit = 10,filters = {})
   }
 };
 
-export const newConnectionRequest = async( data)=>{
+export const newConnectionRequest = async (data) => {
   const jwt = localStorage.getItem("jwt")
   console.log("jwt", jwt)
   try {
-    const reaponse = await api.post(`/connectionrequests`, 
-        {data: data},
+    const reaponse = await api.post(`/connectionrequests`,
+      { data: data },
       {
         headers: {
           Authorization: `Bearer ${jwt}`, // Use correct token
-          "Content-Type": "application/json",}
+          "Content-Type": "application/json",
+        }
       }
     );
     return reaponse.data
@@ -135,17 +145,19 @@ export const newConnectionRequest = async( data)=>{
   }
 }
 //connectionrequest
-export const updateConnectionRequest = async(id, data)=>{
+export const updateConnectionRequest = async (data) => {
   const jwt = localStorage.getItem("jwt")
-  console.log("DATA",data)
+  console.log("DATA", data)
   console.log("jwt", jwt)
+  const id = 1;
   try {
-    const reaponse = await api.put(`/connectionrequests/${id}`, 
-        {data: data},
+    const reaponse = await api.put(`/custom-requests/${id}`,
+      { data: data },
       {
         headers: {
           Authorization: `Bearer ${jwt}`, // Use correct token
-          "Content-Type": "application/json",}
+          "Content-Type": "application/json",
+        }
       }
     );
     return reaponse.data
@@ -158,29 +170,15 @@ export const getEngagedRequests = async (page = 1, pageSize = 10) => {
 
   try {
     const response = await api.get(
-      `/connectionrequests?pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort[0]=updatedAt:desc&filters[status][$eq]=ENGGAGED&populate[sender][populate]=*&populate[receiver][populate]=*`,
+      `/custom-requests`,
       {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       }
     );
+    return response.data
 
-    return {
-      data: response.data.data.map((item) => ({
-        id: item.id,
-        updatedAt: item.attributes.updatedAt,
-        sender: {
-          ...item.attributes.sender?.data?.attributes,
-          id: item.attributes.sender?.data?.id,
-        },
-        receiver: {
-          ...item.attributes.receiver?.data?.attributes,
-          id: item.attributes.receiver?.data?.id,
-        },
-      })),
-      pagination: response.data.meta.pagination,
-    };
   } catch (error) {
     console.error("Failed to fetch ENGAGED requests", error);
     return {
@@ -247,7 +245,7 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
 };
 
 //search ADMIN
-export const searchAdmins = async (query, start = 0, limit = 10,filters={}) => {
+export const searchAdmins = async (query, start = 0, limit = 10, filters = {}) => {
   try {
     const params = {
       _start: start,
@@ -275,6 +273,92 @@ export const searchAdmins = async (query, start = 0, limit = 10,filters={}) => {
     throw error.response?.data?.message || "Search failed";
   }
 };
+
+
+export const getBreakingNews = async (jwt) => {
+  try {
+    const response = await api.get("/breakingmessages", {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+
+
+export const getSingleNews = async (newsId, jwt) => {
+  try {
+    const response = await api.get(`/breakingmessages/${newsId}`, {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+
+export const getDonners = async (jwt) => {
+  try {
+    const response = await api.get("/donners", {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
+export const createAndUpdateDonners = async (data, jwt) => {
+  try {
+    const reaponse = await api.post(`/donners`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
+  }
+}
+
+export const getSingleDonner = async (donorId, jwt) => {
+  try {
+    const response = await api.get(`/donners/${donorId}`, {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Get failed";
+  }
+}
 
 
 export const resetpassword = async (userId, newPassword) => {
@@ -320,15 +404,54 @@ export const uploadImage = async (formData, jwt) => {
   }
 };
 
-// new Apicalls start
-// update Data of me,
-export const updateUserData = async (data, userId) => {
+export const createQRCODEBySuperAdmin = async (data, jwt) => {
+  try {
+    const reaponse = await api.post(`/donationqrcodes`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
+  }
+}
+
+export const updateUser = async (data, userId) => {
   try {
     // console.log("Sending update:", { photos: photoIds });
 
     const response = await api.put(`/users/${userId}`, {
       ...data,
-    } );
+    });
+    return response.data;
+
+  } catch (error) {
+    console.error(
+      "Strapi update error:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data?.message || "Update failed";
+  }
+}
+// new Apicalls start
+// update Data of me,
+export const updateUserData = async (data, userId, jwt) => {
+  try {
+    // console.log("Sending update:", { photos: photoIds });
+    console.log(data, userId)
+    const response = await api.put(`/customupdateuser/${userId}`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      })
     return response.data;
 
   } catch (error) {
@@ -359,7 +482,7 @@ export const getUserById = async (userId, jwt) => {
     throw error.response?.data?.message || "Update failed";
   }
 };
-export const customsingleuser = async (userId, jwt) =>{
+export const customsingleuser = async (userId, jwt) => {
   console.log("Request recieved ", userId, " Token ", jwt)
   try {
     const response = await api.get(`/custom-singleuser/${userId}`, {
@@ -398,12 +521,45 @@ const filteredUsers = async () => {
   return data;
 };
 
-export const getPincode = async(pincode) =>{
-  try{
+export const createBreakingNews = async (data, jwt) => {
+  try {
+    const reaponse = await api.post(`/breakingmessages`,
+      { data: data },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // Use correct token
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return reaponse.data
+  } catch (error) {
+    console.error("error", error)
+  }
+}
 
-    const response =await api.get(`/pincodes?filters[pincode]=${pincode}`)
+export const getQrCards = async (jwt) => {
+  try {
+    const response = await api.get("/donationqrcodes", {
+      params: {
+        populate: "*", // Populates all relations
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
     return response.data
-  } catch(err){
+  } catch (err) {
+    throw err.response?.data?.message || "Error in getting donation qr cards"
+  }
+}
+
+export const getPincode = async (pincode) => {
+  try {
+
+    const response = await api.get(`/pincodes?filters[pincode]=${pincode}`)
+    return response.data
+  } catch (err) {
     throw err.response?.data?.message || "Error in getting pincode"
   }
 }
@@ -424,24 +580,23 @@ export const reverseGeocode = async (latitude, longitude) => {
   try {
     // Make a request to the Mappls API
     console.log("Using Mappls API key:", MAPPLS_API_KEY ? "Key is set" : "Key is not set");
-    
+
     const response = await mapplsApi.get(`/${MAPPLS_API_KEY}/rev_geocode`, {
       params: {
         lat: latitude,
         lng: longitude
       }
     });
-    
+
     return response.data;
   } catch (error) {
     console.error("Mappls API error:", error.response?.data || error.message);
-    
+
     // If we get a CORS error, provide a helpful error message
     if (error.message.includes('Network Error') || error.message.includes('CORS')) {
       throw new Error("CORS issue detected. Please implement a server-side proxy for this API call.");
     }
-    
+
     throw new Error(error.response?.data?.message || 'Location lookup failed');
   }
 };
-

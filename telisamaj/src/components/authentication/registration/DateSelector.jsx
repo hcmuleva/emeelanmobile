@@ -41,7 +41,7 @@ const DateSelector = ({customdata,setCustomdata}) => {
 
   return (
     <Form form={form}>
-      <Form.Item name="DOB" label="Date of Birth">
+      <Form.Item name="DOB">
         <div 
           onClick={() => setDobVisible(true)}
           style={{ 

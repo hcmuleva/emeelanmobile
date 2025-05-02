@@ -4,7 +4,11 @@ import { useAuth } from '../../context/AuthContext';
 import PendingApprovalCard from '../../components/authentication/PendingApprovalCard';
 
 export default function ProfilesPage() {
-  const { user, updateUserField } = useAuth();
+  const { user } = useAuth();
 
- return (<>{user.userstatus!=="APPROVED"?<PendingApprovalCard/>:  <Profiles/>}</> )
+  // Guard clauses
+  if (!user) return <div>Loading...</div>;
+  if (user.userstatus !== "APPROVED") return <PendingApprovalCard />;
+
+  return <Profiles />;
 }
