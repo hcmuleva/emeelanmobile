@@ -6,6 +6,7 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
+  useNavigate,
 } from "react-router-dom";
 import DeepLinkHandler from "./DeepLinkHandler";
 import DonationForm from "./components/admin/DonationForm";
@@ -45,23 +46,30 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function AppContent() {
-  const isAuthenticated = localStorage.getItem("authenticated") 
+  const isAuthenticated = JSON.parse(localStorage.getItem("authenticated"))
+ console.log("AppContent isAuthenticated", isAuthenticated," mytest")
   return (
     <AuthProvider>
       <Router>
         <DeepLinkHandler />
         <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={isAuthenticated ? <MainLayout>
-                  <Home />
-                  
-                </MainLayout> : <Navigate to="/login" />} />
+         {/* Public Routes */}
+    <Route path="/login" element={<LoginPage />} />
+    <Route path="/terms" element={<TermsPage />} />
 
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          {/* <Route path="/reffereralregistration" element={<ReferralRegistration />} /> */}
-
-          {/* Protected Routes */}
+    {/* Protected Route */}
+    <Route
+      path="/"
+      element={
+        isAuthenticated ? (
+          <MainLayout>
+            <Home />
+          </MainLayout>
+        ) : (
+          <Navigate to="/login" replace />
+        )
+      }
+    />
           <Route
             path="/home"
             element={
@@ -321,6 +329,7 @@ function AppContent() {
 }
 
 function App() {
+  
   return (
     <LanguageProvider>
       {({ locale }) => (
