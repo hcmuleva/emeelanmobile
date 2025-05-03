@@ -135,13 +135,13 @@ const DonationForm = () => {
         />
       </Form.Item>
 
-      <Form.Item name="cast" label={<><span style={{ color: 'red' }}>*</span> Cast</>}>
+      {/* <Form.Item name="cast" label={<><span style={{ color: 'red' }}>*</span> Cast</>}>
         <Radio.Group style={{ display: "flex", gap: "10px" }}>
           <Radio value="SEERVI0002" style={{ marginRight: "10px" }}>SEERVI</Radio>
           <Radio value="TELI0001" style={{ marginRight: "10px" }}>TELI</Radio>
           <Radio value="DEMO0003">DEMO</Radio>
         </Radio.Group>
-      </Form.Item>
+      </Form.Item> */}
 
       {donorType === 'individual' && (
         <>
