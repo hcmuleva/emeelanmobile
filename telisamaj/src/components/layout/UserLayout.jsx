@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
 import { Badge } from "antd-mobile";
 import StatusNotification from "./StatusNotification";
+import AdPlayer from "../common/AdPlayer";
 //import StatusNotification from "../components/StatusNotification"; // Adjust path if needed
 
 export default function UserLayout({ children }) {
@@ -15,6 +16,7 @@ export default function UserLayout({ children }) {
   const [notificationStats, setNotificationStats] = useState({ total: 0 });
   console.log("Notification ", JSON.stringify(notificationStats))
   const userId = JSON.parse(localStorage.getItem("user"))?.id;
+  const [showAdd, setShowAd] = useState(false)
 
   console.log(notificationStats, "NEw")
 
@@ -87,6 +89,6 @@ export default function UserLayout({ children }) {
           );
         })}
       </div>
-    </div >
+    </div>
   );
 }

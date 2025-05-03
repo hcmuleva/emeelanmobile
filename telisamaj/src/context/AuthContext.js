@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const channelRef = useRef(null); // 👈 Track the active channel
   const activeChannelId = useRef(null);
   const cleanupPromise = useRef(null);
+
   useEffect(() => {
     const storedJwt = localStorage.getItem('jwt');
     const storedUser = localStorage.getItem('user');
@@ -157,7 +158,7 @@ export const AuthProvider = ({ children }) => {
         setProfileUpdated,
         updateUser,
         updateUserField,
-        completionBar
+        completionBar,
       }}
     >
       {children}
