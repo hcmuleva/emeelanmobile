@@ -37,8 +37,12 @@ const TopBar = ({ userRole }) => {
       (user?.Sex === "Male" ? "/assets/man-user-circle-icon.png" : "/assets/question-mark-circle-outline-icon.png"));
 
   return (
-    <div style={{ paddingTop: 'env(safe-area-inset-top)', background: '#BC0226', padding: '12px 20px', color: 'white' }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <div style={{
+      zIndex: 100, position: "sticky", top: 0, background: '#BC0226', padding: '35px 12px 20px', color: 'white',
+    }}>
+      < div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center"
+      }}>
         <div onClick={() => navigate("/userprofile")} style={{ display: "flex", alignItems: "center" }}>
           <Avatar
             src={userProfile}
@@ -59,8 +63,8 @@ const TopBar = ({ userRole }) => {
             fill: "#fff",
           }} src="/logo.svg" alt="Logo" width="40" height="40" />
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

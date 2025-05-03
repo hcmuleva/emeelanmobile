@@ -1,4 +1,4 @@
-import { ConfigProvider } from "antd-mobile";
+import { ConfigProvider, SafeArea } from "antd-mobile";
 import enUS from "antd-mobile/es/locales/en-US";
 import React from "react";
 import {
@@ -40,6 +40,7 @@ import ProfilesPage from "./pages/user/ProfilesPage";
 import UserProfile from "./pages/user/UserProfile";
 import { AdProvider } from "./context/AdContext";
 import { useAd } from "./hooks/useAd";
+import "./App.css"
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -51,9 +52,11 @@ function AppContent() {
   const isAuthenticated = JSON.parse(localStorage.getItem("authenticated"))
   console.log("AppContent isAuthenticated", isAuthenticated, " mytest")
   return (
-    <AuthProvider>
-      <AdProvider>
-
+    <div>
+      <div style={{ background: '#BC0226' }}>
+        <SafeArea position="top" />
+      </div>
+      <AuthProvider>
         <Router>
           <DeepLinkHandler />
           <Routes>
@@ -67,9 +70,11 @@ function AppContent() {
               path="/"
               element={
                 isAuthenticated ? (
-                  <MainLayout>
-                    <Home />
-                  </MainLayout>
+                  <AdProvider>
+                    <MainLayout>
+                      <Home />
+                    </MainLayout>
+                  </AdProvider>
                 ) : (
                   <Navigate to="/login" replace />
                 )
@@ -329,9 +334,11 @@ function AppContent() {
         }
         `}
         </style>
-
-      </AdProvider>
-    </AuthProvider>
+      </AuthProvider >
+      <div>
+        <SafeArea position="bottom" />
+      </div>
+    </div>
   );
 }
 

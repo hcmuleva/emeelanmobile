@@ -15,7 +15,7 @@ npx cap sync android
 REM === STEP 3: START EMULATOR (OPTIONAL) ===
 REM Replace 'Pixel_9_Pro' with your emulator name
 echo Starting emulator...
-start "" cmd /c "emulator -avd Pixel_9_Pro"
+start "" cmd /c "emulator -avd Pixel_7_Pro"
 REM === WAIT FOR DEVICE TO BOOT ===
 echo Waiting for emulator to boot...
 :waitForDevice

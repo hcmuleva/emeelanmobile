@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
   const getMessage = (channelName) => {
     console.log("Channeld Name", channelName)
     const channel = ably.channels.get(channelName);
+    console.log("Channel", channel)
 
     const handleMessage = (message) => {
       console.log("EMEELAN ROLE Changes", message?.data)
@@ -67,6 +68,8 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    console.log("useEffect for messages")
+
     if (!user?.id) return;
 
     getMessage(`userrole:${user.id}`)

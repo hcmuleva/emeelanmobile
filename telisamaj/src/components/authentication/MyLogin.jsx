@@ -38,8 +38,11 @@ const MyLogin = ({ setIsLogined }) => {
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          padding: '10px',
-          paddingTop: 'env(safe-area-inset-top)'
+          height: "60px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: '35px 12px 20px 20px',
         }}
       >
         <div
@@ -48,7 +51,7 @@ const MyLogin = ({ setIsLogined }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
-            marginTop: "10px"
+            marginTop: "auto"
           }}
         >
           {/* Left Side: Title */}
@@ -58,10 +61,18 @@ const MyLogin = ({ setIsLogined }) => {
                 fontWeight: '600',
                 fontSize: '18px',
                 lineHeight: '20px',
-                letterSpacing: '.5px',
+                letterSpacing: '.8px',
+                textAlign: "left"
               }}
             >
-              EMEELAN (गठजोड़)
+              TELISAMAJ-
+              <br />
+              <span style={{
+                fontWeight: '400',
+                fontSize: '14px',
+              }}>
+                आल इंडिया क्षत्रिय राठौड़ समाज
+              </span>
             </div>
 
           </div>
