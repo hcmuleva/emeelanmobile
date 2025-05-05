@@ -35,8 +35,6 @@ export default function BasicInfoUpdate() {
 
   let imagesrc = ""
 
-  console.log(user)
-
   if (user?.Pictures?.profilePicture) {
     imagesrc = user?.Pictures.profilePicture?.url
   } else if (Array.isArray(user?.images?.pictures) && user?.images?.pictures[0]) {
@@ -78,22 +76,30 @@ export default function BasicInfoUpdate() {
   };
 
   const handleFinish = async (values) => {
-    console.log(values)
-
     try {
-      await updateUser(values, user.id);
-      const updatedUser = { ...user, ...values };
+      // Make sure Country is included in the values being sent
+      const updatedValues = {
+        ...values,
+        Country: values.Country || user?.Country || "",
+      };
 
+      await updateUser(updatedValues, user.id);
+
+      // Update local user state with ALL the form values
+      const updatedUser = { ...user, ...updatedValues };
       setUser(updatedUser);
+
+      // Update local storage with the complete user data
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
       Toast.show({ icon: "success", content: "Profile updated!" });
       setIsEditMode(false);
     } catch (err) {
-      console.log("updateUser Error", err);
+      console.error("updateUser Error", err);
       Toast.show({ icon: "fail", content: "Update failed." });
     }
   };
+
   return (
     <div>
       {!isEditMode ? (
@@ -143,7 +149,7 @@ export default function BasicInfoUpdate() {
             <p><strong>City:</strong> {user?.City}</p>
             <p><strong>District:</strong> {user?.district}</p>
             <p><strong>State:</strong> {user?.State}</p>
-            <p><strong>Country:</strong> {user?.Country}</p>
+            <p><strong>Country:</strong> {user?.Country || ""}</p>
             <p><strong>Is Divyang:</strong> {user?.isdivyang ? 'Yes' : 'No'}</p>
             {user?.isdivyang && (
               <p><strong>Disability Description:</strong> {user?.divyangDescription}</p>
@@ -183,6 +189,7 @@ export default function BasicInfoUpdate() {
             initialValues={initialValues}
             onFinish={handleFinish}
             layout="horizontal"
+            requiredMarkStyle="none"
           >
             <Form.Item name="title" label="Title:">
               <TitleSelector
@@ -232,7 +239,10 @@ export default function BasicInfoUpdate() {
             </Form.Item>
 
             <Form.Item name="Country" label="Country:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                placeholder="Enter your country"
+              />
             </Form.Item>
 
             <Form.Item name="isdivyang" label="Is Divyang:" initialValue={false}>

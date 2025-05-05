@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function MyRegister({ setIsLogined }) {
     console.log("My Register");
-    
+
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
     const [customdata, setCustomdata] = useState({});
@@ -116,8 +116,11 @@ export default function MyRegister({ setIsLogined }) {
                     position: 'sticky',
                     top: 0,
                     zIndex: 100,
-                    padding: '10px',
-                    paddingTop: 'env(safe-area-inset-top)'
+                    height: "100px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: '35px 12px 25px 12px',
                 }}
             >
                 <div
@@ -126,7 +129,7 @@ export default function MyRegister({ setIsLogined }) {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         width: '100%',
-                        marginTop: "10px"
+                        marginTop: "auto"
                     }}
                 >
                     {/* Left Side: Title */}
@@ -211,7 +214,7 @@ export default function MyRegister({ setIsLogined }) {
                     >
                         <Form.Item
                             name="FirstName"
-                            label={<><span style={{ color: 'red' }}>*</span> First Name</>}
+                            label={<span style={{ marginLeft: "5px" }}> First Name</span>}
                             rules={[{ required: true, message: "Please enter your first name" }]}
                         >
                             <Input placeholder="Enter First Name" clearable />
@@ -219,7 +222,7 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="FatherName"
-                            label={<><span style={{ color: 'red' }}>*</span> Father's Name</>}
+                            label={<span style={{ marginLeft: "5px" }}> Father's Name </span>}
                             rules={[{ required: true, message: "Please enter your father's name" }]}
                         >
                             <Input placeholder="Enter Father's Name" clearable />
@@ -227,7 +230,7 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="email"
-                            label={<><span style={{ color: 'red' }}>*</span> Email</>}
+                            label={<span style={{ marginLeft: "5px" }}> Email</span>}
                             rules={[
                                 { required: true, message: 'Please enter your email' },
                                 { type: 'email', message: 'Please enter a valid email address' },
@@ -238,7 +241,7 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="password"
-                            label={<><span style={{ color: 'red' }}>*</span> Password</>}
+                            label={<span style={{ marginLeft: "5px" }}> Password</span>}
                             rules={[
                                 { required: true, message: "Please enter a password" },
                                 { min: 6, message: "Password must be at least 6 characters" },
@@ -249,7 +252,7 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="confirmPassword"
-                            label={<><span style={{ color: 'red' }}>*</span> Confirm Password</>}
+                            label={<span style={{ marginLeft: "5px" }}>Confirm Password</span>}
                             dependencies={['password']}
                             rules={[
                                 { required: true, message: 'Please confirm your password' },
@@ -268,25 +271,14 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="Sex"
-                            label={<><span style={{ color: 'red' }}>*</span> Gender</>}
+                            label={<span style={{ marginLeft: "5px" }}> Gender</span>}
                             rules={[{ required: true, message: "Please select your gender" }]}
                         >
                             <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                                <Radio value="Male">Male</Radio>
+                                <Radio value="Male" style={{ marginRight: "15px" }}>Male</Radio>
                                 <Radio value="Female">Female</Radio>
                             </Radio.Group>
                         </Form.Item>
-                        {/* <Form.Item
-                            name="orgsku"
-                            label={<><span style={{ color: 'red' }}>*</span> Cast</>}
-                            rules={[{ required: true, message: "Please select your Cast" }]}
-                        >
-                            <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                                <Radio value="SEERVI0002">SEERVI</Radio>
-                                <Radio value="TELI0001">TELI</Radio>
-                                <Radio value="DEMO0003">DEMO</Radio>
-                            </Radio.Group>
-                        </Form.Item> */}
 
                         <div style={{ marginBottom: '15px' }}>
                             <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
@@ -321,7 +313,7 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="Profession"
-                            label={<><span style={{ color: 'red' }}>*</span> Profession</>}
+                            label={<span style={{ marginLeft: "5px" }}> Profession</span>}
                             rules={[{ required: true, message: "Please select your profession" }]}
                         >
                             <Radio.Group style={{ fontSize: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
@@ -347,7 +339,7 @@ export default function MyRegister({ setIsLogined }) {
 
                         <Form.Item
                             name="MobileNumber"
-                            label={<><span style={{ color: 'red' }}>*</span> Mobile Number</>}
+                            label={<span style={{ marginLeft: "5px" }}>Mobile Number</span>}
                             rules={[
                                 { required: true, message: "Please enter your mobile number" },
                                 { pattern: /^[0-9]{10}$/, message: "Please enter a valid 10-digit mobile number" }
@@ -432,7 +424,7 @@ export default function MyRegister({ setIsLogined }) {
                     <br />
                     <br />
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

@@ -38,8 +38,11 @@ const MyLogin = ({ setIsLogined }) => {
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          padding: '10px',
-          paddingTop: 'env(safe-area-inset-top)'
+          height: "100px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: '35px 12px 25px 12px',
         }}
       >
         <div
@@ -48,7 +51,7 @@ const MyLogin = ({ setIsLogined }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
-            marginTop: "10px"
+            marginTop: "auto"
           }}
         >
           {/* Left Side: Title */}
@@ -78,6 +81,7 @@ const MyLogin = ({ setIsLogined }) => {
             }}
           />
         </div>
+
       </NavBar>
 
 
@@ -91,7 +95,7 @@ const MyLogin = ({ setIsLogined }) => {
             </div>
           </AutoCenter>
 
-          <Divider />
+          <Space />
 
           <Form
             onFinish={onFinish}

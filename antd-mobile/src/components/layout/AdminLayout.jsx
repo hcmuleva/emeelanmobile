@@ -16,7 +16,7 @@ export default function AdminLayout({ children }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       {/* Header */}
-      <TopBar userRole={"Admin"}/>
+      <TopBar userRole={"Admin"} />
 
       {/* Main Content */}
       <div style={{ flex: 1, overflowY: "auto" }}>{children}</div>
@@ -36,6 +36,7 @@ export default function AdminLayout({ children }) {
             bottom: 0,
             width: "100%",
             zIndex: 100,
+            padding: "16px 0",
           }}
         >
           {[
@@ -45,15 +46,16 @@ export default function AdminLayout({ children }) {
               icon: <CheckCircleFill style={{ fontSize: 24 }} />,
               key: "status",
             },
-           
+
             {
-              icon: <UserCircleOutline style={{ fontSize: 24 }} />, 
-							key: "adminlist"
-						},
+              icon: <UserCircleOutline style={{ fontSize: 24 }} />,
+              key: "adminlist"
+            },
             {
-              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
-							key: "NewUserRegister"
-						},
+              icon: <UserAddOutline style={{ fontSize: 24 }} />,
+              label: "Register",
+              key: "NewUserRegister"
+            },
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (
@@ -64,12 +66,13 @@ export default function AdminLayout({ children }) {
                   flexDirection: "column",
                   alignItems: "center",
                   color: isActive ? "#FF1E56" : "#999",
+                  padding: "15px",
                 }}
                 onClick={() => navigate(`/${item.key}`)}
               >
                 {item.icon}
                 <div style={{ fontSize: 12, marginTop: 4 }}>
-                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
+                  {item.label || item.key.charAt(0).toUpperCase() + item.key.slice(1)}
                 </div>
               </div>
             );

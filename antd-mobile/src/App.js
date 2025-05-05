@@ -1,4 +1,4 @@
-import { ConfigProvider } from "antd-mobile";
+import { ConfigProvider, SafeArea } from "antd-mobile";
 import enUS from "antd-mobile/es/locales/en-US";
 import React from "react";
 import {
@@ -47,289 +47,297 @@ const ProtectedRoute = ({ children }) => {
 
 function AppContent() {
   const isAuthenticated = JSON.parse(localStorage.getItem("authenticated"))
- console.log("AppContent isAuthenticated", isAuthenticated," mytest")
+  console.log("AppContent isAuthenticated", isAuthenticated, " mytest")
   return (
-    <AuthProvider>
-      <Router>
-        <DeepLinkHandler />
-        <Routes>
-         {/* Public Routes */}
-    <Route path="/login" element={<LoginPage />} />
-    <Route path="/terms" element={<TermsPage />} />
+    <div>
+      <div style={{ background: '#BC0226' }}>
+        <SafeArea position="top" />
+      </div>
+      <AuthProvider>
+        <Router>
+          <DeepLinkHandler />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/terms" element={<TermsPage />} />
 
-    {/* Protected Route */}
-    <Route
-      path="/"
-      element={
-        isAuthenticated ? (
-          <MainLayout>
-            <Home />
-          </MainLayout>
-        ) : (
-          <Navigate to="/login" replace />
-        )
-      }
-    />
-          <Route
-            path="/home"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Home />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/status"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ProfileStatusPage />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mailbox"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Mail />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected Route */}
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? (
+                  <MainLayout>
+                    <Home />
+                  </MainLayout>
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Home />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/status"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ProfileStatusPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mailbox"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Mail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/chat"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Chat />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/shareprofile"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <SocialSharingCard />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/qr-creation"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <DynamicUPIPaymentQR />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/donation-collection"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <DonationForm />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Chat />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/shareprofile"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SocialSharingCard />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/qr-creation"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <DynamicUPIPaymentQR />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/donation-collection"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <DonationForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/donation"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Donation />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/adminlist"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <AdminListPage />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/search"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Search />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profiles"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ProfilesPage />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/userprofile"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <UserProfile />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/newuserregister"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <NewUserRegistration />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />ViewDonors
-          <Route
-            path="/donors"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ViewDonors />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/donors/:donorid"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ViewDonorCard />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/allnews"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ViewNews />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/allnews/:newsid"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ViewNewsCard />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <SettingsDialog />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/donation"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Donation />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/adminlist"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <AdminListPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Search />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profiles"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ProfilesPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/userprofile"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <UserProfile />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/newuserregister"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <NewUserRegistration />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />ViewDonors
+            <Route
+              path="/donors"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ViewDonors />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/donors/:donorid"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ViewDonorCard />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/allnews"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ViewNews />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/allnews/:newsid"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ViewNewsCard />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SettingsDialog />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/social-sharing"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <SocialSharingCard />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/social-sharing"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SocialSharingCard />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/profile-view/:profileid"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <ProfileDetailPanel />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/notification-tab"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <StatusNotification />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/Admin"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <Admin />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/SuperAdmin"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <SuperAdmin />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/create-news"
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <BreakingNewsCreate />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          {/* Redirect unknown routes */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-      <style>{`
+            <Route
+              path="/profile-view/:profileid"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ProfileDetailPanel />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notification-tab"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <StatusNotification />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/Admin"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Admin />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/SuperAdmin"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SuperAdmin />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create-news"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <BreakingNewsCreate />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            {/* Redirect unknown routes */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+        <style>{`
         div::-webkit-scrollbar {
           display: none;
         }
         `}
-      </style>
-    </AuthProvider>
+        </style>
+      </AuthProvider>
+      <div>
+        <SafeArea position="bottom" />
+      </div>
+    </div>
   );
 }
 
 function App() {
-  
+
   return (
     <LanguageProvider>
       {({ locale }) => (

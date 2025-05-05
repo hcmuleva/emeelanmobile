@@ -38,7 +38,11 @@ const ProfileStatus = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
-  
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const fetchRequests = async () => {
     setLoading(true);
     try {
@@ -49,9 +53,9 @@ const ProfileStatus = () => {
           : data.filter((r) => r.sender?.id === userId);
       setRequests(filtered);
     } catch (error) {
-      Toast.show({ 
-        icon: "fail", 
-        content: "Failed to load requests" 
+      Toast.show({
+        icon: "fail",
+        content: "Failed to load requests"
       });
     } finally {
       setLoading(false);
@@ -67,9 +71,9 @@ const ProfileStatus = () => {
       });
       fetchRequests();
     } catch (error) {
-      Toast.show({ 
-        icon: "fail", 
-        content: `Failed to update request status` 
+      Toast.show({
+        icon: "fail",
+        content: `Failed to update request status`
       });
     }
   };
@@ -86,14 +90,14 @@ const ProfileStatus = () => {
   const renderCard = (request) => {
     const otherUser =
       mainTab === "RECEIVED" ? request.sender : request.receiver;
-      
+
     if (!otherUser) return null;
 
 
 
     return (
-      <Card 
-        key={request.id} 
+      <Card
+        key={request.id}
         style={{
           marginBottom: "12px",
           backgroundColor: "#FFFFFF",
@@ -138,11 +142,11 @@ const ProfileStatus = () => {
                 fontSize: "14px",
                 color: "#666",
               }}>
-                @{otherUser?.username || "unknown"}  
+                @{otherUser?.username || "unknown"}
               </div>
             </div>
           </div>
-          
+
           <Button
             size="small"
             color="primary"
@@ -172,7 +176,7 @@ const ProfileStatus = () => {
               {statusLabels[request.status]}
             </Tag>
           </div>
-          
+
           <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
             <span style={{ fontWeight: "600", color: "#8B0000" }}>Message:</span>
             <span>{request.message || "No message provided"}</span>
@@ -188,8 +192,8 @@ const ProfileStatus = () => {
                 borderRadius: "20px",
                 padding: "5px 16px",
                 fontWeight: "bold",
-                width:"100px",
-                border:"none"
+                width: "100px",
+                border: "none"
               }}
               onClick={() => handleAction(request.id, "ACCEPTED")}
             >
@@ -202,8 +206,8 @@ const ProfileStatus = () => {
                 padding: "5px 16px",
                 fontWeight: "bold",
                 color: "#FFFFFF",
-                width:"100px",
-                border:"none"
+                width: "100px",
+                border: "none"
               }}
               onClick={() => handleAction(request.id, "REJECTED")}
             >
@@ -224,93 +228,93 @@ const ProfileStatus = () => {
 
   return (
     <>
-   <br/>
-    <div style={{ backgroundColor: "#FCFAFA", minHeight: "100vh", padding: "8px" }}>
-      <div style={{ 
-        backgroundColor: "#8B0000", 
-        color: "white", 
-        padding: "12px", 
-        fontFamily: "Arial, sans-serif",
-        fontSize: "18px",
-        fontWeight: "bold",
-        textAlign: "center",
-        marginBottom: "12px",
-        borderRadius: "8px 8px 0 0"
-      }}>
-        Connection Requests
-      </div>
-
-      <Tabs 
-        activeKey={mainTab} 
-        onChange={setMainTab}
-        style={{ 
+      <br />
+      <div style={{ backgroundColor: "#FCFAFA", minHeight: "100vh", padding: "8px" }}>
+        <div style={{
+          backgroundColor: "#8B0000",
+          color: "white",
+          padding: "12px",
           fontFamily: "Arial, sans-serif",
-          "--title-font-size": "16px",
-          "--active-line-color": "#8B0000",
-          "--active-title-color": "#8B0000",
-          "--fixed-active-line-width": "24px"
-        }}
-      >
-        <Tabs.Tab title="Received" key="RECEIVED" />
-        <Tabs.Tab title="Sent" key="SENT" />
-      </Tabs>
-
-      <Tabs 
-        activeKey={statusTab} 
-        onChange={setStatusTab}
-        style={{
-          fontFamily: "Arial, sans-serif",
-          "--title-font-size": "14px",
-          "--active-line-color": "#8B0000",
-          "--active-title-color": "#8B0000",
-          marginTop: "8px",
-          backgroundColor: "#FFFFFF",
-          borderRadius: "8px",
-          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-          padding: "0 4px",
-          "--fixed-active-line-width": "20px"
-        }}
-      >
-        <Tabs.Tab title="Pending" key="PENDING" />
-        <Tabs.Tab title="Accepted" key="ACCEPTED" />
-        <Tabs.Tab title="Rejected" key="REJECTED" />
-      </Tabs>
-
-      {loading ? (
-        <div style={{ 
-          padding: "24px", 
+          fontSize: "18px",
+          fontWeight: "bold",
           textAlign: "center",
-          fontFamily: "Arial, sans-serif",
-          color: "#8B0000" 
+          marginBottom: "12px",
+          borderRadius: "8px 8px 0 0"
         }}>
-          <DotLoading color="#8B0000" />
-          <div style={{ marginTop: "8px" }}>
-            Loading {statusLabels[statusTab].toLowerCase()} requests...
-          </div>
+          Connection Requests
         </div>
-      ) : (
-        <>
-          <div style={{ paddingTop: "12px" }}>
-            {requests.length > 0 ? (
-              requests.map(renderCard)
-            ) : (
-              <>
-                <div style={{ 
-                  padding: "24px", 
-                  textAlign: "center", 
-                  backgroundColor: "#FFEBEE",
-                  borderRadius: "8px",
-                  fontFamily: "Arial, sans-serif",
-                  color: "#8B0000"
-                }}>
-                  No {statusLabels[statusTab].toLowerCase()} {mainTab.toLowerCase()} requests found.
-                </div>
-              </>
-            )}
+
+        <Tabs
+          activeKey={mainTab}
+          onChange={setMainTab}
+          style={{
+            fontFamily: "Arial, sans-serif",
+            "--title-font-size": "16px",
+            "--active-line-color": "#8B0000",
+            "--active-title-color": "#8B0000",
+            "--fixed-active-line-width": "24px"
+          }}
+        >
+          <Tabs.Tab title="Received" key="RECEIVED" />
+          <Tabs.Tab title="Sent" key="SENT" />
+        </Tabs>
+
+        <Tabs
+          activeKey={statusTab}
+          onChange={setStatusTab}
+          style={{
+            fontFamily: "Arial, sans-serif",
+            "--title-font-size": "14px",
+            "--active-line-color": "#8B0000",
+            "--active-title-color": "#8B0000",
+            marginTop: "8px",
+            backgroundColor: "#FFFFFF",
+            borderRadius: "8px",
+            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+            padding: "0 4px",
+            "--fixed-active-line-width": "20px"
+          }}
+        >
+          <Tabs.Tab title="Pending" key="PENDING" />
+          <Tabs.Tab title="Accepted" key="ACCEPTED" />
+          <Tabs.Tab title="Rejected" key="REJECTED" />
+        </Tabs>
+
+        {loading ? (
+          <div style={{
+            padding: "24px",
+            textAlign: "center",
+            fontFamily: "Arial, sans-serif",
+            color: "#8B0000"
+          }}>
+            <DotLoading color="#8B0000" />
+            <div style={{ marginTop: "8px" }}>
+              Loading {statusLabels[statusTab].toLowerCase()} requests...
+            </div>
           </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <div style={{ paddingTop: "12px" }}>
+              {requests.length > 0 ? (
+                requests.map(renderCard)
+              ) : (
+                <>
+                  <div style={{
+                    padding: "24px",
+                    textAlign: "center",
+                    backgroundColor: "#FFEBEE",
+                    borderRadius: "8px",
+                    fontFamily: "Arial, sans-serif",
+                    color: "#8B0000"
+                  }}>
+                    No {statusLabels[statusTab].toLowerCase()} {mainTab.toLowerCase()} requests found.
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
