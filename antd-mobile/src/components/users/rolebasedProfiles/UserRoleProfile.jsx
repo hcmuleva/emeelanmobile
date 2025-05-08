@@ -53,7 +53,6 @@ const UserRoleProfile = ({ adminProp }) => {
     { label: "GOVTJOB", value: "GOVTJOB" },
     { label: "PRIVATEJOB", value: "PRIVATEJOB" },
     { label: "STUDENT", value: "STUDENT" },
-    { label: "GOVTJOB", value: "GOVTJOB" },
     { label: "OTHER", value: "OTHER" },
   ];
 

@@ -55,8 +55,8 @@ export default function SuperAdminLayout({ children }) {
             },
             {
               icon: <UserAddOutline style={{ fontSize: 24 }} />,
-              label: "Register",
-              key: "NewUserRegister"
+              label: "Admin Panel",
+              key: "AdminPanel"
             },
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;

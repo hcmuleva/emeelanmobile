@@ -28,7 +28,7 @@ import Chat from "./pages/Chat";
 import Home from "./pages/Home";
 import Mail from "./pages/Mail";
 import ProfileStatusPage from "./pages/ProfileStatusPage";
-import Admin from "./pages/admin/Admin";
+import Admin from "./pages/admin/AdminPanel";
 import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import Donation from "./pages/homepage/shortcuts/DonationPage";
@@ -38,6 +38,7 @@ import { TermsPage } from "./pages/public/TermsPage";
 import SuperAdmin from "./pages/superadmin/SuperAdmin";
 import ProfilesPage from "./pages/user/ProfilesPage";
 import UserProfile from "./pages/user/UserProfile";
+import AdminPanel from "./pages/admin/AdminPanel";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -289,11 +290,11 @@ function AppContent() {
               }
             />
             <Route
-              path="/Admin"
+              path="/AdminPanel"
               element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <Admin />
+                    <AdminPanel />
                   </MainLayout>
                 </ProtectedRoute>
               }

@@ -1,14 +1,10 @@
 import {
-  CiCircleTwoTone,
-  HomeOutlined,
-  MessageOutlined,
-  SearchOutlined,
-  TeamOutlined,
+  HomeOutlined
 } from "@ant-design/icons";
-import { CheckCircleFill, TeamOutline, UserAddOutline, UserCircleOutline, UserSetOutline } from "antd-mobile-icons";
+import { CheckCircleFill, TeamOutline, UserAddOutline, UserCircleOutline } from "antd-mobile-icons";
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
-import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AdminLayout({ children }) {
   const location = useLocation();
@@ -53,8 +49,8 @@ export default function AdminLayout({ children }) {
             },
             {
               icon: <UserAddOutline style={{ fontSize: 24 }} />,
-              label: "Register",
-              key: "NewUserRegister"
+              label: "Admin Panel",
+              key: "AdminPanel"
             },
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
