@@ -1,13 +1,12 @@
 import { ConfigProvider, SafeArea } from "antd-mobile";
 import enUS from "antd-mobile/es/locales/en-US";
-import React from "react";
 import {
   Navigate,
   Route,
   BrowserRouter as Router,
-  Routes,
-  useNavigate,
+  Routes
 } from "react-router-dom";
+import "./App.css";
 import DeepLinkHandler from "./DeepLinkHandler";
 import DonationForm from "./components/admin/DonationForm";
 import Search from "./components/common/Search";
@@ -21,14 +20,16 @@ import StatusNotification from "./components/layout/StatusNotification";
 import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
 import ProfileDetailPanel from "./components/users/ProfileDetailPanel";
 import { SettingsDialog } from "./components/users/profilesections/settings/SettingsDialog";
+import { AdProvider } from "./context/AdContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
+import { useAd } from "./hooks/useAd";
 import { locales } from "./locales";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
 import Mail from "./pages/Mail";
 import ProfileStatusPage from "./pages/ProfileStatusPage";
-import Admin from "./pages/admin/Admin";
+import Admin from "./pages/admin/AdminPanel";
 import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import Donation from "./pages/homepage/shortcuts/DonationPage";
@@ -38,9 +39,7 @@ import { TermsPage } from "./pages/public/TermsPage";
 import SuperAdmin from "./pages/superadmin/SuperAdmin";
 import ProfilesPage from "./pages/user/ProfilesPage";
 import UserProfile from "./pages/user/UserProfile";
-import { AdProvider } from "./context/AdContext";
-import { useAd } from "./hooks/useAd";
-import "./App.css"
+import AdminPanel from "./pages/admin/AdminPanel";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -295,7 +294,7 @@ function AppContent() {
               }
             />
             <Route
-              path="/Admin"
+              path="/AdminPanel"
               element={
                 <ProtectedRoute>
                   <MainLayout>

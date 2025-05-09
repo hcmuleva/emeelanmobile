@@ -86,7 +86,7 @@ export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => 
         _start: start,
         _limit: limit,
         filters: modifiedFilters, // ✅ Use filters
-        _sort: 'id:asc', // Sort by newest first
+        _sort: 'id:desc', // Sort by newest first
         "populate[photos]": "*", // ✅ Populate photos (all fields)
         "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
         "populate[Height]": "*",
@@ -222,14 +222,20 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
     const params = {
       _start: start,
       _limit: limit,
-      _q: query, // Strapi search query
       _sort: "username:ASC",
       filters: {
         $or: [
           { FirstName: { $containsi: query } },
           { LastName: { $containsi: query } },
-        ],
-      },
+          { Country: { $containsi: query } },
+          { State: { $containsi: query } },
+          { City: { $containsi: query } },
+          { Profession: { $containsi: query } },
+          {
+            id: !isNaN(parseInt(query)) ? { $eq: parseInt(query) } : undefined
+          }
+        ].filter(Boolean), // removes undefined if `id` is not a number
+      }
     }
     console.log(params)
     const response = await api.get(`/users`, {

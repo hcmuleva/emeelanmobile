@@ -63,7 +63,6 @@ export default function UserLayout({ children }) {
           width: "100%",
           zIndex: 100,
           padding: "16px 0",
-
         }}
       >
         {footerItems.map((item) => {

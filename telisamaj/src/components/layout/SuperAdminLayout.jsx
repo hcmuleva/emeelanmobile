@@ -49,13 +49,14 @@ export default function SuperAdminLayout({ children }) {
               key: "status",
             },
             {
-              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
-							key: "adminlist"
-						},
+              icon: <UserAddOutline style={{ fontSize: 24 }} />,
+              key: "adminlist"
+            },
             {
-              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
-							key: "NewUserRegister"
-						},
+              icon: <UserAddOutline style={{ fontSize: 24 }} />,
+              label: "Admin Panel",
+              key: "AdminPanel"
+            },
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (

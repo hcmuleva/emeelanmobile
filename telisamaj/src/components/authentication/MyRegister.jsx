@@ -18,6 +18,9 @@ export default function MyRegister({ setIsLogined }) {
     const [loading, setLoading] = useState(false);
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [profession, setProfession] = useState("");
+    const [customProfession, setCustomProfession] = useState("");
+
     const handlePincodeChange = async () => {
         const pincode = form.getFieldValue("pincode");
         if (/^\d{6}$/.test(pincode)) {
@@ -64,6 +67,7 @@ export default function MyRegister({ setIsLogined }) {
 
         const payload = {
             ...values,
+            Profession: profession === "OTHER" ? customProfession : profession,
             emeelanrole,
             orgsku: "TELI0001",
             username: values.MobileNumber,
@@ -229,6 +233,14 @@ export default function MyRegister({ setIsLogined }) {
                         </Form.Item>
 
                         <Form.Item
+                            name="LastName"
+                            label={<><span style={{ color: 'red' }}>*</span> Last Name</>}
+                            rules={[{ required: true, message: "Please enter your last name" }]}
+                        >
+                            <Input placeholder="Enter Last Name" clearable />
+                        </Form.Item>
+
+                        <Form.Item
                             name="FatherName"
                             label={<><span style={{ color: 'red' }}>*</span> Father's Name</>}
                             rules={[{ required: true, message: "Please enter your father's name" }]}
@@ -331,29 +343,33 @@ export default function MyRegister({ setIsLogined }) {
                         </div>
 
                         <Form.Item
-                            name="Profession"
                             label={<><span style={{ color: 'red' }}>*</span> Profession</>}
-                            rules={[{ required: true, message: "Please select your profession" }]}
+                            required
                         >
-                            <Radio.Group style={{ fontSize: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                            <Radio.Group
+                                value={profession}
+                                onChange={(val) => setProfession(val)}
+                                style={{ fontSize: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}
+                            >
                                 {[
-                                    "BUSINESS",
-                                    "ENGINEER",
-                                    "DOCTOR",
-                                    "TEACHER",
-                                    "CA",
-                                    "SERVICE",
-                                    "HOUSEWORK",
-                                    "GOVTJOB",
-                                    "PRIVATEJOB",
-                                    "STUDENT",
-                                    "OTHER",
+                                    "BUSINESS", "ENGINEER", "DOCTOR", "TEACHER", "CA", "SERVICE",
+                                    "HOUSEWORK", "GOVTJOB", "PRIVATEJOB", "STUDENT", "OTHER"
                                 ].map((item) => (
-                                    <Radio value={item} key={item} style={{ fontSize: "30%", marginRight: "15px" }}>
+                                    <Radio value={item} key={item} style={{ marginRight: "15px" }}>
                                         <span style={{ fontSize: "15px", textTransform: "capitalize" }}>{item.toLowerCase()}</span>
                                     </Radio>
                                 ))}
                             </Radio.Group>
+
+                            {profession === "OTHER" && (
+                                <Input
+                                    style={{ marginTop: "10px" }}
+                                    placeholder="Enter your profession"
+                                    value={customProfession}
+                                    onChange={val => setCustomProfession(val)}
+                                    clearable
+                                />
+                            )}
                         </Form.Item>
 
                         <Form.Item
@@ -444,6 +460,6 @@ export default function MyRegister({ setIsLogined }) {
                     <br />
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

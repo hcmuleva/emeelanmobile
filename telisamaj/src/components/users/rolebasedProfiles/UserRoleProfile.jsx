@@ -33,6 +33,7 @@ const UserRoleProfile = ({ adminProp }) => {
   const [minAge, setMinAge] = useState("");
   const [maxAge, setMaxAge] = useState("");
 
+
   const maritalOptions = [
     { label: "Single", value: "Never Married" },
     { label: "Divorced", value: "Divorcee" },
@@ -53,9 +54,8 @@ const UserRoleProfile = ({ adminProp }) => {
     { label: "GOVTJOB", value: "GOVTJOB" },
     { label: "PRIVATEJOB", value: "PRIVATEJOB" },
     { label: "STUDENT", value: "STUDENT" },
-    { label: "GOVTJOB", value: "GOVTJOB" },
-    { label: "OTHER", value: "OTHER" },
   ];
+
 
   const limit = 10;
 
@@ -108,7 +108,7 @@ const UserRoleProfile = ({ adminProp }) => {
     setPage(0);
     setHasMore(true);
     fetchUsers(0, search);
-  }, [search, marital, profession, gotra, minAge, maxAge]);
+  }, [search, marital, profession, gotra, minAge, maxAge,]);
 
   return (
     <div>
@@ -173,7 +173,7 @@ const UserRoleProfile = ({ adminProp }) => {
       </div>
       <SearchBar
         key="UniqueKey"
-        placeholder="Search Users..."
+        placeholder="Search Users by ( Name, Location, Profession )"
         value={inputValue}
         onChange={val => setInputValue(val)}
         style={{ marginBottom: 10, padding: "16px" }}

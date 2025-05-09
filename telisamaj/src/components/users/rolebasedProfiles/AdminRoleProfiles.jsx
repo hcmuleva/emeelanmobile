@@ -1,5 +1,5 @@
 
-import { Collapse, InfiniteScroll, Input, List,Button, SearchBar, Selector } from "antd-mobile";
+import { Collapse, InfiniteScroll, Input, List, Button, SearchBar, Selector } from "antd-mobile";
 import React, { useEffect, useState } from "react";
 import { getPaginatedUsers, searchUsers } from "../../../services/api"; // ✅ Import both
 
@@ -44,6 +44,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
     { label: "Vidur", value: "VIDUR" },
     { label: "Separated", value: "Separated" },
   ];
+
   const userstatusOptiopns = [
     { label: "APPROVED", value: "APPROVED" },
     { label: "UNAPPROVED", value: "UNAPPROVED" },
@@ -51,17 +52,21 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
     { label: "BLOCKED", value: "BLOCKED" },
     { label: "PENDING", value: "PENDING" },
     { label: "ENGAGED", value: "ENGAGED" },
-    {label: "SUSPENDED", value: "SUSPENDED" },
+    { label: "SUSPENDED", value: "SUSPENDED" },
   ];
 
+
   const professionOptions = [
-    { label: "Engineer", value: "engineer" },
-    { label: "Doctor", value: "doctor" },
-    { label: "Teacher", value: "teacher" },
-    { label: "Business", value: "business" },
-    { label: "Housewife", value: "House work" },
-    { label: "CA", value: "ca" },
-    { label: "Other", value: "other" },
+    { label: "ENGINEER", value: "ENGINEER" },
+    { label: "DOCTOR", value: "DOCTOR" },
+    { label: "TEACHER", value: "TEACHER" },
+    { label: "BUSINESS", value: "BUSINESS" },
+    { label: "HOUSEWORK", value: "HOUSEWORK" },
+    { label: "CA", value: "CA" },
+    { label: "SERVICE", value: "SERVICE" },
+    { label: "GOVTJOB", value: "GOVTJOB" },
+    { label: "PRIVATEJOB", value: "PRIVATEJOB" },
+    { label: "STUDENT", value: "STUDENT" },
   ];
 
   const limit = 10;
@@ -74,10 +79,10 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
       if (userrole === "ADMIN") {
         filters["userstatus"] = "PENDING"
       }
-      if(userrole === "CENTER" || userrole === "SUPERADMIN"){
-        if(userstatus) filters["userstatus"] = userstatus
-        if(idFilter) filters["id"] = idFilter
-        
+      if (userrole === "CENTER" || userrole === "SUPERADMIN") {
+        if (userstatus) filters["userstatus"] = userstatus
+        if (idFilter) filters["id"] = idFilter
+
 
       }
       if (minAge && maxAge) {
@@ -122,7 +127,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
     setPage(0);
     setHasMore(true);
     fetchUsers(0, search);
-  }, [search, marital, profession, gotra, userstatus, minAge, maxAge,idFilter]);
+  }, [search, marital, profession, gotra, userstatus, minAge, maxAge, idFilter]);
 
   return (
     <div>
@@ -141,19 +146,19 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
               />
             </div>
             <div style={{ marginBottom: 8 }}>
-        <strong>User ID:</strong>
-        <Input
-          type="number"
-          placeholder="Enter user ID"
-          value={idFilter}
-          onChange={val => setIdFilter(val)}
-          clearable
-          style={{ width: '100%', marginTop: 4 }}
-        />
-        {/* <Button color="primary" size="small" onClick={onSearchById} style={{ marginTop: 8 }}>
+              <strong>User ID:</strong>
+              <Input
+                type="number"
+                placeholder="Enter user ID"
+                value={idFilter}
+                onChange={val => setIdFilter(val)}
+                clearable
+                style={{ width: '100%', marginTop: 4 }}
+              />
+              {/* <Button color="primary" size="small" onClick={onSearchById} style={{ marginTop: 8 }}>
           Search by ID
         </Button> */}
-      </div>
+            </div>
             <div style={{ marginBottom: 8 }}>
               <strong>Profession:</strong>
               <Selector
@@ -184,7 +189,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
                 setCustomdata={(val) => setGotra(val.gotra)}
               />
             </div>
-          
+
             <div style={{ marginBottom: 8 }}>
               <strong>Age Range:</strong>
               <div style={{ display: "flex", gap: 10 }}>
