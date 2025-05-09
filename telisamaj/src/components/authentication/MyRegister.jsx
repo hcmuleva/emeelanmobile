@@ -120,11 +120,11 @@ export default function MyRegister({ setIsLogined }) {
                     position: 'sticky',
                     top: 0,
                     zIndex: 100,
-                    height: "60px",
+                    height: "100px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    padding: '35px 12px 20px 20px',
+                    padding: '35px 12px 25px 12px',
                 }}
             >
                 <div

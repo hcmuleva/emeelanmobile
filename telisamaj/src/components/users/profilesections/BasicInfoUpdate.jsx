@@ -6,7 +6,7 @@ import TitleSelector from "../../common/TitleSelector";
 
 export default function BasicInfoUpdate() {
   const [form] = Form.useForm();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, setProfileUpdated } = useContext(AuthContext);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const initialValues = {
@@ -85,6 +85,8 @@ export default function BasicInfoUpdate() {
       const updatedUser = { ...user, ...values };
 
       setUser(updatedUser);
+      setProfileUpdated(true)
+
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
       Toast.show({ icon: "success", content: "Profile updated!" });
@@ -112,7 +114,7 @@ export default function BasicInfoUpdate() {
           }
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
-            <Image
+            {/* <Image
               src={imagesrc}
               width={60}
               height={60}
@@ -121,7 +123,7 @@ export default function BasicInfoUpdate() {
                 borderRadius: '50%',
                 border: '2px solid #8B0000',
               }}
-            />
+            /> */}
             <div>
               <h3 style={{ margin: 0, color: '#8B0000' }}>{user?.FirstName} {user?.LastName}</h3>
               <div style={{ fontSize: '14px', color: '#666' }}>

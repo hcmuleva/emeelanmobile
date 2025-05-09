@@ -37,8 +37,11 @@ export default function SuperAdminLayout({ children }) {
             boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.05)",
             position: "fixed",
             bottom: 0,
+            left: 0,
+            right: 0,
             width: "100%",
             zIndex: 100,
+            padding: "16px 0",
           }}
         >
           {[
@@ -67,6 +70,7 @@ export default function SuperAdminLayout({ children }) {
                   flexDirection: "column",
                   alignItems: "center",
                   color: isActive ? "#FF1E56" : "#999",
+                  padding: "15px",
                 }}
                 onClick={() => navigate(`/${item.key}`)}
               >

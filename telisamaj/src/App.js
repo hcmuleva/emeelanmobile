@@ -29,7 +29,6 @@ import Chat from "./pages/Chat";
 import Home from "./pages/Home";
 import Mail from "./pages/Mail";
 import ProfileStatusPage from "./pages/ProfileStatusPage";
-import Admin from "./pages/admin/AdminPanel";
 import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import Donation from "./pages/homepage/shortcuts/DonationPage";
@@ -298,7 +297,7 @@ function AppContent() {
               element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <Admin />
+                    <AdminPanel />
                   </MainLayout>
                 </ProtectedRoute>
               }
