@@ -23,6 +23,7 @@ export default function MyRegister({ setIsLogined }) {
     const navigate = useNavigate();
     const [profession, setProfession] = useState("");
     const [customProfession, setCustomProfession] = useState("");
+    const authenticated = localStorage.getItem("authenticated")
 
     const handlePincodeChange = async () => {
         const pincode = form.getFieldValue("pincode");
@@ -115,7 +116,7 @@ export default function MyRegister({ setIsLogined }) {
 
     return (
         <div className="registration-container">
-            {user?.userrole === "MEELAN" &&
+            {(user?.userrole === "MEELAN" || authenticated === "false")&& 
                 <NavBar
                     back={null}
                     style={{
@@ -442,7 +443,7 @@ export default function MyRegister({ setIsLogined }) {
                             <Input placeholder="Enter disability details if applicable" />
                         </Form.Item>
                     </Form>
-                    {user?.userrole === "MEELAN" && 
+                    {(user?.userrole === "MEELAN" || authenticated === "false") &&
                         <div style={{ textAlign: 'center', marginTop: '15px' }}>
                             <p style={{ color: '#666', margin: '10px 0' }}>OR</p>
                             <p>

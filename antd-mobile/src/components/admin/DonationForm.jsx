@@ -3,10 +3,14 @@ import { Form, Input, TextArea, Radio, Button, Toast, ImageUploader, Dialog } fr
 import { UploadOutline } from 'antd-mobile-icons';
 import { AuthContext } from '../../context/AuthContext';
 import { createAndUpdateDonners, uploadImage } from '../../services/api';
-import gotraData from "../../utils/gotra.json"; // Gotra data import
+// import gotraData from "../../utils/gotra.json"; // Gotra data import
 import GotraSelector from '../authentication/registration/GotraSelector';
+import GotraController from '../../../../telisamaj/src/utils/GotraController';
 
 const DonationForm = () => {
+  const gotraData = GotraController()
+
+
   const { jwt } = useContext(AuthContext);
   const [form] = Form.useForm();
   const [photoFileList, setPhotoFileList] = useState([]);

@@ -3,11 +3,14 @@ import { Form, Input, Button, Toast, Radio, Divider } from "antd-mobile";
 import { AuthContext } from '../../context/AuthContext';
 import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
-import gotra from "../../utils/gotra.json";
+// import gotra from "../../utils/gotra.json";
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
+import GotraController from '../../../../telisamaj/src/utils/GotraController';
 
 export default function RegisterUser() {
+    const gotra = GotraController()
+
     const [form] = Form.useForm();
     const [emeelanrole, setEmeelanrole] = useState("MEELAN");
     const [customdata, setCustomdata] = useState({});
