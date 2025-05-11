@@ -231,6 +231,9 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
           { State: { $containsi: query } },
           { City: { $containsi: query } },
           { Profession: { $containsi: query } },
+          { district: { $containsi: query } },
+          { userstatus: { $containsi: query } },
+          { Gotra: { $containsi: query } },
           {
             id: !isNaN(parseInt(query)) ? { $eq: parseInt(query) } : undefined
           }

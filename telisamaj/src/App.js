@@ -39,6 +39,7 @@ import SuperAdmin from "./pages/superadmin/SuperAdmin";
 import ProfilesPage from "./pages/user/ProfilesPage";
 import UserProfile from "./pages/user/UserProfile";
 import AdminPanel from "./pages/admin/AdminPanel";
+import ScrollToTop from "./components/ScrollToTop";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -56,6 +57,7 @@ function AppContent() {
       </div>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <DeepLinkHandler />
           <Routes>
             {/* Public Routes */}

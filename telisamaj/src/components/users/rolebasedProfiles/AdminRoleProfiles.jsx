@@ -4,9 +4,13 @@ import React, { useEffect, useState } from "react";
 import { getPaginatedUsers, searchUsers } from "../../../services/api"; // ✅ Import both
 
 import { CollapsePanel } from "antd-mobile/es/components/collapse/collapse";
-import gotraData from "../../../utils/gotra.json";
+// import gotraData from "../../../utils/gotra.json";
 import GotraSelector from "../../authentication/registration/GotraSelector";
 import NewProfileCard from "../NewProfileCard";
+import GotraController from "../../../utils/GotraController";
+
+const gotraData = GotraController()
+
 // Helper to calculate DOB range from age range
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
@@ -80,17 +84,15 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
         filters["userstatus"] = "PENDING"
       }
       if (userrole === "CENTER" || userrole === "SUPERADMIN") {
-        if (userstatus) filters["userstatus"] = userstatus
-        if (idFilter) filters["id"] = idFilter
-
-
+        if (userstatus) filters["userstatus"] = userstatus;
+        if (idFilter) filters["id"] = idFilter;
       }
+      if (gotra) filters["gotra"] = gotra;
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;
         filters["DOB_lte"] = to;
       }
-
       let data;
       if (searchQuery) {
         console.log("searchQuery", searchQuery)
@@ -133,92 +135,95 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
     <div>
       <div style={{ padding: "16px" }}>
         {/* Collapsible Filters */}
-        <Collapse>
-          <CollapsePanel key="1" title="Filters">
-            <div style={{ marginBottom: 8 }}>
-              <strong>Marital Status:</strong>
-              <Selector
-                showCheckMark
-                columns={3}
-                options={maritalOptions}
-                value={[marital]}
-                onChange={(val) => setMarital(val[0])}
-              />
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <strong>User ID:</strong>
-              <Input
+       <Collapse>
+        <CollapsePanel key="1" title="Filters">
+          <div style={{ marginBottom: 12 }}>
+            <strong>Marital Status:</strong>
+            <Selector
+              showCheckMark
+              columns={3}
+              options={maritalOptions}
+              value={[marital]}
+              onChange={(val) => setMarital(val[0])}
+              style={{ wordBreak: "break-word", whiteSpace: "normal" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <strong>User ID:</strong>
+            <Input
+              type="number"
+              placeholder="Enter user ID"
+              value={idFilter}
+              onChange={val => setIdFilter(val)}
+              clearable
+              style={{ width: '100%', marginTop: 4 }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <strong>Profession:</strong>
+            <Selector
+              showCheckMark
+              columns={3}
+              options={professionOptions}
+              value={[profession]}
+              onChange={(val) => setProfession(val[0])}
+              style={{ wordBreak: "break-word", whiteSpace: "normal" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <strong>Status:</strong>
+            <Selector
+              showCheckMark
+              columns={3}
+              options={userstatusOptiopns}
+              value={[userstatus]}
+              onChange={(val) => setUserstatus(val[0])}
+              style={{ wordBreak: "break-word", whiteSpace: "normal" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <strong>Gotra:</strong>
+            <GotraSelector
+              gotra_for={false}
+              gotraData={gotraData.Gotra}
+              customdata={{ gotra }}
+              setCustomdata={(val) => setGotra(val.gotra)}
+            />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <strong>Age Range:</strong>
+            <div style={{ display: "flex", gap: 10 }}>
+              <input
                 type="number"
-                placeholder="Enter user ID"
-                value={idFilter}
-                onChange={val => setIdFilter(val)}
-                clearable
-                style={{ width: '100%', marginTop: 4 }}
+                placeholder="Min Age"
+                value={minAge}
+                onChange={(e) => setMinAge(e.target.value)}
+                style={{ width: "50%" }}
               />
-              {/* <Button color="primary" size="small" onClick={onSearchById} style={{ marginTop: 8 }}>
-          Search by ID
-        </Button> */}
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <strong>Profession:</strong>
-              <Selector
-                showCheckMark
-                columns={3}
-                options={professionOptions}
-                value={[profession]}
-                onChange={(val) => setProfession(val[0])}
+              <input
+                type="number"
+                placeholder="Max Age"
+                value={maxAge}
+                onChange={(e) => setMaxAge(e.target.value)}
+                style={{ width: "50%" }}
               />
             </div>
-            <div style={{ marginBottom: 8 }}>
-              <strong>Status:</strong>
-              <Selector
-                showCheckMark
-                columns={3}
-                options={userstatusOptiopns}
-                value={[userstatus]}
-                onChange={(val) => setUserstatus(val[0])}
-              />
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <strong>Gotra:</strong>
-              <GotraSelector
-                gotra_for={false}
-                gotraData={gotraData.Gotra}
-                customdata={{ gotra }}
-                setCustomdata={(val) => setGotra(val.gotra)}
-              />
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <strong>Age Range:</strong>
-              <div style={{ display: "flex", gap: 10 }}>
-                <input
-                  type="number"
-                  placeholder="Min Age"
-                  value={minAge}
-                  onChange={(e) => setMinAge(e.target.value)}
-                  style={{ width: "50%" }}
-                />
-                <input
-                  type="number"
-                  placeholder="Max Age"
-                  value={maxAge}
-                  onChange={(e) => setMaxAge(e.target.value)}
-                  style={{ width: "50%" }}
-                />
-              </div>
-            </div>
-          </CollapsePanel>
-        </Collapse>
+          </div>
+        </CollapsePanel>
+      </Collapse>
       </div>
-      {/* <SearchBar
+      <SearchBar
         key="UniqueKey"
-        placeholder="Search Users..."
+        placeholder="Search Users by ( Name, Location, Profession, Status )"
         value={inputValue}
         onChange={val => setInputValue(val)}
         style={{ marginBottom: 10, padding: "16px" }}
-      /> */}
+      />
 
       <List>
         {users.map((user) => (

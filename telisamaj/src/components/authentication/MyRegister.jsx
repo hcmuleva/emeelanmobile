@@ -5,11 +5,14 @@ import { getPincode, register } from '../../services/api';
 import GotraSelector from '../authentication/registration/GotraSelector';
 import MaritialStatus from '../authentication/registration/MaritialStatus';
 import DateSelector from '../authentication/registration/DateSelector';
-import gotra from "../../utils/gotra.json";
+// import gotra from "../../utils/gotra.json";
 import "../../styles/registration.css";
 import { useNavigate } from 'react-router-dom';
+import GotraController from '../../utils/GotraController';
 
 export default function MyRegister({ setIsLogined }) {
+    const gotra = GotraController()
+
     console.log("My Register");
 
     const [form] = Form.useForm();
@@ -112,67 +115,68 @@ export default function MyRegister({ setIsLogined }) {
 
     return (
         <div className="registration-container">
-            <NavBar
-                back={null}
-                style={{
-                    background: '#BC0226',
-                    color: 'white',
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 100,
-                    height: "100px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: '35px 12px 25px 12px',
-                }}
-            >
-                <div
+            {user?.userrole === "MEELAN" &&
+                <NavBar
+                    back={null}
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        width: '100%',
-                        marginTop: "auto"
+                        background: '#BC0226',
+                        color: 'white',
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 100,
+                        height: "100px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: '35px 12px 25px 12px',
                     }}
                 >
-                    {/* Left Side: Title */}
-                    <div>
-                        <div
-                            style={{
-                                fontWeight: '600',
-                                fontSize: '18px',
-                                lineHeight: '20px',
-                                letterSpacing: '.8px',
-                                textAlign: "left"
-                            }}
-                        >
-                            TELISAMAJ-
-                            <br />
-                            <span style={{
-                                fontWeight: '400',
-                                fontSize: '14px',
-                            }}>
-                                आल इंडिया क्षत्रिय राठौड़ समाज
-                            </span>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            width: '100%',
+                            marginTop: "auto"
+                        }}
+                    >
+                        {/* Left Side: Title */}
+                        <div>
+                            <div
+                                style={{
+                                    fontWeight: '600',
+                                    fontSize: '18px',
+                                    lineHeight: '20px',
+                                    letterSpacing: '.8px',
+                                    textAlign: "left"
+                                }}
+                            >
+                                TELISAMAJ-
+                                <br />
+                                <span style={{
+                                    fontWeight: '400',
+                                    fontSize: '14px',
+                                }}>
+                                    आल इंडिया क्षत्रिय राठौड़ समाज
+                                </span>
+                            </div>
+
                         </div>
 
+                        {/* Right Side: Logo */}
+                        <img
+                            src="logo.png" // Replace with your logo path
+                            alt="Logo"
+                            style={{
+                                height: '36px',
+                                width: '36px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                            }}
+                        />
                     </div>
-
-                    {/* Right Side: Logo */}
-                    <img
-                        src="logo.png" // Replace with your logo path
-                        alt="Logo"
-                        style={{
-                            height: '36px',
-                            width: '36px',
-                            borderRadius: '50%',
-                            objectFit: 'cover',
-                        }}
-                    />
-                </div>
-            </NavBar>
-
+                </NavBar>
+            }
             <div className="registration-content">
                 <div style={{
                     backgroundColor: 'white',
@@ -295,7 +299,7 @@ export default function MyRegister({ setIsLogined }) {
                             rules={[{ required: true, message: "Please select your gender" }]}
                         >
                             <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                                <Radio value="Male">Male</Radio>
+                                <Radio value="Male" style={{ marginRight: "15px" }}>Male</Radio>
                                 <Radio value="Female">Female</Radio>
                             </Radio.Group>
                         </Form.Item>
@@ -399,19 +403,19 @@ export default function MyRegister({ setIsLogined }) {
                         </Form.Item>
 
                         <Form.Item name="City" label="City">
-                            <Input readOnly />
+                            <Input  />
                         </Form.Item>
 
                         <Form.Item name="District" label="District">
-                            <Input readOnly />
+                            <Input  />
                         </Form.Item>
 
                         <Form.Item name="State" label="State">
-                            <Input readOnly />
+                            <Input  />
                         </Form.Item>
 
                         <Form.Item name="Country" label="Country">
-                            <Input readOnly />
+                            <Input  />
                         </Form.Item>
 
                         <Form.Item name="isdivyang" label="Is Divyang?">
@@ -438,19 +442,20 @@ export default function MyRegister({ setIsLogined }) {
                             <Input placeholder="Enter disability details if applicable" />
                         </Form.Item>
                     </Form>
-
-                    <div style={{ textAlign: 'center', marginTop: '15px' }}>
-                        <p style={{ color: '#666', margin: '10px 0' }}>OR</p>
-                        <p>
-                            Already have an account?{' '}
-                            <span
-                                style={{ color: '#ff6b6b', fontWeight: 'bold', cursor: 'pointer' }}
-                                onClick={() => setIsLogined(true)}
-                            >
-                                Login
-                            </span>
-                        </p>
-                    </div>
+                    {user?.userrole === "MEELAN" && 
+                        <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                            <p style={{ color: '#666', margin: '10px 0' }}>OR</p>
+                            <p>
+                                Already have an account?{' '}
+                                <span
+                                    style={{ color: '#ff6b6b', fontWeight: 'bold', cursor: 'pointer' }}
+                                    onClick={() => setIsLogined(true)}
+                                >
+                                    Login
+                                </span>
+                            </p>
+                        </div>
+                    }
                     <div style={{ textAlign: "center", marginTop: "1rem" }}>
                         <a href="/terms" style={{ fontSize: "0.875rem", color: "#888" }}>
                             Terms and Conditions

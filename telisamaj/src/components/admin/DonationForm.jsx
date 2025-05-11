@@ -3,10 +3,13 @@ import { Form, Input, TextArea, Radio, Button, Toast, ImageUploader, Dialog } fr
 import { UploadOutline } from 'antd-mobile-icons';
 import { AuthContext } from '../../context/AuthContext';
 import { createAndUpdateDonners, uploadImage } from '../../services/api';
-import gotraData from "../../utils/gotra.json"; // Gotra data import
+// import gotraData from "../../utils/gotra.json"; // Gotra data import
 import GotraSelector from '../authentication/registration/GotraSelector';
+import GotraController from '../../utils/GotraController';
 
 const DonationForm = () => {
+  const gotraData = GotraController()
+
   const { jwt } = useContext(AuthContext);
   const [form] = Form.useForm();
   const [photoFileList, setPhotoFileList] = useState([]);
@@ -74,7 +77,7 @@ const DonationForm = () => {
     try {
       const payload = { ...values, ...customdata, photo: imageId, receipt: receiptFileList.id };
       const response = await createAndUpdateDonners(payload, jwt);
-      if (response?.id) {
+      if (response?.data?.id) {
         Toast.show({ icon: 'success', content: 'Donation saved successfully!' });
         form.resetFields();
         setPhotoFileList([]);
@@ -107,10 +110,10 @@ const DonationForm = () => {
       </Form.Item>
 
       <Form.Item name="donorType" label="Donor Type" rules={[{ required: true }]}>
-        <Radio.Group onChange={(e) => setDonorType(e.target.value)}>
-          <Radio value="individual">Individual</Radio>
-          <Radio value="family">Family</Radio>
-          <Radio value="group">Group</Radio>
+       <Radio.Group onChange={(val) => setDonorType(val)}>
+          <Radio value="individual" style={{marginRight:"15px"}}>Individual</Radio>
+          <Radio value="family" style={{marginRight:"15px"}}>Family</Radio>
+          <Radio value="group" style={{marginRight:"15px"}}>Group</Radio>
           <Radio value="sanstha">Sanstha</Radio>
         </Radio.Group>
       </Form.Item>
@@ -126,14 +129,16 @@ const DonationForm = () => {
       </Form.Item>
 
       {/* GotraSelector Component */}
-      <Form.Item name="gotra" label="Gotra" rules={[{ required: true }]}>
+       <Form.Item name="gotra" label="Gotra" rules={[{ required: true }]}>
         <GotraSelector
-          gotra_for={true}  // Example flag for using a specific gotra
-          gotraData={gotraData.Gotra}  // Passing gotraData from your json file
+          form={form}
+          gotra_for={true}
+          gotraData={gotraData.Gotra}
           customdata={customdata}
           setCustomdata={setCustomdata}
         />
       </Form.Item>
+
 
       {/* <Form.Item name="cast" label={<><span style={{ color: 'red' }}>*</span> Cast</>}>
         <Radio.Group style={{ display: "flex", gap: "10px" }}>

@@ -200,7 +200,7 @@ const DynamicUPIPaymentQR = () => {
           style={{
             zIndex: 100,
             position: 'sticky',
-            top: 0,
+            top: -1,
             background: 'brown',
             color: 'white',
           }}
@@ -226,8 +226,8 @@ const DynamicUPIPaymentQR = () => {
                 rules={[{ required: true, message: "Please select your Cast" }]}
               >
                 <Radio.Group style={{ display: "flex", gap: "10px" }}>
-                  <Radio value="SEERVI0002">SEERVI</Radio>
-                  <Radio value="TELI0001">TELI</Radio>
+                  <Radio value="SEERVI0002" style={{marginRight:"15px"}}>SEERVI</Radio>
+                  <Radio value="TELI0001" style={{marginRight:"15px"}}>TELI</Radio>
                   <Radio value="DEMO0003">DEMO</Radio>
                 </Radio.Group>
               </Form.Item>

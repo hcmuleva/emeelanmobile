@@ -1,7 +1,7 @@
-import { Divider, Image, NavBar, Space, Toast } from "antd-mobile";
-import { CalendarOutline, EnvironmentOutline, FileOutline, HeartOutline, PictureOutline, SoundOutline, TeamOutline, UserOutline } from "antd-mobile-icons";
 import { BuildOutlined } from "@ant-design/icons";
-import React, { useContext, useEffect, useState } from "react";
+import { Divider, Image, NavBar, Space, Toast } from "antd-mobile";
+import { CalendarOutline, EnvironmentOutline, FileOutline, PictureOutline, SoundOutline, TeamOutline, UserOutline } from "antd-mobile-icons";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import { customsingleuser } from "../../../services/api";

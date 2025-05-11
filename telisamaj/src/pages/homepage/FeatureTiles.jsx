@@ -12,6 +12,7 @@ import QuickShortcutsUser from '../../components/featuretiles/QuickShortcutsUser
 import { AuthContext } from '../../context/AuthContext';
 import { getPaginatedUsers } from '../../services/api';
 import "../../styles/scrollHide.css";
+import { Space } from 'antd-mobile';
 
 const FeatureTiles = () => {
   const { user } = useContext(AuthContext)
@@ -63,7 +64,13 @@ const FeatureTiles = () => {
         user?.emeelanrole === "ADMIN" ||
         user?.emeelanrole === "SUPERADMIN"
       ) && <AdminUserEditor />}
+
+        <Space />
+        <div></div>
+        <Space />
     </div>
+
+  
   );
 };
 

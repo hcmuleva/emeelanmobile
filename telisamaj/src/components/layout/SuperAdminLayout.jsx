@@ -57,7 +57,7 @@ export default function SuperAdminLayout({ children }) {
             },
             {
               icon: <UserAddOutline style={{ fontSize: 24 }} />,
-              label: "Admin Panel",
+              label: "Admin",
               key: "AdminPanel"
             },
           ].map((item) => {
@@ -76,7 +76,7 @@ export default function SuperAdminLayout({ children }) {
               >
                 {item.icon}
                 <div style={{ fontSize: 12, marginTop: 4 }}>
-                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
+                  {item?.label ? item.label : item.key.charAt(0).toUpperCase() + item.key.slice(1)}
                 </div>
               </div>
             );

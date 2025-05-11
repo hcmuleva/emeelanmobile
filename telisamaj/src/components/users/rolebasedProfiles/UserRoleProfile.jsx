@@ -6,8 +6,12 @@ import { getPaginatedUsers, searchUsers } from "../../../services/api"; // ✅ I
 import NewProfileCard from "../NewProfileCard";
 import { CollapsePanel } from "antd-mobile/es/components/collapse/collapse";
 import GotraSelector from "../../authentication/registration/GotraSelector";
-import gotraData from "../../../utils/gotra.json";
+import GotraController from "../../../utils/GotraController";
+// import gotraData from "../../../utils/gotra.json";
 // Helper to calculate DOB range from age range
+
+const gotraData = GotraController()
+
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
   const fromDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
@@ -108,7 +112,7 @@ const UserRoleProfile = ({ adminProp }) => {
     setPage(0);
     setHasMore(true);
     fetchUsers(0, search);
-  }, [search, marital, profession, gotra, minAge, maxAge,]);
+  }, [search, marital, profession, gotra, minAge, maxAge]);
 
   return (
     <div>
@@ -118,30 +122,45 @@ const UserRoleProfile = ({ adminProp }) => {
           <CollapsePanel key="1" title="Filters">
             <div style={{ marginBottom: 8 }}>
               <strong>Marital Status:</strong>
-              <Selector
-                showCheckMark
-                columns={3}
-                options={maritalOptions}
-                value={[marital]}
-                onChange={(val) => setMarital(val[0])}
-              />
+           <Selector
+              showCheckMark
+              columns={2}
+              options={maritalOptions}
+              value={[marital]}
+              onChange={(val) => setMarital(val[0])}
+              style={{ fontSize: "14px", width: "100%" }}
+              itemStyle={{
+                whiteSpace: "normal",           // ✅ Allow wrapping
+                textAlign: "center",
+                padding: "8px",
+                fontSize: "13px",
+                wordBreak: "break-word",        // ✅ Prevent overflow
+              }}
+            />
             </div>
 
             <div style={{ marginBottom: 8, fontSize: '14px' }}>
               <strong>Profession:</strong>
               <Selector
                 showCheckMark
-                columns={3}
+                columns={2}
                 options={professionOptions}
                 value={[profession]}
                 onChange={(val) => setProfession(val[0])}
-                style={{ fontSize: '14px' }}  // If Selector accepts style prop
+                style={{ fontSize: "14px", width: "100%" }}
+                itemStyle={{
+                  whiteSpace: "normal",           // ✅ Allow wrapping
+                  textAlign: "center",
+                  padding: "8px",
+                  fontSize: "13px",
+                  wordBreak: "break-word",        // ✅ Prevent overflow
+                }}
               />
             </div>
 
             <div style={{ marginBottom: 8 }}>
               <strong>Gotra:</strong>
-              <GotraSelector
+             <GotraSelector
                 gotra_for={false}
                 gotraData={gotraData.Gotra}
                 customdata={{ gotra }}

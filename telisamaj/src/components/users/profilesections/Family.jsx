@@ -1,5 +1,5 @@
-import { Button, Card, Form, Image, Input, Selector, Space, Tabs, Toast } from "antd-mobile";
-import React, { useContext, useEffect, useState } from "react";
+import { Button, Card, Form, Input, Selector, Space, Tabs, Toast } from "antd-mobile";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { updateUser } from "../../../services/api";
 

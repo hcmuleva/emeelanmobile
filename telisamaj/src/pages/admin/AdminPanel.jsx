@@ -40,7 +40,7 @@ export default function AdminPanel() {
               }}>
                 {item.icon}
               </div>
-              <div style={{ fontSize: '12px' }}>{item.text}</div>
+              <div style={{ fontSize: '12px', textAlign:"center" }}>{item.text}</div>
             </div>
           </Grid.Item>
         ))}

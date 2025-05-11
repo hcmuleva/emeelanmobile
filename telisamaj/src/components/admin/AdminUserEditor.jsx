@@ -23,10 +23,9 @@ export default function AdminUserEditor() {
           <div style={{ fontSize: 16 }}>Update Button</div>
           <Switch checked={engagedButton} onChange={handleToggle} />
         </div>
-        <EnggagedRequestsTable />
       </CapsuleTabs.Tab>
       <CapsuleTabs.Tab title='UserPassword' key='resetpassword'>
-        <Space>
+        <Space style={{display:'flex', justifySelf:"center"}}>
           <Form.Item
             name='userId'
             label='User ID'
