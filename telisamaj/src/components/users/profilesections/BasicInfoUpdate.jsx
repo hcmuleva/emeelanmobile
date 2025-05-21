@@ -1,4 +1,13 @@
-import { Button, Card, Form, Image, Input, Radio, Space, Toast } from "antd-mobile";
+import {
+  Button,
+  Card,
+  Form,
+  Image,
+  Input,
+  Radio,
+  Space,
+  Toast,
+} from "antd-mobile";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { getPincode, updateUser } from "../../../services/api";
@@ -33,26 +42,27 @@ export default function BasicInfoUpdate() {
     }
   }, [isEditMode]);
 
-  let imagesrc = ""
+  let imagesrc = "";
 
-  console.log(user)
+  console.log(user);
 
   if (user?.Pictures?.profilePicture) {
-    imagesrc = user?.Pictures.profilePicture?.url
-  } else if (Array.isArray(user?.images?.pictures) && user?.images?.pictures[0]) {
-    imagesrc = user?.images?.pictures[0]
-  }
-  else if (user?.images?.photos?.[0]?.url) {
-    imagesrc = user?.images.photos?.[0]?.url
-  }
-  else if (user?.Pictures?.photos?.[0]?.url) {
-    imagesrc = user?.Pictures.photos?.[0]?.url
+    imagesrc = user?.Pictures.profilePicture?.url;
+  } else if (
+    Array.isArray(user?.images?.pictures) &&
+    user?.images?.pictures[0]
+  ) {
+    imagesrc = user?.images?.pictures[0];
+  } else if (user?.images?.photos?.[0]?.url) {
+    imagesrc = user?.images.photos?.[0]?.url;
+  } else if (user?.Pictures?.photos?.[0]?.url) {
+    imagesrc = user?.Pictures.photos?.[0]?.url;
   } else if (user?.Sex === "Female") {
-    imagesrc = "/assets/woman-user-circle-icon.png"
+    imagesrc = "/assets/woman-user-circle-icon.png";
   } else if (user?.Sex === "Male") {
-    imagesrc = "/assets/man-user-circle-icon.png"
+    imagesrc = "/assets/man-user-circle-icon.png";
   } else {
-    imagesrc = "/assets/question-mark-circle-outline-icon.png"
+    imagesrc = "/assets/question-mark-circle-outline-icon.png";
   }
 
   const handlePincodeChange = async () => {
@@ -78,14 +88,14 @@ export default function BasicInfoUpdate() {
   };
 
   const handleFinish = async (values) => {
-    console.log(values)
+    console.log(values);
 
     try {
       await updateUser(values, user.id);
       const updatedUser = { ...user, ...values };
 
       setUser(updatedUser);
-      setProfileUpdated(true)
+      setProfileUpdated(true);
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
@@ -101,19 +111,26 @@ export default function BasicInfoUpdate() {
       {!isEditMode ? (
         <Card
           style={{
-            borderRadius: '8px',
-            margin: '10px 0',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #eee',
+            borderRadius: "8px",
+            margin: "10px 0",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #eee",
           }}
-          headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+          headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
           title={
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '18px' }}>👤 Basic Information</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "18px" }}>👤 Basic Information</span>
             </div>
           }
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "15px",
+            }}
+          >
             {/* <Image
               src={imagesrc}
               width={60}
@@ -125,30 +142,64 @@ export default function BasicInfoUpdate() {
               }}
             /> */}
             <div>
-              <h3 style={{ margin: 0, color: '#8B0000' }}>{user?.FirstName} {user?.LastName}</h3>
-              <div style={{ fontSize: '14px', color: '#666' }}>
+              <h3 style={{ margin: 0, color: "#8B0000" }}>
+                {user?.FirstName} {user?.LastName}
+              </h3>
+              <div style={{ fontSize: "14px", color: "#666" }}>
                 Member ID: {user?.id}
               </div>
             </div>
           </div>
 
-          <div style={{ marginBottom: '15px' }}>
-            <p><strong>Title:</strong> {user?.title}</p>
-            <p><strong>Username:</strong> {user?.username}</p>
-            <p><strong>Email:</strong> {user?.email}</p>
-            <p><strong>First Name:</strong> {user?.FirstName}</p>
-            <p><strong>Last Name:</strong> {user?.LastName}</p>
-            <p><strong>Age:</strong> {user?.age || user?.mybasicdata?.basicinfo?.age}</p>
-            <p><strong>Height:</strong> {user?.Height}</p>
-            <p><strong>Mobile:</strong> {user?.mobile}</p>
-            <p><strong>Pincode:</strong> {user?.postalcode}</p>
-            <p><strong>City:</strong> {user?.City}</p>
-            <p><strong>District:</strong> {user?.district}</p>
-            <p><strong>State:</strong> {user?.State}</p>
-            <p><strong>Country:</strong> {user?.Country}</p>
-            <p><strong>Is Divyang:</strong> {user?.isdivyang ? 'Yes' : 'No'}</p>
+          <div style={{ marginBottom: "15px" }}>
+            <p>
+              <strong>Title:</strong> {user?.title}
+            </p>
+            <p>
+              <strong>Username:</strong> {user?.username}
+            </p>
+            <p>
+              <strong>Email:</strong> {user?.email}
+            </p>
+            <p>
+              <strong>First Name:</strong> {user?.FirstName}
+            </p>
+            <p>
+              <strong>Last Name:</strong> {user?.LastName}
+            </p>
+            <p>
+              <strong>Age:</strong>{" "}
+              {user?.age || user?.mybasicdata?.basicinfo?.age}
+            </p>
+            <p>
+              <strong>Height:</strong> {user?.Height}
+            </p>
+            <p>
+              <strong>Mobile:</strong> {user?.mobile}
+            </p>
+            <p>
+              <strong>Pincode:</strong> {user?.postalcode}
+            </p>
+            <p>
+              <strong>City:</strong> {user?.City}
+            </p>
+            <p>
+              <strong>District:</strong> {user?.district}
+            </p>
+            <p>
+              <strong>State:</strong> {user?.State}
+            </p>
+            <p>
+              <strong>Country:</strong> {user?.Country}
+            </p>
+            <p>
+              <strong>Is Divyang:</strong> {user?.isdivyang ? "Yes" : "No"}
+            </p>
             {user?.isdivyang && (
-              <p><strong>Disability Description:</strong> {user?.divyangDescription}</p>
+              <p>
+                <strong>Disability Description:</strong>{" "}
+                {user?.divyangDescription}
+              </p>
             )}
           </div>
 
@@ -156,10 +207,10 @@ export default function BasicInfoUpdate() {
             block
             onClick={() => setIsEditMode(true)}
             style={{
-              backgroundColor: '#8B0000',
-              color: 'white',
-              borderRadius: '4px',
-              border: 'none'
+              backgroundColor: "#8B0000",
+              color: "white",
+              borderRadius: "4px",
+              border: "none",
             }}
           >
             Edit Information
@@ -168,15 +219,17 @@ export default function BasicInfoUpdate() {
       ) : (
         <Card
           style={{
-            borderRadius: '8px',
-            margin: '10px 0',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #eee',
+            borderRadius: "8px",
+            margin: "10px 0",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #eee",
           }}
-          headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+          headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
           title={
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '18px' }}>✏️ Edit Basic Information</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "18px" }}>
+                ✏️ Edit Basic Information
+              </span>
             </div>
           }
         >
@@ -194,62 +247,93 @@ export default function BasicInfoUpdate() {
             </Form.Item>
 
             <Form.Item name="username" label="UserName:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="FirstName" label="First Name:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="LastName" label="Last Name:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="age" label="Age:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="Height" label="Height:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="mobile" label="Mobile:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="postalcode" label="Pincode:">
-              <Input onChange={handlePincodeChange} style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                onChange={handlePincodeChange}
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="City" label="City:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="district" label="District:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="State" label="State:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Form.Item name="Country" label="Country:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
-            <Form.Item name="isdivyang" label="Is Divyang:" initialValue={false}>
+            <Form.Item
+              name="isdivyang"
+              label="Is Divyang:"
+              initialValue={false}
+            >
               <Radio.Group
                 value={form.getFieldValue("isdivyang")}
                 onChange={(val) => form.setFieldValue("isdivyang", val)}
                 style={{ display: "flex", gap: "10px" }}
               >
-                <Radio style={{ marginRight: "15px" }} value={true}>Yes</Radio>
+                <Radio style={{ marginRight: "15px" }} value={true}>
+                  Yes
+                </Radio>
                 <Radio value={false}>No</Radio>
               </Radio.Group>
             </Form.Item>
 
             <Form.Item name="divyangDescription" label="Disability Detail:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
             </Form.Item>
 
             <Space block style={{ marginTop: 20 }} justify="between">
@@ -259,7 +343,7 @@ export default function BasicInfoUpdate() {
                   color: "white",
                   borderRadius: "4px",
                   border: "none",
-                  flex: 1
+                  flex: 1,
                 }}
                 type="submit"
               >
@@ -272,7 +356,7 @@ export default function BasicInfoUpdate() {
                   color: "white",
                   borderRadius: "4px",
                   border: "none",
-                  flex: 1
+                  flex: 1,
                 }}
                 onClick={() => setIsEditMode(false)}
               >

@@ -1,7 +1,17 @@
-import { Button, Card, Form, Input, Selector, Space, Tabs, Toast } from "antd-mobile";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Selector,
+  Space,
+  Tabs,
+  Toast,
+} from "antd-mobile";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { updateUser } from "../../../services/api";
+import GotraSelector from "../../authentication/registration/GotraSelector";
 
 const relationOptions = {
   PARENT: [
@@ -19,13 +29,15 @@ const relationOptions = {
 };
 
 const Family = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, samajInfo } = useContext(AuthContext);
+
+  const gotraData = samajInfo?.[0]?.attributes?.gotra || {};
   const [families, setFamilies] = useState(user?.mybasicdata?.families || []);
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
   const [selectedType, setSelectedType] = useState("PARENT");
   const [activeTab, setActiveTab] = useState(families.length ? "view" : "edit");
-
+  const [gotra, setGotra] = useState();
   const defaultFormValues = {
     type: "PARENT",
     relation: "",
@@ -38,7 +50,7 @@ const Family = () => {
 
   const handleEdit = (index) => {
     const member = families[index];
-    form.setFieldsValue(member);
+    form.setFieldsValue({ ...member, gotra: member.gotra || "" });
     setSelectedType(member.type || "PARENT");
     setEditingIndex(index);
     setActiveTab("edit");
@@ -86,28 +98,28 @@ const Family = () => {
   // Get appropriate emoji based on relation
   const getRelationEmoji = (relation) => {
     const emojis = {
-      'FATHER': '👨',
-      'MOTHER': '👩',
-      'BROTHER': '👦',
-      'SISTER': '👧',
-      'NANAJI': '👴',
-      'NANIJI': '👵',
+      FATHER: "👨",
+      MOTHER: "👩",
+      BROTHER: "👦",
+      SISTER: "👧",
+      NANAJI: "👴",
+      NANIJI: "👵",
     };
-    return emojis[relation] || '👤';
+    return emojis[relation] || "👤";
   };
 
   return (
     <Card
       style={{
-        borderRadius: '8px',
-        margin: '10px 0',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #eee',
+        borderRadius: "8px",
+        margin: "10px 0",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #eee",
       }}
-      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '18px' }}>👪 Family Members</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "18px" }}>👪 Family Members</span>
         </div>
       }
     >
@@ -115,8 +127,8 @@ const Family = () => {
         activeKey={activeTab}
         onChange={setActiveTab}
         style={{
-          '--title-active-color': '#8B0000',
-          '--active-line-color': '#8B0000',
+          "--title-active-color": "#8B0000",
+          "--active-line-color": "#8B0000",
         }}
       >
         <Tabs.Tab title="Family Records" key="view">
@@ -126,28 +138,42 @@ const Family = () => {
                 <Card
                   key={index}
                   style={{
-                    margin: '10px 0',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-                    border: '1px solid #eee',
+                    margin: "10px 0",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                    border: "1px solid #eee",
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      backgroundColor: '#8B0000',
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '20px'
-                    }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        backgroundColor: "#8B0000",
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "20px",
+                      }}
+                    >
                       {getRelationEmoji(member.relation)}
                     </div>
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000" }}>
+                      <div
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "#8B0000",
+                        }}
+                      >
                         {member.name}
                       </div>
                       <div style={{ fontSize: 14, color: "#666" }}>
@@ -156,11 +182,21 @@ const Family = () => {
                     </div>
                   </div>
 
-                  <div style={{ margin: '10px 0', fontSize: 14, color: "#333" }}>
-                    <div style={{ margin: '3px 0' }}><strong>Age:</strong> {member.age}</div>
-                    <div style={{ margin: '3px 0' }}><strong>Gotra:</strong> {member.gotra}</div>
-                    <div style={{ margin: '3px 0' }}><strong>Profession:</strong> {member.profession}</div>
-                    <div style={{ margin: '3px 0' }}><strong>MobileNumber:</strong> {member.mobilenumber}</div>
+                  <div
+                    style={{ margin: "10px 0", fontSize: 14, color: "#333" }}
+                  >
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Age:</strong> {member.age}
+                    </div>
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Gotra:</strong> {member.gotra}
+                    </div>
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Profession:</strong> {member.profession}
+                    </div>
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>MobileNumber:</strong> {member.mobilenumber}
+                    </div>
                   </div>
 
                   <Space block justify="between" style={{ marginTop: 10 }}>
@@ -170,7 +206,7 @@ const Family = () => {
                         backgroundColor: "#8B0000",
                         color: "white",
                         borderRadius: "4px",
-                        border: "none"
+                        border: "none",
                       }}
                       onClick={() => handleEdit(index)}
                     >
@@ -182,7 +218,7 @@ const Family = () => {
                         backgroundColor: "#888",
                         color: "white",
                         borderRadius: "4px",
-                        border: "none"
+                        border: "none",
                       }}
                       onClick={() => handleDelete(index)}
                     >
@@ -191,7 +227,6 @@ const Family = () => {
                   </Space>
                 </Card>
               ))}
-
             </>
           )}
           <Button
@@ -201,7 +236,7 @@ const Family = () => {
               color: "white",
               marginTop: 15,
               borderRadius: "4px",
-              border: "none"
+              border: "none",
             }}
             onClick={handleSaveToServer}
           >
@@ -209,43 +244,42 @@ const Family = () => {
           </Button>
         </Tabs.Tab>
 
-
         <Tabs.Tab title="Add / Edit Member" key="edit">
           <Form
             form={form}
             initialValues={defaultFormValues}
             layout="vertical"
-            style={{ padding: '10px 0' }}
+            style={{ padding: "10px 0" }}
             onValuesChange={(changed) => {
               if (changed.type) {
                 setSelectedType(changed.type);
-                form.setFieldValue('relation', '');
+                form.setFieldValue("relation", "");
               }
             }}
           >
             <Form.Item name="type" label="Family Type">
               <Selector
                 options={[
-                  { label: 'Parent', value: 'PARENT' },
-                  { label: 'Sibling', value: 'SIBLING' },
-                  { label: 'Maternal', value: 'MATERNAL' },
+                  { label: "Parent", value: "PARENT" },
+                  { label: "Sibling", value: "SIBLING" },
+                  { label: "Maternal", value: "MATERNAL" },
                 ]}
-                value={form.getFieldValue('type')}
+                value={form.getFieldValue("type")}
                 onChange={(val) => {
-                  form.setFieldValue('type', val);
+                  form.setFieldValue("type", val);
                   setSelectedType(val);
-                  form.setFieldValue('relation', '');
+                  form.setFieldValue("relation", "");
                 }}
-                style={{ '--checked-color': '#8B000040' }}
+                style={{ "--checked-color": "#8B000040" }}
               />
             </Form.Item>
 
             <Form.Item name="relation" label="Relation">
               <Selector
                 options={relationOptions[selectedType]}
-                value={form.getFieldValue('relation')}
-                onChange={(val) => form.setFieldValue('relation', val)}
-                style={{ '--checked-color': '#8B000040' }}
+                value={form.getFieldValue("relation")}
+                onChange={(val) => form.setFieldValue("relation", val)}
+                style={{ "--checked-color": "#8B000040" }}
               />
             </Form.Item>
 
@@ -273,12 +307,16 @@ const Family = () => {
             </Form.Item>
 
             <Form.Item name="gotra" label="Gotra">
-              <Input
-                placeholder="Gotra"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              <GotraSelector
+                gotra_for={false}
+                gotraData={gotraData}
+                customdata={{ gotra: form.getFieldValue("gotra") }}
+                setCustomdata={(val) => {
+                  setGotra(val.gotra);
+                  form.setFieldValue("gotra", val.gotra);
+                }}
               />
             </Form.Item>
-
             <Form.Item name="profession" label="Profession">
               <Input
                 placeholder="Profession"
@@ -293,7 +331,7 @@ const Family = () => {
                 color: "white",
                 marginTop: 15,
                 borderRadius: "4px",
-                border: "none"
+                border: "none",
               }}
               onClick={handleAddOrUpdate}
             >

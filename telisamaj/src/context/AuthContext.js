@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import ably from "../utils/ablyClient";
-import { getUserById } from '../services/api';
+import { getSamajTitle, getUserById } from '../services/api';
 
 export const AuthContext = createContext();
 
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [profileUpdated, setProfileUpdated] = useState(false);
   const [completionBar, setCompletionBar] = useState(0)
-
+  const [samajInfo, setSamajInfo] = useState({});
   const [userMe, setUserMe] = useState("")
 
   const channelRef = useRef(null); // 👈 Track the active channel
@@ -43,6 +43,20 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(user));
     }
   }, [user]);
+
+
+
+
+  useEffect(() => {
+    const fetchUserTitle = async () => {
+      const res = await getSamajTitle(user?.orgsku);
+      console.log(res, "SAMAJ AUTH");
+      setSamajInfo(res?.data);
+    };
+    fetchUserTitle();
+  }, []);
+
+  console.log(samajInfo)
 
   const getMessage = (channelName) => {
     console.log("Channeld Name", channelName)
@@ -162,6 +176,8 @@ export const AuthProvider = ({ children }) => {
         updateUser,
         updateUserField,
         completionBar,
+        samajInfo,
+        setSamajInfo, 
       }}
     >
       {children}

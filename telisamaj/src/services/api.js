@@ -2,7 +2,9 @@ import axios from "axios";
 import qs from "qs";
 
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
+
 const API_URL = process.env.REACT_APP_API_URL;
+
 console.log("API_URL", API_URL);
 const api = axios.create({
   baseURL: API_URL,
@@ -65,6 +67,7 @@ export const getCustomMe = async (jwt) => {
 
 export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => {
   try {
+
     if (filters.DOB_gte) {
       filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
     }
@@ -609,3 +612,32 @@ export const reverseGeocode = async (latitude, longitude) => {
     throw new Error(error.response?.data?.message || 'Location lookup failed');
   }
 };
+
+
+
+export const getSamaj = async (filters) => {
+
+  try {
+    const response = await api.get(`/samajs`,{
+         params: {
+
+        filters,
+
+      },
+    })
+    return response.data
+  } catch (err) {
+    throw err.response?.data?.message || "Error in samaj call"
+  }
+}
+
+
+   export const getSamajTitle = async (orgsku) => {
+
+  try {
+    const response = await api.get(`/samajs?filters[samaj_type][$eq]=${orgsku}`,)
+    return response.data
+  } catch (err) {
+    throw err.response?.data?.message || "Error in samaj call"
+  }
+}

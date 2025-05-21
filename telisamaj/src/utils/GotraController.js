@@ -1,18 +1,29 @@
+import { useEffect, useState } from "react";
 import { seervigotra } from "./seervigotra";
 import { teligotra } from "./teligotra";
+import { getSamaj } from "../services/api";
 
-export default function GotraController() {
-    const samajType = process.env.REACT_APP_SAMAJ
+const samajMap = {
+  TELI0001: teligotra,
+  SEERVI0002: seervigotra,
+};
 
-    console.log(samajType, "SAMAJ TYPE")
+export default function GotraController(samaj) {
+    // console.log(samaj)
 
-    switch (samajType){
-        case "TELI":
-            return teligotra
-        case "SEERVI":
-            return seervigotra
-        default:
-            return teligotra
-    }
+    // const [samajGotra, setSamajGotra] = useState([])
+    //    func fetchSamaj = async()=>{
+    //         const res = await getSamaj()
+    //         console.log(res)
+    //         // setSamajGotra(res)
+    //     }
 
+    // useEffect(()=>{
+ 
+    //     fetchSamaj()
+    // },[])
+
+    // console.log(samajGotra)
+
+  return samajMap[samaj] || [];
 }

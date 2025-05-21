@@ -1,21 +1,37 @@
-
-import React, { useEffect, useState } from "react";
-import { List, InfiniteScroll, SearchBar, Selector, Collapse } from "antd-mobile";
-import { getPaginatedUsers, searchUsers } from "../../../services/api"; // ✅ Import both
+import React, { useContext, useEffect, useState } from "react";
+import {
+  List,
+  InfiniteScroll,
+  SearchBar,
+  Selector,
+  Collapse,
+} from "antd-mobile";
+import {
+  getPaginatedUsers,
+  getSamajTitle,
+  searchUsers,
+} from "../../../services/api"; // ✅ Import both
 
 import NewProfileCard from "../NewProfileCard";
 import { CollapsePanel } from "antd-mobile/es/components/collapse/collapse";
 import GotraSelector from "../../authentication/registration/GotraSelector";
-import GotraController from "../../../utils/GotraController";
+// import GotraController from "../../../utils/GotraController";
+import { AuthContext } from "../../../context/AuthContext";
 // import gotraData from "../../../utils/gotra.json";
 // Helper to calculate DOB range from age range
 
-const gotraData = GotraController()
-
 const getDOBRange = (minAge, maxAge) => {
   const today = new Date();
-  const fromDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
-  const toDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
+  const fromDate = new Date(
+    today.getFullYear() - maxAge,
+    today.getMonth(),
+    today.getDate()
+  );
+  const toDate = new Date(
+    today.getFullYear() - minAge,
+    today.getMonth(),
+    today.getDate()
+  );
 
   return {
     from: fromDate.toISOString().split("T")[0],
@@ -24,7 +40,8 @@ const getDOBRange = (minAge, maxAge) => {
 };
 
 const UserRoleProfile = ({ adminProp }) => {
-  console.log("USER PROFILES ")
+  const { user, samajInfo } = useContext(AuthContext);
+  const gotraData = samajInfo?.[0]?.attributes?.gotra || {};
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -36,7 +53,6 @@ const UserRoleProfile = ({ adminProp }) => {
   const [gotra, setGotra] = useState(); // Will store Gotra.Id
   const [minAge, setMinAge] = useState("");
   const [maxAge, setMaxAge] = useState("");
-
 
   const maritalOptions = [
     { label: "Single", value: "Never Married" },
@@ -60,7 +76,6 @@ const UserRoleProfile = ({ adminProp }) => {
     { label: "STUDENT", value: "STUDENT" },
   ];
 
-
   const limit = 10;
 
   const fetchUsers = async (pageNum = 0, searchQuery = "") => {
@@ -70,6 +85,7 @@ const UserRoleProfile = ({ adminProp }) => {
         marital: marital || "",
         profession: profession || "",
         gotra: gotra || "",
+        orgsku: user?.orgsku,
       };
 
       if (minAge && maxAge) {
@@ -122,24 +138,24 @@ const UserRoleProfile = ({ adminProp }) => {
           <CollapsePanel key="1" title="Filters">
             <div style={{ marginBottom: 8 }}>
               <strong>Marital Status:</strong>
-           <Selector
-              showCheckMark
-              columns={2}
-              options={maritalOptions}
-              value={[marital]}
-              onChange={(val) => setMarital(val[0])}
-              style={{ fontSize: "14px", width: "100%" }}
-              itemStyle={{
-                whiteSpace: "normal",           // ✅ Allow wrapping
-                textAlign: "center",
-                padding: "8px",
-                fontSize: "13px",
-                wordBreak: "break-word",        // ✅ Prevent overflow
-              }}
-            />
+              <Selector
+                showCheckMark
+                columns={2}
+                options={maritalOptions}
+                value={[marital]}
+                onChange={(val) => setMarital(val[0])}
+                style={{ fontSize: "14px", width: "100%" }}
+                itemStyle={{
+                  whiteSpace: "normal", // ✅ Allow wrapping
+                  textAlign: "center",
+                  padding: "8px",
+                  fontSize: "13px",
+                  wordBreak: "break-word", // ✅ Prevent overflow
+                }}
+              />
             </div>
 
-            <div style={{ marginBottom: 8, fontSize: '14px' }}>
+            <div style={{ marginBottom: 8, fontSize: "14px" }}>
               <strong>Profession:</strong>
               <Selector
                 showCheckMark
@@ -149,20 +165,20 @@ const UserRoleProfile = ({ adminProp }) => {
                 onChange={(val) => setProfession(val[0])}
                 style={{ fontSize: "14px", width: "100%" }}
                 itemStyle={{
-                  whiteSpace: "normal",           // ✅ Allow wrapping
+                  whiteSpace: "normal", // ✅ Allow wrapping
                   textAlign: "center",
                   padding: "8px",
                   fontSize: "13px",
-                  wordBreak: "break-word",        // ✅ Prevent overflow
+                  wordBreak: "break-word", // ✅ Prevent overflow
                 }}
               />
             </div>
 
             <div style={{ marginBottom: 8 }}>
               <strong>Gotra:</strong>
-             <GotraSelector
+              <GotraSelector
                 gotra_for={false}
-                gotraData={gotraData.Gotra}
+                gotraData={gotraData}
                 customdata={{ gotra }}
                 setCustomdata={(val) => setGotra(val.gotra)}
               />
@@ -194,7 +210,7 @@ const UserRoleProfile = ({ adminProp }) => {
         key="UniqueKey"
         placeholder="Search Users by ( Name, Location, Profession )"
         value={inputValue}
-        onChange={val => setInputValue(val)}
+        onChange={(val) => setInputValue(val)}
         style={{ marginBottom: 10, padding: "16px" }}
       />
 
@@ -205,7 +221,10 @@ const UserRoleProfile = ({ adminProp }) => {
       </List>
 
       {/* Infinite Scroll */}
-      <InfiniteScroll loadMore={() => fetchUsers(page, search)} hasMore={hasMore} />
+      <InfiniteScroll
+        loadMore={() => fetchUsers(page, search)}
+        hasMore={hasMore}
+      />
     </div>
   );
 };

@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { Picker, Toast } from "antd-mobile";
 
-const GotraSelector = ({ form, gotra_for, gotraData, customdata, setCustomdata }) => {
+const GotraSelector = ({
+  form,
+  gotra_for,
+  gotraData,
+  customdata,
+  setCustomdata,
+}) => {
   const [visible, setVisible] = useState(false);
   const fieldName = "gotra";
 
   const selectedValue = form?.getFieldValue?.(fieldName) || ""; // Safe access
-  const selectedGotra = gotraData.find((g) => g.EName === selectedValue)
-    || gotraData.find((g) => g.Id === customdata?.gotra); // fallback for customdata
+  const selectedGotra =
+    gotraData.find((g) => g.EName === selectedValue) ||
+    gotraData.find((g) => g.Id === customdata?.gotra); // fallback for customdata
 
   const handleConfirm = (value) => {
     const selected = gotraData.find((g) => g.EName === value[0]);
@@ -35,6 +42,7 @@ const GotraSelector = ({ form, gotra_for, gotraData, customdata, setCustomdata }
           padding: "6px 0",
           color: "var(--adm-color-text)",
           cursor: "pointer",
+          marginLeft: "16px",
         }}
       >
         {selectedGotra

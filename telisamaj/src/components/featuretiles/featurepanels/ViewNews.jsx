@@ -18,10 +18,11 @@ export default function ViewNews() {
     fetchBreakingNews();
   }, [jwt]);
 
-  console.log(breakingMessages)
+  console.log(breakingMessages);
 
   const getImageSrc = (news) =>
-    news?.attributes?.image?.data?.attributes?.url || "/assets/news-placeholder.png";
+    news?.attributes?.image?.data?.attributes?.url ||
+    "/assets/news-placeholder.png";
 
   const truncate = (text = "", limit = 30) =>
     text.length > limit ? text.slice(0, limit) + "..." : text;
@@ -33,65 +34,99 @@ export default function ViewNews() {
       </NavBar>
       <Space />
 
-      {breakingMessages.map((news, i) => {
-        const attr = news.attributes || {};
-        return (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              gap: 12,
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              padding: "12px",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-              marginBottom: "14px",
-              alignItems: "flex-start",
-            }}
-          >
-            <img
-              src={getImageSrc(news)}
-              alt="News"
-              width={64}
-              height={64}
-              style={{ borderRadius: "8px", objectFit: "cover", flexShrink: 0 }}
-            />
-            <div style={{ flex: 1 }}>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "6px" }}>
-                <span style={{ fontSize: 13, fontWeight: 600, color: "#999" }}>Title:</span>
-                <span style={{ fontSize: 14, fontWeight: 500, color: "#333" }}>
-                  {truncate(attr.title || "Untitled", 35)}
-                </span>
-              </div>
-
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "10px" }}>
-                <span style={{ fontSize: 13, fontWeight: 600, color: "#999" }}>Description:</span>
-                <span style={{ fontSize: 14, color: "#666" }}>
-                  {truncate(attr.description || "", 60)}
-                </span>
-              </div>
-
-              <button
-                onClick={() => navigate(`/allnews/${news.id}`)}
+      {breakingMessages && breakingMessages.length > 0 ? (
+        breakingMessages?.map((news, i) => {
+          const attr = news.attributes || {};
+          return (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: 12,
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                padding: "12px",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                marginBottom: "14px",
+                alignItems: "flex-start",
+              }}
+            >
+              <img
+                src={getImageSrc(news)}
+                alt="News"
+                width={64}
+                height={64}
                 style={{
-                  background: "#b00000",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "4px",
-                  padding: "4px 10px",
-                  fontSize: 13,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                  cursor: "pointer",
+                  borderRadius: "8px",
+                  objectFit: "cover",
+                  flexShrink: 0,
                 }}
-              >
-                <EyeOutline /> View
-              </button>
+              />
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "8px",
+                    flexWrap: "wrap",
+                    marginBottom: "6px",
+                  }}
+                >
+                  <span
+                    style={{ fontSize: 13, fontWeight: 600, color: "#999" }}
+                  >
+                    Title:
+                  </span>
+                  <span
+                    style={{ fontSize: 14, fontWeight: 500, color: "#333" }}
+                  >
+                    {truncate(attr.title || "Untitled", 35)}
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "8px",
+                    flexWrap: "wrap",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <span
+                    style={{ fontSize: 13, fontWeight: 600, color: "#999" }}
+                  >
+                    Description:
+                  </span>
+                  <span style={{ fontSize: 14, color: "#666" }}>
+                    {truncate(attr.description || "", 60)}
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => navigate(`/allnews/${news.id}`)}
+                  style={{
+                    background: "#b00000",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "4px",
+                    padding: "4px 10px",
+                    fontSize: 13,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  <EyeOutline /> View
+                </button>
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      ) : (
+        <div style={{ textAlign: "center", marginTop: "20px", color: "#666" }}>
+          No news available.
+        </div>
+      )}
     </div>
   );
 }
