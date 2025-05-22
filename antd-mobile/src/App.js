@@ -1,13 +1,12 @@
 import { ConfigProvider, SafeArea } from "antd-mobile";
 import enUS from "antd-mobile/es/locales/en-US";
-import React from "react";
 import {
   Navigate,
   Route,
   BrowserRouter as Router,
-  Routes,
-  useNavigate,
+  Routes
 } from "react-router-dom";
+import "./App.css";
 import DeepLinkHandler from "./DeepLinkHandler";
 import DonationForm from "./components/admin/DonationForm";
 import Search from "./components/common/Search";
@@ -21,14 +20,15 @@ import StatusNotification from "./components/layout/StatusNotification";
 import SocialSharingCard from "./components/socialsharing/SocialSharingCard";
 import ProfileDetailPanel from "./components/users/ProfileDetailPanel";
 import { SettingsDialog } from "./components/users/profilesections/settings/SettingsDialog";
+import { AdProvider } from "./context/AdContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
+import { useAd } from "./hooks/useAd";
 import { locales } from "./locales";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
 import Mail from "./pages/Mail";
 import ProfileStatusPage from "./pages/ProfileStatusPage";
-import Admin from "./pages/admin/AdminPanel";
 import AdminListPage from "./pages/admin/AdminListPage";
 import NewUserRegistration from "./pages/admin/NewUserRegistration";
 import Donation from "./pages/homepage/shortcuts/DonationPage";
@@ -39,6 +39,7 @@ import SuperAdmin from "./pages/superadmin/SuperAdmin";
 import ProfilesPage from "./pages/user/ProfilesPage";
 import UserProfile from "./pages/user/UserProfile";
 import AdminPanel from "./pages/admin/AdminPanel";
+import ScrollToTop from "./components/ScrollToTop";
 
 // ✅ Corrected Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -48,7 +49,7 @@ const ProtectedRoute = ({ children }) => {
 
 function AppContent() {
   const isAuthenticated = JSON.parse(localStorage.getItem("authenticated"))
-  console.log("AppContent isAuthenticated", isAuthenticated, " mytest")
+
   return (
     <div>
       <div style={{ background: '#BC0226' }}>
@@ -56,6 +57,7 @@ function AppContent() {
       </div>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <DeepLinkHandler />
           <Routes>
             {/* Public Routes */}
@@ -63,13 +65,16 @@ function AppContent() {
             <Route path="/terms" element={<TermsPage />} />
 
             {/* Protected Route */}
+
             <Route
               path="/"
               element={
                 isAuthenticated ? (
-                  <MainLayout>
-                    <Home />
-                  </MainLayout>
+           
+                    <MainLayout>
+                      <Home />
+                    </MainLayout>
+              
                 ) : (
                   <Navigate to="/login" replace />
                 )
@@ -329,10 +334,26 @@ function AppContent() {
         }
         `}
         </style>
-      </AuthProvider>
+      </AuthProvider >
       <div>
         <SafeArea position="bottom" />
       </div>
+    </div>
+  );
+}
+
+function ExampleComponent() {
+  const { triggerAd } = useAd();
+
+  return (
+    <div>
+      <h1>My App</h1>
+      <button
+        onClick={triggerAd}
+        style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: 4 }}
+      >
+        Show Ad
+      </button>
     </div>
   );
 }
