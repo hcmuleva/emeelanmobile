@@ -1,25 +1,40 @@
 import React from "react";
 import PicturesImageUploader from "../../common/PicturesImageUploader.jsx";
 import ProfilePictureImageUploader from "../../common/ProfilePictureImageUploader";
+import { Card, Divider } from "antd-mobile";
 
 export default function PhotoUpload() {
   return (
-    <div>
-      <div>
-        <h3 style={{ color: "#8B0000", padding: "0px 10px" }}>
-          Profile Pictures: 
+    <div style={{ padding: "16px", backgroundColor: "#f7f7f7", borderRadius: "12px" }}>
+      {/* Profile Picture Section */}
+      <Card
+        style={{
+          marginBottom: "16px",
+          borderRadius: "12px",
+          padding: "16px",
+        }}
+      >
+        <h3 style={{ color: "#8B0000", fontWeight: "bold", fontSize: "18px" }}>
+          Profile Picture:
         </h3>
         <ProfilePictureImageUploader />
-      </div>
-      <hr />
-      <div>
-        <h3 style={{ color: "#8B0000", padding: "0px 10px" }}>
-          My Pictures: 
+      </Card>
+
+      <Divider style={{ margin: "16px 0", borderColor: "#8B0000" }} />
+
+      {/* My Pictures Section */}
+      <Card
+        style={{
+          borderRadius: "12px",
+
+        }}
+
+      >
+        <h3 style={{ color: "#8B0000", fontWeight: "bold", fontSize: "18px" }}>
+          My Pictures:
         </h3>
         <PicturesImageUploader />
-      </div>
-      <hr />
+      </Card>
     </div>
-    
   );
 }

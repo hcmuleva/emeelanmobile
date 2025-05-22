@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
-import { SafeArea, Button, Input, Toast, Card, Form, Space, Switch, List } from 'antd-mobile';
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  List,
+  NavBar,
+  Radio,
+  SafeArea,
+  Switch,
+  Toast
+} from 'antd-mobile';
 import { QRCodeSVG } from 'qrcode.react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import { createQRCODEBySuperAdmin, uploadImage } from '../../services/api';
 
 const DynamicUPIPaymentQR = () => {
+  const { jwt } = useContext(AuthContext);
   const [form] = Form.useForm();
   const [merchantForm] = Form.useForm();
   const [qrValue, setQrValue] = useState('');
@@ -11,60 +26,95 @@ const DynamicUPIPaymentQR = () => {
   const [showQR, setShowQR] = useState(false);
   const [isFixedAmount, setIsFixedAmount] = useState(false);
   const [merchantData, setMerchantData] = useState(null);
+  const navigate = useNavigate();
+
 
   const generateUPILink = (merchantInfo, amount = null, note = '') => {
     const upiUrl = new URL('upi://pay');
-    
-    // Required parameters
     upiUrl.searchParams.append('pa', merchantInfo.upiId);
     upiUrl.searchParams.append('pn', merchantInfo.payeeName);
-    
-    // Optional parameters
-    if (amount) {
-      upiUrl.searchParams.append('am', amount.toString());
-    }
-    if (note) {
-      upiUrl.searchParams.append('tn', note);
-    }
-    
+    if (amount) upiUrl.searchParams.append('am', amount.toString());
+    if (note) upiUrl.searchParams.append('tn', note);
     return upiUrl.toString();
   };
 
-  const handleMerchantSetup = (values) => {
+  const handleMerchantSetup = async (values) => {
     setMerchantData(values);
-    
-    // Generate QR code based on fixed amount preference
-    const upiLink = generateUPILink(values, isFixedAmount ? values.defaultAmount : null, values.defaultNote);
+
+    const upiLink = generateUPILink(
+      values,
+      isFixedAmount ? values.defaultAmount : null,
+      values.defaultNote
+    );
+
     setQrValue(upiLink);
-    setLogoUrl(values.logoUrl || '');
+    setLogoUrl(values.logoUrl || '/logo.png');
     setShowQR(true);
-    
-    Toast.show({
-      content: 'UPI Payment QR Code generated successfully!',
-    });
+
+    Toast.show({ content: 'UPI Payment QR Code generated successfully!' });
+  };
+
+  const handleQrUpdate = async () => {
+    const svg = document.getElementById('upi-qrcode-svg');
+    if (!svg) return Toast.show({ content: 'QR code not found.' });
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+
+    img.onload = async () => {
+      canvas.width = qrSize;
+      canvas.height = qrSize;
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(async (blob) => {
+        try {
+          const file = new File([blob], `upi-qr-${Date.now()}.png`, {
+            type: 'image/png',
+          });
+          const formData = new FormData();
+          formData.append('files', file);
+
+          const uploaded = await uploadImage(formData, jwt);
+          const uploadedFile = uploaded[0];
+
+          const data = {
+            qrimage: uploadedFile.id,
+            orgsku: merchantData.orgsku,
+            title: merchantData.title,
+            cause: merchantData.cause,
+            createdby: merchantData.createdby
+          }
+
+          console.log(data, "QR DATA")
+
+
+          const updated = await createQRCODEBySuperAdmin(data, jwt);
+          localStorage.setItem('user', JSON.stringify(updated));
+          Toast.show({ content: 'Admin QR image uploaded successfully!' });
+        } catch (err) {
+          Toast.show({ content: 'Failed to upload QR image' });
+        }
+      }, 'image/png');
+    };
+
+    img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
   };
 
   const regenerateQR = () => {
     if (!merchantData) return;
-    
     const values = form.getFieldsValue();
     const amount = isFixedAmount ? values.amount : null;
     const note = values.note || merchantData.defaultNote;
-    
     const upiLink = generateUPILink(merchantData, amount, note);
     setQrValue(upiLink);
     setShowQR(true);
-    
-    Toast.show({
-      content: 'QR Code updated with new details!',
-    });
+    Toast.show({ content: 'QR Code updated with new details!' });
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(qrValue).then(() => {
-      Toast.show({
-        content: 'UPI link copied to clipboard!',
-      });
+      Toast.show({ content: 'UPI link copied to clipboard!' });
     }).catch(() => {
       const textarea = document.createElement('textarea');
       textarea.value = qrValue;
@@ -72,9 +122,7 @@ const DynamicUPIPaymentQR = () => {
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      Toast.show({
-        content: 'UPI link copied!',
-      });
+      Toast.show({ content: 'UPI link copied!' });
     });
   };
 
@@ -85,7 +133,7 @@ const DynamicUPIPaymentQR = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
-      
+
       img.onload = () => {
         canvas.width = qrSize;
         canvas.height = qrSize;
@@ -95,48 +143,109 @@ const DynamicUPIPaymentQR = () => {
         link.href = canvas.toDataURL('image/png');
         link.click();
       };
-      
+
       img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
     }
   };
 
+  const commonStyle = {
+    minHeight: '100vh',
+    backgroundColor: '#f9fafb',
+    paddingBottom: '5rem',
+  };
+
+  const wrapperStyle = {
+    maxWidth: '768px',
+    margin: '0 auto',
+    padding: '1rem',
+  };
+
+  const titleStyle = {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    marginBottom: '1.5rem',
+    textAlign: 'center',
+  };
+
+  const verticalGap = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    gap: '1rem',
+    marginTop: '1.5rem',
+  };
+
+  const linkStyle = {
+    backgroundColor: '#f3f4f6',
+    padding: '0.75rem',
+    borderRadius: '0.5rem',
+    fontSize: '0.75rem',
+    marginTop: '0.5rem',
+    wordBreak: 'break-all',
+  };
+
+  const infoText = {
+    marginTop: '1rem',
+    fontSize: '0.875rem',
+    color: '#4b5563',
+    textAlign: 'center',
+  };
+
   if (!merchantData) {
     return (
-      <div className="min-h-screen bg-gray-50 pb-20">
+      <div style={commonStyle}>
         <SafeArea position="top" />
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-6 text-center">UPI Payment Setup</h1>
-          
+        <NavBar
+          onBack={() => navigate(-1)}
+          style={{
+            zIndex: 100,
+            position: 'sticky',
+            top: -1,
+            background: 'brown',
+            color: 'white',
+          }}
+        >
+          Create QrCode
+        </NavBar>
+        <div style={wrapperStyle}>
+          <h1 style={titleStyle}>UPI Payment Setup</h1>
           <Card title="Merchant Details">
             <Form form={merchantForm} onFinish={handleMerchantSetup} mode="card" layout="vertical">
-              <Form.Item 
-                label="UPI ID" 
-                name="upiId"
-                rules={[{ required: true, message: 'Please enter UPI ID' }]}
+              <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Please enter Title' }]}>
+                <Input placeholder="Enter Title" />
+              </Form.Item>
+              <Form.Item label="Cause" name="cause" rules={[{ required: true, message: 'Please enter Cause' }]}>
+                <Input placeholder="Enter Cause" />
+              </Form.Item>
+              <Form.Item label="Created By" name="createdby" rules={[{ required: true, message: 'Please enter Created by fullname' }]}>
+                <Input placeholder="Enter Created by (Full-Name)" />
+              </Form.Item>
+              <Form.Item
+                name="orgsku"
+                label={<><span style={{ color: 'red' }}>*</span> Cast</>}
+                rules={[{ required: true, message: "Please select your Cast" }]}
               >
+                <Radio.Group style={{ display: "flex", gap: "10px" }}>
+                  <Radio value="SEERVI0002" style={{marginRight:"15px"}}>SEERVI</Radio>
+                  <Radio value="TELI0001" style={{marginRight:"15px"}}>TELI</Radio>
+                  <Radio value="DEMO0003">DEMO</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="UPI ID" name="upiId" rules={[{ required: true, message: 'Please enter UPI ID' }]}>
                 <Input placeholder="Enter UPI ID (e.g., example@upi)" />
               </Form.Item>
-              
-              <Form.Item 
-                label="Business Name" 
-                name="payeeName"
-                rules={[{ required: true, message: 'Please enter business name' }]}
-              >
+              <Form.Item label="Business Name" name="payeeName" rules={[{ required: true, message: 'Please enter business name' }]}>
                 <Input placeholder="Enter your business name" />
               </Form.Item>
-              
               <Form.Item label="Default Note" name="defaultNote">
                 <Input placeholder="Enter default transaction note" />
               </Form.Item>
-              
               <Form.Item label="Default Amount (for fixed QR)" name="defaultAmount">
                 <Input type="number" placeholder="Enter default amount" />
               </Form.Item>
-              
               <Form.Item label="Logo URL" name="logoUrl">
                 <Input placeholder="Enter logo URL (optional)" />
               </Form.Item>
-              
               <Form.Item>
                 <List.Item
                   title="Fixed Amount QR"
@@ -149,8 +258,7 @@ const DynamicUPIPaymentQR = () => {
                   }
                 />
               </Form.Item>
-              
-              <Button block color="primary" type="submit" className="mt-4">
+              <Button block color="primary" type="submit" style={{ marginTop: '1rem' }}>
                 Generate Payment QR
               </Button>
             </Form>
@@ -161,93 +269,71 @@ const DynamicUPIPaymentQR = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div style={commonStyle}>
       <SafeArea position="top" />
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          {merchantData.payeeName}
-        </h1>
-        
+      <NavBar
+        onBack={() => navigate(-1)}
+        style={{
+          zIndex: 100,
+          position: 'sticky',
+          top: 0,
+          background: 'brown',
+          color: 'white',
+        }}
+      >
+        Create QrCode
+      </NavBar>
+      <div style={wrapperStyle}>
+        <h1 style={titleStyle}>{merchantData.payeeName}</h1>
+
         {isFixedAmount && (
-          <Card title="Transaction Details" className="mb-6">
+          <Card title="Transaction Details" style={{ marginBottom: '1.5rem' }}>
             <Form form={form} mode="card" layout="vertical">
-              <Form.Item 
-                label="Amount" 
-                name="amount"
-                rules={[{ required: true, message: 'Please enter amount' }]}
-              >
+              <Form.Item label="Amount" name="amount" rules={[{ required: true, message: 'Please enter amount' }]}>
                 <Input type="number" placeholder="Enter payment amount" />
               </Form.Item>
-              
               <Form.Item label="Note" name="note">
                 <Input placeholder="Enter transaction note" />
               </Form.Item>
-              
-              <Button block color="primary" onClick={regenerateQR} className="mt-4">
+              <Button block color="primary" onClick={regenerateQR} style={{ marginTop: '1rem' }}>
                 Update QR Code
               </Button>
             </Form>
           </Card>
         )}
-        
+
         {showQR && (
           <Card title={isFixedAmount ? "Fixed Amount QR" : "Dynamic Amount QR"}>
-            <div className="flex flex-col items-center">
-              <div className="qr-code-preview">
-                <QRCodeSVG
-                  id="upi-qrcode-svg"
-                  value={qrValue}
-                  size={qrSize}
-                  level="H"
-                  includeMargin={true}
-                  imageSettings={logoUrl ? {
-                    src: logoUrl,
-                    height: 50,
-                    width: 50,
-                    excavate: true,
-                  } : null}
-                />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <QRCodeSVG
+                id="upi-qrcode-svg"
+                value={qrValue}
+                size={qrSize}
+                level="H"
+                includeMargin={true}
+                imageSettings={logoUrl ? {
+                  src: logoUrl,
+                  height: 50,
+                  width: 50,
+                  excavate: true,
+                } : null}
+              />
+
+              <div style={verticalGap}>
+                <Button block onClick={copyToClipboard}>Copy UPI Link</Button>
+                <Button block color="primary" onClick={downloadQR}>Download QR Code</Button>
+                <Button block color="primary" onClick={handleQrUpdate}>Set Qr Code</Button>
+                <Button block onClick={() => setMerchantData(null)}>Reset Setup</Button>
               </div>
-              
-              <Space direction="vertical" className="w-full mt-6">
-                <Button 
-                  block 
-                  onClick={copyToClipboard}
-                >
-                  Copy UPI Link
-                </Button>
-                
-                <Button 
-                  block 
-                  color="primary"
-                  onClick={downloadQR}
-                >
-                  Download QR Code
-                </Button>
-                
-                <Button 
-                  block 
-                  onClick={() => setMerchantData(null)}
-                >
-                  Reset Setup
-                </Button>
-              </Space>
-              
-              <div className="mt-6 text-sm text-gray-600 w-full">
+
+              <div style={{ ...infoText, width: '100%' }}>
                 <p>UPI Link:</p>
-                <p className="bg-gray-100 p-3 rounded mt-2 text-xs break-all">
-                  {qrValue}
-                </p>
+                <p style={linkStyle}>{qrValue}</p>
               </div>
-              
-              <div className="mt-4 text-sm text-center text-gray-600">
-                <p>
-                  {isFixedAmount 
-                    ? "Fixed amount QR code - preset amount" 
-                    : "Dynamic QR code - customer enters amount"
-                  }
-                </p>
-                <p className="mt-2">Scan with any UPI app to make payment</p>
+
+              <div style={infoText}>
+                <p>{isFixedAmount ? 'Fixed amount QR code - preset amount' : 'Dynamic QR code - customer enters amount'}</p>
+                <p style={{ marginTop: '0.5rem' }}>Scan with any UPI app to make payment</p>
               </div>
             </div>
           </Card>

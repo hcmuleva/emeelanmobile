@@ -1,9 +1,9 @@
-import { Button, Form, Input, Toast } from "antd-mobile";
+import { Button, Card, Form, Input, Space, Toast } from "antd-mobile";
 import { EyeInvisibleOutline, EyeOutline } from "antd-mobile-icons";
 import React, { useState } from "react";
 import { resetpassword } from "../../../services/api";
 
-export default function ResetPassword({userId}) {
+export default function ResetPassword({ userId }) {
   const [form] = Form.useForm();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -11,9 +11,6 @@ export default function ResetPassword({userId}) {
   const handleSubmit = async (values) => {
     console.log("Submit Clicked");
     try {
-      // Get user from localStorage
-      //const userId = user?.id ?? null;z
-
       if (!userId) {
         Toast.show({
           content: "Password reset cannot be completed. You are not logged in!",
@@ -22,6 +19,7 @@ export default function ResetPassword({userId}) {
         });
         return;
       }
+
       if (values.password !== values.confirmPassword) {
         Toast.show({
           content: "Passwords do not match!",
@@ -31,10 +29,11 @@ export default function ResetPassword({userId}) {
         return;
       }
 
-      await resetpassword(userId, values.password); // Make sure to use values.password
+      await resetpassword(userId, values.password);
 
       console.log("New Password:", values.password);
       Toast.show({
+        icon: "success",
         content: "Password reset successfully!",
         position: "bottom",
         duration: 2000,
@@ -42,6 +41,7 @@ export default function ResetPassword({userId}) {
     } catch (error) {
       console.error("Password reset error:", error);
       Toast.show({
+        icon: "fail",
         content: "An error occurred during password reset",
         position: "bottom",
         duration: 4000,
@@ -50,10 +50,37 @@ export default function ResetPassword({userId}) {
   };
 
   return (
-    <>
-      <Form form={form} layout="horizontal" onFinish={handleSubmit}>
+    <Card
+      style={{
+        borderRadius: '8px',
+        margin: '10px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #eee',
+      }}
+      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      title={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: '#8B0000',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '20px'
+          }}>
+            🔐
+          </div>
+          <span style={{ fontSize: '18px' }}>Reset Password</span>
+        </div>
+      }
+    >
+      <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ padding: '10px 0' }}>
         <Form.Item
           name="password"
+          label="New Password"
           rules={[
             { required: true, message: "Please enter new password" },
             { min: 6, message: "Password must be at least 6 characters" },
@@ -61,10 +88,18 @@ export default function ResetPassword({userId}) {
         >
           <Input
             type={showPassword ? "text" : "password"}
-            placeholder="New Password"
+            placeholder="Enter new password"
             clearable
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              '--placeholder-color': '#888'
+            }}
             suffix={
-              <div onClick={() => setShowPassword(!showPassword)}>
+              <div
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ color: '#8B0000' }}
+              >
                 {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
               </div>
             }
@@ -73,6 +108,7 @@ export default function ResetPassword({userId}) {
 
         <Form.Item
           name="confirmPassword"
+          label="Confirm Password"
           rules={[
             { required: true, message: "Please confirm password" },
             ({ getFieldValue }) => ({
@@ -87,19 +123,40 @@ export default function ResetPassword({userId}) {
         >
           <Input
             type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm Password"
+            placeholder="Confirm your password"
             clearable
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              '--placeholder-color': '#888'
+            }}
             suffix={
-              <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+              <div
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{ color: '#8B0000' }}
+              >
                 {showConfirmPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
               </div>
             }
           />
         </Form.Item>
-        <Button style={{ margin: "10px" }} type="submit" color="primary">
+
+        <Button
+          block
+          style={{
+            backgroundColor: "#8B0000",
+            color: "white",
+            marginTop: 15,
+            borderRadius: "4px",
+            border: "none",
+            height: '40px',
+            fontWeight: '500'
+          }}
+          type="submit"
+        >
           Save Password
         </Button>
       </Form>
-    </>
+    </Card>
   );
 }

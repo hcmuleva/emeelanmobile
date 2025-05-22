@@ -1,12 +1,11 @@
 .registration-container {
   min-height: 100vh;
   background: linear-gradient(rgba(57, 5, 5, 0.9), rgba(57, 5, 5, 0.7));
-  padding-bottom: 20px;
+  padding-bottom: 50px;
 }
 
 .registration-content {
   padding: 16px;
-  margin-top: 16px;
 }
 
 

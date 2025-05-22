@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import AdminLayout from './AdminLayout';
 import SuperAdminLayout from './SuperAdminLayout';
 import UserLayout from './UserLayout';
+import { Space } from 'antd-mobile';
 
 const MainLayout = ({ children }) => {
   const { user } = useContext(AuthContext);
@@ -18,7 +19,14 @@ const MainLayout = ({ children }) => {
 
   const Layout = LayoutMap[emeelanrole?.toUpperCase()] || UserLayout;
 
-  return <Layout>{children}</Layout>;
+  return (
+    <Layout>
+      {children}
+      <Space />
+      <div></div>
+      <Space />
+    </Layout>
+  )
 };
 
 export default MainLayout;

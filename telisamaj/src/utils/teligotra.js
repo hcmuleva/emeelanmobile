@@ -1,0 +1,94 @@
+export const teligotra = {
+  "Gotra": [
+    {
+      "Id": "Atri",
+      "EName": "Atri",
+      "HName": "अत्रि"
+    },
+    {
+      "Id": "Bharadwaj",
+      "EName": "Bharadwaj",
+      "HName": "भरद्वाज"
+    },
+    {
+      "Id": "Bhargava",
+      "EName": "Bhargava",
+      "HName": "भार्गव"
+    },
+    {
+      "Id": "Kashyap",
+      "EName": "Kashyap",
+      "HName": "कश्यप"
+    },
+    {
+      "Id": "Gautam",
+      "EName": "Gautam",
+      "HName": "गौतम"
+    },
+    {
+      "Id": "Kaushal",
+      "EName": "Kaushal",
+      "HName": "कौशल"
+    },
+    {
+      "Id": "Vasishtha",
+      "EName": "Vasishtha",
+      "HName": "वसिष्ठ"
+    },
+    {
+      "Id": "Jamadagni",
+      "EName": "Jamadagni",
+      "HName": "जमदग्नि"
+    },
+    {
+      "Id": "Shandilya",
+      "EName": "Shandilya",
+      "HName": "शांडिल्य"
+    },
+    {
+      "Id": "Parashara",
+      "EName": "Parashara",
+      "HName": "पराशर"
+    },
+    {
+      "Id": "Garg",
+      "EName": "Garg",
+      "HName": "गर्ग"
+    },
+    {
+      "Id": "Vats",
+      "EName": "Vats",
+      "HName": "वत्स"
+    },
+    {
+      "Id": "Kaushik",
+      "EName": "Kaushik",
+      "HName": "कौशिक"
+    },
+    {
+      "Id": "Angira",
+      "EName": "Angira",
+      "HName": "अंगिरा"
+    },
+    {
+      "Id": "Vaivasvata",
+      "EName": "Vaivasvata",
+      "HName": "वैवस्वत"
+    },
+    {
+      "Id": "Mudgal",
+      "EName": "Mudgal",
+      "HName": "मुद्गल"
+    },
+    {
+      "Id": "Vatsa",
+      "EName": "Vatsa",
+      "HName": "वत्स"
+    },
+    {
+      "Id": "Sanatana",
+      "EName": "Sanatana",
+      "HName": "सनातन"
+    }
+  ]
+}

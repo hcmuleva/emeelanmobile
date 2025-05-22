@@ -1,28 +1,26 @@
-import React, { useState, useContext, useEffect } from "react";
 import {
+  Button,
+  CapsuleTabs,
   Card,
   Form,
   Input,
-  Switch,
-  CapsuleTabs,
-  Button,
   NavBar,
-  Toast,
+  Toast
 } from "antd-mobile";
 import {
-  CloseOutline,
   CheckOutline,
+  CloseOutline,
 } from "antd-mobile-icons";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../../context/AuthContext";
+import { getUserById, updateUser } from "../../../../services/api";
 import "../../../../styles/settings.css";
 import MobileImageUploader from "../../../common/ProfilePictureImageUploader";
-//import { getUserById,updateUserData } from "../../../../services/api";
-import { AuthContext } from "../../../../context/AuthContext";
 import Preferences from "./Prefrences";
-import {getUserById, updateUserData } from "../../../../services/api";
 
 export const SettingsDialog = () => {
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const jwt = localStorage.getItem("jwt")
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -38,21 +36,21 @@ export const SettingsDialog = () => {
     OtherActivities: "",
   });
 
-  useEffect(()=>{
-    const loadFields = async() => {
-        try{
-          const response = await getUserById(user?.id, jwt);
-          const updatedProfile = {};
-          Object.keys(profile).forEach((key) => {
-            updatedProfile[key] = response?.[key] || "";
-          });
-          setProfile(updatedProfile)
-        } catch (err) {
+  useEffect(() => {
+    const loadFields = async () => {
+      try {
+        const response = await getUserById(user?.id, jwt);
+        const updatedProfile = {};
+        Object.keys(profile).forEach((key) => {
+          updatedProfile[key] = response?.[key] || "";
+        });
+        setProfile(updatedProfile)
+      } catch (err) {
         console.error("error", err)
       };
     }
     loadFields();
-  },[])
+  }, [])
 
   const [editingField, setEditingField] = useState(null);
   const [tempValues, setTempValues] = useState({});
@@ -81,7 +79,7 @@ export const SettingsDialog = () => {
     setEditingField(null);
   };
 
-  const saveEdit = async(field) => {
+  const saveEdit = async (field) => {
     try {
       setProfile({
         ...profile,
@@ -93,11 +91,11 @@ export const SettingsDialog = () => {
         position: "bottom",
       });
       // console.log([field], "temp field")
-      const response = await updateUserData(profile, jwt, user?.id)
+      const response = await updateUser(profile, jwt, user?.id)
       console.log(response, "response")
 
       //having issue with updating data using api
-    } catch(err) {
+    } catch (err) {
       console.error("error", err)
     }
   };
@@ -164,16 +162,16 @@ export const SettingsDialog = () => {
 
       <CapsuleTabs defaultActiveKey="profile" className="settings-tabs">
         <CapsuleTabs.Tab title="Profile" key="profile">
-        <Card className="settings-card">
-          {renderProfileField("About Me", "AboutMe")}
-          {renderProfileField("Education", "education_level")}
-          {renderProfileField("Profession", "Profession")}
-          {renderProfileField("Hobby", "OtherActivities")}
-        </Card>
+          <Card className="settings-card">
+            {renderProfileField("About Me", "AboutMe")}
+            {renderProfileField("Education", "education_level")}
+            {renderProfileField("Profession", "Profession")}
+            {renderProfileField("Hobby", "OtherActivities")}
+          </Card>
         </CapsuleTabs.Tab>
 
         <CapsuleTabs.Tab title="Preferences" key="preferences">
-        <Preferences />
+          <Preferences />
         </CapsuleTabs.Tab>
         {/* upload image */}
         {/* <CapsuleTabs.Tab title="Upload Images" key="images">
@@ -202,7 +200,7 @@ export const SettingsDialog = () => {
           </Card>
         </CapsuleTabs.Tab> */}
         <CapsuleTabs.Tab title="Photos" key="images">
-         <MobileImageUploader/>
+          <MobileImageUploader />
         </CapsuleTabs.Tab>
       </CapsuleTabs>
     </div>

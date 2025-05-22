@@ -303,7 +303,7 @@ const ProfileDetailPanel = () => {
           display: "flex",
           flexDirection: "column",
           gap: "10px",
-          width: "100%"
+          width: "100%",
         }}>
           <div style={{
             backgroundColor: "rgba(128, 0, 0, 0.05)",
@@ -404,19 +404,18 @@ const ProfileDetailPanel = () => {
       {/* Divider between content and footer */}
       <Divider style={{
         margin: 0,
-        borderColor: "rgba(139, 0, 0, 0.15)",
+        // borderColor: "rgba(139, 0, 0, 0.15)",
         borderStyle: "solid"
       }} />
 
       {/* Sticky Footer */}
       <div style={{
         position: 'sticky',
-        bottom: 0,
+        bottom: 25,
         backgroundColor: '#fff',
         textAlign: 'center',
         padding: '16px',
-        borderTop: '1px solid rgba(139, 0, 0, 0.1)',
-        boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)'
+
       }}>
         {renderActionButtons()}
       </div>

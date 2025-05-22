@@ -6,7 +6,7 @@ import TitleSelector from "../../common/TitleSelector";
 
 export default function BasicInfoUpdate() {
   const [form] = Form.useForm();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, setProfileUpdated } = useContext(AuthContext);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const initialValues = {
@@ -34,8 +34,6 @@ export default function BasicInfoUpdate() {
   }, [isEditMode]);
 
   let imagesrc = ""
-
-  console.log(user)
 
   if (user?.Pictures?.profilePicture) {
     imagesrc = user?.Pictures.profilePicture?.url
@@ -78,22 +76,30 @@ export default function BasicInfoUpdate() {
   };
 
   const handleFinish = async (values) => {
-    console.log(values)
-
     try {
-      await updateUser(values, user.id);
-      const updatedUser = { ...user, ...values };
+      // Make sure Country is included in the values being sent
+      const updatedValues = {
+        ...values,
+        Country: values.Country || user?.Country || "",
+      };
 
+      await updateUser(updatedValues, user.id);
+
+      // Update local user state with ALL the form values
+      const updatedUser = { ...user, ...updatedValues };
       setUser(updatedUser);
+      setProfileUpdated(true)
+      // Update local storage with the complete user data
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
       Toast.show({ icon: "success", content: "Profile updated!" });
       setIsEditMode(false);
     } catch (err) {
-      console.log("updateUser Error", err);
+      console.error("updateUser Error", err);
       Toast.show({ icon: "fail", content: "Update failed." });
     }
   };
+
   return (
     <div>
       {!isEditMode ? (
@@ -112,7 +118,7 @@ export default function BasicInfoUpdate() {
           }
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
-            <Image
+            {/* <Image
               src={imagesrc}
               width={60}
               height={60}
@@ -121,7 +127,7 @@ export default function BasicInfoUpdate() {
                 borderRadius: '50%',
                 border: '2px solid #8B0000',
               }}
-            />
+            /> */}
             <div>
               <h3 style={{ margin: 0, color: '#8B0000' }}>{user?.FirstName} {user?.LastName}</h3>
               <div style={{ fontSize: '14px', color: '#666' }}>
@@ -143,7 +149,7 @@ export default function BasicInfoUpdate() {
             <p><strong>City:</strong> {user?.City}</p>
             <p><strong>District:</strong> {user?.district}</p>
             <p><strong>State:</strong> {user?.State}</p>
-            <p><strong>Country:</strong> {user?.Country}</p>
+            <p><strong>Country:</strong> {user?.Country || ""}</p>
             <p><strong>Is Divyang:</strong> {user?.isdivyang ? 'Yes' : 'No'}</p>
             {user?.isdivyang && (
               <p><strong>Disability Description:</strong> {user?.divyangDescription}</p>
@@ -183,6 +189,7 @@ export default function BasicInfoUpdate() {
             initialValues={initialValues}
             onFinish={handleFinish}
             layout="horizontal"
+            requiredMarkStyle="none"
           >
             <Form.Item name="title" label="Title:">
               <TitleSelector
@@ -232,7 +239,10 @@ export default function BasicInfoUpdate() {
             </Form.Item>
 
             <Form.Item name="Country" label="Country:">
-              <Input style={{ border: "1px solid #ddd", borderRadius: "4px" }} />
+              <Input
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                placeholder="Enter your country"
+              />
             </Form.Item>
 
             <Form.Item name="isdivyang" label="Is Divyang:" initialValue={false}>

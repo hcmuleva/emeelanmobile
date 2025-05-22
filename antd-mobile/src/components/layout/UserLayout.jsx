@@ -61,8 +61,6 @@ export default function UserLayout({ children }) {
           width: "100%",
           zIndex: 100,
           padding: "16px 0",
-          height: "80px",
-          paddingBottom: 'env(safe-area-inset-bottom)'
         }}
       >
         {footerItems.map((item) => {
@@ -75,12 +73,12 @@ export default function UserLayout({ children }) {
                 flexDirection: "column",
                 alignItems: "center",
                 color: isActive ? "#FF1E56" : "#999",
-                padding: "10px",
+                padding: "15px",
               }}
               onClick={() => navigate(`/${item.key}`)}
             >
               {item.icon}
-              <div style={{ fontSize: 12, marginTop: 4 }}>
+              <div style={{ fontSize: 12, marginTop: 0 }}>
                 {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
               </div>
             </div>

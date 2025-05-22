@@ -37,8 +37,11 @@ export default function SuperAdminLayout({ children }) {
             boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.05)",
             position: "fixed",
             bottom: 0,
+            left: 0,
+            right: 0,
             width: "100%",
             zIndex: 100,
+            padding: "16px 0",
           }}
         >
           {[
@@ -49,13 +52,14 @@ export default function SuperAdminLayout({ children }) {
               key: "status",
             },
             {
-              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
-							key: "adminlist"
-						},
+              icon: <UserAddOutline style={{ fontSize: 24 }} />,
+              key: "adminlist"
+            },
             {
-              icon: <UserAddOutline style={{ fontSize: 24 }} />, 
-							key: "NewUserRegister"
-						},
+              icon: <UserAddOutline style={{ fontSize: 24 }} />,
+              label: "Admin",
+              key: "AdminPanel"
+            },
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (
@@ -66,12 +70,13 @@ export default function SuperAdminLayout({ children }) {
                   flexDirection: "column",
                   alignItems: "center",
                   color: isActive ? "#FF1E56" : "#999",
+                  padding: "15px",
                 }}
                 onClick={() => navigate(`/${item.key}`)}
               >
                 {item.icon}
                 <div style={{ fontSize: 12, marginTop: 4 }}>
-                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
+                  {item?.label ? item.label : item.key.charAt(0).toUpperCase() + item.key.slice(1)}
                 </div>
               </div>
             );
