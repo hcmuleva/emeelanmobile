@@ -70,11 +70,11 @@ function AppContent() {
               path="/"
               element={
                 isAuthenticated ? (
-                  <AdProvider>
+           
                     <MainLayout>
                       <Home />
                     </MainLayout>
-                  </AdProvider>
+              
                 ) : (
                   <Navigate to="/login" replace />
                 )
