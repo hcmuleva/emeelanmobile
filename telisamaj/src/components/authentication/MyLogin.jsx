@@ -25,7 +25,7 @@ const MyLogin = ({ setIsLogined }) => {
     setLoading(true);
     try {
       const { jwt, user } = await login(values.email, values.password);
-      console.log("jwt", jwt);
+
       await authContext.login(jwt, user);
       navigate("/home", { replace: true });
     } catch (error) {
@@ -79,7 +79,6 @@ const MyLogin = ({ setIsLogined }) => {
               <br />
               <span
                 style={{
-                  fontWeight: "400",
                   fontSize: "16px",
                   lineHeight: "20px",
                   letterSpacing: ".8px",
@@ -135,7 +134,7 @@ const MyLogin = ({ setIsLogined }) => {
           >
             <Form.Item
               name="email"
-              label="Email or Username"
+              label="Email or Mobile Number"
               rules={[
                 {
                   required: true,
@@ -143,7 +142,10 @@ const MyLogin = ({ setIsLogined }) => {
                 },
               ]}
             >
-              <Input placeholder="Enter your email" prefix={<MailOutline />} />
+              <Input
+                placeholder="Enter your Email / Username / Mobile"
+                prefix={<MailOutline />}
+              />
             </Form.Item>
 
             <Form.Item

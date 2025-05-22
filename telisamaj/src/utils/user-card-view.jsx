@@ -144,7 +144,8 @@ const UserCardView = ({ userdata, myDetails, refetchDetails }) => {
                 <VerticalAlignTopOutlined /> {currentuserData?.Height}
               </p>
               <p>
-                <WomanOutlined /> {currentuserData?.MeritalStatus}
+                <WomanOutlined />{" "}
+                {currentuserData?.marital || currentuserData?.meritalStatus}
               </p>
               <p>
                 <EnvironmentOutlined /> {currentuserData?.State}
@@ -229,7 +230,7 @@ const UserModal = ({ open, setOpen, user }) => {
       open={open}
       width={800}
       title={
-        <div style={{display: "flex", justifyContent: "center"}}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <p>Meelan Details</p>
         </div>
       }
@@ -237,17 +238,19 @@ const UserModal = ({ open, setOpen, user }) => {
       onCancel={() => setOpen(false)}
       footer={null}
     >
-      <div style={{marginTop: "20px", display: "flex", gap: 12}}>
+      <div style={{ marginTop: "20px", display: "flex", gap: 12 }}>
         <Image src={user.photo} width={200}></Image>
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           <div>
-            <p>Name: {user.FirstName} {user.LastName}</p>
+            <p>
+              Name: {user.FirstName} {user.LastName}
+            </p>
             <p>Gender: {user.Gender}</p>
             <p>Age: {calculateAge(user.DOB)}</p>
             <p>Profession: {user.Profession}</p>
             <p>Height: {user.Height}</p>
           </div>
-          <div style={{marginLeft: 150}}>
+          <div style={{ marginLeft: 150 }}>
             <p>Weight: </p>
             <p>Place: {user.State}</p>
             <p>Interests: </p>

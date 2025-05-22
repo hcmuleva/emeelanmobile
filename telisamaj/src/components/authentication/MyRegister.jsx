@@ -13,29 +13,27 @@ import { AuthContext } from "../../context/AuthContext";
 import { getPincode, getSamaj, register } from "../../services/api";
 import DateSelector from "../authentication/registration/DateSelector";
 import GotraSelector from "../authentication/registration/GotraSelector";
-import MaritialStatus from "../authentication/registration/MaritialStatus";
-// import gotra from "../../utils/gotra.json";
+import ProfessionSelector from "../authentication/registration/ProfessionSelector";
 import { useNavigate } from "react-router-dom";
 import "../../styles/registration.css";
 import GotraController from "../../utils/GotraController";
+import MaritalStatus from "./registration/MaritialStatus";
+import calculateAge from "../../utils/age-finder";
 
 export default function MyRegister({ setIsLogined }) {
   const [selectedSamaj, setSelectedSamaj] = useState(null);
   const gotra = selectedSamaj ? GotraController(selectedSamaj) : { Gotra: [] };
   const [allSamaj, setAllSamaj] = useState([]);
-
   const [form] = Form.useForm();
   const [emeelanrole, setEmeelanrole] = useState("MEELAN");
   const [customdata, setCustomdata] = useState({});
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [profession, setProfession] = useState("");
-  const [customProfession, setCustomProfession] = useState("");
   const authenticated = localStorage.getItem("authenticated");
 
   const handlePincodeChange = async () => {
-    const pincode = form.getFieldValue("pincode");
+    const pincode = form.getFieldValue("postalcode");
     if (/^\d{6}$/.test(pincode)) {
       try {
         const res = await getPincode(pincode);
@@ -69,7 +67,7 @@ export default function MyRegister({ setIsLogined }) {
       Toast.show({ icon: "fail", content: "Please select your gotra" });
       return false;
     }
-    if (!customdata.marititalstatus) {
+    if (!customdata.marital) {
       Toast.show({
         icon: "fail",
         content: "Please select your marital status",
@@ -78,6 +76,14 @@ export default function MyRegister({ setIsLogined }) {
     }
     if (!customdata.DOB) {
       Toast.show({ icon: "fail", content: "Please select your date of birth" });
+      return false;
+    }
+    if (!customdata.profession) {
+      Toast.show({ icon: "fail", content: "Please select your profession" });
+      return false;
+    }
+    if (customdata.profession === "OTHER" && !customdata.customProfession) {
+      Toast.show({ icon: "fail", content: "Please enter your profession" });
       return false;
     }
     return true;
@@ -90,31 +96,32 @@ export default function MyRegister({ setIsLogined }) {
 
   const onFinish = async (values) => {
     if (!validateCustomData()) return;
+
     setLoading(true);
+
+    console.log(values);
 
     const payload = {
       ...values,
-      Profession: profession === "OTHER" ? customProfession : profession,
+      Profession:
+        customdata?.profession === "OTHER"
+          ? customdata.customProfession
+          : customdata.profession,
       emeelanrole,
       username: values.MobileNumber,
       userstatus: "PENDING",
       role: 1,
       Gotra: customdata.gotra,
-      maritial: customdata.marititalstatus,
+      marital: customdata.marital,
       DOB: customdata.DOB,
       orgsku: values.Samaj,
+      age: String(calculateAge(customdata.DOB)),
     };
 
+    console.log(payload);
+
     try {
-      const response = await register(payload);
-      Toast.show({
-        icon: "success",
-        content: "User registration completed successfully",
-        duration: 3000,
-        afterClose: () => form.resetFields(),
-      });
-      handleReset();
-      navigate("/login");
+      await register(payload);
     } catch (err) {
       console.error("Registration error:", err.response?.data || err.message);
       Toast.show({
@@ -125,7 +132,15 @@ export default function MyRegister({ setIsLogined }) {
         duration: 2000,
       });
     } finally {
+      Toast.show({
+        icon: "success",
+        content: "User registration completed successfully",
+        duration: 3000,
+        afterClose: () => form.resetFields(),
+      });
+      handleReset();
       setLoading(false);
+      setIsLogined(true);
     }
   };
 
@@ -165,7 +180,6 @@ export default function MyRegister({ setIsLogined }) {
               marginTop: "auto",
             }}
           >
-            {/* Left Side: Title */}
             <div>
               <div
                 style={{
@@ -187,12 +201,9 @@ export default function MyRegister({ setIsLogined }) {
                   }}
                 >
                   गथजोड़
-                  {/* आल इंडिया क्षत्रिय राठौड़ समाज */}
                 </span>
               </div>
             </div>
-
-            {/* Right Side: Logo */}
             <img
               src="logo.png"
               alt="Logo"
@@ -265,11 +276,7 @@ export default function MyRegister({ setIsLogined }) {
           >
             <Form.Item
               name="FirstName"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>First Name</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>First Name</span>}
               rules={[
                 { required: true, message: "Please enter your first name" },
               ]}
@@ -279,11 +286,7 @@ export default function MyRegister({ setIsLogined }) {
 
             <Form.Item
               name="LastName"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Last Name</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>Last Name</span>}
               rules={[
                 { required: true, message: "Please enter your last name" },
               ]}
@@ -293,11 +296,7 @@ export default function MyRegister({ setIsLogined }) {
 
             <Form.Item
               name="FatherName"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Father's Name</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>Father's Name</span>}
               rules={[
                 { required: true, message: "Please enter your father's name" },
               ]}
@@ -307,11 +306,7 @@ export default function MyRegister({ setIsLogined }) {
 
             <Form.Item
               name="email"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Email</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>Email</span>}
               rules={[
                 { required: true, message: "Please enter your email" },
                 {
@@ -325,11 +320,7 @@ export default function MyRegister({ setIsLogined }) {
 
             <Form.Item
               name="password"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Password</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>Password</span>}
               rules={[
                 { required: true, message: "Please enter a password" },
                 { min: 6, message: "Password must be at least 6 characters" },
@@ -341,9 +332,7 @@ export default function MyRegister({ setIsLogined }) {
             <Form.Item
               name="confirmPassword"
               label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Confirm Password</span>
-                </>
+                <span style={{ marginLeft: "5px" }}>Confirm Password</span>
               }
               dependencies={["password"]}
               rules={[
@@ -363,11 +352,7 @@ export default function MyRegister({ setIsLogined }) {
 
             <Form.Item
               name="Sex"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Gender</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>Gender</span>}
               rules={[{ required: true, message: "Please select your gender" }]}
             >
               <Radio.Group style={{ display: "flex", gap: "10px" }}>
@@ -390,7 +375,6 @@ export default function MyRegister({ setIsLogined }) {
                     const val = e.target.value;
                     if (val) {
                       const res = await getSamaj({ samaj_type: val });
-
                       setSelectedSamaj(val);
                     }
                   }}
@@ -453,9 +437,10 @@ export default function MyRegister({ setIsLogined }) {
               >
                 <span style={{ color: "red" }}>*</span> Marital Status
               </label>
-              <MaritialStatus
+              <MaritalStatus
                 customdata={customdata}
                 setCustomdata={setCustomdata}
+                form={form}
               />
             </div>
 
@@ -475,82 +460,26 @@ export default function MyRegister({ setIsLogined }) {
               />
             </div>
 
-            <Form.Item
-              name="profession"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Profession</span>
-                </>
-              }
-              rules={[
-                { required: true, message: "Please select your profession" },
-              ]}
-            >
-              <div style={{ width: "50%", maxHeight: "40px" }}>
-                <select
-                  value={profession}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setProfession(val);
-                    if (val !== "OTHER") {
-                      setCustomProfession("");
-                    }
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "4px",
-                    border: "1px solid #ddd",
-                    backgroundColor: "white",
-                    height: "36px",
-                    fontSize: "14px",
-                    WebkitAppearance: "menulist",
-                    appearance: "menulist",
-                    backgroundPosition: "right 8px center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "12px",
-                    paddingRight: "24px",
-                  }}
-                  size="1"
-                >
-                  <option value="">Select Profession</option>
-                  {[
-                    "BUSINESS",
-                    "ENGINEER",
-                    "DOCTOR",
-                    "TEACHER",
-                    "CA",
-                    "SERVICE",
-                    "HOUSEWORK",
-                    "GOVTJOB",
-                    "PRIVATEJOB",
-                    "STUDENT",
-                    "OTHER",
-                  ].map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div style={{ marginBottom: "15px" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontWeight: "500",
+                }}
+              >
+                <span style={{ color: "red" }}>*</span> Profession
+              </label>
+              <ProfessionSelector
+                customdata={customdata}
+                setCustomdata={setCustomdata}
+                form={form}
+              />
+            </div>
 
-              {profession === "OTHER" && (
-                <Input
-                  style={{ marginTop: "10px" }}
-                  placeholder="Enter your profession"
-                  value={customProfession}
-                  onChange={(val) => setCustomProfession(val)}
-                  clearable
-                />
-              )}
-            </Form.Item>
             <Form.Item
               name="MobileNumber"
-              label={
-                <>
-                  <span style={{ marginLeft: "5px" }}>Mobile Number</span>
-                </>
-              }
+              label={<span style={{ marginLeft: "5px" }}>Mobile Number</span>}
               rules={[
                 { required: true, message: "Please enter your mobile number" },
                 {
@@ -567,17 +496,17 @@ export default function MyRegister({ setIsLogined }) {
             </Form.Item>
 
             <Form.Item
-              name="pincode"
-              label="Pincode"
+              name="postalcode"
+              label="Postalcode"
               rules={[
                 {
                   pattern: /^[0-9]{6}$/,
-                  message: "Please enter a valid 6-digit pincode",
+                  message: "Please enter a valid 6-digit Postalcode",
                 },
               ]}
             >
               <Input
-                placeholder="Enter 6-digit pincode"
+                placeholder="Enter 6-digit Postalcode"
                 maxLength={6}
                 onChange={handlePincodeChange}
                 clearable

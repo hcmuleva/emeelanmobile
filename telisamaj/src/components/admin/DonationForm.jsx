@@ -12,7 +12,6 @@ import {
 import { UploadOutline } from "antd-mobile-icons";
 import { AuthContext } from "../../context/AuthContext";
 import { createAndUpdateDonners, uploadImage } from "../../services/api";
-// import gotraData from "../../utils/gotra.json"; // Gotra data import
 import GotraSelector from "../authentication/registration/GotraSelector";
 
 const DonationForm = () => {

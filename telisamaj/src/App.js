@@ -49,7 +49,7 @@ const ProtectedRoute = ({ children }) => {
 
 function AppContent() {
   const isAuthenticated = JSON.parse(localStorage.getItem("authenticated"))
-  console.log("AppContent isAuthenticated", isAuthenticated, " mytest")
+
   return (
     <div>
       <div style={{ background: '#BC0226' }}>
