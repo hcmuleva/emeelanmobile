@@ -12,9 +12,13 @@ const GotraSelector = ({
   const fieldName = "gotra";
 
   const selectedValue = form?.getFieldValue?.(fieldName) || ""; // Safe access
+  console.log(gotraData, "GOTRA DATA");
+
   const selectedGotra =
     gotraData.find((g) => g.EName === selectedValue) ||
     gotraData.find((g) => g.Id === customdata?.gotra); // fallback for customdata
+
+  console.log(gotraData);
 
   const handleConfirm = (value) => {
     const selected = gotraData.find((g) => g.EName === value[0]);

@@ -24,8 +24,6 @@ export default function MyRegister({ setIsLogined }) {
   const gotra = selectedSamaj ? GotraController(selectedSamaj) : { Gotra: [] };
   const [allSamaj, setAllSamaj] = useState([]);
 
-  console.log("My Register");
-
   const [form] = Form.useForm();
   const [emeelanrole, setEmeelanrole] = useState("MEELAN");
   const [customdata, setCustomdata] = useState({});
@@ -94,8 +92,6 @@ export default function MyRegister({ setIsLogined }) {
     if (!validateCustomData()) return;
     setLoading(true);
 
-    console.log(customdata, "CUSTOM DATA");
-
     const payload = {
       ...values,
       Profession: profession === "OTHER" ? customProfession : profession,
@@ -109,8 +105,6 @@ export default function MyRegister({ setIsLogined }) {
       orgsku: values.Samaj,
     };
 
-    console.log(payload, "NEW PALOAD");
-
     try {
       const response = await register(payload);
       Toast.show({
@@ -121,7 +115,6 @@ export default function MyRegister({ setIsLogined }) {
       });
       handleReset();
       navigate("/login");
-      console.log("Registration success:", response);
     } catch (err) {
       console.error("Registration error:", err.response?.data || err.message);
       Toast.show({
@@ -147,7 +140,7 @@ export default function MyRegister({ setIsLogined }) {
 
   return (
     <div className="registration-container">
-      {(user?.userrole === "MEELAN" || authenticated === "false") && (
+      {!user && (
         <NavBar
           back={null}
           style={{
@@ -396,10 +389,8 @@ export default function MyRegister({ setIsLogined }) {
                   onChange={async (e) => {
                     const val = e.target.value;
                     if (val) {
-                      console.log(val);
-                      console.log("BEFORE SAMAJ CALLED");
                       const res = await getSamaj({ samaj_type: val });
-                      console.log(res, "SAMAJ CALLED");
+
                       setSelectedSamaj(val);
                     }
                   }}
@@ -637,7 +628,7 @@ export default function MyRegister({ setIsLogined }) {
               <Input placeholder="Enter disability details if applicable" />
             </Form.Item>
           </Form>
-          {(user?.userrole === "MEELAN" || authenticated === "false") && (
+          {!user && (
             <div style={{ textAlign: "center", marginTop: "15px" }}>
               <p style={{ color: "#666", margin: "10px 0" }}>OR</p>
               <p>

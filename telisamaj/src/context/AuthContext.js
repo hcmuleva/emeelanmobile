@@ -50,19 +50,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserTitle = async () => {
       const res = await getSamajTitle(user?.orgsku);
-      console.log(res, "SAMAJ AUTH");
       setSamajInfo(res?.data);
     };
     fetchUserTitle();
-  }, []);
-
-  console.log(samajInfo)
+  }, [jwt]);
 
   const getMessage = (channelName) => {
-    console.log("Channeld Name", channelName)
     const channel = ably.channels.get(channelName);
-    console.log("Channel", channel)
-
     const handleMessage = (message) => {
       console.log("EMEELAN ROLE Changes", message?.data)
 
@@ -82,7 +76,6 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    console.log("useEffect for messages")
 
     if (!user?.id) return;
 
