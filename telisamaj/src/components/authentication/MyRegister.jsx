@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/registration.css";
 import GotraController from "../../utils/GotraController";
 import MaritalStatus from "./registration/MaritialStatus";
+import calculateAge from "../../utils/age-finder";
 
 export default function MyRegister({ setIsLogined }) {
   const [selectedSamaj, setSelectedSamaj] = useState(null);
@@ -32,7 +33,7 @@ export default function MyRegister({ setIsLogined }) {
   const authenticated = localStorage.getItem("authenticated");
 
   const handlePincodeChange = async () => {
-    const pincode = form.getFieldValue("pincode");
+    const pincode = form.getFieldValue("postalcode");
     if (/^\d{6}$/.test(pincode)) {
       try {
         const res = await getPincode(pincode);
@@ -66,7 +67,7 @@ export default function MyRegister({ setIsLogined }) {
       Toast.show({ icon: "fail", content: "Please select your gotra" });
       return false;
     }
-    if (!customdata.maritalStatus) {
+    if (!customdata.marital) {
       Toast.show({
         icon: "fail",
         content: "Please select your marital status",
@@ -98,6 +99,8 @@ export default function MyRegister({ setIsLogined }) {
 
     setLoading(true);
 
+    console.log(values);
+
     const payload = {
       ...values,
       Profession:
@@ -109,23 +112,16 @@ export default function MyRegister({ setIsLogined }) {
       userstatus: "PENDING",
       role: 1,
       Gotra: customdata.gotra,
-      maritial: customdata.maritalStatus,
+      marital: customdata.marital,
       DOB: customdata.DOB,
       orgsku: values.Samaj,
+      age: String(calculateAge(customdata.DOB)),
     };
 
     console.log(payload);
 
     try {
-      const response = await register(payload);
-      Toast.show({
-        icon: "success",
-        content: "User registration completed successfully",
-        duration: 3000,
-        afterClose: () => form.resetFields(),
-      });
-      handleReset();
-      navigate("/login");
+      await register(payload);
     } catch (err) {
       console.error("Registration error:", err.response?.data || err.message);
       Toast.show({
@@ -136,7 +132,15 @@ export default function MyRegister({ setIsLogined }) {
         duration: 2000,
       });
     } finally {
+      Toast.show({
+        icon: "success",
+        content: "User registration completed successfully",
+        duration: 3000,
+        afterClose: () => form.resetFields(),
+      });
+      handleReset();
       setLoading(false);
+      setIsLogined(true);
     }
   };
 
@@ -492,17 +496,17 @@ export default function MyRegister({ setIsLogined }) {
             </Form.Item>
 
             <Form.Item
-              name="pincode"
-              label="Pincode"
+              name="postalcode"
+              label="Postalcode"
               rules={[
                 {
                   pattern: /^[0-9]{6}$/,
-                  message: "Please enter a valid 6-digit pincode",
+                  message: "Please enter a valid 6-digit Postalcode",
                 },
               ]}
             >
               <Input
-                placeholder="Enter 6-digit pincode"
+                placeholder="Enter 6-digit Postalcode"
                 maxLength={6}
                 onChange={handlePincodeChange}
                 clearable

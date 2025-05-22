@@ -11,7 +11,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { getPincode, updateUser } from "../../../services/api";
-import TitleSelector from "../../common/TitleSelector";
+import MaritalStatus from "../../authentication/registration/MaritialStatus";
 
 export default function BasicInfoUpdate() {
   const [form] = Form.useForm();
@@ -19,14 +19,13 @@ export default function BasicInfoUpdate() {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const initialValues = {
-    age: user?.age || "",
-    title: user?.title || "",
+    age: user?.age || user?.mybasicdata?.basicinfo?.age || "",
     username: user?.username || "",
     email: user?.email || "",
     FirstName: user?.FirstName || "",
     LastName: user?.LastName || "",
-    Height: user?.Height || "1",
-    mobile: user?.mobile || null,
+    Height: user?.Height || user?.mybasicdata?.aboutme?.height || "1",
+    MobileNumber: user?.MobileNumber || user?.mobile || null,
     City: user?.City || "",
     district: user?.district || "",
     State: user?.State || "",
@@ -34,7 +33,10 @@ export default function BasicInfoUpdate() {
     isdivyang: user?.isdivyang || false,
     divyangDescription: user?.divyangDescription || "",
     postalcode: user?.postalcode || "",
+    marital: user?.marital || user?.meritalStatus,
   };
+
+  const [tmpData, setTmpData] = useState({ marital: initialValues.marital });
 
   useEffect(() => {
     if (isEditMode) {
@@ -43,8 +45,6 @@ export default function BasicInfoUpdate() {
   }, [isEditMode]);
 
   let imagesrc = "";
-
-  console.log(user);
 
   if (user?.Pictures?.profilePicture) {
     imagesrc = user?.Pictures.profilePicture?.url;
@@ -88,8 +88,6 @@ export default function BasicInfoUpdate() {
   };
 
   const handleFinish = async (values) => {
-    console.log(values);
-
     try {
       await updateUser(values, user.id);
       const updatedUser = { ...user, ...values };
@@ -153,9 +151,6 @@ export default function BasicInfoUpdate() {
 
           <div style={{ marginBottom: "15px" }}>
             <p>
-              <strong>Title:</strong> {user?.title}
-            </p>
-            <p>
               <strong>Username:</strong> {user?.username}
             </p>
             <p>
@@ -172,13 +167,17 @@ export default function BasicInfoUpdate() {
               {user?.age || user?.mybasicdata?.basicinfo?.age}
             </p>
             <p>
-              <strong>Height:</strong> {user?.Height}
+              <strong>Height:</strong>{" "}
+              {user?.Height || user?.mybasicdata?.aboutme?.height}
             </p>
             <p>
-              <strong>Mobile:</strong> {user?.mobile}
+              <strong>Mobile:</strong> {user?.mobile || user?.MobileNumber}
             </p>
             <p>
-              <strong>Pincode:</strong> {user?.postalcode}
+              <strong>Marital:</strong> {user?.marital || user?.meritalStatus}
+            </p>
+            <p>
+              <strong>Postalcode:</strong> {user?.postalcode}
             </p>
             <p>
               <strong>City:</strong> {user?.City}
@@ -239,13 +238,6 @@ export default function BasicInfoUpdate() {
             onFinish={handleFinish}
             layout="horizontal"
           >
-            <Form.Item name="title" label="Title:">
-              <TitleSelector
-                value={form.getFieldValue("title")}
-                onChange={(val) => form.setFieldValue("title", val)}
-              />
-            </Form.Item>
-
             <Form.Item name="username" label="UserName:">
               <Input
                 style={{ border: "1px solid #ddd", borderRadius: "4px" }}
@@ -270,18 +262,29 @@ export default function BasicInfoUpdate() {
               />
             </Form.Item>
 
-            <Form.Item name="Height" label="Height:">
+            <Form.Item name="Height" label="Height (cm)">
+              <Input
+                placeholder="for eg: 126"
+                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              />
+            </Form.Item>
+
+            <Form.Item name="MobileNumber" label="Mobile:">
               <Input
                 style={{ border: "1px solid #ddd", borderRadius: "4px" }}
               />
             </Form.Item>
 
-            <Form.Item name="mobile" label="Mobile:">
-              <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <p style={{ fontWeight: "500", marginLeft: "15px" }}>
+                Marital Status
+              </p>
+              <MaritalStatus
+                customdata={tmpData}
+                setCustomdata={setTmpData}
+                form={form}
               />
-            </Form.Item>
-
+            </div>
             <Form.Item name="postalcode" label="Pincode:">
               <Input
                 onChange={handlePincodeChange}

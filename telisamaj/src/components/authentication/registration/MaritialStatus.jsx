@@ -12,30 +12,31 @@ const MaritalStatus = ({ customdata, setCustomdata, form }) => {
 
   const handleConfirm = (value) => {
     const selectedValue = value[0];
-    form.setFieldsValue({ maritalStatus: selectedValue });
+    form.setFieldsValue({
+      marital: selectedValue,
+    });
     setVisible(false);
     const selectedMaritalStatus = maritalStatusOptions.find(
       (g) => g.EName === selectedValue
     );
-    setCustomdata({ ...customdata, maritalStatus: selectedMaritalStatus.Id });
+    setCustomdata({ ...customdata, marital: selectedMaritalStatus.Id });
     Toast.show(`Selected: ${selectedMaritalStatus?.EName}`);
   };
 
   return (
     <Form.Item
-      name="maritalStatus"
+      name="marital"
       rules={[{ required: true, message: "Please select your marital status" }]}
     >
       <div
         onClick={() => setVisible(true)}
         style={{
-          padding: "6px 0",
           color: "var(--adm-color-text)",
           cursor: "pointer",
         }}
       >
         {(() => {
-          const selectedValue = form.getFieldValue("maritalStatus");
+          const selectedValue = form.getFieldValue("marital");
           const selectedMaritalStatus = maritalStatusOptions.find(
             (g) => g.EName === selectedValue
           );

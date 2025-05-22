@@ -43,7 +43,6 @@ const NewProfileCard = ({ user, role, action }) => {
   // const userObj = getUserFromLocalStorage();
   // const userId = userObj?.id || null;
   const profileid = user?.id || null;
-  console.log(user);
   let imagesrc = "";
 
   if (user?.Pictures?.profilePicture) {
@@ -80,7 +79,6 @@ const NewProfileCard = ({ user, role, action }) => {
         );
       },
     });
-    console.log("Request response", response);
   };
 
   const renderActionButtons = () => {
