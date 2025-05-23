@@ -17,6 +17,18 @@ import {
 } from "antd-mobile-icons";
 import { fetchConnectionRequest } from "../../services/api";
 
+const SearchInput = React.memo(({ value, onChange }) => (
+  <SearchBar
+    placeholder="Search by ID, Name, or Status"
+    value={value}
+    onChange={onChange}
+    style={{
+      "--background": "rgba(255, 255, 255, 0.9)",
+      "--border-radius": "8px",
+    }}
+  />
+));
+
 export default function ConnectionListView() {
   const [connections, setConnections] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,7 +78,7 @@ export default function ConnectionListView() {
         setConnections([]); // Clear existing connections
         setHasMore(true); // Reset hasMore for new search
       }
-    }, 500);
+    }, 2000);
 
     return () => clearTimeout(handler);
   }, [inputValue, searchQuery]);
@@ -141,7 +153,7 @@ export default function ConnectionListView() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          background: "linear-gradient(135deg, #8B0000 0%, #DC143C 100%)",
+          // background: "linear-gradient(135deg, #8B0000 0%, #DC143C 100%)",
         }}
       >
         <Loading color="white" />
@@ -185,16 +197,7 @@ export default function ConnectionListView() {
             {pagination.total} total connections
           </p>
         )}
-        <SearchBar
-          key="connection-search-bar"
-          placeholder="Search by ID, Name, or Status"
-          value={inputValue}
-          onChange={handleSearchChange}
-          style={{
-            "--background": "rgba(255, 255, 255, 0.9)",
-            "--border-radius": "8px",
-          }}
-        />
+        <SearchInput value={inputValue} onChange={handleSearchChange} />
       </div>
       <div style={{ padding: "8px" }}>
         {!loading && connections.length === 0 && (
