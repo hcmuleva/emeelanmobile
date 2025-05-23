@@ -11,7 +11,7 @@ const PendingApprovalCard = ({ userCurrentState, setUserCurrentState }) => {
     // get authentication information from localstorage.
     // if its false then redirect to login page
     const isAuthenticated = localStorage.getItem("authenticated");
-    console.log("isAuthenticated", isAuthenticated);
+
     if (!isAuthenticated) {
       window.location.href = "/login";
       return;
@@ -19,12 +19,7 @@ const PendingApprovalCard = ({ userCurrentState, setUserCurrentState }) => {
     const jwt = localStorage.getItem("jwt");
     try {
       const latestUser = await getCustomMe(jwt);
-      console.log(
-        "Latest User",
-        latestUser,
-        " Before setting ",
-        latestUser.userstatus
-      );
+
       updateUserField("userstatus", latestUser.userstatus);
       if (latestUser?.userstatus === "APPROVED") {
         localStorage.setItem("user", JSON.stringify(latestUser));

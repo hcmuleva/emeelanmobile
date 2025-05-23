@@ -18,8 +18,6 @@ export default function ViewNews() {
     fetchBreakingNews();
   }, [jwt]);
 
-  console.log(breakingMessages);
-
   const getImageSrc = (news) =>
     news?.attributes?.image?.data?.attributes?.url ||
     "/assets/news-placeholder.png";

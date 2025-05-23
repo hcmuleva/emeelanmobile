@@ -6,6 +6,7 @@ import {
   customsingleuser,
   newConnectionRequest,
   updateConnectionRequest,
+  updateConnectionStatus,
   updateUserData,
 } from "../../services/api";
 import UserDetails from "./useractions/UserDetails";
@@ -144,8 +145,9 @@ const ProfileDetailPanel = () => {
 
     setLoading(true);
     try {
-      const updateresp = await updateConnectionRequest(connectionToUpdate.id, {
+      const updateresp = await updateConnectionStatus(connectionToUpdate.id, {
         status,
+        message: `Request ${status.toLowerCase()} successfully`,
       });
       Toast.show({
         icon: "success",

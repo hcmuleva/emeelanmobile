@@ -20,7 +20,7 @@ export const MyFamilyDialog = ({ visible, onClose }) => {
       mobile: "",
       address: "",
       businessLocation: "",
-      maritalStatus: "",
+      marital: "",
     };
 
     setFamilyData((prev) => ({
@@ -123,8 +123,8 @@ export const MyFamilyDialog = ({ visible, onClose }) => {
         <Form.Item label="Marital Status">
           <Input
             placeholder="Married/Single/Divorced"
-            value={member.maritalStatus}
-            onChange={(val) => updateMember(type, index, "maritalStatus", val)}
+            value={member.marital}
+            onChange={(val) => updateMember(type, index, "marital", val)}
           />
         </Form.Item>
       </div>

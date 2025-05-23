@@ -1,25 +1,25 @@
-import React from 'react';
-import { Dialog, Form, Input } from 'antd-mobile';
+import React from "react";
+import { Dialog, Form, Input } from "antd-mobile";
 
 export const ProfessionDialog = ({ visible, onClose }) => {
   const [form] = Form.useForm();
 
   const handleSubmit = () => {
     const values = form.getFieldsValue();
-    console.log('Profession data:', values);
+
     onClose();
   };
 
-  const handleCancel = ()=>{
-    onClose()
-  }
+  const handleCancel = () => {
+    onClose();
+  };
   return (
     <Dialog
       visible={visible}
       title="Profession"
       actions={[
-        { key: 'cancel', text: 'Cancel', onClick: handleCancel},
-        { key: 'submit', text: 'Save', onClick: handleSubmit }
+        { key: "cancel", text: "Cancel", onClick: handleCancel },
+        { key: "submit", text: "Save", onClick: handleSubmit },
       ]}
       onClose={onClose}
     >

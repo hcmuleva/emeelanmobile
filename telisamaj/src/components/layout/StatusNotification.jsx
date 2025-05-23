@@ -7,22 +7,20 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
   const messagesRef = useRef([]);
 
   useEffect(() => {
-    console.log("Use Effect for Status Notification")
     if (!userId) return;
 
     const channel = ably.channels.get(`user:${userId}`);
-    console.log("USER Channele", `user:${userId}`)
+
     const onConnected = () => console.log("✅ Ably connected");
     const onFailed = (err) => console.error("❌ Ably connection failed:", err);
-    const onAttached = () => console.log(`📡 Channel "${channel.name}" attached`);
+    const onAttached = () =>
+      console.log(`📡 Channel "${channel.name}" attached`);
 
     ably.connection.on("connected", onConnected);
     ably.connection.on("failed", onFailed);
     channel.once("attached", onAttached);
 
     const handleMessage = (message) => {
-      console.log("📥 Incoming message:", message);
-
       const { message: text, status, requestId } = message.data;
 
       const updated = [...messagesRef.current, { status, requestId }];
@@ -37,8 +35,6 @@ const StatusNotification = ({ userId, setNotificationStats }) => {
         },
         { PENDING: 0, APPROVED: 0, REJECTED: 0, total: 0, message: text }
       );
-
-      console.log("🔢 Grouped Stats:", grouped);
 
       // ✅ Set full stats object
       if (setNotificationStats) {

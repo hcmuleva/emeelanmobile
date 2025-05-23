@@ -9,21 +9,5 @@ const samajMap = {
 };
 
 export default function GotraController(samaj) {
-    // console.log(samaj)
-
-    // const [samajGotra, setSamajGotra] = useState([])
-    //    func fetchSamaj = async()=>{
-    //         const res = await getSamaj()
-    //         console.log(res)
-    //         // setSamajGotra(res)
-    //     }
-
-    // useEffect(()=>{
- 
-    //     fetchSamaj()
-    // },[])
-
-    // console.log(samajGotra)
-
   return samajMap[samaj] || [];
 }

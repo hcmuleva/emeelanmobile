@@ -5,12 +5,9 @@ import {
   Form,
   Input,
   NavBar,
-  Toast
+  Toast,
 } from "antd-mobile";
-import {
-  CheckOutline,
-  CloseOutline,
-} from "antd-mobile-icons";
+import { CheckOutline, CloseOutline } from "antd-mobile-icons";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../context/AuthContext";
@@ -20,8 +17,8 @@ import MobileImageUploader from "../../../common/ProfilePictureImageUploader";
 import Preferences from "./Prefrences";
 
 export const SettingsDialog = () => {
-  const { user } = useContext(AuthContext)
-  const jwt = localStorage.getItem("jwt")
+  const { user } = useContext(AuthContext);
+  const jwt = localStorage.getItem("jwt");
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [preferences, setPreferences] = useState({
@@ -44,13 +41,13 @@ export const SettingsDialog = () => {
         Object.keys(profile).forEach((key) => {
           updatedProfile[key] = response?.[key] || "";
         });
-        setProfile(updatedProfile)
+        setProfile(updatedProfile);
       } catch (err) {
-        console.error("error", err)
-      };
-    }
+        console.error("error", err);
+      }
+    };
     loadFields();
-  }, [])
+  }, []);
 
   const [editingField, setEditingField] = useState(null);
   const [tempValues, setTempValues] = useState({});
@@ -90,13 +87,11 @@ export const SettingsDialog = () => {
         content: "Saved successfully",
         position: "bottom",
       });
-      // console.log([field], "temp field")
-      const response = await updateUser(profile, jwt, user?.id)
-      console.log(response, "response")
+      const response = await updateUser(profile, jwt, user?.id);
 
       //having issue with updating data using api
     } catch (err) {
-      console.error("error", err)
+      console.error("error", err);
     }
   };
 

@@ -1,7 +1,7 @@
-import { Button, Card, Form, Switch, Toast } from 'antd-mobile';
-import { CheckOutline, CloseOutline } from 'antd-mobile-icons';
-import React, { useEffect, useState } from 'react';
-import { getCustomMe, updateUser } from '../../../../services/api';
+import { Button, Card, Form, Switch, Toast } from "antd-mobile";
+import { CheckOutline, CloseOutline } from "antd-mobile-icons";
+import React, { useEffect, useState } from "react";
+import { getCustomMe, updateUser } from "../../../../services/api";
 
 export default function Preferences() {
   const [form] = Form.useForm();
@@ -11,8 +11,8 @@ export default function Preferences() {
     hidePhotos: false,
     hideLocation: false,
     notifications: false,
-    language: '',
-    theme: ''
+    language: "",
+    theme: "",
   });
 
   // Fetch user data and initialize form
@@ -21,8 +21,6 @@ export default function Preferences() {
       try {
         const jwt = localStorage.getItem("jwt");
         const userdata = await getCustomMe(jwt);
-
-        console.log("User settings:", userdata?.settingjson);
 
         if (userdata?.settingjson?.prerence) {
           const pref = userdata.settingjson.prerence;
@@ -33,22 +31,22 @@ export default function Preferences() {
             hidePhotos: pref.hidePhotos || false,
             hideLocation: pref.hideLocation || false,
             notifications: pref.notifications || false,
-            language: pref.language || '',
-            theme: pref.theme || ''
+            language: pref.language || "",
+            theme: pref.theme || "",
           });
 
           // Initialize form values
           form.setFieldsValue({
             notifications: pref.notifications || false,
-            language: pref.language || '',
-            theme: pref.theme || ''
+            language: pref.language || "",
+            theme: pref.theme || "",
           });
         }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         Toast.show({
-          content: 'Failed to load preferences',
-          position: 'bottom'
+          content: "Failed to load preferences",
+          position: "bottom",
         });
       } finally {
         setLoading(false);
@@ -59,9 +57,9 @@ export default function Preferences() {
   }, [form]);
 
   const handleToggleChange = (key, checked) => {
-    setInitialPreferences(prev => ({
+    setInitialPreferences((prev) => ({
       ...prev,
-      [key]: checked
+      [key]: checked,
     }));
   };
 
@@ -70,25 +68,27 @@ export default function Preferences() {
       const formValues = form.getFieldsValue();
       const allValues = {
         ...initialPreferences,
-        ...formValues
+        ...formValues,
       };
 
-      console.log('Submitted Preferences:', allValues);
       const userObj = JSON.parse(localStorage.getItem("user"));
-      const settingjson = { "prerence": allValues };
-      const updatedresponse = await updateUser({ settingjson: settingjson }, localStorage.getItem("jwt"), userObj?.id);
+      const settingjson = { prerence: allValues };
+      const updatedresponse = await updateUser(
+        { settingjson: settingjson },
+        localStorage.getItem("jwt"),
+        userObj?.id
+      );
       // Here you would typically call an API to save preferences
       // await savePreferences(allValues);
-      console.log("updated res", updatedresponse)
       Toast.show({
-        content: 'Preferences saved successfully',
-        position: 'bottom'
+        content: "Preferences saved successfully",
+        position: "bottom",
       });
     } catch (error) {
       console.error("Failed to save preferences:", error);
       Toast.show({
-        content: 'Failed to save preferences',
-        position: 'bottom'
+        content: "Failed to save preferences",
+        position: "bottom",
       });
     }
   };
@@ -106,7 +106,9 @@ export default function Preferences() {
             checkedText={<CheckOutline fontSize={18} />}
             uncheckedText={<CloseOutline fontSize={18} />}
             checked={initialPreferences.hidePhoneNumber}
-            onChange={(checked) => handleToggleChange("hidePhoneNumber", checked)}
+            onChange={(checked) =>
+              handleToggleChange("hidePhoneNumber", checked)
+            }
           />
         </div>
 
@@ -136,7 +138,7 @@ export default function Preferences() {
           initialValues={{
             notifications: initialPreferences.notifications,
             language: initialPreferences.language,
-            theme: initialPreferences.theme
+            theme: initialPreferences.theme,
           }}
         >
           <Form.Item

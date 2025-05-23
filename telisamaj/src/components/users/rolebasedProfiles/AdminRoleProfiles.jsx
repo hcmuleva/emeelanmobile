@@ -40,7 +40,6 @@ const getDOBRange = (minAge, maxAge) => {
 };
 
 const AdminRoleProfiles = ({ adminProp, userrole }) => {
-  console.log("AdminRoleProfiles", adminProp, userrole, "userRole");
   const { user, samajInfo } = useContext(AuthContext);
   const gotraData = samajInfo?.[0]?.attributes?.gotra || {};
   const [users, setUsers] = useState([]);
@@ -111,7 +110,6 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
       }
       let data;
       if (searchQuery) {
-        console.log("searchQuery", searchQuery);
         data = await searchUsers(searchQuery, offset, limit);
       } else {
         data = await getPaginatedUsers(offset, limit, filters);
@@ -132,7 +130,6 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      console.log("Search triggered:", inputValue);
       setSearch(inputValue);
     }, 300);
 

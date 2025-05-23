@@ -1,24 +1,24 @@
-import { Dialog, Form, Input } from 'antd-mobile';
-import React from 'react';
+import { Dialog, Form, Input } from "antd-mobile";
+import React from "react";
 
 export const BhamasahDialog = ({ visible, onClose }) => {
   const [form] = Form.useForm();
 
   const handleSubmit = () => {
     const values = form.getFieldsValue();
-    console.log('Bhamasah data:', values);
+
     onClose();
   };
-  const handleCancel = ()=>{
-    onClose()
-  }
+  const handleCancel = () => {
+    onClose();
+  };
   return (
-    <Dialog 
+    <Dialog
       visible={visible}
       title="Bhamasah"
       actions={[
-        { key: 'cancel', text: 'Cancel' , onClick:handleCancel},
-        { key: 'submit', text: 'Submit', onClick: handleSubmit }
+        { key: "cancel", text: "Cancel", onClick: handleCancel },
+        { key: "submit", text: "Submit", onClick: handleSubmit },
       ]}
       onClose={onClose}
     >

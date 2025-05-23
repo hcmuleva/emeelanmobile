@@ -63,23 +63,23 @@ const NewProfileCard = ({ user, role, action }) => {
   }
 
   // user?.role?.toUpperCase();
-  const handleRequest = async () => {
-    const response = await newConnectionRequest({
-      sender: selfUser?.id,
-      receiver: user?.id,
-      status: "PENDING",
-      message: `User Status is pending from id ${user?.id}`,
-    });
-    Toast.show({
-      icon: "success",
-      content: `Your request successfully send to ${user.FirstName} and status is pending`,
-      afterClose: () => {
-        console.log(
-          `Your request successfully send to ${user.FirstName} and status is pending`
-        );
-      },
-    });
-  };
+  // const handleRequest = async () => {
+  //   const response = await newConnectionRequest({
+  //     sender: selfUser?.id,
+  //     receiver: user?.id,
+  //     status: "PENDING",
+  //     message: `User Status is pending from id ${user?.id}`,
+  //   });
+  //   Toast.show({
+  //     icon: "success",
+  //     content: `Your request successfully send to ${user.FirstName} and status is pending`,
+  //     afterClose: () => {
+  //       console.log(
+  //         `Your request successfully send to ${user.FirstName} and status is pending`
+  //       );
+  //     },
+  //   });
+  // };
 
   const renderActionButtons = () => {
     /**
@@ -437,7 +437,9 @@ const NewProfileCard = ({ user, role, action }) => {
                 <PhoneOutlined
                   style={{ color: colors.secondary, fontSize: "18px" }}
                 />
-                <span>{user?.MobileNumber || "No Mobile Number"}</span>
+                <span>
+                  {user?.MobileNumber || user?.mobile || "No Mobile Number"}
+                </span>
               </div>
             </div>
 

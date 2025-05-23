@@ -45,8 +45,6 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
 
-
-
   useEffect(() => {
     const fetchUserTitle = async () => {
       const res = await getSamajTitle(user?.orgsku);
