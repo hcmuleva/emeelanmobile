@@ -39,11 +39,11 @@ const EngagementCard = () => {
       const foundConnection = await findConnectionRequest(senderId, receiverId);
       if (
         foundConnection &&
-        foundConnection?.data?.attributes?.status.toUpperCase() === "ACCEPTED"
+        foundConnection?.data?.attributes?.status?.toUpperCase() === "ACCEPTED"
       ) {
-        setConnection(foundConnection?.data);
+        setConnection(foundConnection);
         Toast.show({
-          content: `Accepted connection found (ID: ${foundConnection.id})`,
+          content: `Accepted connection found (ID: ${foundConnection.data.id})`,
           position: "top",
         });
       } else {
@@ -66,7 +66,7 @@ const EngagementCard = () => {
   const handleUpdate = async () => {
     if (
       !connection ||
-      connection?.attributes?.status.toUpperCase() !== "ACCEPTED"
+      connection?.data?.attributes?.status?.toUpperCase() !== "ACCEPTED"
     ) {
       Toast.show({
         content: "No valid ACCEPTED connection to update",
@@ -77,16 +77,22 @@ const EngagementCard = () => {
 
     setLoading(true);
     try {
-      const result = await updateConnectionStatus(connection.id, {
+      const result = await updateConnectionStatus(connection.data.id, {
         status: "ENGAGED",
         message: `Congratulations on the engagement of ${
-          connection?.attributes?.sender?.id || "User"
-        } with ${connection?.attributes?.receiver?.id || "User"}`,
+          connection?.data?.attributes?.sender?.FirstName ||
+          connection?.data?.attributes?.sender?.id ||
+          "User"
+        } with ${
+          connection?.data?.attributes?.receiver?.FirstName ||
+          connection?.data?.attributes?.receiver?.id ||
+          "User"
+        }`,
       });
 
       if (result) {
         Toast.show({
-          content: `Status updated to ENGAGED for connection ID: ${connection.id} ✅`,
+          content: `Status updated to ENGAGED for connection ID: ${connection.data.id} ✅`,
           position: "top",
         });
         setSenderId("");
@@ -137,7 +143,7 @@ const EngagementCard = () => {
                 onChange={(value) => setSenderId(value.trim())}
                 placeholder="Enter Bride ID"
                 clearable
-                type="number" // Restrict to numeric input
+                type="number"
                 style={styles.input}
                 prefix={<UserAddOutline fontSize={18} />}
               />
@@ -163,7 +169,7 @@ const EngagementCard = () => {
                 onChange={(value) => setReceiverId(value.trim())}
                 placeholder="Enter Groom ID"
                 clearable
-                type="number" // Restrict to numeric input
+                type="number"
                 style={styles.input}
                 prefix={<UserAddOutline fontSize={18} />}
               />
@@ -193,24 +199,26 @@ const EngagementCard = () => {
             <h3
               style={{ fontSize: "16px", color: "#333", textAlign: "center" }}
             >
-              Accepted Connection (ID: {connection.id})
+              Accepted Connection (ID: {connection.data.id})
             </h3>
             <List>
               {/* Sender Details */}
               <List.Item
                 title={`Bride: ${
-                  connection.attributes.sender.FirstName ||
-                  connection.attributes.sender.username
+                  connection.data.attributes.sender.FirstName ||
+                  connection.data.attributes.sender.username
                 }`}
                 description={
                   <div>
-                    <div>ID: {connection.attributes.sender.id}</div>
-                    <div>Age: {connection.attributes.sender.age}</div>
-                    <div>Height: {connection.attributes.sender.Height}</div>
+                    <div>ID: {connection.data.attributes.sender.id}</div>
+                    <div>Age: {connection.data.attributes.sender.age}</div>
                     <div>
-                      Status: {connection.attributes.sender.MeritalStatus}
+                      Height: {connection.data.attributes.sender.Height}
                     </div>
-                    <div>Gotra: {connection.attributes.sender.Gotra}</div>
+                    <div>
+                      Status: {connection.data.attributes.sender.MeritalStatus}
+                    </div>
+                    <div>Gotra: {connection.data.attributes.sender.Gotra}</div>
                   </div>
                 }
               />
@@ -218,18 +226,23 @@ const EngagementCard = () => {
               {/* Receiver Details */}
               <List.Item
                 title={`Groom: ${
-                  connection.attributes.receiver.FirstName ||
-                  connection.attributes.receiver.username
+                  connection.data.attributes.receiver.FirstName ||
+                  connection.data.attributes.receiver.username
                 }`}
                 description={
                   <div>
-                    <div>ID: {connection.attributes.receiver.id}</div>
-                    <div>Age: {connection.attributes.receiver.age}</div>
-                    <div>Height: {connection.attributes.receiver.Height}</div>
+                    <div>ID: {connection.data.attributes.receiver.id}</div>
+                    <div>Age: {connection.data.attributes.receiver.age}</div>
                     <div>
-                      Status: {connection.attributes.receiver.MeritalStatus}
+                      Height: {connection.data.attributes.receiver.Height}
                     </div>
-                    <div>Gotra: {connection.attributes.receiver.Gotra}</div>
+                    <div>
+                      Status:{" "}
+                      {connection.data.attributes.receiver.MeritalStatus}
+                    </div>
+                    <div>
+                      Gotra: {connection.data.attributes.receiver.Gotra}
+                    </div>
                   </div>
                 }
               />
@@ -237,16 +250,16 @@ const EngagementCard = () => {
               {/* Connection Details */}
               <List.Item
                 title="Status"
-                description={connection.attributes.status}
+                description={connection.data.attributes.status}
               />
               <List.Item
                 title="Message"
-                description={connection.attributes.message || "No message"}
+                description={connection.data.attributes.message || "No message"}
               />
               <List.Item
                 title="Created At"
                 description={new Date(
-                  connection.attributes.createdAt
+                  connection.data.attributes.createdAt
                 ).toLocaleString()}
               />
             </List>

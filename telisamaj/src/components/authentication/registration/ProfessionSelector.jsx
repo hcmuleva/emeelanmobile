@@ -43,7 +43,7 @@ const ProfessionSelector = ({ customdata, setCustomdata, form }) => {
         <div
           onClick={() => setVisible(true)}
           style={{
-            padding: "6px 0",
+            padding: "0px 0px",
             color: "var(--adm-color-text)",
             cursor: "pointer",
           }}

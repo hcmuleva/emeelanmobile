@@ -112,7 +112,7 @@ const Family = () => {
     <Card
       style={{
         borderRadius: "8px",
-        margin: "10px 0",
+        margin: "0px 0",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
         border: "1px solid #eee",
       }}
@@ -283,30 +283,58 @@ const Family = () => {
               />
             </Form.Item>
 
-            <Form.Item name="name" label="Name">
+            <Form.Item
+              name="name"
+              label="Name"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="name"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="age" label="Age">
+            <Form.Item
+              name="age"
+              label="Age"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 type="number"
                 placeholder="Age"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="mobilenumber" label="Mobile Number">
+            <Form.Item
+              name="mobilenumber"
+              label="Mobile Number"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 type="number"
                 placeholder="mobilenumber"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="gotra" label="Gotra">
+            <Form.Item
+              name="gotra"
+              label="Gotra"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <GotraSelector
                 gotra_for={false}
                 gotraData={gotraData}
@@ -317,10 +345,18 @@ const Family = () => {
                 }}
               />
             </Form.Item>
-            <Form.Item name="profession" label="Profession">
+            <Form.Item
+              name="profession"
+              label="Profession"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="Profession"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 

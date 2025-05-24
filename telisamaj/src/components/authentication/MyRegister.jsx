@@ -19,6 +19,8 @@ import "../../styles/registration.css";
 import GotraController from "../../utils/GotraController";
 import MaritalStatus from "./registration/MaritialStatus";
 import calculateAge from "../../utils/age-finder";
+import Tbd from "../common/Tbd";
+import SamajSelector from "./registration/SamajSelector";
 
 export default function MyRegister({ setIsLogined }) {
   const [selectedSamaj, setSelectedSamaj] = useState(null);
@@ -365,47 +367,21 @@ export default function MyRegister({ setIsLogined }) {
 
             <Form.Item
               name="Samaj"
-              label={<span style={{ marginLeft: "5px" }}>Samaj</span>}
+              label={
+                <span style={{ marginLeft: "5px", fontSize: "15px" }}>
+                  Samaj
+                </span>
+              }
               rules={[{ required: true, message: "Please select your Samaj" }]}
             >
-              <div style={{ width: "50%", maxHeight: "40px" }}>
-                <select
-                  value={selectedSamaj || ""}
-                  onChange={async (e) => {
-                    const val = e.target.value;
-                    if (val) {
-                      const res = await getSamaj({ samaj_type: val });
-                      setSelectedSamaj(val);
-                    }
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "4px",
-                    border: "1px solid #ddd",
-                    backgroundColor: "white",
-                    height: "36px",
-                    fontSize: "14px",
-                    WebkitAppearance: "menulist",
-                    appearance: "menulist",
-                    backgroundPosition: "right 8px center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "12px",
-                    paddingRight: "24px",
-                  }}
-                  size="1"
-                >
-                  <option value="">Select Samaj</option>
-                  {allSamaj.map((samaj) => (
-                    <option
-                      key={samaj?.id}
-                      value={samaj?.attributes?.samaj_type}
-                    >
-                      {samaj?.attributes?.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <SamajSelector
+                form={form}
+                samajData={allSamaj}
+                selectedSamaj={selectedSamaj}
+                setSelectedSamaj={setSelectedSamaj}
+                getSamaj={getSamaj}
+                enableSearch={true}
+              />
             </Form.Item>
 
             {selectedSamaj && (
@@ -415,15 +391,20 @@ export default function MyRegister({ setIsLogined }) {
                     display: "block",
                     marginBottom: "8px",
                     fontWeight: "500",
+                    fontSize: "15px",
+                    padding: "0px 10px",
                   }}
                 >
                   <span style={{ color: "red" }}>*</span> Gotra
                 </label>
-                <GotraSelector
-                  gotraData={gotra.Gotra}
-                  customdata={customdata}
-                  setCustomdata={setCustomdata}
-                />
+                <div style={{ margin: "0px 10px" }}>
+                  <GotraSelector
+                    gotraData={gotra.Gotra}
+                    customdata={customdata}
+                    setCustomdata={setCustomdata}
+                    enableSearch={true} // Explicitly enable search (optional since it's true by default)
+                  />
+                </div>
               </div>
             )}
 
@@ -433,48 +414,58 @@ export default function MyRegister({ setIsLogined }) {
                   display: "block",
                   marginBottom: "8px",
                   fontWeight: "500",
+                  fontSize: "15px",
+                  margin: "0px 10px",
                 }}
               >
                 <span style={{ color: "red" }}>*</span> Marital Status
               </label>
-              <MaritalStatus
-                customdata={customdata}
-                setCustomdata={setCustomdata}
-                form={form}
-              />
+              <div style={{ margin: "0px 10px" }}>
+                <MaritalStatus
+                  customdata={customdata}
+                  setCustomdata={setCustomdata}
+                  form={form}
+                />
+              </div>
             </div>
 
             <div style={{ marginBottom: "15px" }}>
               <label
                 style={{
                   display: "block",
-                  marginBottom: "8px",
                   fontWeight: "500",
+                  fontSize: "15px",
+                  margin: "0px 10px",
                 }}
               >
                 <span style={{ color: "red" }}>*</span> Date of Birth
               </label>
-              <DateSelector
-                customdata={customdata}
-                setCustomdata={setCustomdata}
-              />
+              <div style={{ margin: "0px 10px" }}>
+                <DateSelector
+                  customdata={customdata}
+                  setCustomdata={setCustomdata}
+                />
+              </div>
             </div>
 
             <div style={{ marginBottom: "15px" }}>
               <label
                 style={{
                   display: "block",
-                  marginBottom: "8px",
                   fontWeight: "500",
+                  fontSize: "15px",
+                  margin: "0px 10px",
                 }}
               >
                 <span style={{ color: "red" }}>*</span> Profession
               </label>
-              <ProfessionSelector
-                customdata={customdata}
-                setCustomdata={setCustomdata}
-                form={form}
-              />
+              <div style={{ margin: "0px 10px" }}>
+                <ProfessionSelector
+                  customdata={customdata}
+                  setCustomdata={setCustomdata}
+                  form={form}
+                />
+              </div>
             </div>
 
             <Form.Item

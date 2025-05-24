@@ -168,7 +168,7 @@ export const findConnectionRequest = async (userId1, userId2) => {
   const jwt = localStorage.getItem("jwt");
 
   try {
-    const response = await api.get("/connectionrequests/findAcceptedConnection", {
+    const response = await api.get("/customconnectionrequest/findAcceptedConnection", {
       params: {
         userId1: Number(userId1),
         userId2: Number(userId2)
@@ -183,7 +183,8 @@ export const findConnectionRequest = async (userId1, userId2) => {
     // Check for data structure existence
     if (response.data?.data?.id) {
       console.log("Found connection ID:", response.data.data.id);
-      return response.data.data;
+      // Return the entire response.data object so we have access to both id and attributes
+      return response.data;
     }
 
     console.log("No accepted connection found");
@@ -191,27 +192,33 @@ export const findConnectionRequest = async (userId1, userId2) => {
   } catch (err) {
     console.error("Error finding connection request:", err);
     console.error("Error details:", err.response?.data);
-    return null;
+    throw new Error(err.response?.data?.message || "Failed to find connection");
   }
 };
 
 export const updateConnectionStatus = async (reqid, data) => {
-  const jwt = localStorage.getItem("jwt")
+  const jwt = localStorage.getItem("jwt");
+  
   try {
-    const reaponse = await api.put(`/connectionrequests/${reqid}`,
-      {data: data},
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`, // Use correct token
-          "Content-Type": "application/json",
-        }
+    console.log("Updating connection ID:", reqid, "with data:", data);
+    
+    const response = await api.put(`/connectionrequests/${reqid}`, {
+      data: data
+    }, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
       }
-    );
-    return reaponse.data
+    });
+    
+    console.log("Update response:", response.data);
+    return response.data;
   } catch (error) {
-    console.error("error", error)
+    console.error("Update error:", error);
+    console.error("Error response:", error.response?.data);
+    throw new Error(error.response?.data?.message || "Failed to update connection status");
   }
-}
+};
 
 export const fetchConnectionRequest = async (query = "", page = 1, pageSize = 10) => {
   const jwt = localStorage.getItem("jwt");
@@ -244,27 +251,96 @@ export const fetchConnectionRequest = async (query = "", page = 1, pageSize = 10
   }
 };
 
-export const getEngagedRequests = async (page = 1, pageSize = 10) => {
+// Improved API function for fetching engaged requests
+export const getEngagedRequests = async (start = 0, limit = 10) => {
+  // Note: Avoid localStorage in Claude artifacts - this is for your actual implementation
   const jwt = localStorage.getItem("jwt");
 
   try {
-    const response = await api.get(
-      `/custom-requests`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+    const response = await api.get(`/customconnectionrequest/findEngagedConnection`, {
+      params: {
+        _start: start,
+        _limit: limit,
+        _sort: 'createdAt:DESC',
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     return response.data
-
   } catch (error) {
-    console.error("Failed to fetch ENGAGED requests", error);
+    console.error("Failed to fetch ENGAGED requests:", error);
+    console.error("Error details:", error.response?.data || error.message);
+    throw error; // Throw the error to be caught by the calling function
+  }
+  
+}
+
+
+// Helper function to process API response
+const processApiResponse = (data, page, pageSize) => {
+  let apiData = [];
+  let apiPagination = {
+    page: page,
+    pageSize: pageSize,
+    total: 0,
+    pageCount: 1
+  };
+
+  if (data?.data && Array.isArray(data.data)) {
+    apiData = data.data.map(item => ({
+      id: item.id,
+      status: item.attributes?.status || item.status || 'ENGAGED',
+      message: item.attributes?.message || item.message || 'Engaged',
+      createdAt: item.attributes?.createdAt || item.createdAt,
+      updatedAt: item.attributes?.updatedAt || item.updatedAt,
+      publishedAt: item.attributes?.publishedAt || item.publishedAt,
+      sender: item.attributes?.sender?.data?.attributes || item.attributes?.sender || item.sender,
+      receiver: item.attributes?.receiver?.data?.attributes || item.attributes?.receiver || item.receiver
+    }));
+    
+    if (data.meta?.pagination) {
+      apiPagination = data.meta.pagination;
+    }
+  } else if (Array.isArray(data)) {
+    apiData = data;
+  }
+
+  return {
+    results: apiData,
+    pagination: apiPagination
+  };
+};
+
+// Alternative function if you need to handle the exact data structure from your sample
+export const getEngagedRequestsFromSample = (sampleData, page = 1, pageSize = 10) => {
+  // This function handles the exact structure from your paste.txt
+  if (!sampleData?.data) {
     return {
-      data: [],
-      pagination: { page: 1, pageSize: 10, total: 0, pageCount: 1 },
+      results: [],
+      pagination: { page: 1, pageSize: pageSize, total: 0, pageCount: 1 }
     };
   }
+
+  // Filter engaged items
+  const engagedItems = sampleData.data.filter(item => 
+    item.status?.toLowerCase() === 'engaged'
+  );
+
+  // Apply pagination
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedItems = engagedItems.slice(startIndex, endIndex);
+
+  return {
+    results: paginatedItems,
+    pagination: {
+      page: page,
+      pageSize: pageSize,
+      total: engagedItems.length,
+      pageCount: Math.ceil(engagedItems.length / pageSize)
+    }
+  };
 };
 
 

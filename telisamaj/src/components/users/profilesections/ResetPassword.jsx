@@ -84,6 +84,7 @@ export default function ResetPassword({ userId }) {
         style={{ padding: "10px 0" }}
       >
         <Form.Item
+          style={{ display: "flex", alignItems: "center" }}
           name="password"
           label="New Password"
           rules={[
@@ -99,6 +100,7 @@ export default function ResetPassword({ userId }) {
               border: "1px solid #ddd",
               borderRadius: "4px",
               "--placeholder-color": "#888",
+              padding: "10px",
             }}
             suffix={
               <div
@@ -112,6 +114,7 @@ export default function ResetPassword({ userId }) {
         </Form.Item>
 
         <Form.Item
+          style={{ display: "flex", alignItems: "center" }}
           name="confirmPassword"
           label="Confirm Password"
           rules={[
@@ -134,6 +137,7 @@ export default function ResetPassword({ userId }) {
               border: "1px solid #ddd",
               borderRadius: "4px",
               "--placeholder-color": "#888",
+              padding: "10px",
             }}
             suffix={
               <div

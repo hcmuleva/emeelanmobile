@@ -50,8 +50,6 @@ const UserDetails = ({ profileid }) => {
     fetchProfile();
   }, [profileid, jwt]);
 
-  const handleBack = () => navigate(-1);
-
   if (isLoading)
     return (
       <div
@@ -186,6 +184,8 @@ const UserDetails = ({ profileid }) => {
       </div>
     </div>
   );
+
+  const handleBack = () => navigate(-1);
 
   return (
     <div

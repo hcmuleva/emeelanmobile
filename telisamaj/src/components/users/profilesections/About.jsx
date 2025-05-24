@@ -40,15 +40,15 @@ const About = () => {
   return (
     <Card
       style={{
-        borderRadius: '8px',
-        margin: '10px 0',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #eee',
+        borderRadius: "8px",
+        margin: "10px 0",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #eee",
       }}
-      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '18px' }}>👤 About Me</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "18px" }}>👤 About Me</span>
         </div>
       }
     >
@@ -57,7 +57,7 @@ const About = () => {
           form={form}
           initialValues={aboutmeData}
           layout="vertical"
-          style={{ padding: '10px 0' }}
+          style={{ padding: "10px 0" }}
         >
           <Form.Item name="about" label="About Me">
             <TextArea
@@ -65,28 +65,56 @@ const About = () => {
               maxLength={500}
               showCount
               placeholder="Write about yourself..."
-              style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+              }}
             />
           </Form.Item>
 
-          <Form.Item name="height" label="Height">
+          <Form.Item
+            name="height"
+            label="Height"
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <Input
               placeholder="e.g. 5'6"
-              style={{ border: "1px", solid: "#ddd", borderRadius: "4px" }}
+              style={{
+                border: "1px solid #ddd",
+                solid: "#ddd",
+                borderRadius: "4px",
+                padding: "10px",
+              }}
             />
           </Form.Item>
 
-          <Form.Item name="hobby" label="Hobbies">
+          <Form.Item
+            name="hobby"
+            label="Hobbies"
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <Input
               placeholder="e.g. Reading, Painting, Cycling"
-              style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                padding: "10px",
+              }}
             />
           </Form.Item>
 
-          <Form.Item name="color" label="Skin Tone">
+          <Form.Item
+            name="color"
+            label="Skin Tone"
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <Input
               placeholder="e.g. Fair, Wheatish, Dark"
-              style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                padding: "10px",
+              }}
             />
           </Form.Item>
 
@@ -97,7 +125,7 @@ const About = () => {
                 color: "white",
                 borderRadius: "4px",
                 border: "none",
-                flex: 1
+                flex: 1,
               }}
               onClick={() => setIsEditing(false)}
             >
@@ -109,7 +137,7 @@ const About = () => {
                 color: "white",
                 borderRadius: "4px",
                 border: "none",
-                flex: 1
+                flex: 1,
               }}
               onClick={handleSave}
             >
@@ -118,30 +146,43 @@ const About = () => {
           </Space>
         </Form>
       ) : (
-        <div style={{ padding: '10px 0' }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.85)',
-            borderRadius: '8px',
-            padding: '15px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-            border: '1px solid #eee',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-              <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                backgroundColor: '#8B0000',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '20px'
-              }}>
+        <div style={{ padding: "10px 0" }}>
+          <div
+            style={{
+              background: "rgba(255, 255, 255, 0.85)",
+              borderRadius: "8px",
+              padding: "15px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+              border: "1px solid #eee",
+            }}
+          >
+            <div
+              style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}
+            >
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  backgroundColor: "#8B0000",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "20px",
+                }}
+              >
                 👤
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000", marginBottom: '8px' }}>
+                <div
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "bold",
+                    color: "#8B0000",
+                    marginBottom: "8px",
+                  }}
+                >
                   Personal Information
                 </div>
 
@@ -149,13 +190,16 @@ const About = () => {
                   <strong>Bio:</strong> {aboutmeData.about || "Not provided"}
                 </div>
                 <div style={{ fontSize: 14, marginBottom: 8 }}>
-                  <strong>Height:</strong> {aboutmeData.height || "Not specified"}
+                  <strong>Height:</strong>{" "}
+                  {aboutmeData.height || "Not specified"}
                 </div>
                 <div style={{ fontSize: 14, marginBottom: 8 }}>
-                  <strong>Hobbies:</strong> {aboutmeData.hobby || "Not specified"}
+                  <strong>Hobbies:</strong>{" "}
+                  {aboutmeData.hobby || "Not specified"}
                 </div>
                 <div style={{ fontSize: 14, marginBottom: 8 }}>
-                  <strong>Skin Tone:</strong> {aboutmeData.color || "Not specified"}
+                  <strong>Skin Tone:</strong>{" "}
+                  {aboutmeData.color || "Not specified"}
                 </div>
               </div>
             </div>
@@ -168,7 +212,7 @@ const About = () => {
               color: "white",
               marginTop: 15,
               borderRadius: "4px",
-              border: "none"
+              border: "none",
             }}
             onClick={() => setIsEditing(true)}
           >

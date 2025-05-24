@@ -20,18 +20,7 @@ export default function AdminUserEditor() {
     <>
       <CapsuleTabs>
         <CapsuleTabs.Tab title="Engaggement" key="engaggement">
-          {engagedButton && <UpdateStatusToEnggaged />}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 12,
-            }}
-          >
-            <div style={{ fontSize: 16 }}>Update Button</div>
-            <Switch checked={engagedButton} onChange={handleToggle} />
-          </div>
+          <UpdateStatusToEnggaged />
         </CapsuleTabs.Tab>
         <CapsuleTabs.Tab title="ConnectionList" key="connection">
           <ConnectionListView />
@@ -65,7 +54,7 @@ export default function AdminUserEditor() {
           </Space>
           {showResetPassword && <ResetPassword userId={userId} />}
         </CapsuleTabs.Tab>
-        <CapsuleTabs.Tab title="Engaggements" key="engaggements">
+        <CapsuleTabs.Tab title="Engaggements List" key="engaggements">
           <EngaggementList />
         </CapsuleTabs.Tab>
         <CapsuleTabs.Tab title="DonationForm" key="donationform">
