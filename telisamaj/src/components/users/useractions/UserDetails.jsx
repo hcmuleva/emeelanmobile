@@ -1,6 +1,14 @@
 import { BuildOutlined } from "@ant-design/icons";
 import { Divider, Image, NavBar, Space, Toast } from "antd-mobile";
-import { CalendarOutline, EnvironmentOutline, FileOutline, PictureOutline, SoundOutline, TeamOutline, UserOutline } from "antd-mobile-icons";
+import {
+  CalendarOutline,
+  EnvironmentOutline,
+  FileOutline,
+  PictureOutline,
+  SoundOutline,
+  TeamOutline,
+  UserOutline,
+} from "antd-mobile-icons";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
@@ -42,30 +50,32 @@ const UserDetails = ({ profileid }) => {
     fetchProfile();
   }, [profileid, jwt]);
 
-  const handleBack = () => navigate(-1);
-
   if (isLoading)
     return (
-      <div style={{
-        padding: 24,
-        textAlign: "center",
-        fontWeight: "bold",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        backgroundColor: "#FCFCFC"
-      }}>
-        <div style={{
-          width: 40,
-          height: 40,
-          border: `3px solid ${theme.primary}`,
-          borderTop: "3px solid transparent",
-          borderRadius: "50%",
-          animation: "spin 1s linear infinite",
-          marginBottom: 16
-        }} />
+      <div
+        style={{
+          padding: 24,
+          textAlign: "center",
+          fontWeight: "bold",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          backgroundColor: "#FCFCFC",
+        }}
+      >
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            border: `3px solid ${theme.primary}`,
+            borderTop: "3px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            marginBottom: 16,
+          }}
+        />
         Loading profile...
         <style>{`
           @keyframes spin {
@@ -80,7 +90,10 @@ const UserDetails = ({ profileid }) => {
   let userImage = "";
   if (user?.Pictures?.profilePicture) {
     userImage = user?.Pictures.profilePicture?.url;
-  } else if (Array.isArray(user?.Pictures?.pictures) && user?.Pictures?.pictures[0]) {
+  } else if (
+    Array.isArray(user?.Pictures?.pictures) &&
+    user?.Pictures?.pictures[0]
+  ) {
     userImage = user?.Pictures?.pictures[0];
   } else if (user?.Pictures?.photos?.[0]?.url) {
     userImage = user?.Pictures.photos?.[0]?.url;
@@ -114,18 +127,25 @@ const UserDetails = ({ profileid }) => {
 
   // Get user location string
   const userLocation = [user?.City, user?.State, user?.Country]
-    .filter(item => item)
+    .filter((item) => item)
     .join(", ");
 
   const getSectionIcon = (sectionName) => {
     switch (sectionName) {
-      case "About": return <UserOutline style={{ color: theme.primary }} />;
-      case "Basic Info": return <FileOutline style={{ color: theme.primary }} />;
-      case "Family": return <TeamOutline style={{ color: theme.primary }} />;
-      case "Education": return <SoundOutline style={{ color: theme.primary }} />;
-      case "Profession": return <BuildOutlined style={{ color: theme.primary }} />;
-      case "Photo Gallery": return <PictureOutline style={{ color: theme.primary }} />;
-      default: return <UserOutline style={{ color: theme.primary }} />;
+      case "About":
+        return <UserOutline style={{ color: theme.primary }} />;
+      case "Basic Info":
+        return <FileOutline style={{ color: theme.primary }} />;
+      case "Family":
+        return <TeamOutline style={{ color: theme.primary }} />;
+      case "Education":
+        return <SoundOutline style={{ color: theme.primary }} />;
+      case "Profession":
+        return <BuildOutlined style={{ color: theme.primary }} />;
+      case "Photo Gallery":
+        return <PictureOutline style={{ color: theme.primary }} />;
+      default:
+        return <UserOutline style={{ color: theme.primary }} />;
     }
   };
 
@@ -149,16 +169,23 @@ const UserDetails = ({ profileid }) => {
   const renderInfoItem = (label, value) => (
     <div style={{ marginBottom: "12px" }}>
       <div style={{ fontWeight: "bold", color: theme.textDark }}>{label}</div>
-      <div style={{
-        padding: "8px 12px",
-        backgroundColor: value && !value.includes("No") && value !== "Unknown" ? theme.highlightBg : "transparent",
-        borderRadius: "4px",
-        color: theme.textDark
-      }}>
+      <div
+        style={{
+          padding: "8px 12px",
+          backgroundColor:
+            value && !value.includes("No") && value !== "Unknown"
+              ? theme.highlightBg
+              : "transparent",
+          borderRadius: "4px",
+          color: theme.textDark,
+        }}
+      >
         {value || "Not provided"}
       </div>
     </div>
   );
+
+  const handleBack = () => navigate(-1);
 
   return (
     <div
@@ -166,7 +193,7 @@ const UserDetails = ({ profileid }) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FCFCFC"
+        backgroundColor: "#FCFCFC",
       }}
     >
       {/* Header */}
@@ -178,7 +205,7 @@ const UserDetails = ({ profileid }) => {
           backgroundColor: theme.primary,
           color: "white",
           height: "56px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
         }}
       >
         Profile Details
@@ -187,15 +214,17 @@ const UserDetails = ({ profileid }) => {
       {/* Content */}
       <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
         {/* Profile Header */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "16px",
-          backgroundColor: "white",
-          borderRadius: "8px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-          marginBottom: "16px"
-        }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            padding: "16px",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            marginBottom: "16px",
+          }}
+        >
           <Image
             src={userImage}
             width={80}
@@ -209,32 +238,44 @@ const UserDetails = ({ profileid }) => {
             onClick={() => userImage && setSelectedImage(userImage)}
           />
           <div>
-            <h2 style={{
-              margin: 0,
-              color: theme.primary,
-              fontSize: "15px",
-              fontWeight: "bold"
-            }}>
+            <h2
+              style={{
+                margin: 0,
+                color: theme.primary,
+                fontSize: "15px",
+                fontWeight: "bold",
+              }}
+            >
               {user?.FirstName || "First"} {user?.LastName || "Last"}
             </h2>
-            <div style={{
-              color: theme.textLight,
-              marginTop: "8px",
-              fontSize: "12px"
-            }}>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "4px"
-              }}>
-                <CalendarOutline style={{ marginRight: "8px", fontSize: "12px" }} />
+            <div
+              style={{
+                color: theme.textLight,
+                marginTop: "8px",
+                fontSize: "12px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "4px",
+                }}
+              >
+                <CalendarOutline
+                  style={{ marginRight: "8px", fontSize: "12px" }}
+                />
                 {user?.age ? `${user.age} yrs` : "Age Unknown"}
               </div>
-              <div style={{
-                display: "flex",
-                alignItems: "center"
-              }}>
-                <EnvironmentOutline style={{ marginRight: "8px", fontSize: "12px" }} />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <EnvironmentOutline
+                  style={{ marginRight: "8px", fontSize: "12px" }}
+                />
                 {userLocation || "Location Unknown"}
               </div>
               <div style={{ marginTop: "4px", fontSize: "12px" }}>
@@ -245,14 +286,16 @@ const UserDetails = ({ profileid }) => {
         </div>
 
         {/* Toggle between Profile & Photos */}
-        <div style={{
-          display: "flex",
-          backgroundColor: "white",
-          borderRadius: "8px",
-          overflow: "hidden",
-          marginBottom: "16px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.08)"
-        }}>
+        <div
+          style={{
+            display: "flex",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            overflow: "hidden",
+            marginBottom: "16px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
+          }}
+        >
           <button
             onClick={() => setToggleProfile(false)}
             style={{
@@ -265,7 +308,7 @@ const UserDetails = ({ profileid }) => {
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <UserOutline style={{ marginRight: "8px" }} />
@@ -283,7 +326,7 @@ const UserDetails = ({ profileid }) => {
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <PictureOutline style={{ marginRight: "8px" }} />
@@ -292,32 +335,63 @@ const UserDetails = ({ profileid }) => {
         </div>
 
         {!toggleProfile ? (
-          <div style={{ backgroundColor: "white", borderRadius: "8px", padding: "16px", boxShadow: "0 2px 4px rgba(0,0,0,0.08)" }}>
+          <div
+            style={{
+              backgroundColor: "white",
+              borderRadius: "8px",
+              padding: "16px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
+            }}
+          >
             {/* About Section */}
             {renderSectionHeader("About")}
-            {renderInfoItem("About Me", basicData?.aboutme?.about || "No About Me Given")}
-            {renderInfoItem("Hobby", basicData?.aboutme?.hobby || "No Hobby Given")}
-            {renderInfoItem("Height", basicData?.aboutme?.height || "No Height Given")}
-            {renderInfoItem("Skin Color", basicData?.aboutme?.color || "No Skin Color Given")}
+            {renderInfoItem(
+              "About Me",
+              basicData?.aboutme?.about || "No About Me Given"
+            )}
+            {renderInfoItem(
+              "Hobby",
+              basicData?.aboutme?.hobby || "No Hobby Given"
+            )}
+            {renderInfoItem(
+              "Height",
+              basicData?.aboutme?.height || "No Height Given"
+            )}
+            {renderInfoItem(
+              "Skin Color",
+              basicData?.aboutme?.color || "No Skin Color Given"
+            )}
 
             {/* Basic Info Section */}
             {renderSectionHeader("Basic Info")}
             {renderInfoItem("Gotra", user?.Gotra || "No Gotra Given")}
             {renderInfoItem("Date of Birth", user?.DOB || "No DOB Given")}
-            {renderInfoItem("Marital Status", user?.marital || "No Marital Status Given")}
+            {renderInfoItem(
+              "Marital Status",
+              user?.marital || "No Marital Status Given"
+            )}
 
             {/* Family Section */}
             {renderSectionHeader("Family")}
             {normalizedFamilies.length > 0 ? (
               <>
                 {normalizedFamilies.map((member, index) => (
-                  <div key={index} style={{
-                    marginBottom: "16px",
-                    padding: "12px",
-                    backgroundColor: theme.highlightBg,
-                    borderRadius: "4px"
-                  }}>
-                    <div style={{ fontWeight: "bold", marginBottom: "8px", color: theme.primary }}>
+                  <div
+                    key={index}
+                    style={{
+                      marginBottom: "16px",
+                      padding: "12px",
+                      backgroundColor: theme.highlightBg,
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        marginBottom: "8px",
+                        color: theme.primary,
+                      }}
+                    >
                       {member.firstName} {member.lastName} • {member.relation}
                     </div>
                     <div style={{ fontSize: "14px" }}>
@@ -329,7 +403,9 @@ const UserDetails = ({ profileid }) => {
                 ))}
               </>
             ) : (
-              <div style={{ color: theme.textLight }}>No Family Info Available</div>
+              <div style={{ color: theme.textLight }}>
+                No Family Info Available
+              </div>
             )}
 
             {/* Education Section */}
@@ -337,17 +413,28 @@ const UserDetails = ({ profileid }) => {
             {basicData?.educations?.length > 0 ? (
               <>
                 {basicData.educations.map((edu, index) => (
-                  <div key={index} style={{
-                    marginBottom: "16px",
-                    padding: "12px",
-                    backgroundColor: theme.highlightBg,
-                    borderRadius: "4px"
-                  }}>
-                    <div style={{ fontWeight: "bold", marginBottom: "8px", color: theme.primary }}>
+                  <div
+                    key={index}
+                    style={{
+                      marginBottom: "16px",
+                      padding: "12px",
+                      backgroundColor: theme.highlightBg,
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        marginBottom: "8px",
+                        color: theme.primary,
+                      }}
+                    >
                       {edu.degreeName || "Degree"}
                     </div>
                     <div style={{ fontSize: "14px" }}>
-                      <div>Institute: {edu.institute || "Unknown Institute"}</div>
+                      <div>
+                        Institute: {edu.institute || "Unknown Institute"}
+                      </div>
                       {edu.year && <div>Year: {edu.year}</div>}
                       <div>Level: {edu.level || "Unknown"}</div>
                       <div>Location: {edu.location || "Unknown"}</div>
@@ -356,7 +443,9 @@ const UserDetails = ({ profileid }) => {
                 ))}
               </>
             ) : (
-              <div style={{ color: theme.textLight }}>No Education Info Given</div>
+              <div style={{ color: theme.textLight }}>
+                No Education Info Given
+              </div>
             )}
 
             {/* Profession Section */}
@@ -364,18 +453,31 @@ const UserDetails = ({ profileid }) => {
             {basicData?.professions?.length > 0 ? (
               <>
                 {basicData.professions.map((job, index) => (
-                  <div key={index} style={{
-                    marginBottom: "16px",
-                    padding: "12px",
-                    backgroundColor: theme.highlightBg,
-                    borderRadius: "4px"
-                  }}>
-                    <div style={{ fontWeight: "bold", marginBottom: "8px", color: theme.primary }}>
+                  <div
+                    key={index}
+                    style={{
+                      marginBottom: "16px",
+                      padding: "12px",
+                      backgroundColor: theme.highlightBg,
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        marginBottom: "8px",
+                        color: theme.primary,
+                      }}
+                    >
                       {job.title || "Title Unknown"}
                     </div>
                     <div style={{ fontSize: "14px" }}>
-                      <div>Organization: {job.organization || "Unknown Org"}</div>
-                      {job.salary && <div>Salary: ₹ {job.salary} per annum</div>}
+                      <div>
+                        Organization: {job.organization || "Unknown Org"}
+                      </div>
+                      {job.salary && (
+                        <div>Salary: ₹ {job.salary} per annum</div>
+                      )}
                       <div>Title: {job.title || "Unknown"}</div>
                       <div>Experience: {job.totalExperience || "Unknown"}</div>
                       <div>Type: {job.type || "Unknown"}</div>
@@ -384,20 +486,31 @@ const UserDetails = ({ profileid }) => {
                 ))}
               </>
             ) : (
-              <div style={{ color: theme.textLight }}>No Profession Info Given</div>
+              <div style={{ color: theme.textLight }}>
+                No Profession Info Given
+              </div>
             )}
           </div>
         ) : (
-          <div style={{ backgroundColor: "white", borderRadius: "8px", padding: "16px", boxShadow: "0 2px 4px rgba(0,0,0,0.08)" }}>
+          <div
+            style={{
+              backgroundColor: "white",
+              borderRadius: "8px",
+              padding: "16px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
+            }}
+          >
             {renderSectionHeader("Photo Gallery")}
 
             {images.length > 0 ? (
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "12px",
-                marginTop: "16px"
-              }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: "12px",
+                  marginTop: "16px",
+                }}
+              >
                 {images.map((photo, index) => (
                   <div
                     key={index}
@@ -424,15 +537,23 @@ const UserDetails = ({ profileid }) => {
                 ))}
               </div>
             ) : (
-              <div style={{
-                textAlign: "center",
-                padding: "30px 0",
-                color: theme.textLight,
-                backgroundColor: "rgba(139, 0, 0, 0.05)",
-                borderRadius: "8px",
-                border: "1px dashed rgba(139, 0, 0, 0.2)"
-              }}>
-                <PictureOutline style={{ fontSize: "32px", marginBottom: "8px", color: theme.primary }} />
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "30px 0",
+                  color: theme.textLight,
+                  backgroundColor: "rgba(139, 0, 0, 0.05)",
+                  borderRadius: "8px",
+                  border: "1px dashed rgba(139, 0, 0, 0.2)",
+                }}
+              >
+                <PictureOutline
+                  style={{
+                    fontSize: "32px",
+                    marginBottom: "8px",
+                    color: theme.primary,
+                  }}
+                />
                 <div>No Photos Available</div>
               </div>
             )}
@@ -442,20 +563,29 @@ const UserDetails = ({ profileid }) => {
 
       {/* Image Modal */}
       {selectedImage && (
-        <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "rgba(0,0,0,0.8)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: 1000,
-          padding: "20px"
-        }} onClick={closeImageModal}>
-          <div style={{ position: "relative", maxWidth: "100%", maxHeight: "90vh" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+            padding: "20px",
+          }}
+          onClick={closeImageModal}
+        >
+          <div
+            style={{
+              position: "relative",
+              maxWidth: "100%",
+              maxHeight: "90vh",
+            }}
+          >
             <img
               src={selectedImage}
               alt="Enlarged view"
@@ -463,7 +593,7 @@ const UserDetails = ({ profileid }) => {
                 maxWidth: "100%",
                 maxHeight: "90vh",
                 objectFit: "contain",
-                borderRadius: "8px"
+                borderRadius: "8px",
               }}
             />
             <button
@@ -481,7 +611,7 @@ const UserDetails = ({ profileid }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
               onClick={closeImageModal}
             >
@@ -492,18 +622,19 @@ const UserDetails = ({ profileid }) => {
       )}
 
       {/* Footer */}
-      <div style={{
-        padding: 12,
-        borderTop: "1px solid #f0f0f0",
-        textAlign: "center",
-        color: theme.textLight,
-        fontSize: "12px",
-        backgroundColor: "white",
-        marginBottom: "30px"
-      }}>
+      <div
+        style={{
+          padding: 12,
+          borderTop: "1px solid #f0f0f0",
+          textAlign: "center",
+          color: theme.textLight,
+          fontSize: "12px",
+          backgroundColor: "white",
+          marginBottom: "30px",
+        }}
+      >
         Profile details for {user?.FirstName || "User"} {user?.LastName || ""}
       </div>
-
     </div>
   );
 };

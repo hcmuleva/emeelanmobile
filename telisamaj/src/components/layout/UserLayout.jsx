@@ -1,7 +1,9 @@
+import { HomeOutlined } from "@ant-design/icons";
 import {
-  HomeOutlined,
-} from "@ant-design/icons";
-import { ChatCheckOutline, CheckCircleFill, TeamOutline } from "antd-mobile-icons";
+  ChatCheckOutline,
+  CheckCircleFill,
+  TeamOutline,
+} from "antd-mobile-icons";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
@@ -14,18 +16,18 @@ export default function UserLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [notificationStats, setNotificationStats] = useState({ total: 0 });
-  console.log("Notification ", JSON.stringify(notificationStats))
   const userId = JSON.parse(localStorage.getItem("user"))?.id;
-  const [showAdd, setShowAd] = useState(false)
-
-  console.log(notificationStats, "NEw")
+  const [showAdd, setShowAd] = useState(false);
 
   const footerItems = [
     { icon: <HomeOutlined style={{ fontSize: 24 }} />, key: "home" },
     { icon: <TeamOutline style={{ fontSize: 24 }} />, key: "profiles" },
     {
       icon: (
-        <Badge content={notificationStats.total} style={{ '--right': '0%', '--top': '0%' }}>
+        <Badge
+          content={notificationStats.total}
+          style={{ "--right": "0%", "--top": "0%" }}
+        >
           <CheckCircleFill style={{ fontSize: 24 }} />
         </Badge>
       ),
@@ -39,15 +41,22 @@ export default function UserLayout({ children }) {
   ];
 
   return (
-    <div style={{
-      display: "flex", flexDirection: "column", minHeight: "100vh"
-    }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
       <TopBar userRole={"User"} />
       <div style={{ flex: 1, overflowY: "auto" }}>{children}</div>
 
       {/* StatusNotification hooks into Ably */}
 
-      <StatusNotification userId={userId} setNotificationStats={setNotificationStats} />
+      <StatusNotification
+        userId={userId}
+        setNotificationStats={setNotificationStats}
+      />
 
       <div
         style={{

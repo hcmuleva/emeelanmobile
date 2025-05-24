@@ -191,7 +191,7 @@ const DonationForm = () => {
           </Form.Item>
 
           <Form.Item
-            name="maritalStatus"
+            name="marital"
             label="Marital Status"
             rules={[{ required: true }]}
           >

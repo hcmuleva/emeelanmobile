@@ -11,22 +11,25 @@ const DeepLinkHandler = () => {
 
     const setupListener = async () => {
       try {
-        const newListener = await CapacitorApp.addListener("appUrlOpen", (event) => {
-          if (!isMounted) return;
-          
-          if (event?.url) {
-            const url = new URL(event.url);
-            const pathname = url.pathname;
-            const referralId = url.searchParams.get("referral_id");
-            const orgId = url.searchParams.get("orgid");
+        const newListener = await CapacitorApp.addListener(
+          "appUrlOpen",
+          (event) => {
+            if (!isMounted) return;
 
-            console.log("📲 Deep link opened:", event.url);
+            if (event?.url) {
+              const url = new URL(event.url);
+              const pathname = url.pathname;
+              const referralId = url.searchParams.get("referral_id");
+              const orgId = url.searchParams.get("orgid");
 
-            if (pathname.includes("/referral") && referralId && orgId) {
-              navigate(`/reffereralregistration?referral_id=${referralId}&orgid=${orgId}`);
+              if (pathname.includes("/referral") && referralId && orgId) {
+                navigate(
+                  `/reffereralregistration?referral_id=${referralId}&orgid=${orgId}`
+                );
+              }
             }
           }
-        });
+        );
 
         if (isMounted) {
           listener = newListener;
@@ -43,7 +46,7 @@ const DeepLinkHandler = () => {
     return () => {
       isMounted = false;
       if (listener && typeof listener.remove === "function") {
-        listener.remove().catch(error => {
+        listener.remove().catch((error) => {
           console.error("Error removing listener:", error);
         });
       }

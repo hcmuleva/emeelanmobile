@@ -1,15 +1,15 @@
-import { Button, DatePicker, Form, Toast } from 'antd-mobile';
-import React, { useState } from 'react';
+import { Button, DatePicker, Form, Toast } from "antd-mobile";
+import React, { useState } from "react";
 
 const formatDateToDDMMYYYY = (date) => {
-  if (!date) return '';
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  if (!date) return "";
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear();
   return `${year}-${month}-${day}`;
 };
 
-const DateSelector = ({customdata,setCustomdata}) => {
+const DateSelector = ({ customdata, setCustomdata }) => {
   const now = new Date();
   const eighteenYearsAgo = new Date(
     now.getFullYear() - 18,
@@ -31,26 +31,24 @@ const DateSelector = ({customdata,setCustomdata}) => {
   }, [form]);
 
   const handleDateConfirm = (date) => {
-    setCustomdata({...customdata, DOB: formatDateToDDMMYYYY(date)});
+    setCustomdata({ ...customdata, DOB: formatDateToDDMMYYYY(date) });
     form.setFieldsValue({ DOB: date });
     setDobVisible(false);
     Toast.show(`Selected: ${formatDateToDDMMYYYY(date)}`);
   };
 
-
-
   return (
     <Form form={form}>
       <Form.Item name="DOB">
-        <div 
+        <div
           onClick={() => setDobVisible(true)}
-          style={{ 
-            padding: '6px 0',
-            color: 'var(--adm-color-text)',
-            cursor: 'pointer'
+          style={{
+            padding: "0px 0",
+            color: "var(--adm-color-text)",
+            cursor: "pointer",
           }}
         >
-          {formatDateToDDMMYYYY(form.getFieldValue('DOB')) || 'Select Date'}
+          {formatDateToDDMMYYYY(form.getFieldValue("DOB")) || "Select Date"}
         </div>
       </Form.Item>
 
@@ -61,7 +59,7 @@ const DateSelector = ({customdata,setCustomdata}) => {
         onConfirm={handleDateConfirm}
         min={hundredYearsAgo}
         max={eighteenYearsAgo}
-        value={form.getFieldValue('DOB')}
+        value={form.getFieldValue("DOB")}
       />
     </Form>
   );

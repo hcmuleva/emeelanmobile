@@ -22,7 +22,6 @@ const FeatureTiles = () => {
   const { jwt } = useContext(AuthContext);
   // const user = JSON.parse(localStorage.getItem("user"));
   const userStatus = user?.userstatus || "PENDING";
-  console.log("hcm userStatus", userStatus);
   useEffect(() => {
     // Fetch suggested users only if approved
     if (userStatus === "APPROVED") {

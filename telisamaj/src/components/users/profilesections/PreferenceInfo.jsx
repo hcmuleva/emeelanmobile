@@ -1,4 +1,14 @@
-import { Button, Card, Form, Input, Selector, Space, Tabs, TextArea, Toast } from "antd-mobile";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Selector,
+  Space,
+  Tabs,
+  TextArea,
+  Toast,
+} from "antd-mobile";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { updateUser } from "../../../services/api";
@@ -27,10 +37,14 @@ const defaultFormValues = {
 
 const PreferenceInfo = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [preferences, setPreferences] = useState(user?.mybasicdata?.preferences || []);
+  const [preferences, setPreferences] = useState(
+    user?.mybasicdata?.preferences || []
+  );
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
-  const [activeTab, setActiveTab] = useState(preferences.length ? "view" : "edit");
+  const [activeTab, setActiveTab] = useState(
+    preferences.length ? "view" : "edit"
+  );
 
   const handleEdit = (index) => {
     form.setFieldsValue(preferences[index]);
@@ -84,15 +98,15 @@ const PreferenceInfo = () => {
   return (
     <Card
       style={{
-        borderRadius: '8px',
-        margin: '10px 0',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #eee',
+        borderRadius: "8px",
+        margin: "10px 0",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #eee",
       }}
-      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '18px' }}>💖 Partner Preferences</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "18px" }}>💖 Partner Preferences</span>
         </div>
       }
     >
@@ -100,8 +114,8 @@ const PreferenceInfo = () => {
         activeKey={activeTab}
         onChange={setActiveTab}
         style={{
-          '--title-active-color': '#8B0000',
-          '--active-line-color': '#8B0000',
+          "--title-active-color": "#8B0000",
+          "--active-line-color": "#8B0000",
         }}
       >
         <Tabs.Tab title="View Preferences" key="view">
@@ -111,28 +125,42 @@ const PreferenceInfo = () => {
                 <Card
                   key={index}
                   style={{
-                    margin: '10px 0',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-                    border: '1px solid #eee',
+                    margin: "10px 0",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                    border: "1px solid #eee",
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      backgroundColor: '#8B0000',
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '20px'
-                    }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        backgroundColor: "#8B0000",
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "20px",
+                      }}
+                    >
                       {getPreferenceEmoji(pref)}
                     </div>
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000" }}>
+                      <div
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "bold",
+                          color: "#8B0000",
+                        }}
+                      >
                         Preference {index + 1}
                       </div>
                       <div style={{ fontSize: 14, color: "#666" }}>
@@ -141,12 +169,26 @@ const PreferenceInfo = () => {
                     </div>
                   </div>
 
-                  <div style={{ margin: '10px 0', fontSize: 14, color: "#333" }}>
-                    <div style={{ margin: '3px 0' }}><strong>Marital Status:</strong> {pref.maritialstatus}</div>
-                    <div style={{ margin: '3px 0' }}><strong>Skin Tone:</strong> {pref.color}</div>
-                    <div style={{ margin: '3px 0' }}><strong>Business Type:</strong> {pref.businesstype}</div>
-                    <div style={{ margin: '3px 0' }}><strong>Height:</strong> {pref.height}</div>
-                    {pref.description && <div style={{ margin: '3px 0' }}><strong>Description:</strong> {pref.description}</div>}
+                  <div
+                    style={{ margin: "10px 0", fontSize: 14, color: "#333" }}
+                  >
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Marital Status:</strong> {pref.maritialstatus}
+                    </div>
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Skin Tone:</strong> {pref.color}
+                    </div>
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Business Type:</strong> {pref.businesstype}
+                    </div>
+                    <div style={{ margin: "3px 0" }}>
+                      <strong>Height:</strong> {pref.height}
+                    </div>
+                    {pref.description && (
+                      <div style={{ margin: "3px 0" }}>
+                        <strong>Description:</strong> {pref.description}
+                      </div>
+                    )}
                   </div>
 
                   <Space block justify="between" style={{ marginTop: 10 }}>
@@ -156,7 +198,7 @@ const PreferenceInfo = () => {
                         backgroundColor: "#8B0000",
                         color: "white",
                         borderRadius: "4px",
-                        border: "none"
+                        border: "none",
                       }}
                       onClick={() => handleEdit(index)}
                     >
@@ -168,7 +210,7 @@ const PreferenceInfo = () => {
                         backgroundColor: "#888",
                         color: "white",
                         borderRadius: "4px",
-                        border: "none"
+                        border: "none",
                       }}
                       onClick={() => handleDelete(index)}
                     >
@@ -177,7 +219,6 @@ const PreferenceInfo = () => {
                   </Space>
                 </Card>
               ))}
-
             </>
           ) : (
             <div>No preferences added yet.</div>
@@ -189,7 +230,7 @@ const PreferenceInfo = () => {
               color: "white",
               marginTop: 15,
               borderRadius: "4px",
-              border: "none"
+              border: "none",
             }}
             onClick={handleSaveToServer}
           >
@@ -202,12 +243,20 @@ const PreferenceInfo = () => {
             form={form}
             initialValues={defaultFormValues}
             layout="vertical"
-            style={{ padding: '10px 0' }}
+            style={{ padding: "10px 0" }}
           >
-            <Form.Item name="agerange" label="Age Range">
+            <Form.Item
+              name="agerange"
+              label="Age Range"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="e.g. 25-30"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
@@ -216,14 +265,22 @@ const PreferenceInfo = () => {
                 options={maritalStatusOptions}
                 value={form.getFieldValue("maritialstatus")}
                 onChange={(val) => form.setFieldValue("maritialstatus", val)}
-                style={{ '--checked-color': '#8B000040' }}
+                style={{ "--checked-color": "#8B000040" }}
               />
             </Form.Item>
 
-            <Form.Item name="color" label="Skin Tone">
+            <Form.Item
+              name="color"
+              label="Skin Tone"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="e.g. Fair, Wheatish"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
@@ -232,22 +289,38 @@ const PreferenceInfo = () => {
                 options={businessTypeOptions}
                 value={form.getFieldValue("businesstype")}
                 onChange={(val) => form.setFieldValue("businesstype", val)}
-                style={{ '--checked-color': '#8B000040' }}
+                style={{ "--checked-color": "#8B000040" }}
               />
             </Form.Item>
 
-            <Form.Item name="height" label="Height">
+            <Form.Item
+              name="height"
+              label="Height"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="e.g. 5'6"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="description" label="Description">
+            <Form.Item
+              name="description"
+              label="Description"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <TextArea
                 placeholder="Extra details or expectations"
                 rows={3}
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
@@ -258,7 +331,7 @@ const PreferenceInfo = () => {
                 color: "white",
                 marginTop: 15,
                 borderRadius: "4px",
-                border: "none"
+                border: "none",
               }}
               onClick={handleAddOrUpdate}
             >

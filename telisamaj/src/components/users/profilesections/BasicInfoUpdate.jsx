@@ -105,7 +105,7 @@ export default function BasicInfoUpdate() {
     }
   };
   return (
-    <div>
+    <>
       {!isEditMode ? (
         <Card
           style={{
@@ -217,6 +217,7 @@ export default function BasicInfoUpdate() {
         </Card>
       ) : (
         <Card
+          bodyStyle={{ padding: "0", margin: "0" }}
           style={{
             borderRadius: "8px",
             margin: "10px 0",
@@ -238,45 +239,107 @@ export default function BasicInfoUpdate() {
             onFinish={handleFinish}
             layout="horizontal"
           >
-            <Form.Item name="username" label="UserName:">
+            <Form.Item
+              name="username"
+              label="UserName:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                  width: "100%",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="FirstName" label="First Name:">
+            <Form.Item
+              name="FirstName"
+              label="First Name:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                  width: "100%",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="LastName" label="Last Name:">
+            <Form.Item
+              name="LastName"
+              label="Last Name:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="age" label="Age:">
+            <Form.Item
+              name="age"
+              label="Age:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="Height" label="Height (cm)">
+            <Form.Item
+              name="Height"
+              label="Height (cm)"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="for eg: 126"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="MobileNumber" label="Mobile:">
+            <Form.Item
+              name="MobileNumber"
+              label="Mobile:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <p style={{ fontWeight: "500", marginLeft: "15px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <p
+                style={{
+                  fontWeight: "500",
+                  marginLeft: "15px",
+                  marginRight: "15px",
+                }}
+              >
                 Marital Status
               </p>
               <MaritalStatus
@@ -285,34 +348,74 @@ export default function BasicInfoUpdate() {
                 form={form}
               />
             </div>
-            <Form.Item name="postalcode" label="Pincode:">
+            <Form.Item
+              name="postalcode"
+              label="Pincode:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 onChange={handlePincodeChange}
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="City" label="City:">
+            <Form.Item
+              name="City"
+              label="City:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="district" label="District:">
+            <Form.Item
+              name="district"
+              label="District:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="State" label="State:">
+            <Form.Item
+              name="State"
+              label="State:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="Country" label="Country:">
+            <Form.Item
+              name="Country"
+              label="Country:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
@@ -320,6 +423,7 @@ export default function BasicInfoUpdate() {
               name="isdivyang"
               label="Is Divyang:"
               initialValue={false}
+              style={{ display: "flex", alignItems: "center" }}
             >
               <Radio.Group
                 value={form.getFieldValue("isdivyang")}
@@ -333,9 +437,17 @@ export default function BasicInfoUpdate() {
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item name="divyangDescription" label="Disability Detail:">
+            <Form.Item
+              name="divyangDescription"
+              label="Disability Detail:"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
@@ -369,6 +481,6 @@ export default function BasicInfoUpdate() {
           </Form>
         </Card>
       )}
-    </div>
+    </>
   );
 }

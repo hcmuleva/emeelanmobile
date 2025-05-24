@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { List, InfiniteScroll, Avatar } from 'antd-mobile';
-import { ChatWindow } from './ChatWindow';
-import { useAuth } from '../../context/AuthContext';
-import { getPaginatedUsers } from '../../services/api';
+import React, { useState, useEffect } from "react";
+import { List, InfiniteScroll, Avatar } from "antd-mobile";
+import { ChatWindow } from "./ChatWindow";
+import { useAuth } from "../../context/AuthContext";
+import { getPaginatedUsers } from "../../services/api";
 
 export const ChatApp = () => {
   const { user } = useAuth();
@@ -28,7 +28,7 @@ export const ChatApp = () => {
       setUsers((prev) => (pageNum === 0 ? userList : [...prev, ...userList]));
       setPage(pageNum + 1);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
       setHasMore(false);
     } finally {
       setLoading(false);
@@ -44,19 +44,22 @@ export const ChatApp = () => {
   };
 
   return (
-    <div style={{ height: '100vh', overflow: 'auto' }}>
+    <div style={{ height: "100vh", overflow: "auto" }}>
       {!selectedUser ? (
         <>
           <List header="Available Users" mode="card">
             {users.map((u) => (
               <List.Item
                 key={u.id}
-                prefix={<Avatar src={`https://ui-avatars.com/api/?name=${u.FirstName}`} />}
+                prefix={
+                  <Avatar
+                    src={`https://ui-avatars.com/api/?name=${u.FirstName}`}
+                  />
+                }
                 onClick={() => {
-                    setSelectedUser(u)
-                    console.log("User Selected", u)
+                  setSelectedUser(u);
                 }}
-                description={u.online ? 'Online' : `'Offline' ${u.id}`}
+                description={u.online ? "Online" : `'Offline' ${u.id}`}
               >
                 {u.FirstName}
               </List.Item>
@@ -65,7 +68,10 @@ export const ChatApp = () => {
           <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
         </>
       ) : (
-        <ChatWindow selectedUser={selectedUser} onBack={() => setSelectedUser(null)} />
+        <ChatWindow
+          selectedUser={selectedUser}
+          onBack={() => setSelectedUser(null)}
+        />
       )}
     </div>
   );

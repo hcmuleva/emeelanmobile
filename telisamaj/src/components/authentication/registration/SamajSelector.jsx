@@ -1,53 +1,60 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Popup, SearchBar, Toast, List, Button } from "antd-mobile";
 
-const GotraSelector = ({
+const SamajSelector = ({
   form,
-  gotra_for,
-  gotraData,
-  customdata,
-  setCustomdata,
+  samajData,
+  selectedSamaj,
+  setSelectedSamaj,
   enableSearch = true,
+  getSamaj, // Pass the getSamaj function to fetch additional data
 }) => {
   const [visible, setVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const fieldName = "gotra";
+  const fieldName = "Samaj";
   const searchBarRef = useRef(null);
 
-  // Safely get the selected value from the form or customdata
-  const selectedValue = form?.getFieldValue?.(fieldName) || "";
-  const selectedGotra =
-    gotraData.find((g) => g.EName === selectedValue) ||
-    gotraData.find((g) => g.Id === customdata?.gotra);
+  // Safely get the selected value from the form or selectedSamaj
+  const selectedValue = form?.getFieldValue?.(fieldName) || selectedSamaj || "";
+  const selectedSamajItem = samajData.find(
+    (s) => s.attributes?.samaj_type === selectedValue
+  );
 
-  // Filter gotraData based on search text
-  const filteredGotraData = useMemo(() => {
-    if (!searchText) return gotraData;
+  // Filter samajData based on search text
+  const filteredSamajData = useMemo(() => {
+    if (!searchText) return samajData;
     const lowerSearchText = searchText.toLowerCase();
-    return gotraData.filter(
-      (gotra) =>
-        gotra.EName.toLowerCase().includes(lowerSearchText) ||
-        gotra.HName.toLowerCase().includes(lowerSearchText)
+    return samajData.filter((samaj) =>
+      samaj.attributes?.title?.toLowerCase().includes(lowerSearchText)
     );
-  }, [searchText, gotraData]);
+  }, [searchText, samajData]);
 
-  const handleConfirm = (gotra) => {
-    const selected = gotraData.find((g) => g.EName === gotra.EName);
+  const handleConfirm = async (samaj) => {
+    const selected = samajData.find(
+      (s) => s.attributes?.samaj_type === samaj.attributes?.samaj_type
+    );
 
+    // Update the form field value
     if (form?.setFieldValue) {
-      form.setFieldValue(fieldName, gotra.EName);
+      form.setFieldValue(fieldName, samaj.attributes?.samaj_type);
     }
 
-    setCustomdata({
-      ...customdata,
-      ...(gotra_for
-        ? { matranal_gotra: selected?.Id }
-        : { gotra: selected?.Id }),
-    });
+    // Update the selectedSamaj state
+    if (samaj.attributes?.samaj_type) {
+      try {
+        const res = await getSamaj({
+          samaj_type: samaj.attributes?.samaj_type,
+        });
+        setSelectedSamaj(samaj.attributes?.samaj_type);
+      } catch (error) {
+        console.error("Error fetching Samaj data:", error);
+        Toast.show({ icon: "fail", content: "Failed to fetch Samaj data" });
+      }
+    }
 
     setVisible(false);
     setSearchText("");
-    Toast.show({ content: `Selected: ${selected?.EName}` });
+    Toast.show({ content: `Selected: ${selected.attributes?.title}` });
   };
 
   // Focus the search bar when the popup opens
@@ -63,7 +70,7 @@ const GotraSelector = ({
       <div
         onClick={() => setVisible(true)}
         role="button"
-        aria-label="Select Gotra"
+        aria-label="Select Samaj"
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -72,7 +79,7 @@ const GotraSelector = ({
         }}
         style={{
           padding: "0px 12px",
-          color: selectedGotra ? "var(--adm-color-text)" : "#888",
+          color: selectedSamajItem ? "var(--adm-color-text)" : "#888",
           backgroundColor: "#f5f5f5",
           borderRadius: "8px",
           fontSize: "16px",
@@ -87,9 +94,9 @@ const GotraSelector = ({
         }}
       >
         <span>
-          {selectedGotra
-            ? `${selectedGotra.EName} (${selectedGotra.HName})`
-            : "Select Gotra"}
+          {selectedSamajItem
+            ? selectedSamajItem.attributes?.title
+            : "Select Samaj"}
         </span>
         <svg
           width="16"
@@ -114,14 +121,12 @@ const GotraSelector = ({
         bodyStyle={{
           borderTopLeftRadius: "12px",
           borderTopRightRadius: "12px",
-          height: "70vh", // Fixed height for consistency
+          height: "70vh",
           display: "flex",
           flexDirection: "column",
           backgroundColor: "#fff",
-          // Mobile-first styles
           width: "100%",
           maxWidth: "100%",
-          // Responsive styles for larger screens
           "@media (min-width: 768px)": {
             height: "50vh",
             maxWidth: "400px",
@@ -153,7 +158,7 @@ const GotraSelector = ({
               color: "#333",
             }}
           >
-            Select Gotra
+            Select Samaj
           </h3>
           <Button
             size="small"
@@ -179,14 +184,14 @@ const GotraSelector = ({
               padding: "12px 16px",
               borderBottom: "1px solid #eee",
               position: "sticky",
-              top: "54px", // Height of the header
+              top: "54px",
               backgroundColor: "#fff",
               zIndex: 1,
             }}
           >
             <SearchBar
               ref={searchBarRef}
-              placeholder="Search Gotra"
+              placeholder="Search Samaj"
               value={searchText}
               onChange={(value) => setSearchText(value)}
               onClear={() => setSearchText("")}
@@ -196,12 +201,12 @@ const GotraSelector = ({
                 "--height": "40px",
                 "--padding": "0 12px",
               }}
-              aria-label="Search Gotra"
+              aria-label="Search Samaj"
             />
           </div>
         )}
 
-        {/* Scrollable list of gotras */}
+        {/* Scrollable list of samaj */}
         <div
           style={{
             flex: 1,
@@ -215,28 +220,36 @@ const GotraSelector = ({
               "--border-bottom": "none",
             }}
           >
-            {filteredGotraData.length > 0 ? (
-              filteredGotraData.map((gotra) => (
+            {filteredSamajData.length > 0 ? (
+              filteredSamajData.map((samaj) => (
                 <List.Item
-                  key={gotra.Id}
-                  onClick={() => handleConfirm(gotra)}
+                  key={samaj.id}
+                  onClick={() => handleConfirm(samaj)}
                   role="option"
-                  aria-selected={selectedGotra?.Id === gotra.Id}
+                  aria-selected={
+                    selectedSamajItem?.attributes?.samaj_type ===
+                    samaj.attributes?.samaj_type
+                  }
                   style={{
                     cursor: "pointer",
-                    padding: "5px 16px",
+                    padding: "14px 16px",
                     fontSize: "16px",
                     lineHeight: "1.5",
-                    minHeight: "48px", // Touch-friendly height
-                    color: selectedGotra?.Id === gotra.Id ? "#ff4d4f" : "#333",
+                    minHeight: "48px",
+                    color:
+                      selectedSamajItem?.attributes?.samaj_type ===
+                      samaj.attributes?.samaj_type
+                        ? "#ff4d4f"
+                        : "#333",
                     backgroundColor:
-                      selectedGotra?.Id === gotra.Id
+                      selectedSamajItem?.attributes?.samaj_type ===
+                      samaj.attributes?.samaj_type
                         ? "rgba(255, 77, 79, 0.05)"
                         : "transparent",
                     transition: "background-color 0.2s",
                   }}
                 >
-                  {gotra.EName} ({gotra.HName})
+                  {samaj.attributes?.title}
                 </List.Item>
               ))
             ) : (
@@ -248,7 +261,7 @@ const GotraSelector = ({
                   fontSize: "14px",
                 }}
               >
-                No matching gotras found
+                No matching Samaj found
               </List.Item>
             )}
           </List>
@@ -258,4 +271,4 @@ const GotraSelector = ({
   );
 };
 
-export default GotraSelector;
+export default SamajSelector;
