@@ -148,7 +148,12 @@ const EducationInfo = () => {
                     <div
                       style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
                     >
-                      <strong>Year:</strong> {edu.year}
+                      <strong>Degree Name:</strong> {edu.degreeName}
+                    </div>
+                    <div
+                      style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
+                    >
+                      <strong>Passing Year:</strong> {edu.year}
                     </div>
                   </div>
 

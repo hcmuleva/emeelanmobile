@@ -298,14 +298,22 @@ const UserRoleProfile = ({ adminProp }) => {
                   placeholder="Min Age"
                   value={minAge}
                   onChange={(e) => setMinAge(e.target.value)}
-                  style={{ width: "50%" }}
+                  style={{
+                    width: "50%",
+                    padding: "5px",
+                    border: "1px solid #ddd",
+                  }}
                 />
                 <input
                   type="number"
                   placeholder="Max Age"
                   value={maxAge}
                   onChange={(e) => setMaxAge(e.target.value)}
-                  style={{ width: "50%" }}
+                  style={{
+                    width: "50%",
+                    padding: "5px",
+                    border: "1px solid #ddd",
+                  }}
                 />
               </div>
             </div>

@@ -273,9 +273,7 @@ export const getEngagedRequests = async (start = 0, limit = 10) => {
     console.error("Error details:", error.response?.data || error.message);
     throw error; // Throw the error to be caught by the calling function
   }
-  
 }
-
 
 // Helper function to process API response
 const processApiResponse = (data, page, pageSize) => {
@@ -560,7 +558,6 @@ export const createQRCODEBySuperAdmin = async (data, jwt) => {
 
 export const updateUser = async (data, userId) => {
   try {
-
     const response = await api.put(`/users/${userId}`, {
       ...data,
     });

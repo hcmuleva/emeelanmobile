@@ -107,6 +107,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
   const fetchUsers = async (pageNum = 0, searchQuery = "") => {
     try {
       const offset = pageNum * limit;
+
       let filters = {};
 
       if (userrole === "ADMIN") {
@@ -122,6 +123,7 @@ const AdminRoleProfiles = ({ adminProp, userrole }) => {
         filters["DOB_gte"] = from;
         filters["DOB_lte"] = to;
       }
+      
       let data;
       if (searchQuery) {
         data = await searchUsers(searchQuery, offset, limit);

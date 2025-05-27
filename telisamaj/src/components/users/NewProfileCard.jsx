@@ -30,7 +30,9 @@ const NewProfileCard = ({ user, role, action, onDetailsClick }) => {
   const navigate = useNavigate();
 
   let imagesrc = "";
-  if (user?.Pictures?.profilePicture) {
+  if (user?.images?.profilePicture) {
+    imagesrc = user?.images?.profilePicture?.url;
+  } else if (user?.Pictures?.profilePicture) {
     imagesrc = user?.Pictures.profilePicture?.url;
   } else if (
     Array.isArray(user?.images?.pictures) &&
@@ -101,6 +103,8 @@ const NewProfileCard = ({ user, role, action, onDetailsClick }) => {
       accent: "#8B0000",
     },
   };
+
+  console.log(user);
 
   return (
     <div
@@ -304,7 +308,10 @@ const NewProfileCard = ({ user, role, action, onDetailsClick }) => {
                 border: "none",
               }}
             >
-              Height: {user?.Height || "Not Specified"}
+              Height:{" "}
+              {user?.Height ||
+                user?.mybasicdata?.aboutme?.height ||
+                "Not Specified"}
             </Tag>
             <Tag
               style={{
@@ -321,7 +328,7 @@ const NewProfileCard = ({ user, role, action, onDetailsClick }) => {
             </Tag>
           </div>
           <hr />
-          <div style={{ marginBottom: "24px" }}>
+          <div style={{ marginBottom: "24px", marginTop: "24px" }}>
             <div
               style={{
                 display: "flex",
@@ -356,24 +363,6 @@ const NewProfileCard = ({ user, role, action, onDetailsClick }) => {
               />
               <span>
                 Profession: {user?.Profession || "Profession Not Specified"}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                color: colors.text.dark,
-                marginBottom: "12px",
-                fontSize: "15px",
-                fontWeight: "500",
-              }}
-            >
-              <PhoneOutlined
-                style={{ color: colors.secondary, fontSize: "18px" }}
-              />
-              <span>
-                {user?.MobileNumber || user?.mobile || "No Mobile Number"}
               </span>
             </div>
           </div>

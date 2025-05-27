@@ -24,7 +24,7 @@ export default function BasicInfoUpdate() {
     email: user?.email || "",
     FirstName: user?.FirstName || "",
     LastName: user?.LastName || "",
-    Height: user?.Height || user?.mybasicdata?.aboutme?.height || "1",
+    Height: user?.Height || user?.mybasicdata?.aboutme?.height || "0",
     MobileNumber: user?.MobileNumber || user?.mobile || null,
     City: user?.City || "",
     district: user?.district || "",

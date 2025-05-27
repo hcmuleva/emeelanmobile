@@ -33,6 +33,33 @@ const defaultFormValues = {
   location: "",
 };
 
+// Indian currency formatter function
+const formatIndianCurrency = (amount) => {
+  if (!amount) return "";
+
+  // Convert to number if it's a string
+  const num =
+    typeof amount === "string"
+      ? parseFloat(amount.replace(/[^\d.]/g, ""))
+      : amount;
+
+  if (isNaN(num)) return "";
+
+  // Format using Indian number system
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num);
+};
+
+// Function to parse formatted currency back to number
+const parseCurrencyToNumber = (formattedValue) => {
+  if (!formattedValue) return "";
+  return formattedValue.replace(/[^\d]/g, "");
+};
+
 const ProfessionInfo = () => {
   const { user, setUser } = useContext(AuthContext);
   const [professions, setProfessions] = useState(
@@ -43,9 +70,15 @@ const ProfessionInfo = () => {
   const [activeTab, setActiveTab] = useState(
     professions.length ? "view" : "edit"
   );
+  const [salaryDisplay, setSalaryDisplay] = useState("");
 
   const handleEdit = (index) => {
-    form.setFieldsValue(professions[index]);
+    const professionData = professions[index];
+    form.setFieldsValue(professionData);
+    // Set the display value for salary
+    setSalaryDisplay(
+      professionData.salary ? formatIndianCurrency(professionData.salary) : ""
+    );
     setEditingIndex(index);
     setActiveTab("edit");
   };
@@ -67,6 +100,7 @@ const ProfessionInfo = () => {
       }
       setProfessions(updated);
       form.resetFields();
+      setSalaryDisplay("");
       setActiveTab("view");
     });
   };
@@ -77,6 +111,7 @@ const ProfessionInfo = () => {
       mybasicdata: { ...user.mybasicdata, professions },
     };
     try {
+      console.log(updatedUser);
       await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -85,6 +120,18 @@ const ProfessionInfo = () => {
       console.error("Save error", err);
       Toast.show({ icon: "fail", content: "Failed to save profession data." });
     }
+  };
+
+  // Handle salary input change with formatting
+  const handleSalaryChange = (value) => {
+    // Remove all non-digit characters to get the raw number
+    const numericValue = value.replace(/[^\d]/g, "");
+
+    // Update the form field with the numeric value
+    form.setFieldValue("salary", numericValue);
+
+    // Update the display with formatted currency
+    setSalaryDisplay(numericValue ? formatIndianCurrency(numericValue) : "");
   };
 
   // Get appropriate emoji based on profession type
@@ -187,7 +234,10 @@ const ProfessionInfo = () => {
                       <strong>Location:</strong> {prof.location}
                     </div>
                     <div style={{ margin: "3px 0" }}>
-                      <strong>Salary:</strong> ₹{prof.salary}
+                      <strong>Salary:</strong>{" "}
+                      {prof.salary
+                        ? formatIndianCurrency(prof.salary)
+                        : "Not specified"}
                     </div>
                     <div style={{ margin: "3px 0" }}>
                       <strong>Experience:</strong> {prof.totalExperience} years
@@ -341,12 +391,13 @@ const ProfessionInfo = () => {
 
             <Form.Item
               name="salary"
-              label="Salary"
+              label="Salary (Per Annum)"
               style={{ display: "flex", alignItems: "center" }}
             >
               <Input
-                type="number"
-                placeholder="e.g. 60000"
+                value={salaryDisplay}
+                onChange={handleSalaryChange}
+                placeholder="e.g. ₹6,00,000"
                 style={{
                   border: "1px solid #ddd",
                   borderRadius: "4px",

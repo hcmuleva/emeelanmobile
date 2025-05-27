@@ -19,6 +19,7 @@ const About = () => {
     const values = form.getFieldsValue();
     const updatedUser = {
       ...user,
+      Height: values.height,
       mybasicdata: {
         ...user.mybasicdata,
         aboutme: values,
@@ -26,7 +27,10 @@ const About = () => {
     };
 
     try {
-      await updateUser({ mybasicdata: updatedUser.mybasicdata }, user.id);
+      await updateUser(
+        { mybasicdata: updatedUser.mybasicdata, Height: updatedUser.Height },
+        user.id
+      );
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       Toast.show({ icon: "success", content: "About Me updated!" });
