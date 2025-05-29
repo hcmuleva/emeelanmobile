@@ -23,6 +23,26 @@ const theme = {
   highlightBg: "#00000005",
 };
 
+const formatIndianCurrency = (amount) => {
+  if (!amount || amount === "0" || amount === 0) return "Not specified";
+
+  // Convert to number if it's a string
+  const num =
+    typeof amount === "string"
+      ? parseFloat(amount.replace(/[^\d.]/g, ""))
+      : amount;
+
+  if (isNaN(num) || num === 0) return "Not specified";
+
+  // Format using Indian number system
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num);
+};
+
 const UserDetails = ({ profileid }) => {
   const { jwt } = useContext(AuthContext);
   const [user, setUser] = useState({});
@@ -187,6 +207,7 @@ const UserDetails = ({ profileid }) => {
 
   const handleBack = () => navigate(-1);
 
+  console.log(user);
   return (
     <div
       style={{
@@ -227,8 +248,8 @@ const UserDetails = ({ profileid }) => {
         >
           <Image
             src={userImage}
-            width={80}
-            height={80}
+            width={95}
+            height={90}
             style={{
               borderRadius: "50%",
               marginRight: 16,
@@ -276,7 +297,7 @@ const UserDetails = ({ profileid }) => {
                 <EnvironmentOutline
                   style={{ marginRight: "8px", fontSize: "12px" }}
                 />
-                {userLocation || "Location Unknown"}
+                {userLocation.toLowerCase() || "Location Unknown"}
               </div>
               <div style={{ marginTop: "4px", fontSize: "12px" }}>
                 User ID: {profileid}
@@ -357,10 +378,12 @@ const UserDetails = ({ profileid }) => {
               "Height",
               basicData?.aboutme?.height || "No Height Given"
             )}
-            {renderInfoItem(
-              "Skin Color",
-              basicData?.aboutme?.color || "No Skin Color Given"
-            )}
+
+            {basicData?.aboutme?.color &&
+              renderInfoItem(
+                "Skin Color",
+                basicData?.aboutme?.color || "No Skin Color Given"
+              )}
 
             {/* Basic Info Section */}
             {renderSectionHeader("Basic Info")}
@@ -370,6 +393,8 @@ const UserDetails = ({ profileid }) => {
               "Marital Status",
               user?.marital || "No Marital Status Given"
             )}
+            {renderInfoItem("Mobile", user?.MobileNumber || user?.mobile)}
+            {user?.isdivyang && renderInfoItem("is Divyang", "Yes")}
 
             {/* Family Section */}
             {renderSectionHeader("Family")}
@@ -435,9 +460,10 @@ const UserDetails = ({ profileid }) => {
                       <div>
                         Institute: {edu.institute || "Unknown Institute"}
                       </div>
-                      {edu.year && <div>Year: {edu.year}</div>}
+                      {edu.year && <div>Passing Year: {edu.year}</div>}
                       <div>Level: {edu.level || "Unknown"}</div>
                       <div>Location: {edu.location || "Unknown"}</div>
+                      <div>Degree Name: {edu?.degreeName || "Unknown"}</div>
                     </div>
                   </div>
                 ))}
@@ -473,14 +499,17 @@ const UserDetails = ({ profileid }) => {
                     </div>
                     <div style={{ fontSize: "14px" }}>
                       <div>
-                        Organization: {job.organization || "Unknown Org"}
+                        Salary: {formatIndianCurrency(job.salary)} per annum
                       </div>
-                      {job.salary && (
-                        <div>Salary: ₹ {job.salary} per annum</div>
-                      )}
                       <div>Title: {job.title || "Unknown"}</div>
                       <div>Experience: {job.totalExperience || "Unknown"}</div>
                       <div>Type: {job.type || "Unknown"}</div>
+                      {job?.fromYear && job?.toYear && (
+                        <div>
+                          Duration: {job.fromYear} - {job.toYear}
+                        </div>
+                      )}
+                      {job.details && <div>Details: {job.details}</div>}
                     </div>
                   </div>
                 ))}
