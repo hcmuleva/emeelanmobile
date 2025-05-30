@@ -142,7 +142,9 @@ export default function MyRegister({ setIsLogined }) {
       });
       handleReset();
       setLoading(false);
-      setIsLogined(true);
+      if (!user) {
+        setIsLogined(true);
+      }
     }
   };
 
