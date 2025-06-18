@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import ably from "../utils/ablyClient";
-import { getUserById } from '../services/api';
+import { getSamajTitle, getUserById } from '../services/api';
 
 export const AuthContext = createContext();
 
@@ -13,12 +13,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [profileUpdated, setProfileUpdated] = useState(false);
   const [completionBar, setCompletionBar] = useState(0)
-
+  const [samajInfo, setSamajInfo] = useState({});
   const [userMe, setUserMe] = useState("")
 
   const channelRef = useRef(null); // 👈 Track the active channel
   const activeChannelId = useRef(null);
   const cleanupPromise = useRef(null);
+
   useEffect(() => {
     const storedJwt = localStorage.getItem('jwt');
     const storedUser = localStorage.getItem('user');
@@ -43,10 +44,17 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const getMessage = (channelName) => {
-    console.log("Channeld Name", channelName)
-    const channel = ably.channels.get(channelName);
 
+  useEffect(() => {
+    const fetchUserTitle = async () => {
+      const res = await getSamajTitle(user?.orgsku);
+      setSamajInfo(res?.data);
+    };
+    fetchUserTitle();
+  }, [jwt]);
+
+  const getMessage = (channelName) => {
+    const channel = ably.channels.get(channelName);
     const handleMessage = (message) => {
       console.log("EMEELAN ROLE Changes", message?.data)
 
@@ -66,6 +74,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
+
     if (!user?.id) return;
 
     getMessage(`userrole:${user.id}`)
@@ -157,7 +166,9 @@ export const AuthProvider = ({ children }) => {
         setProfileUpdated,
         updateUser,
         updateUserField,
-        completionBar
+        completionBar,
+        samajInfo,
+        setSamajInfo, 
       }}
     >
       {children}

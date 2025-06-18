@@ -1,4 +1,4 @@
-import { Button, Card, Grid } from 'antd-mobile'
+import { Button, Card, Grid, Space } from 'antd-mobile'
 import { TeamOutline, UserAddOutline } from 'antd-mobile-icons';
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -40,7 +40,7 @@ export default function AdminPanel() {
               }}>
                 {item.icon}
               </div>
-              <div style={{ fontSize: '12px' }}>{item.text}</div>
+              <div style={{ fontSize: '12px', textAlign:"center" }}>{item.text}</div>
             </div>
           </Grid.Item>
         ))}

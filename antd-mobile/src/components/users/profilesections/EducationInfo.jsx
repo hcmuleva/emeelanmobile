@@ -1,4 +1,13 @@
-import { Button, Form, Input, Selector, Space, Tabs, Toast, Card } from "antd-mobile";
+import {
+  Button,
+  Form,
+  Input,
+  Selector,
+  Space,
+  Tabs,
+  Toast,
+  Card,
+} from "antd-mobile";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { updateUser } from "../../../services/api";
@@ -22,10 +31,14 @@ const defaultFormValues = {
 
 const EducationInfo = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [educations, setEducations] = useState(user?.mybasicdata?.educations || []);
+  const [educations, setEducations] = useState(
+    user?.mybasicdata?.educations || []
+  );
   const [form] = Form.useForm();
   const [editingIndex, setEditingIndex] = useState(null);
-  const [activeTab, setActiveTab] = useState(educations.length ? "view" : "edit");
+  const [activeTab, setActiveTab] = useState(
+    educations.length ? "view" : "edit"
+  );
 
   const handleEdit = (index) => {
     form.setFieldsValue(educations[index]);
@@ -74,14 +87,14 @@ const EducationInfo = () => {
   return (
     <Card
       style={{
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #eee',
+        borderRadius: "8px",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #eee",
       }}
-      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '18px' }}>🎓 Education Information</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "18px" }}>🎓 Education Information</span>
         </div>
       }
     >
@@ -89,8 +102,8 @@ const EducationInfo = () => {
         activeKey={activeTab}
         onChange={setActiveTab}
         style={{
-          '--title-active-color': '#8B0000',
-          '--active-line-color': '#8B0000',
+          "--title-active-color": "#8B0000",
+          "--active-line-color": "#8B0000",
         }}
       >
         <Tabs.Tab title="Education Records" key="view">
@@ -100,27 +113,47 @@ const EducationInfo = () => {
                 <Card
                   key={index}
                   style={{
-                    margin: '10px 0',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-                    border: '1px solid #eee',
+                    margin: "10px 0",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                    border: "1px solid #eee",
                   }}
                 >
-                  <div style={{ margin: '5px 0' }}>
-                    <div style={{ fontSize: 16, fontWeight: "bold", color: "#8B0000", marginBottom: 5 }}>
+                  <div style={{ margin: "5px 0" }}>
+                    <div
+                      style={{
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        color: "#8B0000",
+                        marginBottom: 5,
+                      }}
+                    >
                       {edu.degreeName || "Degree"}
                     </div>
-                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                    <div
+                      style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
+                    >
                       <strong>Level:</strong> {edu.level}
                     </div>
-                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                    <div
+                      style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
+                    >
                       <strong>Institute:</strong> {edu.institute}
                     </div>
-                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
+                    <div
+                      style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
+                    >
                       <strong>Location:</strong> {edu.location}
                     </div>
-                    <div style={{ fontSize: 14, color: "#333", margin: '3px 0' }}>
-                      <strong>Year:</strong> {edu.year}
+                    <div
+                      style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
+                    >
+                      <strong>Degree Name:</strong> {edu.degreeName}
+                    </div>
+                    <div
+                      style={{ fontSize: 14, color: "#333", margin: "3px 0" }}
+                    >
+                      <strong>Passing Year:</strong> {edu.year}
                     </div>
                   </div>
 
@@ -131,7 +164,7 @@ const EducationInfo = () => {
                         backgroundColor: "#8B0000",
                         color: "white",
                         borderRadius: "4px",
-                        border: "none"
+                        border: "none",
                       }}
                       onClick={() => handleEdit(index)}
                     >
@@ -143,7 +176,7 @@ const EducationInfo = () => {
                         backgroundColor: "#888",
                         color: "white",
                         borderRadius: "4px",
-                        border: "none"
+                        border: "none",
                       }}
                       onClick={() => handleDelete(index)}
                     >
@@ -154,8 +187,11 @@ const EducationInfo = () => {
               ))}
             </>
           ) : (
-            <div style={{ textAlign: 'center', padding: '20px 0', color: '#666' }}>
-              No education records added yet. Click the "Add / Edit Education" tab to add information.
+            <div
+              style={{ textAlign: "center", padding: "20px 0", color: "#666" }}
+            >
+              No education records added yet. Click the "Add / Edit Education"
+              tab to add information.
             </div>
           )}
 
@@ -166,7 +202,7 @@ const EducationInfo = () => {
               color: "white",
               marginTop: 15,
               borderRadius: "4px",
-              border: "none"
+              border: "none",
             }}
             onClick={handleSaveToServer}
           >
@@ -175,42 +211,79 @@ const EducationInfo = () => {
         </Tabs.Tab>
 
         <Tabs.Tab title="Add / Edit Education" key="edit">
-          <Form form={form} initialValues={defaultFormValues} layout="vertical" style={{ padding: '10px 0' }}>
+          <Form
+            form={form}
+            initialValues={defaultFormValues}
+            layout="vertical"
+            style={{ padding: "10px 0px" }}
+          >
             <Form.Item name="level" label="Education Level">
               <Selector
                 options={levelOptions}
                 value={form.getFieldValue("level")}
                 onChange={(val) => form.setFieldValue("level", val)}
-                style={{ '--checked-color': '#8B000040' }}
+                style={{ "--checked-color": "#8B000040" }}
               />
             </Form.Item>
 
-            <Form.Item name="degreeName" label="Degree Name">
+            <Form.Item
+              name="degreeName"
+              label="Degree Name"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="e.g. BSc Computer Science"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="year" label="Passing Year">
+            <Form.Item
+              name="year"
+              label="Passing Year"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 type="number"
                 placeholder="e.g. 2022"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="institute" label="Institute Name">
+            <Form.Item
+              name="institute"
+              label="Institute Name"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="e.g. BITS Pilani"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
-            <Form.Item name="location" label="Institute Location">
+            <Form.Item
+              name="location"
+              label="Institute Location"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Input
                 placeholder="e.g. Hyderabad"
-                style={{ border: "1px solid #ddd", borderRadius: "4px" }}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
               />
             </Form.Item>
 
@@ -221,7 +294,7 @@ const EducationInfo = () => {
                 color: "white",
                 marginTop: 15,
                 borderRadius: "4px",
-                border: "none"
+                border: "none",
               }}
               onClick={handleAddOrUpdate}
             >

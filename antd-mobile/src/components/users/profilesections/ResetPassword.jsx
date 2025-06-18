@@ -9,7 +9,6 @@ export default function ResetPassword({ userId }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (values) => {
-    console.log("Submit Clicked");
     try {
       if (!userId) {
         Toast.show({
@@ -31,7 +30,6 @@ export default function ResetPassword({ userId }) {
 
       await resetpassword(userId, values.password);
 
-      console.log("New Password:", values.password);
       Toast.show({
         icon: "success",
         content: "Password reset successfully!",
@@ -52,33 +50,41 @@ export default function ResetPassword({ userId }) {
   return (
     <Card
       style={{
-        borderRadius: '8px',
-        margin: '10px 0',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #eee',
+        borderRadius: "8px",
+        margin: "10px 0",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #eee",
       }}
-      headerStyle={{ color: '#8B0000', fontWeight: 'bold' }}
+      headerStyle={{ color: "#8B0000", fontWeight: "bold" }}
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            backgroundColor: '#8B0000',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '20px'
-          }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              backgroundColor: "#8B0000",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px",
+            }}
+          >
             🔐
           </div>
-          <span style={{ fontSize: '18px' }}>Reset Password</span>
+          <span style={{ fontSize: "18px" }}>Reset Password</span>
         </div>
       }
     >
-      <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ padding: '10px 0' }}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        style={{ padding: "10px 0" }}
+      >
         <Form.Item
+          style={{ display: "flex", alignItems: "center" }}
           name="password"
           label="New Password"
           rules={[
@@ -93,12 +99,13 @@ export default function ResetPassword({ userId }) {
             style={{
               border: "1px solid #ddd",
               borderRadius: "4px",
-              '--placeholder-color': '#888'
+              "--placeholder-color": "#888",
+              padding: "10px",
             }}
             suffix={
               <div
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ color: '#8B0000' }}
+                style={{ color: "#8B0000" }}
               >
                 {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
               </div>
@@ -107,6 +114,7 @@ export default function ResetPassword({ userId }) {
         </Form.Item>
 
         <Form.Item
+          style={{ display: "flex", alignItems: "center" }}
           name="confirmPassword"
           label="Confirm Password"
           rules={[
@@ -128,12 +136,13 @@ export default function ResetPassword({ userId }) {
             style={{
               border: "1px solid #ddd",
               borderRadius: "4px",
-              '--placeholder-color': '#888'
+              "--placeholder-color": "#888",
+              padding: "10px",
             }}
             suffix={
               <div
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{ color: '#8B0000' }}
+                style={{ color: "#8B0000" }}
               >
                 {showConfirmPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
               </div>
@@ -149,8 +158,8 @@ export default function ResetPassword({ userId }) {
             marginTop: 15,
             borderRadius: "4px",
             border: "none",
-            height: '40px',
-            fontWeight: '500'
+            height: "40px",
+            fontWeight: "500",
           }}
           type="submit"
         >

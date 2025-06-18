@@ -2,8 +2,9 @@ import axios from "axios";
 import qs from "qs";
 
 // const API_URL = 'http://localhost:1337/api'; // Replace with your Strapi URL
+
 const API_URL = process.env.REACT_APP_API_URL;
-console.log("API_URL", API_URL);
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -65,6 +66,7 @@ export const getCustomMe = async (jwt) => {
 
 export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => {
   try {
+
     if (filters.DOB_gte) {
       filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
     }
@@ -86,7 +88,7 @@ export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => 
         _start: start,
         _limit: limit,
         filters: modifiedFilters, // ✅ Use filters
-        _sort: 'id:asc', // Sort by newest first
+        _sort: 'id:desc', // Sort by newest first
         "populate[photos]": "*", // ✅ Populate photos (all fields)
         "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
         "populate[Height]": "*",
@@ -128,7 +130,6 @@ export const getPaginatedAdminUsers = async (start = 0, limit = 10, filters = {}
 
 export const newConnectionRequest = async (data) => {
   const jwt = localStorage.getItem("jwt")
-  console.log("jwt", jwt)
   try {
     const reaponse = await api.post(`/connectionrequests`,
       { data: data },
@@ -145,14 +146,11 @@ export const newConnectionRequest = async (data) => {
   }
 }
 //connectionrequest
-export const updateConnectionRequest = async (data) => {
+export const updateConnectionRequest = async (reqid, data) => {
   const jwt = localStorage.getItem("jwt")
-  console.log("DATA", data)
-  console.log("jwt", jwt)
-  const id = 1;
   try {
-    const reaponse = await api.put(`/custom-requests/${id}`,
-      { data: data },
+    const reaponse = await api.put(`/custom-requests/${reqid}`,
+      data,
       {
         headers: {
           Authorization: `Bearer ${jwt}`, // Use correct token
@@ -165,56 +163,185 @@ export const updateConnectionRequest = async (data) => {
     console.error("error", error)
   }
 }
-export const getEngagedRequests = async (page = 1, pageSize = 10) => {
-  const jwt = localStorage.getItem("jwt");
-
-  try {
-    const response = await api.get(
-      `/custom-requests`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
-    return response.data
-
-  } catch (error) {
-    console.error("Failed to fetch ENGAGED requests", error);
-    return {
-      data: [],
-      pagination: { page: 1, pageSize: 10, total: 0, pageCount: 1 },
-    };
-  }
-};
 
 export const findConnectionRequest = async (userId1, userId2) => {
   const jwt = localStorage.getItem("jwt");
 
   try {
-    const response = await api.get(
-      `/connectionrequests?filters[$or][0][sender][id][$eq]=${userId1}&filters[$or][0][receiver][id][$eq]=${userId2}&filters[$or][1][sender][id][$eq]=${userId2}&filters[$or][1][receiver][id][$eq]=${userId1}`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+    const response = await api.get("/customconnectionrequest/findAcceptedConnection", {
+      params: {
+        userId1: Number(userId1),
+        userId2: Number(userId2)
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`
       }
-    );
+    });
 
-    if (response.data?.data?.length > 0) {
-      const item = response.data.data[0];
-      return {
-        id: item.id,
-        ...item.attributes,
-      };
-    } else {
-      return null;
+    console.log("API Response:", response.data);
+
+    // Check for data structure existence
+    if (response.data?.data?.id) {
+      console.log("Found connection ID:", response.data.data.id);
+      // Return the entire response.data object so we have access to both id and attributes
+      return response.data;
     }
-  } catch (err) {
-    console.error("Error finding connection request", err);
+
+    console.log("No accepted connection found");
     return null;
+  } catch (err) {
+    console.error("Error finding connection request:", err);
+    console.error("Error details:", err.response?.data);
+    throw new Error(err.response?.data?.message || "Failed to find connection");
   }
 };
+
+export const updateConnectionStatus = async (reqid, data) => {
+  const jwt = localStorage.getItem("jwt");
+  
+  try {
+    console.log("Updating connection ID:", reqid, "with data:", data);
+    
+    const response = await api.put(`/connectionrequests/${reqid}`, {
+      data: data
+    }, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      }
+    });
+    
+    console.log("Update response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Update error:", error);
+    console.error("Error response:", error.response?.data);
+    throw new Error(error.response?.data?.message || "Failed to update connection status");
+  }
+};
+
+export const fetchConnectionRequest = async (query = "", page = 1, pageSize = 10) => {
+  const jwt = localStorage.getItem("jwt");
+  try {
+    const params = {
+      populate: ["sender", "receiver"],
+      page,
+      pageSize,
+    };
+
+    if (query) {
+      params.query = query;
+    }
+
+    const response = await api.get("/connectionrequests", {
+      params,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return {
+      data: response.data.data || [],
+      meta: response.data.meta || { pagination: { page: 1, pageSize: 10, total: 0 } },
+    };
+  } catch (error) {
+    console.error("Error fetching connection requests:", error);
+    return { data: [], meta: { pagination: { page: 1, pageSize: 10, total: 0 } } };
+  }
+};
+
+// Improved API function for fetching engaged requests
+export const getEngagedRequests = async (start = 0, limit = 10) => {
+  // Note: Avoid localStorage in Claude artifacts - this is for your actual implementation
+  const jwt = localStorage.getItem("jwt");
+
+  try {
+    const response = await api.get(`/customconnectionrequest/findEngagedConnection`, {
+      params: {
+        _start: start,
+        _limit: limit,
+        _sort: 'createdAt:DESC',
+      },
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data
+  } catch (error) {
+    console.error("Failed to fetch ENGAGED requests:", error);
+    console.error("Error details:", error.response?.data || error.message);
+    throw error; // Throw the error to be caught by the calling function
+  }
+}
+
+// Helper function to process API response
+const processApiResponse = (data, page, pageSize) => {
+  let apiData = [];
+  let apiPagination = {
+    page: page,
+    pageSize: pageSize,
+    total: 0,
+    pageCount: 1
+  };
+
+  if (data?.data && Array.isArray(data.data)) {
+    apiData = data.data.map(item => ({
+      id: item.id,
+      status: item.attributes?.status || item.status || 'ENGAGED',
+      message: item.attributes?.message || item.message || 'Engaged',
+      createdAt: item.attributes?.createdAt || item.createdAt,
+      updatedAt: item.attributes?.updatedAt || item.updatedAt,
+      publishedAt: item.attributes?.publishedAt || item.publishedAt,
+      sender: item.attributes?.sender?.data?.attributes || item.attributes?.sender || item.sender,
+      receiver: item.attributes?.receiver?.data?.attributes || item.attributes?.receiver || item.receiver
+    }));
+    
+    if (data.meta?.pagination) {
+      apiPagination = data.meta.pagination;
+    }
+  } else if (Array.isArray(data)) {
+    apiData = data;
+  }
+
+  return {
+    results: apiData,
+    pagination: apiPagination
+  };
+};
+
+// Alternative function if you need to handle the exact data structure from your sample
+export const getEngagedRequestsFromSample = (sampleData, page = 1, pageSize = 10) => {
+  // This function handles the exact structure from your paste.txt
+  if (!sampleData?.data) {
+    return {
+      results: [],
+      pagination: { page: 1, pageSize: pageSize, total: 0, pageCount: 1 }
+    };
+  }
+
+  // Filter engaged items
+  const engagedItems = sampleData.data.filter(item => 
+    item.status?.toLowerCase() === 'engaged'
+  );
+
+  // Apply pagination
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedItems = engagedItems.slice(startIndex, endIndex);
+
+  return {
+    results: paginatedItems,
+    pagination: {
+      page: page,
+      pageSize: pageSize,
+      total: engagedItems.length,
+      pageCount: Math.ceil(engagedItems.length / pageSize)
+    }
+  };
+};
+
+
 
 // Add to your existing API service file
 export const searchUsers = async (query, start = 0, limit = 10) => {
@@ -222,16 +349,25 @@ export const searchUsers = async (query, start = 0, limit = 10) => {
     const params = {
       _start: start,
       _limit: limit,
-      _q: query, // Strapi search query
       _sort: "username:ASC",
       filters: {
         $or: [
           { FirstName: { $containsi: query } },
           { LastName: { $containsi: query } },
-        ],
-      },
+          { Country: { $containsi: query } },
+          { State: { $containsi: query } },
+          { City: { $containsi: query } },
+          { Profession: { $containsi: query } },
+          { district: { $containsi: query } },
+          { userstatus: { $containsi: query } },
+          { Gotra: { $containsi: query } },
+          {
+            id: !isNaN(parseInt(query)) ? { $eq: parseInt(query) } : undefined
+          }
+        ].filter(Boolean), // removes undefined if `id` is not a number
+      }
     }
-    console.log(params)
+
     const response = await api.get(`/users`, {
       params,
       headers: {
@@ -261,7 +397,7 @@ export const searchAdmins = async (query, start = 0, limit = 10, filters = {}) =
         ],
       },
     }
-    console.log(params)
+
     const response = await api.get(`/custom-admins`, {
       params,
       headers: {
@@ -385,7 +521,7 @@ export const photoUpload = async (formData) => {
 };
 
 export const uploadImage = async (formData, jwt) => {
-  console.log("uploadImage function called", "token", jwt);
+
   try {
     // ✅ Upload files to Strapi using Axios
     const uploadResponse = await api.post("/upload", formData, {
@@ -396,7 +532,6 @@ export const uploadImage = async (formData, jwt) => {
     });
 
     // Handle successful upload
-    console.log("Upload successful:", uploadResponse);
     return uploadResponse.data; // Return the uploaded file data
   } catch (error) {
     console.error("Upload failed:", error.message);
@@ -423,8 +558,6 @@ export const createQRCODEBySuperAdmin = async (data, jwt) => {
 
 export const updateUser = async (data, userId) => {
   try {
-    // console.log("Sending update:", { photos: photoIds });
-
     const response = await api.put(`/users/${userId}`, {
       ...data,
     });
@@ -442,8 +575,6 @@ export const updateUser = async (data, userId) => {
 // update Data of me,
 export const updateUserData = async (data, userId, jwt) => {
   try {
-    // console.log("Sending update:", { photos: photoIds });
-    console.log(data, userId)
     const response = await api.put(`/customupdateuser/${userId}`,
       { data: data },
       {
@@ -483,7 +614,6 @@ export const getUserById = async (userId, jwt) => {
   }
 };
 export const customsingleuser = async (userId, jwt) => {
-  console.log("Request recieved ", userId, " Token ", jwt)
   try {
     const response = await api.get(`/custom-singleuser/${userId}`, {
       params: {
@@ -579,7 +709,6 @@ const mapplsApi = axios.create({
 export const reverseGeocode = async (latitude, longitude) => {
   try {
     // Make a request to the Mappls API
-    console.log("Using Mappls API key:", MAPPLS_API_KEY ? "Key is set" : "Key is not set");
 
     const response = await mapplsApi.get(`/${MAPPLS_API_KEY}/rev_geocode`, {
       params: {
@@ -600,3 +729,32 @@ export const reverseGeocode = async (latitude, longitude) => {
     throw new Error(error.response?.data?.message || 'Location lookup failed');
   }
 };
+
+
+
+export const getSamaj = async (filters) => {
+
+  try {
+    const response = await api.get(`/samajs`,{
+         params: {
+
+        filters,
+
+      },
+    })
+    return response.data
+  } catch (err) {
+    throw err.response?.data?.message || "Error in samaj call"
+  }
+}
+
+
+   export const getSamajTitle = async (orgsku) => {
+
+  try {
+    const response = await api.get(`/samajs?filters[samaj_type][$eq]=${orgsku}`,)
+    return response.data
+  } catch (err) {
+    throw err.response?.data?.message || "Error in samaj call"
+  }
+}

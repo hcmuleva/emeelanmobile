@@ -2,7 +2,6 @@ import {
   HomeOutlined
 } from "@ant-design/icons";
 import { CheckCircleFill, TeamOutline, UserAddOutline, UserCircleOutline } from "antd-mobile-icons";
-import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
 
@@ -30,6 +29,8 @@ export default function AdminLayout({ children }) {
             boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.05)",
             position: "fixed",
             bottom: 0,
+            left: 0,
+            right: 0,
             width: "100%",
             zIndex: 100,
             padding: "16px 0",
@@ -52,6 +53,10 @@ export default function AdminLayout({ children }) {
               label: "Admin Panel",
               key: "AdminPanel"
             },
+            {
+              icon: <UserAddOutline style={{ fontSize: 24 }} />,
+              key: "userprofile",
+            },
           ].map((item) => {
             const isActive = location.pathname === `/${item.key}`;
             return (
@@ -68,7 +73,7 @@ export default function AdminLayout({ children }) {
               >
                 {item.icon}
                 <div style={{ fontSize: 12, marginTop: 4 }}>
-                  {item.label || item.key.charAt(0).toUpperCase() + item.key.slice(1)}
+                  {item.key.charAt(0).toUpperCase() + item.key.slice(1)}
                 </div>
               </div>
             );

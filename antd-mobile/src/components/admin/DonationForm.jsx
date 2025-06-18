@@ -1,34 +1,40 @@
-import React, { useState, useContext } from 'react';
-import { Form, Input, TextArea, Radio, Button, Toast, ImageUploader, Dialog } from 'antd-mobile';
-import { UploadOutline } from 'antd-mobile-icons';
-import { AuthContext } from '../../context/AuthContext';
-import { createAndUpdateDonners, uploadImage } from '../../services/api';
-// import gotraData from "../../utils/gotra.json"; // Gotra data import
-import GotraSelector from '../authentication/registration/GotraSelector';
-import GotraController from '../../../../telisamaj/src/utils/GotraController';
+import React, { useState, useContext } from "react";
+import {
+  Form,
+  Input,
+  TextArea,
+  Radio,
+  Button,
+  Toast,
+  ImageUploader,
+  Dialog,
+} from "antd-mobile";
+import { UploadOutline } from "antd-mobile-icons";
+import { AuthContext } from "../../context/AuthContext";
+import { createAndUpdateDonners, uploadImage } from "../../services/api";
+import GotraSelector from "../authentication/registration/GotraSelector";
 
 const DonationForm = () => {
-  const gotraData = GotraController()
+  const { jwt, samajInfo } = useContext(AuthContext);
+  const gotraData = samajInfo?.[0]?.attributes?.gotra || {};
 
-
-  const { jwt } = useContext(AuthContext);
   const [form] = Form.useForm();
   const [photoFileList, setPhotoFileList] = useState([]);
   const [receiptFileList, setReceiptFileList] = useState([]);
   const [imageId, setImageId] = useState("");
-  const [donorType, setDonorType] = useState('individual');
+  const [donorType, setDonorType] = useState("individual");
   const [customdata, setCustomdata] = useState({}); // For storing custom data like gotra
   const MAX_IMAGES = 1;
 
   const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      Toast.show({ icon: 'fail', content: 'Only JPG/PNG files allowed!' });
+      Toast.show({ icon: "fail", content: "Only JPG/PNG files allowed!" });
       return null;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      Toast.show({ icon: 'fail', content: 'Image must be smaller than 2MB!' });
+      Toast.show({ icon: "fail", content: "Image must be smaller than 2MB!" });
       return null;
     }
     return file;
@@ -36,7 +42,7 @@ const DonationForm = () => {
 
   const handleUpload = async (file) => {
     const uploadData = new FormData();
-    uploadData.append('files', file);
+    uploadData.append("files", file);
 
     try {
       const response = await uploadImage(uploadData, jwt);
@@ -51,8 +57,8 @@ const DonationForm = () => {
       setPhotoFileList([uploadedImage]);
       return uploadedImage; // Must return for ImageUploader
     } catch (error) {
-      console.error('Upload failed:', error);
-      Toast.show({ icon: 'fail', content: 'Upload failed' });
+      console.error("Upload failed:", error);
+      Toast.show({ icon: "fail", content: "Upload failed" });
       throw error;
     }
   };
@@ -62,7 +68,7 @@ const DonationForm = () => {
       content: (
         <img
           src={file.url}
-          style={{ width: '100%', height: 'auto', borderRadius: 8 }}
+          style={{ width: "100%", height: "auto", borderRadius: 8 }}
           alt="Preview"
         />
       ),
@@ -71,25 +77,36 @@ const DonationForm = () => {
 
   const handleSubmit = async (values) => {
     if (!imageId) {
-      Toast.show({ icon: 'fail', content: 'Please upload a photo' });
+      Toast.show({ icon: "fail", content: "Please upload a photo" });
       return;
     }
 
     try {
-      const payload = { ...values, ...customdata, photo: imageId, receipt: receiptFileList.id };
+      const payload = {
+        ...values,
+        ...customdata,
+        photo: imageId,
+        receipt: receiptFileList.id,
+      };
       const response = await createAndUpdateDonners(payload, jwt);
-      if (response?.id) {
-        Toast.show({ icon: 'success', content: 'Donation saved successfully!' });
+      if (response?.data?.id) {
+        Toast.show({
+          icon: "success",
+          content: "Donation saved successfully!",
+        });
         form.resetFields();
         setPhotoFileList([]);
         setReceiptFileList([]);
-        setDonorType('individual');
+        setDonorType("individual");
       } else {
-        throw new Error('Unexpected API response');
+        throw new Error("Unexpected API response");
       }
     } catch (error) {
-      console.error('Failed to submit donation:', error);
-      Toast.show({ icon: 'fail', content: 'Failed to submit donation. Please try again.' });
+      console.error("Failed to submit donation:", error);
+      Toast.show({
+        icon: "fail",
+        content: "Failed to submit donation. Please try again.",
+      });
     }
   };
 
@@ -97,7 +114,7 @@ const DonationForm = () => {
     <Form
       form={form}
       onFinish={handleSubmit}
-      initialValues={{ donorType: 'individual' }}
+      initialValues={{ donorType: "individual" }}
       footer={
         <Button block type="submit" color="primary" size="large">
           Submit
@@ -110,17 +127,31 @@ const DonationForm = () => {
         <Input placeholder="Enter full name" />
       </Form.Item>
 
-      <Form.Item name="donorType" label="Donor Type" rules={[{ required: true }]}>
-        <Radio.Group onChange={(e) => setDonorType(e.target.value)}>
-          <Radio value="individual">Individual</Radio>
-          <Radio value="family">Family</Radio>
-          <Radio value="group">Group</Radio>
+      <Form.Item
+        name="donorType"
+        label="Donor Type"
+        rules={[{ required: true }]}
+      >
+        <Radio.Group onChange={(val) => setDonorType(val)}>
+          <Radio value="individual" style={{ marginRight: "15px" }}>
+            Individual
+          </Radio>
+          <Radio value="family" style={{ marginRight: "15px" }}>
+            Family
+          </Radio>
+          <Radio value="group" style={{ marginRight: "15px" }}>
+            Group
+          </Radio>
           <Radio value="sanstha">Sanstha</Radio>
         </Radio.Group>
       </Form.Item>
 
-      {donorType === 'individual' && (
-        <Form.Item name="parentName" label="Father/Husband Name" rules={[{ required: true }]}>
+      {donorType === "individual" && (
+        <Form.Item
+          name="parentName"
+          label="Father/Husband Name"
+          rules={[{ required: true }]}
+        >
           <Input placeholder="Enter father's or husband's name" />
         </Form.Item>
       )}
@@ -132,8 +163,9 @@ const DonationForm = () => {
       {/* GotraSelector Component */}
       <Form.Item name="gotra" label="Gotra" rules={[{ required: true }]}>
         <GotraSelector
-          gotra_for={true}  // Example flag for using a specific gotra
-          gotraData={gotraData.Gotra}  // Passing gotraData from your json file
+          form={form}
+          gotra_for={true}
+          gotraData={gotraData}
           customdata={customdata}
           setCustomdata={setCustomdata}
         />
@@ -147,20 +179,32 @@ const DonationForm = () => {
         </Radio.Group>
       </Form.Item> */}
 
-      {donorType === 'individual' && (
+      {donorType === "individual" && (
         <>
           <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
             <Radio.Group>
-              <Radio value="male" style={{ marginRight: "10px" }}>Male</Radio>
+              <Radio value="male" style={{ marginRight: "10px" }}>
+                Male
+              </Radio>
               <Radio value="female">Female</Radio>
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="maritalStatus" label="Marital Status" rules={[{ required: true }]}>
+          <Form.Item
+            name="marital"
+            label="Marital Status"
+            rules={[{ required: true }]}
+          >
             <Radio.Group>
-              <Radio value="married" style={{ marginRight: "10px" }}>Married</Radio>
-              <Radio value="bachelor" style={{ marginRight: "10px" }}>Bachelor</Radio>
-              <Radio value="divorced" style={{ marginRight: "10px" }}>Divorced</Radio>
+              <Radio value="married" style={{ marginRight: "10px" }}>
+                Married
+              </Radio>
+              <Radio value="bachelor" style={{ marginRight: "10px" }}>
+                Bachelor
+              </Radio>
+              <Radio value="divorced" style={{ marginRight: "10px" }}>
+                Divorced
+              </Radio>
               <Radio value="na">N/A</Radio>
             </Radio.Group>
           </Form.Item>
@@ -168,7 +212,12 @@ const DonationForm = () => {
       )}
 
       <Form.Item name="description" label="Description">
-        <TextArea placeholder="Enter description (max 200 characters)" rows={3} maxLength={200} showCount />
+        <TextArea
+          placeholder="Enter description (max 200 characters)"
+          rows={3}
+          maxLength={200}
+          showCount
+        />
       </Form.Item>
 
       <Form.Item name="amount" label="Amount (₹)" rules={[{ required: true }]}>

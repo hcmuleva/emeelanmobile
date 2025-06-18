@@ -25,7 +25,7 @@ const AdminList = ({ adminProp, userrole }) => {
       const userList = data?.data || [];
 
       setHasMore(userList.length >= limit); // Check if more users are available
-      setUsers(prev => (pageNum === 0 ? userList : [...prev, ...userList])); // Update the user list
+      setUsers((prev) => (pageNum === 0 ? userList : [...prev, ...userList])); // Update the user list
       setPage(pageNum + 1);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -53,13 +53,11 @@ const AdminList = ({ adminProp, userrole }) => {
       <SearchBar
         placeholder="Search Admins..."
         value={inputValue}
-        onChange={val => setInputValue(val)}
+        onChange={(val) => setInputValue(val)}
         style={{
           marginBottom: 16,
 
-
           backgroundColor: "#f0f4f8",
-
         }}
       />
 

@@ -1,15 +1,14 @@
-import { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import AdminLayout from './AdminLayout';
-import SuperAdminLayout from './SuperAdminLayout';
-import UserLayout from './UserLayout';
-import { Space } from 'antd-mobile';
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import AdminLayout from "./AdminLayout";
+import SuperAdminLayout from "./SuperAdminLayout";
+import UserLayout from "./UserLayout";
 
 const MainLayout = ({ children }) => {
   const { user } = useContext(AuthContext);
   // const role = user?.role || 'USER';
-  const emeelanrole = user?.emeelanrole
-  console.log("Meeelan rol", emeelanrole)
+  const emeelanrole = user?.emeelanrole;
+
   const LayoutMap = {
     ADMIN: AdminLayout,
     SUPERADMIN: SuperAdminLayout,
@@ -19,18 +18,10 @@ const MainLayout = ({ children }) => {
 
   const Layout = LayoutMap[emeelanrole?.toUpperCase()] || UserLayout;
 
-  return (
-    <Layout>
-      {children}
-      <Space />
-      <div></div>
-      <Space />
-    </Layout>
-  )
+  return <Layout>{children}</Layout>;
 };
 
 export default MainLayout;
-
 
 // import React, { useContext, useEffect } from 'react';
 // import { AuthContext } from '../../context/AuthContext';

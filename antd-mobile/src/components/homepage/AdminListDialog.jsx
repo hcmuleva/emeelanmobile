@@ -1,8 +1,8 @@
+import { MessageOutlined, PhoneOutlined } from "@ant-design/icons";
 import { List, Popup, SearchBar } from "antd-mobile";
-import { CloseOutline, MailOutline, UserOutline } from "antd-mobile-icons";
-import React, { useEffect, useState } from "react";
+import { CloseOutline, MailOutline } from "antd-mobile-icons";
+import { useEffect, useState } from "react";
 import { getPaginatedAdminUsers } from "../../services/api";
-import { PhoneOutlined, MessageOutlined } from "@ant-design/icons";
 
 export const AdminListDialog = ({ visible, onClose }) => {
   const [admins, setAdmins] = useState([]);

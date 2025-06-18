@@ -1,7 +1,8 @@
 {
 	"appId": "com.emeelan.mastjod",
 	"appName": "EMEELAN",
-	"webDir": "build",
+	"webDir": "build-obfuscated",
+	"bundledWebRuntime": false,
 	"ios": {
 		"scheme": "emeelan"
 	},

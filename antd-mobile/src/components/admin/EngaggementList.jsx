@@ -1,10 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, Avatar, Space, Tag, DotLoading } from "antd-mobile";
+import {
+  Card,
+  Avatar,
+  Space,
+  Tag,
+  DotLoading,
+  Button,
+  InfiniteScroll,
+} from "antd-mobile";
 import { getEngagedRequests } from "../../services/api";
 import { HeartFill } from "antd-mobile-icons";
 import { AuthContext } from "../../context/AuthContext";
 
-const EnggagedCard = ({ male, female, message, date }) => {
+const EngagedCard = ({ male, female, message, date }) => {
   return (
     <Card
       style={{
@@ -17,48 +25,55 @@ const EnggagedCard = ({ male, female, message, date }) => {
       bodyStyle={{ padding: "0" }}
     >
       {/* Engagement header with date */}
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "0.5rem"
-      }}>
-        <Tag
-          color="danger"
-          fill="outline"
-          style={{ fontSize: "11px" }}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          marginBottom: "0.5rem",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "10px",
+            color: "#888",
+            flexShrink: 0,
+          }}
         >
-          {message || "Engaged"}
-        </Tag>
-        <div style={{ fontSize: "10px", color: "#888" }}>
           {new Date(date).toLocaleDateString()}
         </div>
       </div>
 
       {/* Male Profile */}
-      <div style={{
-        display: "flex",
-        marginBottom: "0.75rem",
-        padding: "0.5rem",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
-        borderRadius: "0.5rem"
-      }}>
+      <div
+        style={{
+          display: "flex",
+          marginBottom: "0.75rem",
+          padding: "0.5rem",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          borderRadius: "0.5rem",
+        }}
+      >
         <Avatar
           src={male?.avatar || "/placeholder.svg"}
           style={{ "--size": "50px", "--border-radius": "50%" }}
         />
         <div style={{ marginLeft: "0.75rem", flex: 1 }}>
-          <div style={{ fontWeight: "bold", fontSize: "14px" }}>{male?.name}</div>
+          <div style={{ fontWeight: "bold", fontSize: "14px" }}>
+            {male?.name}
+          </div>
           <div style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>
             {male?.age} years • ID: {male?.id}
           </div>
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "4px"
-          }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "4px",
+            }}
+          >
             <Tag color="primary" style={{ fontSize: "10px", padding: "0 6px" }}>
-              {male?.gotra || "Gotra"}
+              Gotra: {male?.gotra || "Gotra"}
             </Tag>
             <Tag color="success" style={{ fontSize: "10px", padding: "0 6px" }}>
               {male?.gender || "Male"}
@@ -68,19 +83,23 @@ const EnggagedCard = ({ male, female, message, date }) => {
       </div>
 
       {/* Heart Divider */}
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        margin: "0.5rem 0",
-        position: "relative"
-      }}>
-        <div style={{
-          height: "1px",
-          backgroundColor: "#ffcdd2",
-          width: "80%",
-          position: "absolute",
-          top: "50%"
-        }}></div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "0.5rem 0",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            height: "1px",
+            backgroundColor: "#ffcdd2",
+            width: "80%",
+            position: "absolute",
+            top: "50%",
+          }}
+        ></div>
         <HeartFill
           style={{
             fontSize: "24px",
@@ -89,34 +108,40 @@ const EnggagedCard = ({ male, female, message, date }) => {
             borderRadius: "50%",
             padding: "4px",
             position: "relative",
-            zIndex: 1
+            zIndex: 1,
           }}
         />
       </div>
 
       {/* Female Profile */}
-      <div style={{
-        display: "flex",
-        padding: "0.5rem",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
-        borderRadius: "0.5rem"
-      }}>
+      <div
+        style={{
+          display: "flex",
+          padding: "0.5rem",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          borderRadius: "0.5rem",
+        }}
+      >
         <Avatar
           src={female?.avatar || "/placeholder.svg"}
           style={{ "--size": "50px", "--border-radius": "50%" }}
         />
         <div style={{ marginLeft: "0.75rem", flex: 1 }}>
-          <div style={{ fontWeight: "bold", fontSize: "14px" }}>{female?.name}</div>
+          <div style={{ fontWeight: "bold", fontSize: "14px" }}>
+            {female?.name}
+          </div>
           <div style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>
             {female?.age} years • ID: {female?.id}
           </div>
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "4px"
-          }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "4px",
+            }}
+          >
             <Tag color="primary" style={{ fontSize: "10px", padding: "0 6px" }}>
-              {female?.gotra || "Gotra"}
+              Gotra: {female?.gotra || "Gotra"}
             </Tag>
             <Tag color="success" style={{ fontSize: "10px", padding: "0 6px" }}>
               {female?.gender || "Female"}
@@ -128,81 +153,288 @@ const EnggagedCard = ({ male, female, message, date }) => {
   );
 };
 
+// Updated mapEngageData function
 const mapEngageData = (engagedData) => {
-  if (!engagedData?.results) return [];
-  return engagedData.results.map((item) => {
-    const { sender, receiver, createdAt } = item;
-    const isMaleSender = sender.Sex === "Male";
-    return {
-      male: {
-        name: (isMaleSender ? sender.FirstName : receiver.FirstName) + " " + (isMaleSender ? sender.LastName : receiver.LastName),
-        age: (isMaleSender ? sender.age : receiver.age),
-        avatar: (isMaleSender ? "/public/assets/man-user-circle-icon.png" : "/public/assets/woman-user-circle-icon.png"),
-        id: (isMaleSender ? sender.id : receiver.id),
-        gotra: (isMaleSender ? sender.Gotra : receiver.Gotra),
-        gender: (isMaleSender ? sender.Sex : receiver.Sex)
-      },
-      female: {
-        name: (isMaleSender ? receiver.FirstName : sender.FirstName) + " " + (isMaleSender ? receiver.LastName : sender.LastName),
-        age: (isMaleSender ? receiver.age : sender.age),
-        avatar: (isMaleSender ? "/public/assets/woman-user-circle-icon.png" : "/public/assets/man-user-circle-icon.png"),
-        id: (isMaleSender ? receiver.id : sender.id),
-        gotra: (isMaleSender ? receiver.Gotra : sender.Gotra),
-        gender: (isMaleSender ? receiver.Sex : sender.Sex)
-      },
-      date: createdAt,
-    };
-  });
+  if (!engagedData?.data || !Array.isArray(engagedData.data)) {
+    console.warn("Invalid engaged data structure:", engagedData);
+    return [];
+  }
+
+  return engagedData.data
+    .map((item) => {
+      const { sender, receiver, createdAt, message } = item.attributes;
+
+      // Calculate age from DOB
+      const calculateAge = (dob) => {
+        if (!dob) return "N/A";
+        try {
+          const birthDate = new Date(dob);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+          ) {
+            age--;
+          }
+          return age > 0 ? age : "N/A";
+        } catch (error) {
+          console.error("Error calculating age for DOB:", dob, error);
+          return "N/A";
+        }
+      };
+
+      // Extract profile picture from Pictures array string
+      const extractProfilePicture = (picturesString) => {
+        if (!picturesString) return null;
+        try {
+          const picturesArray = JSON.parse(picturesString.replace(/'/g, '"'));
+          return picturesArray && picturesArray.length > 0
+            ? picturesArray[0]
+            : null;
+        } catch (error) {
+          console.error("Error parsing pictures:", picturesString, error);
+          return null;
+        }
+      };
+
+      // Determine male and female based on Sex field
+      const isMaleSender = sender?.Sex === "Male";
+      const maleData = isMaleSender ? sender : receiver;
+      const femaleData = isMaleSender ? receiver : sender;
+
+      // Validate that we have both male and female data
+      if (!maleData || !femaleData) {
+        console.warn("Missing gender data for engagement:", item);
+        return null;
+      }
+
+      return {
+        male: {
+          name:
+            `${maleData?.FirstName || ""} ${maleData?.LastName || ""}`.trim() ||
+            maleData?.username ||
+            "Unknown",
+          age: calculateAge(maleData?.DOB),
+          avatar:
+            extractProfilePicture(maleData?.Pictures) ||
+            "/assets/man-user-circle-icon.png",
+          id: maleData?.id,
+          gotra: maleData?.Gotra || "N/A",
+          gender: "Male",
+          city: maleData?.City,
+          profession: maleData?.Profession || maleData?.occupation,
+        },
+        female: {
+          name:
+            `${femaleData?.FirstName || ""} ${
+              femaleData?.LastName || ""
+            }`.trim() ||
+            femaleData?.username ||
+            "Unknown",
+          age: calculateAge(femaleData?.DOB),
+          avatar:
+            extractProfilePicture(femaleData?.Pictures) ||
+            "/assets/woman-user-circle-icon.png",
+          id: femaleData?.id,
+          gotra: femaleData?.Gotra || "N/A",
+          gender: "Female",
+          city: femaleData?.City,
+          profession: femaleData?.Profession || femaleData?.occupation,
+        },
+        date: createdAt,
+        message: message || "Engaged",
+      };
+    })
+    .filter(Boolean); // Remove null entries
 };
 
 export default function EngagementList() {
   const { jwt } = useContext(AuthContext);
-  const [engagedData, setEngagedData] = useState(null);
+  const [engagedData, setEngagedData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState({
+    start: 0,
+    limit: 10,
+    total: 0,
+    page: 1,
+    pageCount: 1,
+  });
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchData = async (start = 0, append = false) => {
+    if (!jwt || loading) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      console.log(`Fetching engagements - Start: ${start}, Append: ${append}`);
+      const res = await getEngagedRequests(start, pagination.limit, jwt);
+      console.log("API Response:", res);
+
+      const mapped = mapEngageData(res);
+      console.log("Mapped data:", mapped);
+
+      if (append) {
+        setEngagedData((prev) => [...prev, ...mapped]);
+      } else {
+        setEngagedData(mapped);
+      }
+
+      // Update pagination info
+      if (res.meta?.pagination) {
+        setPagination({
+          start: res.meta.pagination.start,
+          limit: res.meta.pagination.limit,
+          total: res.meta.pagination.total,
+          page: res.meta.pagination.page,
+          pageCount: res.meta.pagination.pageCount,
+        });
+        setHasMore(res.meta.pagination.page < res.meta.pagination.pageCount);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to fetch engagements:", error);
+      setError("Failed to load engagements. Please try again.");
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getEngagedRequests(jwt);
-        const mapped = mapEngageData(res);
-        setEngagedData(mapped);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    if (jwt) {
+      fetchData(0, false);
+    }
   }, [jwt]);
+
+  const loadMore = async () => {
+    if (hasMore && !loading) {
+      const nextStart = pagination.start + pagination.limit;
+      await fetchData(nextStart, true);
+    }
+  };
+
+  const refreshData = () => {
+    setEngagedData([]);
+    setError(null);
+    setPagination((prev) => ({ ...prev, start: 0, page: 1 }));
+    setHasMore(true);
+    fetchData(0, false);
+  };
+
+  // Show error state
+  if (error && engagedData.length === 0) {
+    return (
+      <div style={{ padding: "0.75rem", textAlign: "center" }}>
+        <div style={{ color: "#ff4d4f", marginBottom: "1rem" }}>{error}</div>
+        <Button onClick={refreshData} size="small">
+          Try Again
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: "0.75rem", width: "100%", boxSizing: "border-box" }}>
-      <h1 style={{
-        fontSize: "1.25rem",
-        fontWeight: "bold",
-        textAlign: "center",
-        marginBottom: "1rem",
-      }}>
-        Recent Engagements
-      </h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "1.25rem",
+            fontWeight: "bold",
+            margin: 0,
+          }}
+        >
+          Recent Engagements
+        </h1>
+        <Button
+          size="small"
+          onClick={refreshData}
+          loading={loading}
+          style={{ fontSize: "12px" }}
+        >
+          Refresh
+        </Button>
+      </div>
+
+      {/* Stats */}
+      <div
+        style={{
+          textAlign: "center",
+          marginBottom: "1rem",
+          fontSize: "12px",
+          color: "#666",
+        }}
+      >
+        Total Engagements: {pagination.total}
+      </div>
+
+      {/* Error display */}
+      {error && engagedData.length > 0 && (
+        <div
+          style={{
+            color: "#ff4d4f",
+            textAlign: "center",
+            fontSize: "12px",
+            marginBottom: "1rem",
+          }}
+        >
+          {error}
+        </div>
+      )}
 
       <Space direction="vertical" block style={{ gap: "0.75rem" }}>
-        {engagedData ? (
-          engagedData.length > 0 ? (
-            engagedData.map((engagement, index) => (
-              <EnggagedCard
-                key={index}
+        {engagedData.length > 0 ? (
+          <>
+            {engagedData.map((engagement, index) => (
+              <EngagedCard
+                key={`${engagement.male.id}-${engagement.female.id}-${index}`}
                 male={engagement.male}
                 female={engagement.female}
-                message="Engaged"
+                message={engagement.message}
                 date={engagement.date}
               />
-            ))
-          ) : (
-            <div style={{ textAlign: "center", color: "#aaa", marginTop: "1rem" }}>
-              No Engagements Yet
-            </div>
-          )
-        ) : (
+            ))}
+
+            {/* Infinite Scroll */}
+            <InfiniteScroll loadMore={loadMore} hasMore={hasMore}>
+              {hasMore ? (
+                <div style={{ textAlign: "center", padding: "1rem" }}>
+                  {loading ? <DotLoading /> : "Pull up to load more"}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    textAlign: "center",
+                    color: "#aaa",
+                    padding: "1rem",
+                  }}
+                >
+                  No more engagements to load
+                </div>
+              )}
+            </InfiniteScroll>
+          </>
+        ) : loading ? (
           <div style={{ textAlign: "center", marginTop: "1rem" }}>
             <DotLoading />
+          </div>
+        ) : (
+          <div
+            style={{ textAlign: "center", color: "#aaa", marginTop: "1rem" }}
+          >
+            No Engagements Yet
           </div>
         )}
       </Space>

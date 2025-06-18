@@ -6,7 +6,8 @@ import {
   customsingleuser,
   newConnectionRequest,
   updateConnectionRequest,
-  updateUserData
+  updateConnectionStatus,
+  updateUserData,
 } from "../../services/api";
 import UserDetails from "./useractions/UserDetails";
 
@@ -31,7 +32,7 @@ const baseButtonStyle = {
   fontWeight: "bold",
   fontSize: "14px",
   boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-  transition: "all 0.3s ease-in-out"
+  transition: "all 0.3s ease-in-out",
 };
 
 const gradientBtn = (color1, color2) => ({
@@ -44,24 +45,24 @@ const statusBadgeStyle = (status) => {
     ACCEPTED: {
       backgroundColor: "rgba(0, 100, 0, 0.1)",
       borderColor: "#006400",
-      textColor: "#006400"
+      textColor: "#006400",
     },
     DECLINED: {
       backgroundColor: "rgba(139, 0, 0, 0.1)",
       borderColor: "#8B0000",
-      textColor: "#8B0000"
+      textColor: "#8B0000",
     },
     PENDING: {
       backgroundColor: "rgba(255, 165, 0, 0.1)",
       borderColor: "#FFA500",
-      textColor: "#FFA500"
-    }
+      textColor: "#FFA500",
+    },
   };
 
   const colors = statusColors[status] || {
     backgroundColor: "rgba(102, 102, 102, 0.1)",
     borderColor: "#666666",
-    textColor: "#666666"
+    textColor: "#666666",
   };
 
   return {
@@ -74,7 +75,7 @@ const statusBadgeStyle = (status) => {
     color: colors.textColor,
     fontWeight: "600",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
-    fontSize: "14px"
+    fontSize: "14px",
   };
 };
 
@@ -90,7 +91,6 @@ const ProfileDetailPanel = () => {
   const getProfileData = async () => {
     try {
       const data = await customsingleuser(profileid, jwt);
-      console.log("\n\ngetProfileDataProfileData", data.connectionRequests);
 
       setProfileData(data);
       setConnRequests(data?.connectionRequests || null);
@@ -110,12 +110,12 @@ const ProfileDetailPanel = () => {
         sender: user.id,
         receiver: profileid,
         status: "PENDING",
-        message: `User Status is pending from id ${profileid}`
+        message: `User Status is pending from id ${profileid}`,
       });
       Toast.show({
         icon: "success",
         content: "Connection request sent",
-        position: 'center'
+        position: "center",
       });
 
       getProfileData();
@@ -123,7 +123,7 @@ const ProfileDetailPanel = () => {
       Toast.show({
         icon: "fail",
         content: "Failed to send request",
-        position: 'center'
+        position: "center",
       });
     }
     setLoading(false);
@@ -138,27 +138,28 @@ const ProfileDetailPanel = () => {
       Toast.show({
         icon: "fail",
         content: "Connection request not found",
-        position: 'center'
+        position: "center",
       });
       return;
     }
 
     setLoading(true);
     try {
-      const updateresp = await updateConnectionRequest(connectionToUpdate.id, {
+      const updateresp = await updateConnectionStatus(connectionToUpdate.id, {
         status,
+        message: `Request ${status.toLowerCase()} successfully`,
       });
       Toast.show({
         icon: "success",
         content: `Request ${status.toLowerCase()} successfully`,
-        position: 'center'
+        position: "center",
       });
       getProfileData();
     } catch (error) {
       Toast.show({
         icon: "fail",
         content: "Failed to update request status",
-        position: 'center'
+        position: "center",
       });
     } finally {
       setLoading(false);
@@ -168,7 +169,6 @@ const ProfileDetailPanel = () => {
   const handleUserStatus = async (actionname) => {
     setLoading(true);
     try {
-      console.log(profileid)
       const response = await updateUserData(
         { userstatus: actionname },
         profileid,
@@ -177,14 +177,14 @@ const ProfileDetailPanel = () => {
       Toast.show({
         icon: "success",
         content: `Status updated to ${actionname}`,
-        position: 'center'
+        position: "center",
       });
       getProfileData();
     } catch (error) {
       Toast.show({
         icon: "fail",
         content: "Failed to update user status",
-        position: 'center'
+        position: "center",
       });
     } finally {
       setLoading(false);
@@ -238,30 +238,37 @@ const ProfileDetailPanel = () => {
         );
       } else if (isReceiver && status === "PENDING") {
         return (
-          <div className="action-container" style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            width: "100%",
-            maxWidth: "400px",
-            margin: "0 auto"
-          }}>
-            <div style={{
-              backgroundColor: "rgba(128, 0, 0, 0.05)",
-              padding: "10px",
-              borderRadius: "8px",
-              textAlign: "center",
-              marginBottom: "5px",
-              fontWeight: "500",
-              color: theme.primary
-            }}>
+          <div
+            className="action-container"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              width: "100%",
+              maxWidth: "400px",
+              margin: "0 auto",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "rgba(128, 0, 0, 0.05)",
+                padding: "10px",
+                borderRadius: "8px",
+                textAlign: "center",
+                marginBottom: "5px",
+                fontWeight: "500",
+                color: theme.primary,
+              }}
+            >
               Connection Request Received
             </div>
-            <div style={{
-              display: "flex",
-              gap: "10px",
-              justifyContent: "center"
-            }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                justifyContent: "center",
+              }}
+            >
               <Button
                 style={gradientBtn("#006400", "#008000")}
                 loading={loading}
@@ -281,14 +288,16 @@ const ProfileDetailPanel = () => {
         );
       } else if (isReceiver && status !== "PENDING") {
         return (
-          <div style={{
-            ...statusBadgeStyle(status),
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "12px 24px",
-            margin: "0 auto"
-          }}>
+          <div
+            style={{
+              ...statusBadgeStyle(status),
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "12px 24px",
+              margin: "0 auto",
+            }}
+          >
             {renderStatusIcon(status)}
             You responded: {status}
           </div>
@@ -299,28 +308,35 @@ const ProfileDetailPanel = () => {
     // ADMIN/CENTER/SUPERADMIN logic
     if (["ADMIN", "CENTER", "SUPERADMIN"].includes(role)) {
       return (
-        <div className="admin-actions" style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          width: "100%",
-        }}>
-          <div style={{
-            backgroundColor: "rgba(128, 0, 0, 0.05)",
-            padding: "10px",
-            borderRadius: "8px",
-            textAlign: "center",
-            marginBottom: "5px",
-            fontWeight: "500",
-            color: theme.primary
-          }}>
+        <div
+          className="admin-actions"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "rgba(128, 0, 0, 0.05)",
+              padding: "10px",
+              borderRadius: "8px",
+              textAlign: "center",
+              marginBottom: "5px",
+              fontWeight: "500",
+              color: theme.primary,
+            }}
+          >
             Admin Actions
           </div>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "10px"
-          }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "10px",
+            }}
+          >
             <Button
               style={{
                 backgroundColor: "#4CAF50",
@@ -328,7 +344,7 @@ const ProfileDetailPanel = () => {
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                 borderRadius: "24px",
                 border: "none",
-                fontWeight: "600"
+                fontWeight: "600",
               }}
               loading={loading === "APPROVED"}
               onClick={() => handleUserStatus("APPROVED")}
@@ -342,7 +358,7 @@ const ProfileDetailPanel = () => {
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                 borderRadius: "24px",
                 border: "none",
-                fontWeight: "600"
+                fontWeight: "600",
               }}
               loading={loading === "REJECTED"}
               onClick={() => handleUserStatus("REJECTED")}
@@ -356,7 +372,7 @@ const ProfileDetailPanel = () => {
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                 borderRadius: "24px",
                 border: "none",
-                fontWeight: "600"
+                fontWeight: "600",
               }}
               loading={loading === "BLOCKED"}
               onClick={() => handleUserStatus("BLOCKED")}
@@ -370,7 +386,7 @@ const ProfileDetailPanel = () => {
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                 borderRadius: "24px",
                 border: "none",
-                fontWeight: "600"
+                fontWeight: "600",
               }}
               loading={loading === "SUSPENDED"}
               onClick={() => handleUserStatus("SUSPENDED")}
@@ -385,38 +401,43 @@ const ProfileDetailPanel = () => {
   };
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Top part (NavBar + content) */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <div style={{ flex: 1, overflowY: "auto" }}>
         {profileData ? (
           <UserDetails profileData={profileData} profileid={profileid} />
         ) : (
-          <div style={{
-            padding: "40px 20px",
-            textAlign: "center",
-            color: theme.textLight
-          }}>
+          <div
+            style={{
+              padding: "40px 20px",
+              textAlign: "center",
+              color: theme.textLight,
+            }}
+          >
             Loading profile data...
           </div>
         )}
       </div>
 
       {/* Divider between content and footer */}
-      <Divider style={{
-        margin: 0,
-        // borderColor: "rgba(139, 0, 0, 0.15)",
-        borderStyle: "solid"
-      }} />
+      <Divider
+        style={{
+          margin: 0,
+          // borderColor: "rgba(139, 0, 0, 0.15)",
+          borderStyle: "solid",
+        }}
+      />
 
       {/* Sticky Footer */}
-      <div style={{
-        position: 'sticky',
-        bottom: 25,
-        backgroundColor: '#fff',
-        textAlign: 'center',
-        padding: '16px',
-
-      }}>
+      <div
+        style={{
+          position: "sticky",
+          bottom: 25,
+          backgroundColor: "#fff",
+          textAlign: "center",
+          padding: "16px",
+        }}
+      >
         {renderActionButtons()}
       </div>
     </div>
