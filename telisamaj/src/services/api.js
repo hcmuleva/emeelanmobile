@@ -66,40 +66,68 @@ export const getCustomMe = async (jwt) => {
 
 export const getPaginatedUsers = async (start = 0, limit = 10, filters = {}) => {
   try {
+    // Build Strapi v4 compatible filters
+    const strapiFilters = {};
+    
+    // Handle basic string/value filters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined) {
+        // Skip DOB range filters as they're handled separately
+        if (key !== 'DOB_gte' && key !== 'DOB_lte') {
+          if (key === 'gotra') {
+            // For gotra, use $ne (not equal) filter
+            strapiFilters[key] = { $ne: value };
+          } else {
+            // For other filters, use exact match or $eq
+            strapiFilters[key] = { $eq: value };
+          }
+        }
+      }
+    });
 
-    if (filters.DOB_gte) {
-      filters.DOB = { ...(filters.DOB || {}), $gte: filters.DOB_gte };
+    // Handle DOB range filters
+    if (filters.DOB_gte || filters.DOB_lte) {
+      strapiFilters.DOB = {};
+      if (filters.DOB_gte) {
+        strapiFilters.DOB.$gte = filters.DOB_gte;
+      }
+      if (filters.DOB_lte) {
+        strapiFilters.DOB.$lte = filters.DOB_lte;
+      }
     }
-    if (filters.DOB_lte) {
-      filters.DOB = { ...(filters.DOB || {}), $lte: filters.DOB_lte };
+
+    // Build query parameters
+    const queryParams = {
+      pagination: {
+        start: start,
+        limit: limit
+      },
+      sort: ['id:desc'], // Sort by newest first
+      populate: {
+        photos: '*',
+        profilePicture: '*',
+        Height: '*'
+      }
+    };
+
+    // Add filters if they exist
+    if (Object.keys(strapiFilters).length > 0) {
+      queryParams.filters = strapiFilters;
     }
-    if (filters.gotra) {
-      filters.gotra = { $ne: filters.gotra };
-    }
-    const strapiFilters = Object.fromEntries(
-      Object.entries(filters).filter(
-        ([_, value]) => value !== '' && value !== null && value !== undefined
-      )
-    );
-    const { DOB_gte, DOB_lte, ...modifiedFilters } = strapiFilters;
+
+    console.log('API Query Params:', JSON.stringify(queryParams, null, 2)); // Debug log
 
     const response = await api.get(`/users`, {
-      params: {
-        _start: start,
-        _limit: limit,
-        filters: modifiedFilters, // ✅ Use filters
-        _sort: 'id:desc', // Sort by newest first
-        "populate[photos]": "*", // ✅ Populate photos (all fields)
-        "populate[profilePicture]": "*", // ✅ Populate profile picture (all fields)
-        "populate[Height]": "*",
-      },
+      params: queryParams,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('jwt')}`
       }
     });
+
     return response.data;
 
   } catch (error) {
+    console.error('API Error:', error.response?.data || error.message);
     throw error.response?.data?.message || 'Failed to fetch users';
   }
 };

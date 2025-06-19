@@ -65,13 +65,20 @@ const UserRoleProfile = ({ adminProp }) => {
   const [minAge, setMinAge] = useState("");
   const [maxAge, setMaxAge] = useState("");
 
+  // Collapsible states for each filter category
+  const [expandedFilters, setExpandedFilters] = useState({
+    marital: false,
+    profession: false,
+    gotra: false,
+    age: false,
+  });
+
   const maritalOptions = [
-    { label: "Single", value: "Never Married" },
-    { label: "Divorced", value: "Divorcee" },
+    { label: "Single", value: "BACHELOR" },
+    { label: "Divorced", value: "DIVORCED" },
     { label: "Married", value: "MARRIED" },
-    { label: "Widow", value: "Widow" },
-    { label: "Vidur", value: "VIDUR" },
-    { label: "Separated", value: "Separated" },
+    { label: "WIDOW", value: "WIDOW" },
+    { label: "VIDUR", value: "VIDUR" },
   ];
 
   const professionOptions = [
@@ -93,17 +100,22 @@ const UserRoleProfile = ({ adminProp }) => {
     try {
       const offset = pageNum * limit;
       let filters = {
-        marital: marital || "",
-        profession: profession || "",
-        gotra: gotra || "",
-        orgsku: user?.orgsku,
+        orgsku: user?.orgsku, // Always include orgsku
       };
 
+      // Only add filters if they have values
+      if (marital) filters["marital"] = marital;
+      if (profession) filters["profession"] = profession;
+      if (gotra) filters["gotra"] = gotra;
+
+      // Age range filters
       if (minAge && maxAge) {
         const { from, to } = getDOBRange(minAge, maxAge);
         filters["DOB_gte"] = from;
         filters["DOB_lte"] = to;
       }
+
+      console.log("User role filters being sent:", filters); // Debug log
 
       let data;
       if (searchQuery) {
@@ -126,6 +138,26 @@ const UserRoleProfile = ({ adminProp }) => {
   };
 
   useEffect(() => {
+    const saved = sessionStorage.getItem("filters");
+    if (saved) {
+      try {
+        const f = JSON.parse(saved);
+        if (f.search !== undefined) {
+          setSearch(f.search);
+          setInputValue(f.search);
+        }
+        if (f.marital !== undefined) setMarital(f.marital);
+        if (f.profession !== undefined) setProfession(f.profession);
+        if (f.gotra !== undefined) setGotra(f.gotra);
+        if (f.minAge !== undefined) setMinAge(f.minAge);
+        if (f.maxAge !== undefined) setMaxAge(f.maxAge);
+      } catch (err) {
+        console.warn("Failed to restore filters:", err);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const handler = setTimeout(() => {
       setSearch(inputValue);
     }, 300);
@@ -138,7 +170,7 @@ const UserRoleProfile = ({ adminProp }) => {
     setPage(0);
     setHasMore(true);
     fetchUsers(0, search);
-  }, [search, marital, profession, gotra, minAge, maxAge]);
+  }, [search, marital, profession, gotra, minAge, maxAge, user?.orgsku]);
 
   // 1. Capture saved scroll position when location changes (navigation back)
   useEffect(() => {
@@ -179,6 +211,34 @@ const UserRoleProfile = ({ adminProp }) => {
     isInitialLoad.current = true;
   }, [search, marital, profession, gotra, minAge, maxAge]);
 
+  const toggleFilterExpansion = (filterKey) => {
+    setExpandedFilters((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey],
+    }));
+  };
+
+  // Helper function to get active filter count
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (marital) count++;
+    if (profession) count++;
+    if (gotra) count++;
+    if (minAge && maxAge) count++;
+    return count;
+  };
+
+  const clearAllFilters = () => {
+    setMarital(undefined);
+    setProfession(undefined);
+    setGotra(undefined);
+    setMinAge("");
+    setMaxAge("");
+    setInputValue("");
+    setSearch("");
+    sessionStorage.removeItem("filters");
+  };
+
   const handleDetailsClick = useCallback(
     (profileid) => {
       if (listRef.current) {
@@ -187,9 +247,23 @@ const UserRoleProfile = ({ adminProp }) => {
           listRef.current.scrollTop
         );
       }
+
+      // Save current filters
+      sessionStorage.setItem(
+        "filters",
+        JSON.stringify({
+          search,
+          marital,
+          profession,
+          gotra,
+          minAge,
+          maxAge,
+        })
+      );
+
       navigate(`/profile-view/${profileid}`);
     },
-    [navigate]
+    [navigate, search, marital, profession, gotra, minAge, maxAge]
   );
 
   const handleScrollToTop = useCallback(() => {
@@ -239,87 +313,204 @@ const UserRoleProfile = ({ adminProp }) => {
         </div>
       )}
 
-      <div style={{ padding: "16px" }}>
-        <Collapse>
-          <CollapsePanel key="1" title="Filters">
-            <div style={{ marginBottom: 8 }}>
-              <strong>Marital Status:</strong>
-              <Selector
-                showCheckMark
-                columns={2}
-                options={maritalOptions}
-                value={[marital]}
-                onChange={(val) => setMarital(val[0])}
-                style={{ fontSize: "14px", width: "100%" }}
-                itemStyle={{
-                  whiteSpace: "normal",
-                  textAlign: "center",
-                  padding: "8px",
-                  fontSize: "13px",
-                  wordBreak: "break-word",
+      {/* Main Filters Collapse */}
+      <Collapse>
+        <CollapsePanel
+          key="1"
+          title={`Filters ${
+            getActiveFilterCount() > 0
+              ? `(${getActiveFilterCount()} active)`
+              : ""
+          }`}
+        >
+          <div style={{ padding: "8px" }}>
+            {/* Clear All Filters Button */}
+            <Button
+              onClick={clearAllFilters}
+              style={{
+                width: "100%",
+                marginBottom: "12px",
+                backgroundColor: "#f0f0f0",
+                color: "#333",
+                border: "1px solid #ddd",
+                fontSize: "14px",
+              }}
+            >
+              Clear All Filters
+            </Button>
+
+            {/* Marital Status Filter */}
+            <div style={{ marginBottom: 12 }}>
+              <div
+                onClick={() => toggleFilterExpansion("marital")}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "8px 12px",
+                  backgroundColor: marital ? "#e6f7ff" : "#f5f5f5",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  border: marital ? "1px solid #1890ff" : "1px solid #d9d9d9",
                 }}
-              />
-            </div>
-
-            <div style={{ marginBottom: 8, fontSize: "14px" }}>
-              <strong>Profession:</strong>
-              <Selector
-                showCheckMark
-                columns={2}
-                options={professionOptions}
-                value={[profession]}
-                onChange={(val) => setProfession(val[0])}
-                style={{ fontSize: "14px", width: "100%" }}
-                itemStyle={{
-                  whiteSpace: "normal",
-                  textAlign: "center",
-                  padding: "8px",
-                  fontSize: "13px",
-                  wordBreak: "break-word",
-                }}
-              />
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <strong>Gotra:</strong>
-              <GotraSelector
-                gotra_for={false}
-                gotraData={samajInfo?.[0]?.attributes?.gotra || {}}
-                customdata={{ gotra }}
-                setCustomdata={(val) => setGotra(val.gotra)}
-              />
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <strong>Age Range:</strong>
-              <div style={{ display: "flex", gap: 10 }}>
-                <input
-                  type="number"
-                  placeholder="Min Age"
-                  value={minAge}
-                  onChange={(e) => setMinAge(e.target.value)}
-                  style={{
-                    width: "50%",
-                    padding: "5px",
-                    border: "1px solid #ddd",
-                  }}
-                />
-                <input
-                  type="number"
-                  placeholder="Max Age"
-                  value={maxAge}
-                  onChange={(e) => setMaxAge(e.target.value)}
-                  style={{
-                    width: "50%",
-                    padding: "5px",
-                    border: "1px solid #ddd",
-                  }}
-                />
+              >
+                <strong style={{ fontSize: "14px" }}>
+                  Marital Status{" "}
+                  {marital &&
+                    `(${
+                      maritalOptions.find((opt) => opt.value === marital)?.label
+                    })`}
+                </strong>
+                <span style={{ fontSize: "18px" }}>
+                  {expandedFilters.marital ? "−" : "+"}
+                </span>
               </div>
+              {expandedFilters.marital && (
+                <div style={{ marginTop: "8px", padding: "0 12px" }}>
+                  <Selector
+                    showCheckMark
+                    columns={2}
+                    options={maritalOptions}
+                    value={[marital]}
+                    onChange={(val) => setMarital(val[0])}
+                    style={{ wordBreak: "break-word", whiteSpace: "normal" }}
+                  />
+                </div>
+              )}
             </div>
-          </CollapsePanel>
-        </Collapse>
-      </div>
+
+            {/* Profession Filter */}
+            <div style={{ marginBottom: 12 }}>
+              <div
+                onClick={() => toggleFilterExpansion("profession")}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "8px 12px",
+                  backgroundColor: profession ? "#e6f7ff" : "#f5f5f5",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  border: profession
+                    ? "1px solid #1890ff"
+                    : "1px solid #d9d9d9",
+                }}
+              >
+                <strong style={{ fontSize: "14px" }}>
+                  Profession {profession && `(${profession})`}
+                </strong>
+                <span style={{ fontSize: "18px" }}>
+                  {expandedFilters.profession ? "−" : "+"}
+                </span>
+              </div>
+              {expandedFilters.profession && (
+                <div style={{ marginTop: "8px", padding: "0 12px" }}>
+                  <Selector
+                    showCheckMark
+                    columns={2}
+                    options={professionOptions}
+                    value={[profession]}
+                    onChange={(val) => setProfession(val[0])}
+                    style={{ wordBreak: "break-word", whiteSpace: "normal" }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Gotra Filter */}
+            <div style={{ marginBottom: 12 }}>
+              <div
+                onClick={() => toggleFilterExpansion("gotra")}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "8px 12px",
+                  backgroundColor: gotra ? "#e6f7ff" : "#f5f5f5",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  border: gotra ? "1px solid #1890ff" : "1px solid #d9d9d9",
+                }}
+              >
+                <strong style={{ fontSize: "14px" }}>
+                  Gotra {gotra && "(Selected)"}
+                </strong>
+                <span style={{ fontSize: "18px" }}>
+                  {expandedFilters.gotra ? "−" : "+"}
+                </span>
+              </div>
+              {expandedFilters.gotra && (
+                <div style={{ marginTop: "8px", padding: "0 12px" }}>
+                  <GotraSelector
+                    gotra_for={false}
+                    gotraData={samajInfo?.[0]?.attributes?.gotra || {}}
+                    customdata={{ gotra }}
+                    setCustomdata={(val) => setGotra(val.gotra)}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Age Range Filter */}
+            <div style={{ marginBottom: 12 }}>
+              <div
+                onClick={() => toggleFilterExpansion("age")}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "8px 12px",
+                  backgroundColor: minAge && maxAge ? "#e6f7ff" : "#f5f5f5",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  border:
+                    minAge && maxAge
+                      ? "1px solid #1890ff"
+                      : "1px solid #d9d9d9",
+                }}
+              >
+                <strong style={{ fontSize: "14px" }}>
+                  Age Range {minAge && maxAge && `(${minAge}-${maxAge})`}
+                </strong>
+                <span style={{ fontSize: "18px" }}>
+                  {expandedFilters.age ? "−" : "+"}
+                </span>
+              </div>
+              {expandedFilters.age && (
+                <div style={{ marginTop: "8px", padding: "0 12px" }}>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <input
+                      type="number"
+                      placeholder="Min Age"
+                      value={minAge}
+                      onChange={(e) => setMinAge(e.target.value)}
+                      style={{
+                        width: "50%",
+                        padding: "8px",
+                        border: "1px solid #d9d9d9",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max Age"
+                      value={maxAge}
+                      onChange={(e) => setMaxAge(e.target.value)}
+                      style={{
+                        width: "50%",
+                        padding: "8px",
+                        border: "1px solid #d9d9d9",
+                        borderRadius: "4px",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </CollapsePanel>
+      </Collapse>
+
       <SearchBar
         key="UniqueKey"
         placeholder="Search Users by ( Name, Location, Profession )"

@@ -5,6 +5,8 @@ const maritalStatusOptions = [
   { Id: "MARRIED", EName: "MARRIED", HName: "शादीशुदा" },
   { Id: "NOTMARRIED", EName: "BACHELOR", HName: "कुंवारा/कुवारी" },
   { Id: "DIVORCED", EName: "DIVORCED", HName: "तलाकशुदा" },
+  { Id: "WIDOW", EName: "WIDOW", HName: "विधवा" },
+  { Id: "VIDUR", EName: "VIDUR", HName: "विधुर" },
 ];
 
 const MaritalStatus = ({ customdata, setCustomdata, form }) => {
